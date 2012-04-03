@@ -22,12 +22,22 @@
 	<modules>
 
 		<module>barchart-util-anno</module>
+		
 		<module>barchart-util-ascii</module>
+		
 		<module>barchart-util-bench</module>
+		
 		<module>barchart-util-clone</module>
+		
 		<module>barchart-util-enums</module>
+		
 		<module>barchart-util-math</module>
+		
+		<module>barchart-util-thread</module>
+		
 		<module>barchart-util-values</module>
+		
+		<module>barchart-util-collections</module>
 
 	</modules>
 

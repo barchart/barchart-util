@@ -1,3 +1,10 @@
+/**
+ * Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com/>
+ *
+ * All rights reserved. Licensed under the OSI BSD License.
+ *
+ * http://www.opensource.org/licenses/bsd-license.php
+ */
 package com.barchart.util.values.provider;
 
 import static org.junit.Assert.*;
@@ -10,7 +17,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.util.test.size.JavaSize;
+import com.barchart.util.bench.size.JavaSize;
 import com.barchart.util.values.api.Value;
 
 public class TestValueConst {
