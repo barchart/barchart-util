@@ -9,13 +9,13 @@ package com.barchart.util.values.provider;
 
 import java.util.UUID;
 
+import com.barchart.util.ascii.ASCII;
+import com.barchart.util.math.MathExtra;
 import com.barchart.util.values.api.DecimalValue;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.lang.ASCII;
-import com.barchart.util.values.lang.MathExtra;
 
 public final class ValueBuilder {
 
@@ -146,8 +146,8 @@ public final class ValueBuilder {
 	}
 
 	public static final TextValue newTextId() {
-		UUID uuid = UUID.randomUUID();
-		TextValue text = newText(uuid.toString());
+		final UUID uuid = UUID.randomUUID();
+		final TextValue text = newText(uuid.toString());
 		return text;
 	}
 

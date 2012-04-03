@@ -13,9 +13,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.barchart.util.test.size.JavaSize;
 import com.barchart.util.values.api.TextValue;
-import com.barchart.util.values.provider.DefTextByteArray;
-import com.barchart.util.values.size.JavaSize;
 
 public class TestDefTextByteArray {
 
@@ -30,17 +29,18 @@ public class TestDefTextByteArray {
 	@Test
 	public void testSize() {
 
-		TextValue text0 = new DefTextByteArray(new byte[] {});
+		final TextValue text0 = new DefTextByteArray(new byte[] {});
 
-		int size0 = JavaSize.of(text0);
+		final int size0 = JavaSize.of(text0);
 
 		// System.err.println("size=" + size);
 
 		assertEquals(size0, 24);
 
-		TextValue text1 = new DefTextByteArray(new byte[] { 0, 1, 2, 3, 4 });
+		final TextValue text1 = new DefTextByteArray(
+				new byte[] { 0, 1, 2, 3, 4 });
 
-		int size1 = JavaSize.of(text1);
+		final int size1 = JavaSize.of(text1);
 
 		// System.err.println("size=" + size);
 
@@ -51,11 +51,11 @@ public class TestDefTextByteArray {
 	@Test
 	public void testHashCode() {
 
-		byte[] array = new byte[] { 65, 66, 67 };
+		final byte[] array = new byte[] { 65, 66, 67 };
 
-		TextValue text = new DefTextByteArray(array);
+		final TextValue text = new DefTextByteArray(array);
 
-		String string = text.toString();
+		final String string = text.toString();
 
 		// System.err.println("text=" + text);
 
@@ -85,14 +85,14 @@ public class TestDefTextByteArray {
 	@Test
 	public void testSubString() {
 
-		byte[] array = new byte[] { 65, 66, 67 };
+		final byte[] array = new byte[] { 65, 66, 67 };
 
-		TextValue text = new DefTextByteArray(array);
+		final TextValue text = new DefTextByteArray(array);
 
-		CharSequence seq1 = text.subSequence(0, 1);
+		final CharSequence seq1 = text.subSequence(0, 1);
 		assertTrue(seq1.equals("A"));
 
-		CharSequence seq2 = text.subSequence(1, 3);
+		final CharSequence seq2 = text.subSequence(1, 3);
 		assertTrue(seq2.equals("BC"));
 
 	}

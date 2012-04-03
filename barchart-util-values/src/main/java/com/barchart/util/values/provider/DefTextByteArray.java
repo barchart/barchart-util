@@ -9,8 +9,8 @@ package com.barchart.util.values.provider;
 
 import static com.barchart.util.values.provider.ValueBuilder.*;
 
+import com.barchart.util.ascii.ASCII;
 import com.barchart.util.values.api.TextValue;
-import com.barchart.util.values.lang.ASCII;
 
 //24+ bytes on 32 bit JVM
 final class DefTextByteArray extends BaseText {
@@ -32,6 +32,7 @@ final class DefTextByteArray extends BaseText {
 	}
 
 	// same as String.hashCode()
+	@Override
 	public final int hashCode() {
 		int h = hash;
 		if (h == 0) {

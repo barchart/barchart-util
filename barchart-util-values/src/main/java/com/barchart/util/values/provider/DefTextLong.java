@@ -9,8 +9,8 @@ package com.barchart.util.values.provider;
 
 import static com.barchart.util.values.provider.ValueBuilder.*;
 
+import com.barchart.util.ascii.ASCII;
 import com.barchart.util.values.api.TextValue;
-import com.barchart.util.values.lang.ASCII;
 
 // ASCII, NUL terminated, up to 8 chars 
 
@@ -28,7 +28,7 @@ final class DefTextLong extends BaseText {
 		if (array.length > 8) {
 			throw new ArrayIndexOutOfBoundsException();
 		}
-		for (byte b : array) {
+		for (final byte b : array) {
 			if (b == NUL) {
 				throw new IllegalArgumentException();
 			}
@@ -72,6 +72,7 @@ final class DefTextLong extends BaseText {
 	}
 
 	// same as String.hashCode()
+	@Override
 	public final int hashCode() {
 		int h = 0;
 		long value = this.value;

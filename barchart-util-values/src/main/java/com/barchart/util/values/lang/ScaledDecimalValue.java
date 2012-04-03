@@ -10,6 +10,7 @@ package com.barchart.util.values.lang;
 import static java.lang.Math.*;
 
 import com.barchart.util.anno.NotMutable;
+import com.barchart.util.math.MathExtra;
 import com.barchart.util.values.api.Value;
 import com.barchart.util.values.provider.ValueFreezer;
 

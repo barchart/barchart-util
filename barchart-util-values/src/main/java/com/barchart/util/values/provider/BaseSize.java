@@ -8,8 +8,8 @@
 package com.barchart.util.values.provider;
 
 import com.barchart.util.anno.NotMutable;
+import com.barchart.util.math.MathExtra;
 import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.lang.MathExtra;
 
 @NotMutable
 abstract class BaseSize extends ValueFreezer<SizeValue> implements SizeValue {
