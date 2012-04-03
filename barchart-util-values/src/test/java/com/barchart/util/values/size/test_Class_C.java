@@ -5,8 +5,10 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.util;
+package com.barchart.util.values.size;
 
-public class Dummy {
+class test_Class_C {
+
+	test_Class_C self;
 
 }

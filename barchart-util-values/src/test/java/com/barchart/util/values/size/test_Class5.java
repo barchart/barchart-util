@@ -5,8 +5,10 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.util;
+package com.barchart.util.values.size;
 
-public class Dummy {
+interface test_Class5 extends test_Class4 {
+
+	public int x = 2;
 
 }
