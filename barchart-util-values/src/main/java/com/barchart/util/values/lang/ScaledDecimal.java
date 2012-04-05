@@ -92,22 +92,4 @@ public interface ScaledDecimal<T extends ScaledDecimal<T, F>, F extends ScaledDe
 
 	//
 
-	/** legacy compatibility */
-	@Deprecated
-	int asInt() throws ArithmeticException;
-
-	/** legacy compatibility */
-	@Deprecated
-	long asLong() throws ArithmeticException;
-
-	/** legacy compatibility */
-	@Deprecated
-	float asFloat();
-
-	/** legacy compatibility */
-	@Deprecated
-	double asDouble();
-
-	//
-
 }

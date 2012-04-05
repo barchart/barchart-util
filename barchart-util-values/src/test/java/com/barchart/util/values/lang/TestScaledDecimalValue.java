@@ -7,14 +7,16 @@
  */
 package com.barchart.util.values.lang;
 
-import static com.barchart.util.values.provider.ValueBuilder.*;
-import static org.junit.Assert.*;
+import static com.barchart.util.values.provider.ValueBuilder.newPrice;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.barchart.util.values.api.PriceValue;
+import com.barchart.util.values.util.ValUtil;
 
 public class TestScaledDecimalValue {
 
@@ -36,43 +38,43 @@ public class TestScaledDecimalValue {
 
 	@Test
 	public void TestCompare1() {
-		PriceValue p1 = newPrice(1000, 2);
-		PriceValue p2 = newPrice(1000, 2);
+		final PriceValue p1 = newPrice(1000, 2);
+		final PriceValue p2 = newPrice(1000, 2);
 		assertEquals(p1.compareTo(p2), 0);
 	}
 
 	@Test
 	public void TestCompare2() {
-		PriceValue p1 = newPrice(1000, 2);
-		PriceValue p2 = newPrice(1001, 2);
+		final PriceValue p1 = newPrice(1000, 2);
+		final PriceValue p2 = newPrice(1001, 2);
 		assertEquals(p1.compareTo(p2), -1);
 	}
 
 	@Test
 	public void TestCompare3() {
-		PriceValue p1 = newPrice(1001, 2);
-		PriceValue p2 = newPrice(1000, 2);
+		final PriceValue p1 = newPrice(1001, 2);
+		final PriceValue p2 = newPrice(1000, 2);
 		assertEquals(p1.compareTo(p2), +1);
 	}
 
 	@Test
 	public void TestCompare4() {
-		PriceValue p1 = newPrice(100100, 2);
-		PriceValue p2 = newPrice(1001, 4);
+		final PriceValue p1 = newPrice(100100, 2);
+		final PriceValue p2 = newPrice(1001, 4);
 		assertEquals(p1.compareTo(p2), 0);
 	}
 
 	@Test
 	public void TestCompare5() {
-		PriceValue p1 = newPrice(Long.MAX_VALUE, 2);
-		PriceValue p2 = newPrice(Long.MIN_VALUE / 1000, 4);
+		final PriceValue p1 = newPrice(Long.MAX_VALUE, 2);
+		final PriceValue p2 = newPrice(Long.MIN_VALUE / 1000, 4);
 		assertEquals(p1.compareTo(p2), 1);
 	}
 
 	@Test
 	public void TestCompare6() {
-		PriceValue p1 = newPrice(Long.MAX_VALUE, 2);
-		PriceValue p2 = newPrice(Long.MIN_VALUE / 10, 4);
+		final PriceValue p1 = newPrice(Long.MAX_VALUE, 2);
+		final PriceValue p2 = newPrice(Long.MIN_VALUE / 10, 4);
 		assertEquals(p1.compareTo(p2), 1);
 	}
 
@@ -94,51 +96,48 @@ public class TestScaledDecimalValue {
 
 	@Test
 	public void TestNormal() {
-		PriceValue p1 = newPrice(100100, 2);
-		PriceValue p2 = p1.scale(0);
+		final PriceValue p1 = newPrice(100100, 2);
+		final PriceValue p2 = p1.scale(0);
 		// System.err.println("p1 : " + p1 + " p2 : " + p2);
 		assertTrue(p1.equals(p2));
 	}
 
-	@SuppressWarnings("deprecation")
 	@Test
 	public void TestToDouble() {
 
-		PriceValue p1 = newPrice(100100, -2);
+		final PriceValue p1 = newPrice(100100, -2);
 
-		double f1 = p1.asDouble();
+		final double f1 = ValUtil.asDouble(p1);
 
 		assertEquals(f1, 1001.0, ERR);
 
 	}
 
-	@SuppressWarnings("deprecation")
 	@Test
 	public void TestAdd() {
 
-		PriceValue p1 = newPrice(9710013123L, -2);
-		PriceValue p2 = newPrice(101298634, -3);
-		PriceValue p3 = p1.add(p2);
+		final PriceValue p1 = newPrice(9710013123L, -2);
+		final PriceValue p2 = newPrice(101298634, -3);
+		final PriceValue p3 = p1.add(p2);
 
-		double d1 = p1.asDouble();
-		double d2 = p2.asDouble();
-		double d3 = p3.asDouble();
+		final double d1 = ValUtil.asDouble(p1);
+		final double d2 = ValUtil.asDouble(p2);
+		final double d3 = ValUtil.asDouble(p3);
 
 		assertEquals(d3, d1 + d2, ERR);
 
 	}
 
-	@SuppressWarnings("deprecation")
 	@Test
 	public void TestSub() {
 
-		PriceValue p1 = newPrice(13123, -2);
-		PriceValue p2 = newPrice(9712986342L, -4);
-		PriceValue p3 = p1.sub(p2);
+		final PriceValue p1 = newPrice(13123, -2);
+		final PriceValue p2 = newPrice(9712986342L, -4);
+		final PriceValue p3 = p1.sub(p2);
 
-		double d1 = p1.asDouble();
-		double d2 = p2.asDouble();
-		double d3 = p3.asDouble();
+		final double d1 = ValUtil.asDouble(p1);
+		final double d2 = ValUtil.asDouble(p2);
+		final double d3 = ValUtil.asDouble(p3);
 
 		assertEquals(d3, d1 - d2, 0.00001);
 
@@ -147,10 +146,10 @@ public class TestScaledDecimalValue {
 	@Test(expected = ArithmeticException.class)
 	public void TestSubOverflow1() {
 
-		PriceValue p1 = newPrice(Long.MAX_VALUE, -2);
-		PriceValue p2 = newPrice(Long.MAX_VALUE, -4);
+		final PriceValue p1 = newPrice(Long.MAX_VALUE, -2);
+		final PriceValue p2 = newPrice(Long.MAX_VALUE, -4);
 
-		PriceValue p3 = p1.sub(p2);
+		final PriceValue p3 = p1.sub(p2);
 
 		System.err.println("p1 : " + p1);
 		System.err.println("p2 : " + p2);
@@ -160,10 +159,10 @@ public class TestScaledDecimalValue {
 	@Test(expected = ArithmeticException.class)
 	public void TestSubOverflow2() {
 
-		PriceValue p1 = newPrice(-10L, 0);
-		PriceValue p2 = newPrice(Long.MAX_VALUE, 0);
+		final PriceValue p1 = newPrice(-10L, 0);
+		final PriceValue p2 = newPrice(Long.MAX_VALUE, 0);
 
-		PriceValue p3 = p1.sub(p2);
+		final PriceValue p3 = p1.sub(p2);
 
 		System.err.println("p1 : " + p1);
 		System.err.println("p2 : " + p2);
@@ -171,50 +170,47 @@ public class TestScaledDecimalValue {
 
 	}
 
-	@SuppressWarnings("deprecation")
 	@Test
 	public void TestMult1() {
 
-		int factor = 124923655;
-		PriceValue p1 = newPrice(9710013123L, -2);
-		PriceValue p2 = p1.mult(factor);
+		final int factor = 124923655;
+		final PriceValue p1 = newPrice(9710013123L, -2);
+		final PriceValue p2 = p1.mult(factor);
 
-		double d1 = p1.asDouble();
-		double d2 = p2.asDouble();
+		final double d1 = ValUtil.asDouble(p1);
+		final double d2 = ValUtil.asDouble(p2);
 
 		assertEquals(d2, d1 * factor, ERR);
 
 	}
 
-	@SuppressWarnings("deprecation")
 	@Test
 	public void TestCount1() {
 
-		PriceValue p1 = newPrice(1112131415, -8);
-		PriceValue p2 = newPrice(1112131415, -8);
+		final PriceValue p1 = newPrice(1112131415, -8);
+		final PriceValue p2 = newPrice(1112131415, -8);
 
-		long count = p1.count(p2);
+		final long count = p1.count(p2);
 
-		double d1 = p1.asDouble();
+		final double d1 = ValUtil.asDouble(p1);
 
-		double d2 = p2.asDouble();
+		final double d2 = ValUtil.asDouble(p2);
 
 		assertEquals(d1 / d2, count, ERR);
 
 	}
 
-	@SuppressWarnings("deprecation")
 	@Test
 	public void TestCount2() {
 
-		PriceValue p1 = newPrice(1112131415, -4);
-		PriceValue p2 = newPrice(1112131415, -8);
+		final PriceValue p1 = newPrice(1112131415, -4);
+		final PriceValue p2 = newPrice(1112131415, -8);
 
-		long count = p1.count(p2);
+		final long count = p1.count(p2);
 
-		double d1 = p1.asDouble();
+		final double d1 = ValUtil.asDouble(p1);
 
-		double d2 = p2.asDouble();
+		final double d2 = ValUtil.asDouble(p2);
 
 		assertEquals(d1 / d2, count, ERR_09);
 
@@ -223,7 +219,7 @@ public class TestScaledDecimalValue {
 	@Test(expected = ArithmeticException.class)
 	public void TestMultOverflow1() {
 
-		PriceValue p1 = newPrice(Long.MAX_VALUE, 0);
+		final PriceValue p1 = newPrice(Long.MAX_VALUE, 0);
 
 		p1.mult(Long.MAX_VALUE);
 
@@ -232,9 +228,9 @@ public class TestScaledDecimalValue {
 	@Test(expected = ArithmeticException.class)
 	public void TestAddOverflow1() {
 
-		PriceValue p1 = newPrice(Long.MAX_VALUE / 20, -123);
+		final PriceValue p1 = newPrice(Long.MAX_VALUE / 20, -123);
 
-		PriceValue p2 = newPrice(-Long.MAX_VALUE / 20, -125);
+		final PriceValue p2 = newPrice(-Long.MAX_VALUE / 20, -125);
 
 		p1.add(p2);
 
@@ -243,9 +239,9 @@ public class TestScaledDecimalValue {
 	@Test(expected = ArithmeticException.class)
 	public void TestAddOverflow2() {
 
-		PriceValue p1 = newPrice(Long.MAX_VALUE / 2, 0);
+		final PriceValue p1 = newPrice(Long.MAX_VALUE / 2, 0);
 
-		PriceValue p2 = newPrice(Long.MAX_VALUE, 0);
+		final PriceValue p2 = newPrice(Long.MAX_VALUE, 0);
 
 		p1.add(p2);
 

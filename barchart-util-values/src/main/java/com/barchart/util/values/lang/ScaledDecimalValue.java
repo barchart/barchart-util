@@ -7,7 +7,8 @@
  */
 package com.barchart.util.values.lang;
 
-import static java.lang.Math.*;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.math.MathExtra;
@@ -19,46 +20,6 @@ public abstract class ScaledDecimalValue<T extends ScaledDecimal<T, F> & Value<T
 		extends ValueFreezer<T> implements ScaledDecimal<T, F> {
 
 	protected abstract T result(long mantissa, int exponent);
-
-	@Deprecated
-	@Override
-	public final double asDouble() {
-		return mantissa() * Math.pow(10, exponent());
-	}
-
-	@Deprecated
-	@Override
-	public final float asFloat() {
-		return (float) asDouble();
-	}
-
-	@Deprecated
-	@Override
-	public final long asLong() throws ArithmeticException {
-
-		long m = mantissa();
-		int e = exponent();
-
-		while (e > 0) {
-			m = MathExtra.longMult10(m);
-			e--;
-		}
-		while (e < 0) {
-			m /= 10;
-			e++;
-		}
-
-		return m;
-
-	}
-
-	@Deprecated
-	@Override
-	public final int asInt() throws ArithmeticException {
-
-		return MathExtra.castLongToInt(asLong());
-
-	}
 
 	// yes, same type
 	@SuppressWarnings("unchecked")
@@ -175,7 +136,7 @@ public abstract class ScaledDecimalValue<T extends ScaledDecimal<T, F> & Value<T
 
 	@Override
 	public String toString() {
-		return String.format("Decimal > %9d %3d", // 
+		return String.format("Decimal > %9d %3d", //
 				mantissa(), exponent());
 	}
 
@@ -245,7 +206,7 @@ public abstract class ScaledDecimalValue<T extends ScaledDecimal<T, F> & Value<T
 		int e = this.exponent();
 
 		while (true) {
-			long r = m * 10L;
+			final long r = m * 10L;
 			if (r / 10L != m) {
 				break;
 			}
@@ -277,11 +238,11 @@ public abstract class ScaledDecimalValue<T extends ScaledDecimal<T, F> & Value<T
 	@Override
 	public final T mult(final F that) throws ArithmeticException {
 
-		int e1 = this.exponent();
-		int e2 = that.exponent();
+		final int e1 = this.exponent();
+		final int e2 = that.exponent();
 
-		long m1 = this.mantissa();
-		long m2 = that.mantissa();
+		final long m1 = this.mantissa();
+		final long m2 = that.mantissa();
 
 		return result(MathExtra.longMult(m1, m2), e1 + e2);
 
@@ -291,13 +252,13 @@ public abstract class ScaledDecimalValue<T extends ScaledDecimal<T, F> & Value<T
 	public final T div(final F that) throws ArithmeticException {
 
 		int e1 = this.exponent();
-		int e2 = that.exponent();
+		final int e2 = that.exponent();
 
 		long m1 = this.mantissa();
-		long m2 = that.mantissa();
+		final long m2 = that.mantissa();
 
 		while (true) {
-			long r = m1 * 10L;
+			final long r = m1 * 10L;
 			if (r / 10L != m1) {
 				break;
 			}
