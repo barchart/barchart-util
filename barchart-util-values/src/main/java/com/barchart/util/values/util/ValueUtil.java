@@ -12,22 +12,23 @@ import com.barchart.util.values.lang.ScaledDecimal;
  * @author g-litchfield
  * 
  */
-public class ValUtil {
+public class ValueUtil {
 
-	private ValUtil() {
+	private ValueUtil() {
 
 	}
 
 	/**
 	 * 
-	 * @param sd
+	 * @param decimal
 	 * @return
 	 * @throws ArithmeticException
 	 */
-	public static long asLong(final ScaledDecimal<?, ?> sd)
+	public static long asLong(final ScaledDecimal<?, ?> decimal)
 			throws ArithmeticException {
-		long m = sd.mantissa();
-		int e = sd.exponent();
+
+		long m = decimal.mantissa();
+		int e = decimal.exponent();
 
 		while (e > 0) {
 			m = MathExtra.longMult10(m);

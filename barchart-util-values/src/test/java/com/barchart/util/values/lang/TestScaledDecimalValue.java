@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.util.ValUtil;
+import com.barchart.util.values.util.ValueUtil;
 
 public class TestScaledDecimalValue {
 
@@ -107,7 +107,7 @@ public class TestScaledDecimalValue {
 
 		final PriceValue p1 = newPrice(100100, -2);
 
-		final double f1 = ValUtil.asDouble(p1);
+		final double f1 = ValueUtil.asDouble(p1);
 
 		assertEquals(f1, 1001.0, ERR);
 
@@ -120,9 +120,9 @@ public class TestScaledDecimalValue {
 		final PriceValue p2 = newPrice(101298634, -3);
 		final PriceValue p3 = p1.add(p2);
 
-		final double d1 = ValUtil.asDouble(p1);
-		final double d2 = ValUtil.asDouble(p2);
-		final double d3 = ValUtil.asDouble(p3);
+		final double d1 = ValueUtil.asDouble(p1);
+		final double d2 = ValueUtil.asDouble(p2);
+		final double d3 = ValueUtil.asDouble(p3);
 
 		assertEquals(d3, d1 + d2, ERR);
 
@@ -135,9 +135,9 @@ public class TestScaledDecimalValue {
 		final PriceValue p2 = newPrice(9712986342L, -4);
 		final PriceValue p3 = p1.sub(p2);
 
-		final double d1 = ValUtil.asDouble(p1);
-		final double d2 = ValUtil.asDouble(p2);
-		final double d3 = ValUtil.asDouble(p3);
+		final double d1 = ValueUtil.asDouble(p1);
+		final double d2 = ValueUtil.asDouble(p2);
+		final double d3 = ValueUtil.asDouble(p3);
 
 		assertEquals(d3, d1 - d2, 0.00001);
 
@@ -177,8 +177,8 @@ public class TestScaledDecimalValue {
 		final PriceValue p1 = newPrice(9710013123L, -2);
 		final PriceValue p2 = p1.mult(factor);
 
-		final double d1 = ValUtil.asDouble(p1);
-		final double d2 = ValUtil.asDouble(p2);
+		final double d1 = ValueUtil.asDouble(p1);
+		final double d2 = ValueUtil.asDouble(p2);
 
 		assertEquals(d2, d1 * factor, ERR);
 
@@ -192,9 +192,9 @@ public class TestScaledDecimalValue {
 
 		final long count = p1.count(p2);
 
-		final double d1 = ValUtil.asDouble(p1);
+		final double d1 = ValueUtil.asDouble(p1);
 
-		final double d2 = ValUtil.asDouble(p2);
+		final double d2 = ValueUtil.asDouble(p2);
 
 		assertEquals(d1 / d2, count, ERR);
 
@@ -208,9 +208,9 @@ public class TestScaledDecimalValue {
 
 		final long count = p1.count(p2);
 
-		final double d1 = ValUtil.asDouble(p1);
+		final double d1 = ValueUtil.asDouble(p1);
 
-		final double d2 = ValUtil.asDouble(p2);
+		final double d2 = ValueUtil.asDouble(p2);
 
 		assertEquals(d1 / d2, count, ERR_09);
 

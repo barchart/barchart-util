@@ -16,35 +16,35 @@ import com.barchart.util.values.provider.ValueBuilder;
  * @author g-litchfield
  * 
  */
-public class TestValUtil {
+public class TestValueUtil {
 
 	/**
 	 * Test method for
-	 * {@link com.barchart.base.util.values.util.ValUtil#asLong(com.barchart.util.values.lang.ScaledDecimal)}
+	 * {@link com.barchart.ValueUtil.util.values.util.ValUtil#asLong(com.barchart.util.values.lang.ScaledDecimal)}
 	 * .
 	 */
 	@Test
 	public void testAsLong() {
 		final long l = 123456789l;
 		final PriceValue pv = ValueBuilder.newPrice(l);
-		assertEquals(l, ValUtil.asLong(pv));
+		assertEquals(l, ValueUtil.asLong(pv));
 	}
 
 	/**
 	 * Test method for
-	 * {@link com.barchart.base.util.values.util.ValUtil#asInt(com.barchart.util.values.lang.ScaledDecimal)}
+	 * {@link com.barchart.ValueUtil.util.values.util.ValUtil#asInt(com.barchart.util.values.lang.ScaledDecimal)}
 	 * .
 	 */
 	@Test
 	public void testAsInt() {
 		final int i = 123456;
 		final PriceValue pv = ValueBuilder.newPrice(i);
-		assertEquals(i, ValUtil.asInt(pv));
+		assertEquals(i, ValueUtil.asInt(pv));
 	}
 
 	/**
 	 * Test method for
-	 * {@link com.barchart.base.util.values.util.ValUtil#asDouble(com.barchart.util.values.lang.ScaledDecimal)}
+	 * {@link com.barchart.ValueUtil.util.values.util.ValUtil#asDouble(com.barchart.util.values.lang.ScaledDecimal)}
 	 * .
 	 */
 	@Test
@@ -53,13 +53,13 @@ public class TestValUtil {
 		final DoubleParts dp = MathIEEE754.extractDecimal(d);
 		final PriceValue pv = ValueBuilder.newPrice(dp.getMantissa(),
 				dp.getExponent());
-		assertEquals(d, ValUtil.asDouble(pv), 0.000000001);
+		assertEquals(d, ValueUtil.asDouble(pv), 0.000000001);
 
 	}
 
 	/**
 	 * Test method for
-	 * {@link com.barchart.base.util.values.util.ValUtil#asFloat(com.barchart.util.values.lang.ScaledDecimal)}
+	 * {@link com.barchart.ValueUtil.util.values.util.ValUtil#asFloat(com.barchart.util.values.lang.ScaledDecimal)}
 	 * .
 	 */
 	@Test
@@ -68,7 +68,7 @@ public class TestValUtil {
 		final DoubleParts dp = MathIEEE754.extractDecimal(f);
 		final PriceValue pv = ValueBuilder.newPrice(dp.getMantissa(),
 				dp.getExponent());
-		assertEquals(f, ValUtil.asDouble(pv), 0.000000001);
+		assertEquals(f, ValueUtil.asDouble(pv), 0.000000001);
 	}
 
 }
