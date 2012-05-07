@@ -14,9 +14,9 @@ import org.codehaus.jackson.map.SerializationConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JSON {
+public class Json {
 
-	private static Logger log = LoggerFactory.getLogger(JSON.class);
+	private static Logger log = LoggerFactory.getLogger(Json.class);
 
 	private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -104,7 +104,7 @@ public class JSON {
 
 	public static <T> T fromCP(String path, Class<T> klaz) {
 		try {
-			InputStream input = JSON.class.getResourceAsStream(path);
+			InputStream input = Json.class.getResourceAsStream(path);
 			T value = mapper.readValue(input, klaz);
 			input.close();
 			return value;
