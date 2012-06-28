@@ -28,6 +28,11 @@ public class FastArrayList<T> extends UnsupportedList<T> implements
 		this.array = (T[]) new Object[0];
 	}
 
+	@SuppressWarnings("unchecked")
+	public FastArrayList(final int size) {
+		this.array = (T[]) new Object[size];
+	}
+
 	public FastArrayList(final T[] array) {
 		this.array = array;
 	}
@@ -144,6 +149,19 @@ public class FastArrayList<T> extends UnsupportedList<T> implements
 				list.add(result);
 			}
 		}
+	}
+
+	/** @return current array */
+	@Override
+	public Object[] toArray() {
+		return array;
+	}
+
+	/** @return array copy */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T[] toArray(final T[] instance) {
+		return (T[]) Arrays.copyOf(array, size(), instance.getClass());
 	}
 
 }

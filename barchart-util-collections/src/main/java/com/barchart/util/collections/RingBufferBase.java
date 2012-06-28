@@ -15,9 +15,9 @@ import java.util.Map;
 
 import com.barchart.util.anno.NotThreadSafe;
 
-// http://en.wikipedia.org/wiki/Circular_buffer
-
 /**
+ * http://en.wikipedia.org/wiki/Circular_buffer
+ * 
  * legend:
  * 
  * absolute :: from beginning of array
@@ -109,7 +109,7 @@ public abstract class RingBufferBase<V> implements RingBuffer<V> {
 		return head + offset;
 	}
 
-	// absolute clue from logical offset off mark
+	/** absolute clue from logical offset off mark */
 	protected final int clueFromOffset(final int offset) {
 		final int size = length();
 		final int mark = this.mark;
@@ -123,7 +123,7 @@ public abstract class RingBufferBase<V> implements RingBuffer<V> {
 		return clue;
 	}
 
-	// absolute clue from absolute index
+	/** absolute clue from absolute index */
 	protected final int clueFromIndex(final int index) {
 		return clueFromOffset(index - head());
 	}

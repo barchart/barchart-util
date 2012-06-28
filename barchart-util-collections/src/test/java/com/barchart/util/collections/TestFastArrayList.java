@@ -24,6 +24,50 @@ public class TestFastArrayList {
 	}
 
 	@Test
+	public void testToArray1() {
+
+		final Integer[] array1 = { 1, 2, 3 };
+
+		final FastArrayList<Integer> list = new FastArrayList<Integer>(array1);
+
+		final Object[] array2 = list.toArray();
+
+		assertNotNull(array2);
+		assertEquals(array2.length, 3);
+
+		assertArrayEquals(array1, array2);
+		assertTrue(array1 == array2);
+
+		list.remove((Integer) 3);
+		list.add(3);
+
+		final Object[] array3 = list.toArray();
+
+		assertArrayEquals(array1, array3);
+		assertFalse(array1 == array3);
+
+	}
+
+	@Test
+	public void testToArray2() {
+
+		final Integer[] array1 = { 1, 2, 3 };
+
+		final FastArrayList<Integer> list = new FastArrayList<Integer>(array1);
+
+		final Integer[] array2 = list.toArray(new Integer[0]);
+
+		assertNotNull(array2);
+
+		assertEquals(array2.length, 3);
+
+		assertArrayEquals(array1, array2);
+
+		assertFalse(array1 == array2);
+
+	}
+
+	@Test
 	public void testIterator() {
 
 		boolean isAdded, isRemoved;
