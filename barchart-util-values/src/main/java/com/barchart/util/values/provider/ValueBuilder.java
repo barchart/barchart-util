@@ -145,10 +145,16 @@ public final class ValueBuilder {
 		}
 	}
 
+	/** random uuid based text id */
 	public static final TextValue newTextId() {
 		final UUID uuid = UUID.randomUUID();
 		final TextValue text = newText(uuid.toString());
 		return text;
+	}
+
+	/** provided-long based text id */
+	public static final TextValue newTextId(final long value) {
+		return new DefTextId(value);
 	}
 
 	public static final boolean isStrictMultiple(final PriceValue priceTest,
