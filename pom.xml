@@ -30,7 +30,7 @@
 		<module>barchart-util-bench</module>
 
 		<module>barchart-util-clone</module>
-		
+
 		<module>barchart-util-enums</module>
 
 		<module>barchart-util-math</module>
@@ -41,6 +41,8 @@
 		
 		<module>barchart-util-collections</module>
 
+		<module>barchart-util-concurrent</module>
+		
 	</modules>
 
 </project>
