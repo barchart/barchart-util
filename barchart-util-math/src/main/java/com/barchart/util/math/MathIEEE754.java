@@ -77,6 +77,10 @@ public class MathIEEE754 {
 		 * the formulae in JLS, Section 20.10.22.
 		 */
 
+		if(value == 0.0) {
+			return new DoubleParts(0,0);
+		}
+		
 		final long bits = Double.doubleToLongBits(value);
 
 		final int sign = ((bits >> 63) == 0 ? 1 : -1);
