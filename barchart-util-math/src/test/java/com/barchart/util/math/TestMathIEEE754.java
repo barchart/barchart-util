@@ -16,6 +16,17 @@ import org.junit.Test;
 public class TestMathIEEE754 {
 
 	@Test
+	public void testZero() {
+		
+		final double zero = 0.0;
+		final DoubleParts parts = MathIEEE754.extractDecimal(zero);
+		
+		assertEquals(parts.getMantissa(), 0l);
+		assertEquals(parts.getExponent(), 0);
+		
+	}
+	
+	@Test
 	public void testMantissa0() {
 
 		final long m1 = 12345;
