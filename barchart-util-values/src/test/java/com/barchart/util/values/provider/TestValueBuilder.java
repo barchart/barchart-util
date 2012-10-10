@@ -72,5 +72,12 @@ public class TestValueBuilder {
 		assertTrue(newPrice(10, -9) instanceof DefPrice9);
 
 	}
+	
+	@Test
+	public void TestNewPrice3() {
+		
+		//TODO Test from double builder
+		
+	}
 
 }

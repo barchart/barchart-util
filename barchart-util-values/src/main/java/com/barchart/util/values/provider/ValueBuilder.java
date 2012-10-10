@@ -10,7 +10,9 @@ package com.barchart.util.values.provider;
 import java.util.UUID;
 
 import com.barchart.util.ascii.ASCII;
+import com.barchart.util.math.DoubleParts;
 import com.barchart.util.math.MathExtra;
+import com.barchart.util.math.MathIEEE754;
 import com.barchart.util.values.api.DecimalValue;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -22,6 +24,11 @@ public final class ValueBuilder {
 	private ValueBuilder() {
 	}
 
+	public static final PriceValue newPrice(final double price) {
+		final DoubleParts part = MathIEEE754.extractDecimal(price);
+		return ValueBuilder.newPrice(part.getMantissa(), part.getExponent());
+	}
+	
 	public static final PriceValue newPrice(final long mantissa) {
 		if (mantissa == 0) {
 			return ValueConst.ZERO_PRICE;
