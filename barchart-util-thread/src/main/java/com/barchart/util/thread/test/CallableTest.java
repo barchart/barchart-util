@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.concurrent.Callable;
 
+import junit.framework.AssertionFailedError;
+
 public final class CallableTest {
 
 	private CallableTest() {
@@ -14,17 +16,37 @@ public final class CallableTest {
 	 */
 	public static void waitFor(final Callable<Boolean> condition)
 			throws Exception {
-		waitFor(condition, 1000);
+		waitFor(condition, null, 1000);
+	}
+
+	/**
+	 * Defaults to wait for ten seconds.
+	 */
+	public static void waitFor(final Callable<Boolean> condition,
+			final String message) throws Exception {
+		waitFor(condition, message, 1000);
+	}
+
+	/**
+	 * Defaults to wait for ten seconds.
+	 */
+	public static void waitFor(final Callable<Boolean> condition,
+			final long maxTime) throws Exception {
+		waitFor(condition, null, maxTime);
 	}
 
 	public static void waitFor(final Callable<Boolean> condition,
-			final long maxTime) throws Exception {
+			String message, final long maxTime) throws Exception {
+
+		if (message == null) {
+			message = "waitFor() time expired before assertion passed";
+		}
 
 		final long start = System.currentTimeMillis();
 
 		while (!condition.call()) {
 			if (System.currentTimeMillis() > start + maxTime) {
-				return;
+				throw new AssertionFailedError(message);
 			}
 			Thread.sleep(1);
 		}
