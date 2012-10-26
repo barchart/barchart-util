@@ -7,6 +7,9 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Groups a number of {@link FutureCallbackTask} results together, and executes
  * a single callback only after all FutureCallbacks have completed (succeeded or
@@ -22,6 +25,9 @@ import java.util.concurrent.TimeoutException;
  */
 public class FutureCallbackList<E> implements FutureCallback<List<E>> {
 
+	private final static Logger log = LoggerFactory
+			.getLogger(FutureCallbackList.class);
+
 	private final FutureListener<E> listener = new FutureListener<E>() {
 
 		@Override
@@ -31,7 +37,8 @@ public class FutureCallbackList<E> implements FutureCallback<List<E>> {
 
 	};
 
-	private final List<FutureListener<List<E>>> listeners = new CopyOnWriteArrayList<FutureListener<List<E>>>();
+	private final List<FutureListener<List<E>>> listeners =
+			new CopyOnWriteArrayList<FutureListener<List<E>>>();
 	private final List<E> responses = new CopyOnWriteArrayList<E>();
 	private final List<? extends FutureCallback<E>> results;
 	private final Semaphore resultMonitor = new Semaphore(1);
@@ -74,7 +81,11 @@ public class FutureCallbackList<E> implements FutureCallback<List<E>> {
 			final FutureListener<List<E>> callback) {
 		listeners.add(callback);
 		if (fired) {
-			callback.resultAvailable(this);
+			try {
+				callback.resultAvailable(this);
+			} catch (final Exception e) {
+				log.warn("Unhandled exception in callback", e);
+			}
 		}
 		return this;
 	}
@@ -98,7 +109,11 @@ public class FutureCallbackList<E> implements FutureCallback<List<E>> {
 			fired = true;
 			resultMonitor.release();
 			for (final FutureListener<List<E>> l : listeners) {
-				l.resultAvailable(this);
+				try {
+					l.resultAvailable(this);
+				} catch (final Exception e) {
+					log.warn("Unhandled exception in callback", e);
+				}
 			}
 		}
 	}
