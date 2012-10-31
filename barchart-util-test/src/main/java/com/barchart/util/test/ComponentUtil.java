@@ -32,8 +32,8 @@ public class ComponentUtil {
 		}
 	}
 
-	public static <T extends BaseComponent, I, P extends I> T bind(
-			final T component, final P param, final Class<I> type) {
+	public static <T extends Object, I, P extends I> T bind(final T component,
+			final P param, final Class<I> type) {
 
 		try {
 			final Method m = findMethod(component, "bind", param, type);
