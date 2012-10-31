@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.concurrent.Callable;
 
-import junit.framework.AssertionFailedError;
-
 public final class CallableTest {
 
 	private CallableTest() {
@@ -46,7 +44,7 @@ public final class CallableTest {
 
 		while (!condition.call()) {
 			if (System.currentTimeMillis() > start + maxTime) {
-				throw new AssertionFailedError(message);
+				throw new Exception(message);
 			}
 			Thread.sleep(1);
 		}
