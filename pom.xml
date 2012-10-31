@@ -43,6 +43,8 @@
 
 		<module>barchart-util-concurrent</module>
 		
+		<module>barchart-util-test</module>
+		
 	</modules>
 
 </project>

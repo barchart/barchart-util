@@ -1,4 +1,4 @@
-package com.barchart.util.thread.test;
+package com.barchart.util.test;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
