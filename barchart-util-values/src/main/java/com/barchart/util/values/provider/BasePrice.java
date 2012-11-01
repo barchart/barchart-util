@@ -38,10 +38,4 @@ abstract class BasePrice extends ScaledDecimalValue<PriceValue, DecimalValue>
 		return false;
 	}
 
-	@Override
-	public String toString() {
-		return String.format("Price > %9d %3d", // 
-				mantissa(), exponent());
-	}
-
 }
