@@ -32,6 +32,25 @@ public class ComponentUtil {
 		}
 	}
 
+	public static <T extends BaseComponent> T deactivate(final T component) {
+		return deactivate(component, new MockComponentContext());
+	}
+
+	public static <T extends BaseComponent> T deactivate(final T component,
+			final ComponentContext context) {
+		try {
+			final Method m =
+					BaseComponent.class.getDeclaredMethod(
+							"componentDeactivate", ComponentContext.class);
+			m.setAccessible(true);
+			m.invoke(component, context);
+			return component;
+		} catch (final Exception e) {
+			throw new UnsupportedOperationException(
+					"Could not activate component", e);
+		}
+	}
+
 	public static <T extends Object, I, P extends I> T bind(final T component,
 			final P param, final Class<I> type) {
 

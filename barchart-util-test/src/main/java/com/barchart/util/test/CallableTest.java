@@ -3,6 +3,7 @@ package com.barchart.util.test;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeoutException;
 
 public final class CallableTest {
 
@@ -34,7 +35,13 @@ public final class CallableTest {
 	}
 
 	public static void waitFor(final Callable<Boolean> condition,
-			String message, final long maxTime) throws Exception {
+			final String message, final long maxTime) throws Exception {
+		waitFor(condition, message, maxTime, 1);
+	}
+
+	public static void waitFor(final Callable<Boolean> condition,
+			String message, final long maxTime, final long pollInterval)
+			throws Exception {
 
 		if (message == null) {
 			message = "waitFor() time expired before assertion passed";
@@ -44,9 +51,9 @@ public final class CallableTest {
 
 		while (!condition.call()) {
 			if (System.currentTimeMillis() > start + maxTime) {
-				throw new Exception(message);
+				throw new TimeoutException(message);
 			}
-			Thread.sleep(1);
+			Thread.sleep(pollInterval);
 		}
 
 	}
