@@ -136,8 +136,27 @@ public abstract class ScaledDecimalValue<T extends ScaledDecimal<T, F> & Value<T
 
 	@Override
 	public String toString() {
-		return String.format("Decimal > %9d %3d", //
-				mantissa(), exponent());
+		int e = exponent();
+		double d  = mantissa() * Math.pow(10.0, e);
+		
+		int numberOfDecimalPlaces = e < 0 ? - e : 0;
+		switch (numberOfDecimalPlaces) {
+			case 0:
+				return String.format("%.0f", d);
+			case 1:
+				return String.format("%.1f", d);
+			case 2:
+				return String.format("%.2f", d);
+			case 3:
+				return String.format("%.3f", d);
+			case 4:
+				return String.format("%.4f", d);
+			case 5:
+				return String.format("%.5f", d);
+			default:
+				return String.format("%.6f", d);
+		}
+		
 	}
 
 	// static final long SIGN = 1L << Long.SIZE;
