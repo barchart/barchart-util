@@ -15,4 +15,6 @@ import com.barchart.util.values.lang.ScaledDecimal;
 public interface DecimalValue extends Value<DecimalValue>,
 		ScaledDecimal<DecimalValue, DecimalValue> {
 
+	double asDouble();
+	
 }

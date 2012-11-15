@@ -28,5 +28,5 @@ final class DefPrice2 extends BasePrice {
 	public final int exponent() {
 		return -2;
 	}
-
+	
 }

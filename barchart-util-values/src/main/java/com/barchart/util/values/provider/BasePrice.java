@@ -38,4 +38,9 @@ abstract class BasePrice extends ScaledDecimalValue<PriceValue, DecimalValue>
 		return false;
 	}
 
+	@Override
+	public final double asDouble() {
+		return mantissa() * Math.pow(10, exponent());
+	}
+	
 }

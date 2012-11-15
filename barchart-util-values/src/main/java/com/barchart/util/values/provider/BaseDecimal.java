@@ -36,5 +36,10 @@ abstract class BaseDecimal extends
 		}
 		return false;
 	}
+	
+	@Override
+	public final double asDouble() {
+		return mantissa() * Math.pow(10, exponent());
+	}
 
 }
