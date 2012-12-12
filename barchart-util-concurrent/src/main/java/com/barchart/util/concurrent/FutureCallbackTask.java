@@ -11,42 +11,50 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * <p>Basic implementation of {@link FutureCallback} based on {@link FutureTask}.</p>
+ * <p>
+ * Basic implementation of {@link FutureCallback} based on {@link FutureTask}.
+ * </p>
  * 
  * @author jeremy
  * @see FutureTask
  * @see FutureCallback
- * @param <E> The result type
+ * @param <E>
+ *            The result type
  */
-public class FutureCallbackTask<E> extends FutureTask<E> implements FutureCallback<E> {
-	
-	private final static Logger log = LoggerFactory.getLogger(FutureCallbackTask.class);
-	
-	private final List<FutureListener<E>> listeners = new CopyOnWriteArrayList<FutureListener<E>>();
+public class FutureCallbackTask<E> extends FutureTask<E> implements
+		FutureCallback<E, FutureCallbackTask<E>> {
+
+	private final static Logger log = LoggerFactory
+			.getLogger(FutureCallbackTask.class);
+
+	private final List<FutureListener<E>> listeners =
+			new CopyOnWriteArrayList<FutureListener<E>>();
 	private final Lock callbackLock = new ReentrantLock();
-	
+
 	/**
 	 * Create a future result handler.
 	 */
-	public FutureCallbackTask(Runnable r, E value) {
+	public FutureCallbackTask(final Runnable r, final E value) {
 		super(r, value);
 	}
-	
+
 	/**
 	 * Create a future result handler.
 	 */
-	public FutureCallbackTask(Callable<E> c) {
+	public FutureCallbackTask(final Callable<E> c) {
 		super(c);
 	}
-	
-	public FutureCallback<E> addResultListener(FutureListener<E> listener) {
+
+	@Override
+	public FutureCallbackTask<E> addResultListener(
+			final FutureListener<E> listener) {
 		callbackLock.lock();
 		try {
 			listeners.add(listener);
 			if (isDone()) {
 				try {
 					listener.resultAvailable(this);
-				} catch (Exception ex) {
+				} catch (final Exception ex) {
 					log.warn("Unhandled exception in callback", ex);
 				}
 			}
@@ -56,43 +64,57 @@ public class FutureCallbackTask<E> extends FutureTask<E> implements FutureCallba
 		return this;
 	}
 
-	public FutureCallback<E> succeed(E result_) {
+	@Override
+	public FutureCallbackTask<E> succeed(final E result_) {
 		super.set(result_);
 		return this;
 	}
-	
-	public FutureCallback<E> fail(Throwable error_) {
+
+	@Override
+	public FutureCallbackTask<E> fail(final Throwable error_) {
 		super.setException(error_);
 		return this;
 	}
-	
+
+	@Override
+	public E getUnchecked() {
+		try {
+			return get();
+		} catch (final Exception e) {
+			return null;
+		}
+	}
+
 	/**
 	 * Notify listeners that a result is available.
 	 */
+	@Override
 	protected void done() {
 		callbackLock.lock();
 		try {
-			for (FutureListener<E> l : listeners)
+			for (final FutureListener<E> l : listeners) {
 				try {
 					l.resultAvailable(this);
-				} catch (Exception ex) {
+				} catch (final Exception ex) {
 					log.warn("Unhandled exception in callback", ex);
 				}
+			}
 		} finally {
 			callbackLock.unlock();
 		}
 	}
-	
+
 	/**
-	 * Log an error if this FutureCallbackTask is garbage collected before it has been
-	 * called.
+	 * Log an error if this FutureCallbackTask is garbage collected before it
+	 * has been called.
 	 */
 	@Override
 	public void finalize() throws Throwable {
 		try {
-			if (!isDone())
+			if (!isDone()) {
 				log.error("finalize() called on an incomplete FutureCallbackTask");
-		} catch (Exception e) {
+			}
+		} catch (final Exception e) {
 		} finally {
 			super.finalize();
 		}
