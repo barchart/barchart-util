@@ -7,12 +7,4 @@
     http://www.opensource.org/licenses/bsd-license.php
 
 -->
-## info
 
-barchart utilities projects 
-
-### repo
-
-maven central has
-[latest version of these artifacts]
-(http://search.maven.org/#search%7Cga%7C1%7Ccom.barchart.util)
