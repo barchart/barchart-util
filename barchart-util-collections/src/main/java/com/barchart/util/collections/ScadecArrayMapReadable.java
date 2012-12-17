@@ -120,7 +120,11 @@ public abstract class ScadecArrayMapReadable<T extends ScaledDecimal<T, ?>, V>
 		if (isBelowHead(key) || isAboveTail(key)) {
 			return null;
 		} else {
-			return getArray()[indexFrom(key)];
+			if(getArray().length > 0) {
+				return getArray()[indexFrom(key)];
+			} else {
+				return null;
+			}
 		}
 
 	}

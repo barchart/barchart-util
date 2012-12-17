@@ -12,7 +12,6 @@ package com.barchart.util.values.lang;
  * 
  * http://en.wikipedia.org/wiki/Floating_point
  */
-
 public interface ScaledDecimal<T extends ScaledDecimal<T, F>, F extends ScaledDecimal<F, ?>>
 		extends Comparable<T> {
 

@@ -19,7 +19,7 @@ public interface SizeValue extends Value<SizeValue>, Comparable<SizeValue> {
 	int asInt();
 
 	long asLong();
-
+	
 	//
 
 	@Override
