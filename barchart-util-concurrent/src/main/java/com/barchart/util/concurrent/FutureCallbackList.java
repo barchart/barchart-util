@@ -23,7 +23,8 @@ import org.slf4j.LoggerFactory;
  * @param <E>
  *            The deferred result type
  */
-public class FutureCallbackList<E> implements FutureCallback<List<E>> {
+public class FutureCallbackList<E> implements
+		FutureCallback<List<E>, FutureCallbackList<E>> {
 
 	private final static Logger log = LoggerFactory
 			.getLogger(FutureCallbackList.class);
@@ -40,7 +41,7 @@ public class FutureCallbackList<E> implements FutureCallback<List<E>> {
 	private final List<FutureListener<List<E>>> listeners =
 			new CopyOnWriteArrayList<FutureListener<List<E>>>();
 	private final List<E> responses = new CopyOnWriteArrayList<E>();
-	private final List<? extends FutureCallback<E>> results;
+	private final List<? extends FutureCallback<E, ?>> results;
 	private final Semaphore resultMonitor = new Semaphore(1);
 
 	private volatile int completed = 0;
@@ -53,14 +54,15 @@ public class FutureCallbackList<E> implements FutureCallback<List<E>> {
 	 * @param deferreds_
 	 *            The list of deferred results to monitor
 	 */
-	public FutureCallbackList(final List<? extends FutureCallback<E>> results_) {
+	public FutureCallbackList(
+			final List<? extends FutureCallback<E, ?>> results_) {
 		results = results_;
 		if (results_ == null || results_.size() == 0) {
 			fired = true;
 		} else {
 			// Lock the semaphore until a result is available
 			resultMonitor.acquireUninterruptibly();
-			for (final FutureCallback<E> r : results_) {
+			for (final FutureCallback<E, ?> r : results_) {
 				r.addResultListener(listener);
 			}
 		}
@@ -77,7 +79,7 @@ public class FutureCallbackList<E> implements FutureCallback<List<E>> {
 	 *            The object to notify of the deferred results
 	 */
 	@Override
-	public FutureCallback<List<E>> addResultListener(
+	public FutureCallbackList<E> addResultListener(
 			final FutureListener<List<E>> callback) {
 		listeners.add(callback);
 		if (fired) {
@@ -99,7 +101,7 @@ public class FutureCallbackList<E> implements FutureCallback<List<E>> {
 		}
 		completed++;
 		if (completed == results.size()) {
-			for (final FutureCallback<E> r : results) {
+			for (final FutureCallback<E, ?> r : results) {
 				try {
 					responses.add(r.get());
 				} catch (final Exception e) {
@@ -124,7 +126,7 @@ public class FutureCallbackList<E> implements FutureCallback<List<E>> {
 			return false;
 		}
 		cancelled = true;
-		for (final FutureCallback<E> r : results) {
+		for (final FutureCallback<E, ?> r : results) {
 			r.cancel(interrupt);
 		}
 		return true;
@@ -136,6 +138,11 @@ public class FutureCallbackList<E> implements FutureCallback<List<E>> {
 			resultMonitor.acquireUninterruptibly();
 		}
 		return responses;
+	}
+
+	@Override
+	public List<E> getUnchecked() {
+		return get();
 	}
 
 	@Override
@@ -158,12 +165,12 @@ public class FutureCallbackList<E> implements FutureCallback<List<E>> {
 	}
 
 	@Override
-	public FutureCallback<List<E>> succeed(final List<E> result) {
+	public FutureCallbackList<E> succeed(final List<E> result) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public FutureCallback<List<E>> fail(final Throwable error) {
+	public FutureCallbackList<E> fail(final Throwable error) {
 		throw new UnsupportedOperationException();
 	}
 
