@@ -1,13 +1,7 @@
-<!--
-
-    Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com />
-
-    All rights reserved. Licensed under the OSI BSD License.
-
-    http://www.opensource.org/licenses/bsd-license.php
-
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<!-- Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com /> All 
+	rights reserved. Licensed under the OSI BSD License. http://www.opensource.org/licenses/bsd-license.php -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -33,36 +27,31 @@
 		<url>https://github.com/barchart/barchart-util</url>
 		<connection>scm:git:git://github.com/barchart/barchart-util.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-util.git</developerConnection>
-	  	<tag>HEAD</tag>
-  	</scm>
+		<tag>HEAD</tag>
+	</scm>
 
 	<modules>
 
 		<module>barchart-util-anno</module>
-
 		<module>barchart-util-json</module>
-		
 		<module>barchart-util-ascii</module>
-		
 		<module>barchart-util-bench</module>
-
 		<module>barchart-util-clone</module>
-
 		<module>barchart-util-enums</module>
-
 		<module>barchart-util-math</module>
-		
 		<module>barchart-util-thread</module>
-		
 		<module>barchart-util-values</module>
-		
 		<module>barchart-util-collections</module>
-
 		<module>barchart-util-concurrent</module>
-		
 		<module>barchart-util-test</module>
-		
+
 	</modules>
+
+	<properties>
+
+		<maven.site.skip>true</maven.site.skip>
+
+	</properties>
 
 	<!-- publish maven site to github -->
 	<profiles>
@@ -108,5 +97,17 @@
 		</profile>
 
 	</profiles>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<stylesheetfile>${basedir}/src/site/stylesheet.css</stylesheetfile>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 
 </project>
