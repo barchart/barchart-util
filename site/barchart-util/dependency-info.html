@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="Date-Revision-yyyymmdd" content="20121218" />
     <meta http-equiv="Content-Language" content="en" />
-    <title>barchart-util - Project Dependency Management</title>
+    <title>barchart-util - Dependency Information</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido-1.3.0.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -120,17 +120,17 @@
         Project Modules</a>
             </li>
                       
-      <li>
-    
-                          <a href="dependency-info.html" title="Dependency Information">
-          <i class="none"></i>
-        Dependency Information</a>
-            </li>
-                      
       <li class="active">
     
-            <a href="#"><i class="none"></i>Dependency Management</a>
+            <a href="#"><i class="none"></i>Dependency Information</a>
           </li>
+                      
+      <li>
+    
+                          <a href="dependency-management.html" title="Dependency Management">
+          <i class="none"></i>
+        Dependency Management</a>
+            </li>
                       
       <li>
     
@@ -237,7 +237,16 @@
                 
         <div id="bodyColumn"  class="span9" >
                                   
-            <div class="section"><h2>Project Dependency Management<a name="Project_Dependency_Management"></a></h2><a name="Project_Dependency_Management"></a><div class="section"><h3>compile<a name="compile"></a></h3><a name="compile"></a><p>The following is a list of compile dependencies in the DependencyManagement of this project. These dependencies can be included in the submodules to compile and run the submodule:</p><table border="0" class="table table-striped"><tr class="a"><th>GroupId</th><th>ArtifactId</th><th>Version</th><th>Type</th><th>License</th></tr><tr class="b"><td>ch.qos.logback</td><td><a class="externalLink" href="http://logback.qos.ch">logback-classic</a></td><td>1.0.9</td><td>jar</td><td><a class="externalLink" href="http://www.eclipse.org/legal/epl-v10.html">Eclipse Public License - v 1.0</a>, <a class="externalLink" href="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">GNU Lesser General Public License</a></td></tr><tr class="a"><td>ch.qos.logback</td><td><a class="externalLink" href="http://logback.qos.ch">logback-core</a></td><td>1.0.9</td><td>jar</td><td><a class="externalLink" href="http://www.eclipse.org/legal/epl-v10.html">Eclipse Public License - v 1.0</a>, <a class="externalLink" href="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">GNU Lesser General Public License</a></td></tr><tr class="b"><td>joda-time</td><td><a class="externalLink" href="http://joda-time.sourceforge.net">joda-time</a></td><td>2.1</td><td>jar</td><td><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2</a></td></tr><tr class="a"><td>junit</td><td><a class="externalLink" href="http://junit.org">junit</a></td><td>4.11</td><td>jar</td><td><a class="externalLink" href="http://www.opensource.org/licenses/cpl1.0.txt">Common Public License Version 1.0</a></td></tr><tr class="b"><td>org.easymock</td><td><a class="externalLink" href="http://www.easymock.org/easymock">easymock</a></td><td>3.1</td><td>jar</td><td><a class="externalLink" href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2</a></td></tr><tr class="a"><td>org.mockito</td><td><a class="externalLink" href="http://www.mockito.org">mockito-all</a></td><td>1.9.5</td><td>jar</td><td><a class="externalLink" href="http://code.google.com/p/mockito/wiki/License">The MIT License</a></td></tr><tr class="b"><td>org.osgi</td><td>org.osgi.compendium</td><td>4.2.0</td><td>jar</td><td>-</td></tr><tr class="a"><td>org.osgi</td><td><a class="externalLink" href="http://www.osgi.org">org.osgi.core</a></td><td>4.3.0</td><td>jar</td><td><a class="externalLink" href="http://opensource.org/licenses/apache2.0.php">Apache License, Version 2.0</a></td></tr><tr class="b"><td>org.scala-lang</td><td><a class="externalLink" href="http://www.scala-lang.org/">scala-library</a></td><td>2.9.2</td><td>jar</td><td><a class="externalLink" href="http://www.scala-lang.org/downloads/license.html">BSD-like</a></td></tr><tr class="a"><td>org.slf4j</td><td><a class="externalLink" href="http://www.slf4j.org">slf4j-api</a></td><td>1.7.2</td><td>jar</td><td><a class="externalLink" href="http://www.opensource.org/licenses/mit-license.php">MIT License</a></td></tr></table></div></div>
+            <div class="section"><h2>Dependency Information<a name="Dependency_Information"></a></h2><a name="Dependency_Information"></a><div class="section"><h3>Apache Maven<a name="Apache_Maven"></a></h3><a name="Apache_Maven"></a><div class="source"><pre class="prettyprint">&lt;dependency&gt;
+  &lt;groupId&gt;com.barchart.util&lt;/groupId&gt;
+  &lt;artifactId&gt;barchart-util&lt;/artifactId&gt;
+  &lt;version&gt;2.0.13&lt;/version&gt;
+  &lt;type&gt;pom&lt;/type&gt;
+&lt;/dependency&gt;</pre></div></div><div class="section"><h3>Apache Buildr<a name="Apache_Buildr"></a></h3><a name="Apache_Buildr"></a><div class="source"><pre class="prettyprint">'com.barchart.util:barchart-util:pom:2.0.13'</pre></div></div><div class="section"><h3>Apache Ant<a name="Apache_Ant"></a></h3><a name="Apache_Ant"></a><div class="source"><pre class="prettyprint">&lt;dependency org=&quot;com.barchart.util&quot; name=&quot;barchart-util&quot; rev=&quot;2.0.13&quot;&gt;
+  &lt;artifact name=&quot;barchart-util&quot; type=&quot;pom&quot; /&gt;
+&lt;/dependency&gt;</pre></div></div><div class="section"><h3>Groovy Grape<a name="Groovy_Grape"></a></h3><a name="Groovy_Grape"></a><div class="source"><pre class="prettyprint">@Grapes(
+@Grab(group='com.barchart.util', module='barchart-util', version='2.0.13')
+)</pre></div></div><div class="section"><h3>Grails<a name="Grails"></a></h3><a name="Grails"></a><div class="source"><pre class="prettyprint">compile 'com.barchart.util:barchart-util:2.0.13'</pre></div></div><div class="section"><h3>Leiningen<a name="Leiningen"></a></h3><a name="Leiningen"></a><div class="source"><pre class="prettyprint">[com.barchart.util/barchart-util &quot;2.0.13&quot;]</pre></div></div><div class="section"><h3>SBT<a name="SBT"></a></h3><a name="SBT"></a><div class="source"><pre class="prettyprint">libraryDependencies += &quot;com.barchart.util&quot; %% &quot;barchart-util&quot; % &quot;2.0.13&quot;</pre></div></div></div>
                   </div>
             </div>
           </div>

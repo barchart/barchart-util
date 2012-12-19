@@ -123,42 +123,46 @@
 <FONT color="green">120</FONT>                    if (isBelowHead(key) || isAboveTail(key)) {<a name="line.120"></a>
 <FONT color="green">121</FONT>                            return null;<a name="line.121"></a>
 <FONT color="green">122</FONT>                    } else {<a name="line.122"></a>
-<FONT color="green">123</FONT>                            return getArray()[indexFrom(key)];<a name="line.123"></a>
-<FONT color="green">124</FONT>                    }<a name="line.124"></a>
-<FONT color="green">125</FONT>    <a name="line.125"></a>
-<FONT color="green">126</FONT>            }<a name="line.126"></a>
-<FONT color="green">127</FONT>    <a name="line.127"></a>
-<FONT color="green">128</FONT>            protected final T normalize(final T key) {<a name="line.128"></a>
-<FONT color="green">129</FONT>                    return key.scale(keyStep().exponent());<a name="line.129"></a>
+<FONT color="green">123</FONT>                            if(getArray().length &gt; 0) {<a name="line.123"></a>
+<FONT color="green">124</FONT>                                    return getArray()[indexFrom(key)];<a name="line.124"></a>
+<FONT color="green">125</FONT>                            } else {<a name="line.125"></a>
+<FONT color="green">126</FONT>                                    return null;<a name="line.126"></a>
+<FONT color="green">127</FONT>                            }<a name="line.127"></a>
+<FONT color="green">128</FONT>                    }<a name="line.128"></a>
+<FONT color="green">129</FONT>    <a name="line.129"></a>
 <FONT color="green">130</FONT>            }<a name="line.130"></a>
 <FONT color="green">131</FONT>    <a name="line.131"></a>
-<FONT color="green">132</FONT>            @Override<a name="line.132"></a>
-<FONT color="green">133</FONT>            public final V get(final int index) {<a name="line.133"></a>
-<FONT color="green">134</FONT>                    return getArray()[index];<a name="line.134"></a>
-<FONT color="green">135</FONT>            }<a name="line.135"></a>
-<FONT color="green">136</FONT>    <a name="line.136"></a>
-<FONT color="green">137</FONT>            @Override<a name="line.137"></a>
-<FONT color="green">138</FONT>            public final int getIndex(final T keyValue) {<a name="line.138"></a>
-<FONT color="green">139</FONT>    <a name="line.139"></a>
-<FONT color="green">140</FONT>                    if (keyValue == null) {<a name="line.140"></a>
-<FONT color="green">141</FONT>                            return ERROR_INDEX;<a name="line.141"></a>
-<FONT color="green">142</FONT>                    }<a name="line.142"></a>
+<FONT color="green">132</FONT>            protected final T normalize(final T key) {<a name="line.132"></a>
+<FONT color="green">133</FONT>                    return key.scale(keyStep().exponent());<a name="line.133"></a>
+<FONT color="green">134</FONT>            }<a name="line.134"></a>
+<FONT color="green">135</FONT>    <a name="line.135"></a>
+<FONT color="green">136</FONT>            @Override<a name="line.136"></a>
+<FONT color="green">137</FONT>            public final V get(final int index) {<a name="line.137"></a>
+<FONT color="green">138</FONT>                    return getArray()[index];<a name="line.138"></a>
+<FONT color="green">139</FONT>            }<a name="line.139"></a>
+<FONT color="green">140</FONT>    <a name="line.140"></a>
+<FONT color="green">141</FONT>            @Override<a name="line.141"></a>
+<FONT color="green">142</FONT>            public final int getIndex(final T keyValue) {<a name="line.142"></a>
 <FONT color="green">143</FONT>    <a name="line.143"></a>
-<FONT color="green">144</FONT>                    final T key = normalize(keyValue);<a name="line.144"></a>
-<FONT color="green">145</FONT>    <a name="line.145"></a>
-<FONT color="green">146</FONT>                    if (isBelowHead(key)) {<a name="line.146"></a>
-<FONT color="green">147</FONT>                            return ERROR_INDEX;<a name="line.147"></a>
-<FONT color="green">148</FONT>                    }<a name="line.148"></a>
+<FONT color="green">144</FONT>                    if (keyValue == null) {<a name="line.144"></a>
+<FONT color="green">145</FONT>                            return ERROR_INDEX;<a name="line.145"></a>
+<FONT color="green">146</FONT>                    }<a name="line.146"></a>
+<FONT color="green">147</FONT>    <a name="line.147"></a>
+<FONT color="green">148</FONT>                    final T key = normalize(keyValue);<a name="line.148"></a>
 <FONT color="green">149</FONT>    <a name="line.149"></a>
-<FONT color="green">150</FONT>                    if (isAboveTail(key)) {<a name="line.150"></a>
+<FONT color="green">150</FONT>                    if (isBelowHead(key)) {<a name="line.150"></a>
 <FONT color="green">151</FONT>                            return ERROR_INDEX;<a name="line.151"></a>
 <FONT color="green">152</FONT>                    }<a name="line.152"></a>
 <FONT color="green">153</FONT>    <a name="line.153"></a>
-<FONT color="green">154</FONT>                    return indexFrom(key);<a name="line.154"></a>
-<FONT color="green">155</FONT>    <a name="line.155"></a>
-<FONT color="green">156</FONT>            }<a name="line.156"></a>
+<FONT color="green">154</FONT>                    if (isAboveTail(key)) {<a name="line.154"></a>
+<FONT color="green">155</FONT>                            return ERROR_INDEX;<a name="line.155"></a>
+<FONT color="green">156</FONT>                    }<a name="line.156"></a>
 <FONT color="green">157</FONT>    <a name="line.157"></a>
-<FONT color="green">158</FONT>    }<a name="line.158"></a>
+<FONT color="green">158</FONT>                    return indexFrom(key);<a name="line.158"></a>
+<FONT color="green">159</FONT>    <a name="line.159"></a>
+<FONT color="green">160</FONT>            }<a name="line.160"></a>
+<FONT color="green">161</FONT>    <a name="line.161"></a>
+<FONT color="green">162</FONT>    }<a name="line.162"></a>
 
 
 
