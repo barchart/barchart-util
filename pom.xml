@@ -22,12 +22,19 @@
 	<version>2.0.15-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<url>https://github.com/barchart/barchart-util</url>
+
+	<issueManagement>
+		<system>github</system>
+		<url>https://github.com/barchart/barchart-util/issues</url>
+	</issueManagement>
+
 	<scm>
 		<url>https://github.com/barchart/barchart-util</url>
 		<connection>scm:git:git://github.com/barchart/barchart-util.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-util.git</developerConnection>
-	  <tag>HEAD</tag>
-  </scm>
+	  	<tag>HEAD</tag>
+  	</scm>
 
 	<modules>
 
