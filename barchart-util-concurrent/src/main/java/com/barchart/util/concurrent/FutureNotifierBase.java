@@ -154,10 +154,15 @@ public class FutureNotifierBase<V, T extends FutureCallback<V, T>> implements
 	 *            the value
 	 */
 	protected void set(final V v) {
-		if (isDone()) {
-			throw new IllegalStateException("Future already completed");
+		callbackLock.lock();
+		try {
+			if (isDone()) {
+				throw new IllegalStateException("Future already completed");
+			}
+			sync.innerSet(v);
+		} finally {
+			callbackLock.unlock();
 		}
-		sync.innerSet(v);
 	}
 
 	/**
@@ -170,10 +175,15 @@ public class FutureNotifierBase<V, T extends FutureCallback<V, T>> implements
 	 *            the cause of failure
 	 */
 	protected void setException(final Throwable t) {
-		if (isDone()) {
-			throw new IllegalStateException("Future already completed");
+		callbackLock.lock();
+		try {
+			if (isDone()) {
+				throw new IllegalStateException("Future already completed");
+			}
+			sync.innerSetException(t);
+		} finally {
+			callbackLock.unlock();
 		}
-		sync.innerSetException(t);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -197,6 +207,21 @@ public class FutureNotifierBase<V, T extends FutureCallback<V, T>> implements
 			callbackLock.unlock();
 		}
 		return (T) this;
+	}
+
+	@SuppressWarnings("unchecked")
+	public T removeResultListener(final FutureListener<V> listener) {
+		callbackLock.lock();
+		try {
+			listeners.remove(listener);
+		} finally {
+			callbackLock.unlock();
+		}
+		return (T) this;
+	}
+
+	public boolean hasListeners() {
+		return listeners.size() > 0;
 	}
 
 	@SuppressWarnings("unchecked")
