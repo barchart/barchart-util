@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>com.barchart.util</groupId>
 		<artifactId>barchart-util</artifactId>
-		<version>2.0.22</version>
+		<version>2.0.23-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>barchart-util-test</artifactId>
@@ -24,7 +24,7 @@
 		<url>https://github.com/barchart/barchart-util</url>
 		<connection>scm:git:git://github.com/barchart/barchart-util.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-util.git</developerConnection>
-	  <tag>barchart-util-2.0.22</tag>
+	  <tag>HEAD</tag>
   </scm>
 
 	<dependencies>
