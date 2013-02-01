@@ -42,6 +42,7 @@
 		<module>barchart-util-values</module>
 		<module>barchart-util-collections</module>
 		<module>barchart-util-concurrent</module>
+		<module>barchart-util-aws</module>
 		<module>barchart-util-test</module>
 
 	</modules>
