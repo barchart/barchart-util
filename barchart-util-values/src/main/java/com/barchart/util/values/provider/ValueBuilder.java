@@ -17,6 +17,7 @@ import com.barchart.util.values.api.DecimalValue;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TextValue;
+import com.barchart.util.values.api.TimeInterval;
 import com.barchart.util.values.api.TimeValue;
 
 public final class ValueBuilder {
@@ -199,5 +200,15 @@ public final class ValueBuilder {
 			final int exponent) {
 		return new VarDecimal(mantissa, exponent);
 	}
+	
+	public static TimeInterval newTimeInterval(final TimeValue start, 
+			final TimeValue stop) {
+		return new DefTimeInterval(start, stop);
+	}
+	
+	public static TimeInterval newTimeInterval(final long start, final long stop) {
+		return new DefTimeInterval(newTime(start), newTime(stop));
+	}
+	
 
 }

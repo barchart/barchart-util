@@ -14,6 +14,7 @@ import com.barchart.util.values.api.DecimalValue;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TextValue;
+import com.barchart.util.values.api.TimeInterval;
 import com.barchart.util.values.api.TimeValue;
 
 public final class ValueConst {
@@ -43,6 +44,9 @@ public final class ValueConst {
 	new NulTime();
 	public static final TimeValue ZERO_TIME = //
 	new NulTime();
+	
+	public static final TimeInterval NULL_TIME_INTERVAL = //
+	new NulTimeInterval();
 
 	public static final SizeValue[] NULL_SIZE_ARRAY = new SizeValue[0];
 
