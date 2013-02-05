@@ -5,10 +5,15 @@ import com.barchart.util.values.api.TimeValue;
 
 public class DefTimeInterval extends ValueFreezer<TimeInterval> implements TimeInterval {
 
-	final TimeValue start;
-	final TimeValue stop;
+	final long start;
+	final long stop;
 	
 	DefTimeInterval(final TimeValue start, final TimeValue stop) {
+		this.start = start.asMillisUTC();
+		this.stop = stop.asMillisUTC();
+	}
+	
+	DefTimeInterval(final long start, final long stop) {
 		this.start = start;
 		this.stop = stop;
 	}
@@ -20,22 +25,22 @@ public class DefTimeInterval extends ValueFreezer<TimeInterval> implements TimeI
 
 	@Override
 	public TimeValue start() {
-		return start.freeze();
+		return ValueBuilder.newTime(start);
 	}
 
 	@Override
 	public long startAsMillis() {
-		return start.asMillisUTC();
+		return start;
 	}
 
 	@Override
 	public TimeValue stop() {
-		return stop.freeze();
+		return ValueBuilder.newTime(stop);
 	}
 
 	@Override
 	public long stopAsMillis() {
-		return stop.asMillisUTC();
+		return stop;
 	}
 
 }
