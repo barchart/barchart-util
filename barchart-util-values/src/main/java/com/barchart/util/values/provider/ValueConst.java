@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.util.values.api.DecimalValue;
+import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TextValue;
@@ -48,6 +49,9 @@ public final class ValueConst {
 	public static final TimeInterval NULL_TIME_INTERVAL = //
 	new NulTimeInterval();
 
+	public static final Fraction NULL_FRACTION = //
+	new NulFraction();
+	
 	public static final SizeValue[] NULL_SIZE_ARRAY = new SizeValue[0];
 
 	static {
