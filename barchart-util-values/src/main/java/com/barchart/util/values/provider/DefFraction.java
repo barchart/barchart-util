@@ -29,7 +29,8 @@ public class DefFraction extends BaseDecimal implements Fraction {
 		decimalExponent = exponent;
 		decimalDenominator = (long) pow(10, -decimalExponent);
 		
-		places = 1 + (int)Math.log10(decimalExponent);
+		places = 1 + (int)Math.log10(denominator);
+		
 	}
 	
 	@Override
@@ -107,6 +108,15 @@ public class DefFraction extends BaseDecimal implements Fraction {
 		mantissa /= decimalDenominator;
 		
 		return mantissa;
+	}
+	
+	@Override 
+	public long priceWhole(PriceValue price) {
+		
+		if(price == null) {
+			price = ValueConst.NULL_PRICE;
+		}
+		return priceWhole(price.mantissa(), price.exponent());
 	}
 
 	@Override

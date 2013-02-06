@@ -65,4 +65,9 @@ class NulFraction extends BaseDecimal implements Fraction {
 		return 0;
 	}
 
+	@Override
+	public long priceWhole(PriceValue price) {
+		return 0;
+	}
+
 }

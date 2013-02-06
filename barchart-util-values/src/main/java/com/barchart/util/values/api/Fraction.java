@@ -22,6 +22,8 @@ public interface Fraction extends DecimalValue {
 	
 	long priceFraction(long mantissa, int exponent);
 	
+	long priceWhole(PriceValue price);
+	
 	long priceWhole(long mantissa, int exponent);
 	
 }
