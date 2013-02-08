@@ -2,11 +2,26 @@ package com.barchart.util.collections;
 
 import java.lang.reflect.Array;
 
+/**
+ * A fast array based bi-directional map between two sets of enums.
+ * 
+ * @author Gavin M Litchfield
+ *
+ * @param <K> 
+ * @param <V>
+ */
 public class BiEnumMap<K extends Enum<K>, V extends Enum<V>> {
 
 	private final K[] ks;
 	private final V[] vs;
 	
+	/**
+	 * Map maintains the explicit ordering between the array elements.  Arrays
+	 * must contain the same number of elements.
+	 * 
+	 * @param keys
+	 * @param vals
+	 */
 	@SuppressWarnings("unchecked")
 	public BiEnumMap(final K[] keys, final V[] vals) {
 		
