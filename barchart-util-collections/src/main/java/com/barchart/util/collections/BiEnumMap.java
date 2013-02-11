@@ -53,6 +53,12 @@ public class BiEnumMap<K extends Enum<K>, V extends Enum<V>> {
 		
 	}
 	
+	public BiEnumMap(final Class<K> keyClass, final Class<V> valClass) {
+		
+		this(keyClass.getEnumConstants(), valClass.getEnumConstants());
+		
+	}
+	
 	public V getValue(final K key) {
 		if(key.ordinal() >= vs.length) {
 			return null;
