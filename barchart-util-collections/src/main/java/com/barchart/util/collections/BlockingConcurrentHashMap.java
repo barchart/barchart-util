@@ -38,10 +38,13 @@ public class BlockingConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V>
 			throws InterruptedException {
 		V result = get(key);
 		if (result == null) {
-			final CountDownLatch tryLatch = new CountDownLatch(1);
-			CountDownLatch latch = latches.putIfAbsent(key, tryLatch);
+			CountDownLatch latch = latches.get(key);
 			if (latch == null) {
-				latch = tryLatch;
+				final CountDownLatch tryLatch = new CountDownLatch(1);
+				latch = latches.putIfAbsent(key, tryLatch);
+				if (latch == null) {
+					latch = tryLatch;
+				}
 			}
 			latch.await(timeout, unit);
 			result = get(key);
