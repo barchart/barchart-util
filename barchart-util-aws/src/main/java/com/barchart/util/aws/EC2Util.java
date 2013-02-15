@@ -26,8 +26,8 @@ public class EC2Util {
 
 			final URL url = new URL("http://169.254.169.254/latest/user-data");
 
-			final HttpURLConnection connection =
-					(HttpURLConnection) url.openConnection();
+			final HttpURLConnection connection = (HttpURLConnection) url
+					.openConnection();
 
 			connection.setConnectTimeout(2 * 1000);
 			connection.setRequestMethod("GET");
@@ -57,12 +57,11 @@ public class EC2Util {
 
 		try {
 
-			final URL url =
-					new URL(
-							"http://169.254.169.254/latest/meta-data/security-groups");
+			final URL url = new URL(
+					"http://169.254.169.254/latest/meta-data/security-groups");
 
-			final HttpURLConnection connection =
-					(HttpURLConnection) url.openConnection();
+			final HttpURLConnection connection = (HttpURLConnection) url
+					.openConnection();
 
 			connection.setConnectTimeout(2 * 1000);
 			connection.setRequestMethod("GET");
@@ -86,4 +85,43 @@ public class EC2Util {
 		return groups;
 
 	}
+
+	/**
+	 * Read string from URL.
+	 */
+	public static String readURL(final String textURL) {
+
+		final StringBuilder text = new StringBuilder(128);
+
+		try {
+
+			final URL url = new URL(textURL);
+
+			final HttpURLConnection connection = (HttpURLConnection) url
+					.openConnection();
+
+			connection.setConnectTimeout(2 * 1000);
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("User-Agent", "config-reader");
+			connection.connect();
+
+			final InputStream input = connection.getInputStream();
+			final InputStreamReader reader = new InputStreamReader(input);
+			final BufferedReader buffered = new BufferedReader(reader);
+
+			String line;
+			while ((line = buffered.readLine()) != null) {
+				text.append(line);
+			}
+
+			buffered.close();
+
+		} catch (final Exception e) {
+			text.append(e.getMessage());
+		}
+
+		return text.toString();
+
+	}
+
 }
