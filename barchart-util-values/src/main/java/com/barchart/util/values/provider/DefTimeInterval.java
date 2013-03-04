@@ -49,5 +49,39 @@ public class DefTimeInterval extends ValueFreezer<TimeInterval> implements TimeI
 	public long stopAsMillis() {
 		return stop;
 	}
+	
+	@Override
+	public boolean equals(final Object o) {
+		
+		if(o == null) {
+			return false;
+		}
+		
+		if(this == o) {
+			return true;
+		}
+		
+		if(!(o instanceof TimeInterval)) {
+			return false;
+		}
+		
+		final TimeInterval tI = (TimeInterval)o;
+		
+		if(this.isNull()) {
+			if(tI.isNull()) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+		if(tI.isNull()) {
+			return false;
+		}
+		
+		return (start == tI.startAsMillis()) &&
+				(stop == tI.stopAsMillis());
+		
+	}
 
 }
