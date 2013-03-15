@@ -1,5 +1,7 @@
-barchart-util-concurrent provides the basic building block for asynchronous programming in Java.
-It has similar goals to Guava's ListenableFuture with a simpler API. It provides an
+## barchart-util-concurrent
+
+barchart-util-concurrent provides the basic building blocks for asynchronous programming in
+Java. It has similar goals to Guava's ListenableFuture with a simpler API. It provides an
 implementation of some Future<E> classes, with the ability to attach a callback listener that
 will be notified as soon as a result is available.
 
