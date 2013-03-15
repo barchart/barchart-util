@@ -36,9 +36,9 @@ public void init() {
 
 }
 
-public FutureCallback<User> login(final String user, final String pass) {
+public FutureCallback<User, ?> login(final String user, final String pass) {
 
-     final FutureCallback<User> future = new FutureNotifier<User>();
+     final FutureCallback<User, ?> future = new FutureNotifier<User>();
 
      new Thread() {
           public void run() {
@@ -47,8 +47,7 @@ public FutureCallback<User> login(final String user, final String pass) {
                if (user != null)
                     future.succeed(user);
                else
-                    future.fail(new AuthenticationException("Username
-not found"));
+                    future.fail(new AuthenticationException("Username not found"));
           }
      }.start();
 
