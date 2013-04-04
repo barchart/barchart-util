@@ -27,9 +27,6 @@
 
 			<arg value="--update-snapshots" />
 
-			<arg value="--define" />
-			<arg value="skipTests" />
-
 		</exec>
 
 	</target>
