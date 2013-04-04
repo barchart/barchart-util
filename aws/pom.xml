@@ -15,6 +15,7 @@
 		<groupId>com.barchart.base</groupId>
 		<artifactId>barchart-archon</artifactId>
 		<version>2.5.6</version>
+		<relativePath/>
 	</parent>
 
 	<groupId>com.barchart.util</groupId>
