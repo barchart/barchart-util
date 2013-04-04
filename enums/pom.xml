@@ -12,12 +12,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.barchart.util</groupId>
-		<artifactId>barchart-util</artifactId>
-		<version>2.0.29-SNAPSHOT</version>
+		<groupId>com.barchart.base</groupId>
+		<artifactId>barchart-archon</artifactId>
+		<version>2.5.6</version>
 	</parent>
 
-	<artifactId>barchart-util-json</artifactId>
+	<groupId>com.barchart.util</groupId>
+	<artifactId>barchart-util-enums</artifactId>
+	<version>2.0.29-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<scm>
@@ -26,29 +28,5 @@
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-util.git</developerConnection>
 	  <tag>master</tag>
   </scm>
-
-	<dependencies>
-
-		<!-- logging -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- jackson -->
-		<dependency>
-			<groupId>com.barchart.wrap</groupId>
-			<artifactId>barchart-wrap-jackson</artifactId>
-			<version>1.8.6-build001</version>
-			<scope>provided</scope>
-		</dependency>
-
-	</dependencies>
 
 </project>

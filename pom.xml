@@ -1,15 +1,7 @@
-<!--
-
-    Copyright (C) 2011-2013 Barchart, Inc. <http://www.barchart.com />
-
-    All rights reserved. Licensed under the OSI BSD License.
-
-    http://www.opensource.org/licenses/bsd-license.php
-
--->
-<!-- Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com /> All 
+<!-- Copyright (C) 2011-2013 Barchart, Inc. <http://www.barchart.com /> All 
 	rights reserved. Licensed under the OSI BSD License. http://www.opensource.org/licenses/bsd-license.php -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -21,8 +13,16 @@
 
 	<groupId>com.barchart.util</groupId>
 	<artifactId>barchart-util</artifactId>
-	<version>2.0.29-SNAPSHOT</version>
+	<version>0.0.0</version>
 	<packaging>pom</packaging>
+
+	<description>
+<![CDATA[
+### ${project.artifactId}
+
+Layout Project.
+]]>
+	</description>
 
 	<url>https://github.com/barchart/barchart-util</url>
 
@@ -40,21 +40,36 @@
 
 	<modules>
 
-		<module>barchart-util-anno</module>
-		<module>barchart-util-json</module>
-		<module>barchart-util-ascii</module>
-		<module>barchart-util-bench</module>
-		<module>barchart-util-clone</module>
-		<module>barchart-util-enums</module>
-		<module>barchart-util-math</module>
-		<module>barchart-util-thread</module>
-		<module>barchart-util-values</module>
-		<module>barchart-util-collections</module>
-		<module>barchart-util-concurrent</module>
-		<module>barchart-util-aws</module>
-		<module>barchart-util-test</module>
+		<module>anno</module>
+		<module>json</module>
+		<module>ascii</module>
+		<module>bench</module>
+		<module>clone</module>
+		<module>enums</module>
+		<module>math</module>
+		<module>thread</module>
+		<module>values</module>
+		<module>collections</module>
+		<module>concurrent</module>
+		<module>aws</module>
+		<module>test</module>
 
 	</modules>
+
+	<build>
+
+		<!-- Layout project is not for deployment. -->
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+
+	</build>
 
 	<reporting>
 		<plugins>

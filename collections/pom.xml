@@ -12,12 +12,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.barchart.util</groupId>
-		<artifactId>barchart-util</artifactId>
-		<version>2.0.29-SNAPSHOT</version>
+		<groupId>com.barchart.base</groupId>
+		<artifactId>barchart-archon</artifactId>
+		<version>2.5.6</version>
 	</parent>
 
-	<artifactId>barchart-util-test</artifactId>
+	<groupId>com.barchart.util</groupId>
+	<artifactId>barchart-util-collections</artifactId>
+	<version>2.0.29-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<scm>
@@ -30,40 +32,29 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>com.barchart.conf</groupId>
-			<artifactId>barchart-conf-util</artifactId>
-			<version>1.2.0</version>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-thread</artifactId>
+			<version>${project.parent.version}</version>
 		</dependency>
 		
 		<dependency>
-			<groupId>com.typesafe</groupId>
-			<artifactId>config</artifactId>
-			<version>1.0.0</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<!-- osgi -->
-		
-		<dependency>
-			<groupId>org.osgi</groupId>
-			<artifactId>org.osgi.core</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.osgi</groupId>
-			<artifactId>org.osgi.compendium</artifactId>
-			<scope>provided</scope>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-values</artifactId>
+			<version>${project.parent.version}</version>
 		</dependency>
 
-		<!-- logging -->
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-bench</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
