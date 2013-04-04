@@ -24,7 +24,7 @@
 		<url>https://github.com/barchart/barchart-util</url>
 		<connection>scm:git:git://github.com/barchart/barchart-util.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-util.git</developerConnection>
-	  <tag>HEAD</tag>
+	  <tag>master</tag>
   </scm>
 
 </project>
