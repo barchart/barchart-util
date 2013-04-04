@@ -82,12 +82,14 @@
 			<artifactId>jackson-core-asl</artifactId>
 			<version>${jacksonVersion}</version>
 			<scope>provided</scope>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>${jacksonVersion}</version>
 			<scope>provided</scope>
+			<optional>true</optional>
 		</dependency>
 
 	</dependencies>
