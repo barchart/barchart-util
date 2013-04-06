@@ -14,7 +14,9 @@ import java.lang.annotation.Target;
 /**
  * API Package.
  * 
- * @see https://github.com/barchart/barchart-documents/wiki/Version-Policy
+ * @see <a
+ *      href="https://github.com/barchart/barchart-documents/wiki/Version-Policy">Version
+ *      Policy</a>
  */
 @Documented
 @Target({ ElementType.PACKAGE })
