@@ -23,7 +23,9 @@ import java.lang.annotation.Target;
  * API Provider bundle needs a release with MICRO version change.
  * 
  * 
- * @see https://github.com/barchart/barchart-documents/wiki/Version-Policy
+ * @see <a
+ *      href="https://github.com/barchart/barchart-documents/wiki/Version-Policy">Version
+ *      Policy</a>
  */
 @Documented
 @Target({ ElementType.TYPE })
