@@ -13,6 +13,14 @@ import java.lang.annotation.Target;
 
 /**
  * API Consumer Implementation.
+ * <p>
+ * Change in this class means:
+ * <p>
+ * API bundle is not affected.
+ * <p>
+ * API Consumer bundle needs a release with MICRO version change.
+ * <p>
+ * API Provider bundle is not affected.
  * 
  * @see https://github.com/barchart/barchart-documents/wiki/Version-Policy
  */

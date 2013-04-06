@@ -13,6 +13,14 @@ import java.lang.annotation.Target;
 
 /**
  * API Consumer Interface.
+ * <p>
+ * Change in this interface means:
+ * <p>
+ * API bundle needs a release with MAJOR version change.
+ * <p>
+ * API Consumer bundle needs a release with MAJOR version change.
+ * <p>
+ * API Provider bundle needs a release with MAJOR version change.
  * 
  * @see https://github.com/barchart/barchart-documents/wiki/Version-Policy
  */

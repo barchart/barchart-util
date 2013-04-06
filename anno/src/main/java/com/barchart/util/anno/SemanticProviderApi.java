@@ -13,6 +13,14 @@ import java.lang.annotation.Target;
 
 /**
  * API Provider Interface.
+ * <p>
+ * Change in this interface means:
+ * <p>
+ * API bundle needs a release with MINOR version change.
+ * <p>
+ * API Consumer bundle is not affected.
+ * <p>
+ * API Provider bundle needs a release with MINOR version change.
  * 
  * @see https://github.com/barchart/barchart-documents/wiki/Version-Policy
  */
