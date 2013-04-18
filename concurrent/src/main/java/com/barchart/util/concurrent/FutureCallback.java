@@ -69,29 +69,6 @@ public interface FutureCallback<V, T extends FutureCallback<V, T>> extends
 	public T addResultListener(FutureListener<V> listener);
 
 	/**
-	 * Notify listeners that a result is available. Returns the current
-	 * FutureCallbackTask instance to allow simple synchronous returns when the
-	 * result is already available:<br />
-	 * <code>return new FutureCallbackTask<Object>().succeed(result);</code>
-	 * 
-	 * @param result_
-	 *            The deferred result
-	 * @return This FutureCallbackTask object (for chaining calls)
-	 */
-	public T succeed(V result);
-
-	/**
-	 * Notify listeners that an error occurred. Returns the current
-	 * FutureCallbackTask instance to allow simple synchronous returns when an
-	 * error has already occurred:<br />
-	 * <code>return new FutureCallbackTask<Object>().fail(exception);</code>
-	 * 
-	 * @param error_
-	 *            The deferred error
-	 */
-	public T fail(Throwable error);
-
-	/**
 	 * Get the return value, or null if a checked exception was caught.
 	 */
 	public V getUnchecked();

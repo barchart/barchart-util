@@ -72,18 +72,6 @@ public class FutureCallbackTask<E> extends FutureTask<E> implements
 	}
 
 	@Override
-	public FutureCallbackTask<E> succeed(final E result_) {
-		super.set(result_);
-		return this;
-	}
-
-	@Override
-	public FutureCallbackTask<E> fail(final Throwable error_) {
-		super.setException(error_);
-		return this;
-	}
-
-	@Override
 	public E getUnchecked() {
 		try {
 			return get();

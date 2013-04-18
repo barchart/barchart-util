@@ -171,14 +171,4 @@ public class FutureCallbackList<E> implements
 		return fired;
 	}
 
-	@Override
-	public FutureCallbackList<E> succeed(final List<E> result) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public FutureCallbackList<E> fail(final Throwable error) {
-		throw new UnsupportedOperationException();
-	}
-
 }

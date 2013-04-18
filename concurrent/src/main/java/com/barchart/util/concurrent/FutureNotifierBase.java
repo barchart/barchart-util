@@ -224,15 +224,32 @@ public class FutureNotifierBase<V, T extends FutureCallback<V, T>> implements
 		return listeners.size() > 0;
 	}
 
+	/**
+	 * Notify listeners that an error occurred. Returns the current
+	 * FutureCallbackTask instance to allow simple synchronous returns when an
+	 * error has already occurred:<br />
+	 * <code>return new FutureCallbackTask<Object>().fail(exception);</code>
+	 * 
+	 * @param error_
+	 *            The deferred error
+	 */
 	@SuppressWarnings("unchecked")
-	@Override
 	public T fail(final Throwable error) {
 		setException(error);
 		return (T) this;
 	}
 
+	/**
+	 * Notify listeners that a result is available. Returns the current
+	 * FutureCallbackTask instance to allow simple synchronous returns when the
+	 * result is already available:<br />
+	 * <code>return new FutureCallbackTask<Object>().succeed(result);</code>
+	 * 
+	 * @param result_
+	 *            The deferred result
+	 * @return This FutureCallbackTask object (for chaining calls)
+	 */
 	@SuppressWarnings("unchecked")
-	@Override
 	public T succeed(final V result) {
 		set(result);
 		return (T) this;
