@@ -67,9 +67,9 @@ public class TestFutureNotifier {
 		final AtomicInteger count = new AtomicInteger(0);
 		final FutureNotifier<String> notifier = new FutureNotifier<String>();
 
-		notifier.addResultListener(new FutureListener<String>() {
+		notifier.addResultListener(new FutureCallback<String>() {
 			@Override
-			public void resultAvailable(final Future<String> result)
+			public void call(final Future<String> result)
 					throws Exception {
 				count.incrementAndGet();
 			}
@@ -132,9 +132,9 @@ public class TestFutureNotifier {
 		for (int i = 0; i < 100000; i++) {
 			final FutureNotifier<String> notifier =
 					new FutureNotifier<String>();
-			notifier.addResultListener(new FutureListener<String>() {
+			notifier.addResultListener(new FutureCallback<String>() {
 				@Override
-				public void resultAvailable(final Future<String> result)
+				public void call(final Future<String> result)
 						throws Exception {
 					count.incrementAndGet();
 				}

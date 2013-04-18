@@ -18,37 +18,37 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Groups a number of {@link FutureCallbackTask} results together, and executes
- * a single callback only after all FutureCallbacks have completed (succeeded or
- * failed.)
+ * Groups a number of {@link ListenableFutureTask} results together, and
+ * executes a single callback only after all FutureCallbacks have completed
+ * (succeeded or failed.)
  * 
  * This class does not support direct access to succeed() or fail(), and will
  * throw and UnsupportedOperationException for them.
  * 
  * @author jeremy
- * @see FutureCallbackTask
+ * @see ListenableFutureTask
  * @param <E>
  *            The deferred result type
  */
-public class FutureCallbackList<E> implements
-		FutureCallback<List<E>, FutureCallbackList<E>> {
+public class ListenableFutureGroup<E> implements
+		LIstenableFuture<List<E>, ListenableFutureGroup<E>> {
 
 	private final static Logger log = LoggerFactory
-			.getLogger(FutureCallbackList.class);
+			.getLogger(ListenableFutureGroup.class);
 
-	private final FutureListener<E> listener = new FutureListener<E>() {
+	private final FutureCallback<E> listener = new FutureCallback<E>() {
 
 		@Override
-		public void resultAvailable(final Future<E> result_) {
+		public void call(final Future<E> result_) {
 			onResponse(result_);
 		}
 
 	};
 
-	private final List<FutureListener<List<E>>> listeners =
-			new CopyOnWriteArrayList<FutureListener<List<E>>>();
+	private final List<FutureCallback<List<E>>> listeners =
+			new CopyOnWriteArrayList<FutureCallback<List<E>>>();
 	private final List<E> responses = new CopyOnWriteArrayList<E>();
-	private final List<? extends FutureCallback<E, ?>> results;
+	private final List<? extends LIstenableFuture<E, ?>> results;
 	private final Semaphore resultMonitor = new Semaphore(1);
 
 	private volatile int completed = 0;
@@ -61,15 +61,15 @@ public class FutureCallbackList<E> implements
 	 * @param deferreds_
 	 *            The list of deferred results to monitor
 	 */
-	public FutureCallbackList(
-			final List<? extends FutureCallback<E, ?>> results_) {
+	public ListenableFutureGroup(
+			final List<? extends LIstenableFuture<E, ?>> results_) {
 		results = results_;
 		if (results_ == null || results_.size() == 0) {
 			fired = true;
 		} else {
 			// Lock the semaphore until a result is available
 			resultMonitor.acquireUninterruptibly();
-			for (final FutureCallback<E, ?> r : results_) {
+			for (final LIstenableFuture<E, ?> r : results_) {
 				r.addResultListener(listener);
 			}
 		}
@@ -86,12 +86,12 @@ public class FutureCallbackList<E> implements
 	 *            The object to notify of the deferred results
 	 */
 	@Override
-	public FutureCallbackList<E> addResultListener(
-			final FutureListener<List<E>> callback) {
+	public ListenableFutureGroup<E> addResultListener(
+			final FutureCallback<List<E>> callback) {
 		listeners.add(callback);
 		if (fired) {
 			try {
-				callback.resultAvailable(this);
+				callback.call(this);
 			} catch (final Exception e) {
 				log.warn("Unhandled exception in callback", e);
 			}
@@ -108,7 +108,7 @@ public class FutureCallbackList<E> implements
 		}
 		completed++;
 		if (completed == results.size()) {
-			for (final FutureCallback<E, ?> r : results) {
+			for (final LIstenableFuture<E, ?> r : results) {
 				try {
 					responses.add(r.get());
 				} catch (final Exception e) {
@@ -117,9 +117,9 @@ public class FutureCallbackList<E> implements
 			}
 			fired = true;
 			resultMonitor.release();
-			for (final FutureListener<List<E>> l : listeners) {
+			for (final FutureCallback<List<E>> l : listeners) {
 				try {
-					l.resultAvailable(this);
+					l.call(this);
 				} catch (final Exception e) {
 					log.warn("Unhandled exception in callback", e);
 				}
@@ -133,7 +133,7 @@ public class FutureCallbackList<E> implements
 			return false;
 		}
 		cancelled = true;
-		for (final FutureCallback<E, ?> r : results) {
+		for (final LIstenableFuture<E, ?> r : results) {
 			r.cancel(interrupt);
 		}
 		return true;

@@ -19,48 +19,48 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <p>
- * Basic implementation of {@link FutureCallback} based on {@link FutureTask}.
+ * Basic implementation of {@link LIstenableFuture} based on {@link FutureTask}.
  * </p>
  * 
  * @author jeremy
  * @see FutureTask
- * @see FutureCallback
+ * @see LIstenableFuture
  * @param <E>
  *            The result type
  */
-public class FutureCallbackTask<E> extends FutureTask<E> implements
-		FutureCallback<E, FutureCallbackTask<E>> {
+public class ListenableFutureTask<E> extends FutureTask<E> implements
+		LIstenableFuture<E, ListenableFutureTask<E>> {
 
 	private final static Logger log = LoggerFactory
-			.getLogger(FutureCallbackTask.class);
+			.getLogger(ListenableFutureTask.class);
 
-	private final List<FutureListener<E>> listeners =
-			new CopyOnWriteArrayList<FutureListener<E>>();
+	private final List<FutureCallback<E>> listeners =
+			new CopyOnWriteArrayList<FutureCallback<E>>();
 	private final Lock callbackLock = new ReentrantLock();
 
 	/**
 	 * Create a future result handler.
 	 */
-	public FutureCallbackTask(final Runnable r, final E value) {
+	public ListenableFutureTask(final Runnable r, final E value) {
 		super(r, value);
 	}
 
 	/**
 	 * Create a future result handler.
 	 */
-	public FutureCallbackTask(final Callable<E> c) {
+	public ListenableFutureTask(final Callable<E> c) {
 		super(c);
 	}
 
 	@Override
-	public FutureCallbackTask<E> addResultListener(
-			final FutureListener<E> listener) {
+	public ListenableFutureTask<E> addResultListener(
+			final FutureCallback<E> listener) {
 		callbackLock.lock();
 		try {
 			listeners.add(listener);
 			if (isDone()) {
 				try {
-					listener.resultAvailable(this);
+					listener.call(this);
 				} catch (final Exception ex) {
 					log.warn("Unhandled exception in callback", ex);
 				}
@@ -87,9 +87,9 @@ public class FutureCallbackTask<E> extends FutureTask<E> implements
 	protected void done() {
 		callbackLock.lock();
 		try {
-			for (final FutureListener<E> l : listeners) {
+			for (final FutureCallback<E> l : listeners) {
 				try {
-					l.resultAvailable(this);
+					l.call(this);
 				} catch (final Exception ex) {
 					log.warn("Unhandled exception in callback", ex);
 				}

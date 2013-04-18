@@ -20,43 +20,43 @@ import java.util.concurrent.TimeUnit;
  * 
  * @author jeremy
  */
-public class FutureCallbackExecutor extends ThreadPoolExecutor {
+public class ListenableFutureExecutor extends ThreadPoolExecutor {
 
-	public FutureCallbackExecutor(final int poolSize, final int maxPoolSize,
+	public ListenableFutureExecutor(final int poolSize, final int maxPoolSize,
 			final long keepAlive, final TimeUnit units,
 			final BlockingQueue<Runnable> queue) {
 		super(poolSize, maxPoolSize, keepAlive, units, queue);
 	}
 
 	@Override
-	protected <T> FutureCallbackTask<T> newTaskFor(final Callable<T> callable) {
-		return new FutureCallbackTask<T>(callable);
+	protected <T> ListenableFutureTask<T> newTaskFor(final Callable<T> callable) {
+		return new ListenableFutureTask<T>(callable);
 	}
 
 	@Override
-	protected <T> FutureCallbackTask<T> newTaskFor(final Runnable runnable,
+	protected <T> ListenableFutureTask<T> newTaskFor(final Runnable runnable,
 			final T value) {
-		return new FutureCallbackTask<T>(runnable, value);
+		return new ListenableFutureTask<T>(runnable, value);
 	}
 
 	@Override
-	public <T> FutureCallbackTask<T> submit(final Callable<T> callable) {
-		final FutureCallbackTask<T> f = newTaskFor(callable);
+	public <T> ListenableFutureTask<T> submit(final Callable<T> callable) {
+		final ListenableFutureTask<T> f = newTaskFor(callable);
 		execute(f);
 		return f;
 	}
 
 	@Override
-	public <T> FutureCallbackTask<T> submit(final Runnable runnable,
+	public <T> ListenableFutureTask<T> submit(final Runnable runnable,
 			final T value) {
-		final FutureCallbackTask<T> f = newTaskFor(runnable, value);
+		final ListenableFutureTask<T> f = newTaskFor(runnable, value);
 		execute(f);
 		return f;
 	}
 
 	@Override
-	public FutureCallbackTask<?> submit(final Runnable runnable) {
-		final FutureCallbackTask<?> f = newTaskFor(runnable, null);
+	public ListenableFutureTask<?> submit(final Runnable runnable) {
+		final ListenableFutureTask<?> f = newTaskFor(runnable, null);
 		execute(f);
 		return f;
 	}

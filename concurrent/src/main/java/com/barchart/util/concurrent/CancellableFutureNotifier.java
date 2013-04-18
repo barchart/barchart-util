@@ -7,20 +7,20 @@
  */
 package com.barchart.util.concurrent;
 
-public class CancellableFutureNotifier<V, T extends FutureCallback<V, T>>
+public class CancellableFutureNotifier<V, T extends LIstenableFuture<V, T>>
 		extends FutureNotifierBase<V, T> {
 
-	private FutureCallback<?, ?> parent;
+	private LIstenableFuture<?, ?> parent;
 
 	public CancellableFutureNotifier() {
 		parent = null;
 	}
 
-	public CancellableFutureNotifier(final FutureCallback<?, ?> parent_) {
+	public CancellableFutureNotifier(final LIstenableFuture<?, ?> parent_) {
 		parent = parent_;
 	}
 
-	public void setCancelCallback(final FutureCallback<?, ?> parent_) {
+	public void setCancelCallback(final LIstenableFuture<?, ?> parent_) {
 		parent = parent_;
 	}
 

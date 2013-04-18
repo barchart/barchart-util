@@ -34,15 +34,15 @@ import org.slf4j.LoggerFactory;
  * @param <T>
  *            The subclass being defined (for return value parameterization)
  */
-public class FutureNotifierBase<V, T extends FutureCallback<V, T>> implements
-		FutureCallback<V, T>, FutureListener<V> {
+public class FutureNotifierBase<V, T extends LIstenableFuture<V, T>> implements
+		LIstenableFuture<V, T>, FutureCallback<V> {
 
 	private final static Logger log = LoggerFactory
 			.getLogger(FutureNotifierBase.class);
 
 	/** Callback listeners */
-	private final List<FutureListener<V>> listeners =
-			new CopyOnWriteArrayList<FutureListener<V>>();
+	private final List<FutureCallback<V>> listeners =
+			new CopyOnWriteArrayList<FutureCallback<V>>();
 	private final Lock callbackLock = new ReentrantLock();
 
 	/** Synchronization control for FutureNotifier */
@@ -112,7 +112,7 @@ public class FutureNotifierBase<V, T extends FutureCallback<V, T>> implements
 	 * Result listener for chaining callbacks together.
 	 */
 	@Override
-	public void resultAvailable(final Future<V> result) {
+	public void call(final Future<V> result) {
 		try {
 			succeed(result.get());
 		} catch (final ExecutionException e) {
@@ -133,9 +133,9 @@ public class FutureNotifierBase<V, T extends FutureCallback<V, T>> implements
 	protected void done() {
 		callbackLock.lock();
 		try {
-			for (final FutureListener<V> l : listeners) {
+			for (final FutureCallback<V> l : listeners) {
 				try {
-					l.resultAvailable(this);
+					l.call(this);
 				} catch (final Exception ex) {
 					log.warn("Unhandled exception in callback", ex);
 				}
@@ -188,13 +188,13 @@ public class FutureNotifierBase<V, T extends FutureCallback<V, T>> implements
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public T addResultListener(final FutureListener<V> listener) {
+	public T addResultListener(final FutureCallback<V> listener) {
 		callbackLock.lock();
 		try {
 			listeners.add(listener);
 			if (isDone()) {
 				try {
-					listener.resultAvailable(this);
+					listener.call(this);
 				} catch (final Exception ex) {
 					log.warn("Unhandled exception in callback", ex);
 				}
@@ -210,7 +210,7 @@ public class FutureNotifierBase<V, T extends FutureCallback<V, T>> implements
 	}
 
 	@SuppressWarnings("unchecked")
-	public T removeResultListener(final FutureListener<V> listener) {
+	public T removeResultListener(final FutureCallback<V> listener) {
 		callbackLock.lock();
 		try {
 			listeners.remove(listener);
