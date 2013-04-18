@@ -20,14 +20,14 @@
 
 	<groupId>com.barchart.util</groupId>
 	<artifactId>barchart-util-concurrent</artifactId>
-	<version>3.0.0-SNAPSHOT</version>
+	<version>3.0.0</version>
 	<packaging>bundle</packaging>
 
 	<scm>
 		<url>https://github.com/barchart/barchart-util</url>
 		<connection>scm:git:git://github.com/barchart/barchart-util.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-util.git</developerConnection>
-	  <tag>master</tag>
+	  <tag>barchart-util-concurrent-3.0.0</tag>
   </scm>
 
 	<dependencies>
