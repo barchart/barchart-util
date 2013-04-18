@@ -34,8 +34,8 @@ import org.slf4j.LoggerFactory;
  * @param <T>
  *            The subclass being defined (for return value parameterization)
  */
-public class FutureNotifierBase<V, T extends LIstenableFuture<V, T>> implements
-		LIstenableFuture<V, T>, FutureCallback<V> {
+public class FutureNotifierBase<V, T extends ListenableFuture<V, T>> implements
+		ListenableFuture<V, T>, FutureCallback<V> {
 
 	private final static Logger log = LoggerFactory
 			.getLogger(FutureNotifierBase.class);

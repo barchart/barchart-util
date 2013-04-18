@@ -55,7 +55,7 @@ import java.util.concurrent.Future;
  * @param <E>
  *            The result type
  */
-public interface LIstenableFuture<V, T extends LIstenableFuture<V, T>> extends
+public interface ListenableFuture<V, T extends ListenableFuture<V, T>> extends
 		Future<V> {
 
 	/**

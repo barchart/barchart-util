@@ -19,17 +19,17 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <p>
- * Basic implementation of {@link LIstenableFuture} based on {@link FutureTask}.
+ * Basic implementation of {@link ListenableFuture} based on {@link FutureTask}.
  * </p>
  * 
  * @author jeremy
  * @see FutureTask
- * @see LIstenableFuture
+ * @see ListenableFuture
  * @param <E>
  *            The result type
  */
 public class ListenableFutureTask<E> extends FutureTask<E> implements
-		LIstenableFuture<E, ListenableFutureTask<E>> {
+		ListenableFuture<E, ListenableFutureTask<E>> {
 
 	private final static Logger log = LoggerFactory
 			.getLogger(ListenableFutureTask.class);

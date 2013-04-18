@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  *            The deferred result type
  */
 public class ListenableFutureGroup<E> implements
-		LIstenableFuture<List<E>, ListenableFutureGroup<E>> {
+		ListenableFuture<List<E>, ListenableFutureGroup<E>> {
 
 	private final static Logger log = LoggerFactory
 			.getLogger(ListenableFutureGroup.class);
@@ -48,7 +48,7 @@ public class ListenableFutureGroup<E> implements
 	private final List<FutureCallback<List<E>>> listeners =
 			new CopyOnWriteArrayList<FutureCallback<List<E>>>();
 	private final List<E> responses = new CopyOnWriteArrayList<E>();
-	private final List<? extends LIstenableFuture<E, ?>> results;
+	private final List<? extends ListenableFuture<E, ?>> results;
 	private final Semaphore resultMonitor = new Semaphore(1);
 
 	private volatile int completed = 0;
@@ -62,14 +62,14 @@ public class ListenableFutureGroup<E> implements
 	 *            The list of deferred results to monitor
 	 */
 	public ListenableFutureGroup(
-			final List<? extends LIstenableFuture<E, ?>> results_) {
+			final List<? extends ListenableFuture<E, ?>> results_) {
 		results = results_;
 		if (results_ == null || results_.size() == 0) {
 			fired = true;
 		} else {
 			// Lock the semaphore until a result is available
 			resultMonitor.acquireUninterruptibly();
-			for (final LIstenableFuture<E, ?> r : results_) {
+			for (final ListenableFuture<E, ?> r : results_) {
 				r.addResultListener(listener);
 			}
 		}
@@ -108,7 +108,7 @@ public class ListenableFutureGroup<E> implements
 		}
 		completed++;
 		if (completed == results.size()) {
-			for (final LIstenableFuture<E, ?> r : results) {
+			for (final ListenableFuture<E, ?> r : results) {
 				try {
 					responses.add(r.get());
 				} catch (final Exception e) {
@@ -133,7 +133,7 @@ public class ListenableFutureGroup<E> implements
 			return false;
 		}
 		cancelled = true;
-		for (final LIstenableFuture<E, ?> r : results) {
+		for (final ListenableFuture<E, ?> r : results) {
 			r.cancel(interrupt);
 		}
 		return true;
