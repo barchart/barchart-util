@@ -83,6 +83,26 @@ public final class CallableTest {
 
 	}
 
+	// MJS: Added this as sometimes unit test would block indefinitely at a
+	// queue with 2 elements waiting for it to be 1
+	public static class CollectionSizeEqualOrAbove implements Callable<Boolean> {
+
+		private final Collection<?> collection;
+		private final int expectedSize;
+
+		public CollectionSizeEqualOrAbove(final Collection<?> collection_,
+				final int expectedSize_) {
+			collection = collection_;
+			expectedSize = expectedSize_;
+		}
+
+		@Override
+		public Boolean call() throws Exception {
+			return collection.size() >= expectedSize;
+		}
+
+	}
+
 	public static class FieldValue implements Callable<Boolean> {
 
 		private final Object obj;
