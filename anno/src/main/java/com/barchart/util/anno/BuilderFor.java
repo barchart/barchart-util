@@ -9,16 +9,16 @@ package com.barchart.util.anno;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 
- * means this class has transient existence and is used to help build another
- * class
- * 
- * */
+ * Class has transient existence and is used to help build another class.
+ */
 @Documented
-@Target( { ElementType.TYPE })
+@Target({ ElementType.TYPE })
+@Retention(RetentionPolicy.CLASS)
 public @interface BuilderFor {
 
 	Class<?>[] value();

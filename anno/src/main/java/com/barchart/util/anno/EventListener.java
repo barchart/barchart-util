@@ -9,15 +9,16 @@ package com.barchart.util.anno;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 
- * means that method has event listener semantics; for the specified class
- * 
- * */
+ * Method has event listener semantics; for the specified class
+ */
 @Documented
-@Target( { ElementType.METHOD })
+@Target({ ElementType.METHOD })
+@Retention(RetentionPolicy.CLASS)
 public @interface EventListener {
 
 	Class<?> value();

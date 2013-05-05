@@ -9,16 +9,16 @@ package com.barchart.util.anno;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 
- * 
- * means mutable, changing, live object, which can also be modified explicitly
- * 
- * */
+ * Mutable, changing, live object, which can also be modified explicitly.
+ */
 @Documented
 @Target(ElementType.TYPE)
+@Retention(RetentionPolicy.CLASS)
 public @interface Mutable {
 
 	// Class<?> value();

@@ -9,15 +9,16 @@ package com.barchart.util.anno;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 
- * helps to show interface that method implements
- * 
- * */
+ * Show interface that method implements.
+ */
 @Documented
 @Target(ElementType.METHOD)
+@Retention(RetentionPolicy.CLASS)
 public @interface Implements {
 
 	Class<?> value();

@@ -9,15 +9,16 @@ package com.barchart.util.anno;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 
- * means class or method that should not be used as yet
- * 
- * */
+ * Class or method that should not be used as yet.
+ */
 @Documented
-@Target( { ElementType.TYPE, ElementType.METHOD })
+@Target({ ElementType.TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.CLASS)
 public @interface NotYetImplemented {
 
 	// Class<?> value();

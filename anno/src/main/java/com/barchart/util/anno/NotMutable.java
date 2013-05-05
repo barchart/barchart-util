@@ -9,15 +9,16 @@ package com.barchart.util.anno;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 
- * means immutable, final, non changing value object
- * 
- * */
+ * Immutable, final, non changing value object.
+ */
 @Documented
-@Target( { ElementType.TYPE, ElementType.PARAMETER })
+@Target({ ElementType.TYPE, ElementType.PARAMETER })
+@Retention(RetentionPolicy.CLASS)
 public @interface NotMutable {
 
 	// Class<?> value();

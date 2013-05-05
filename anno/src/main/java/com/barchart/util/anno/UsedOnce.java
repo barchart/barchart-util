@@ -9,15 +9,16 @@ package com.barchart.util.anno;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 
- * means that method is called once on object init/registration
- * 
- * */
+ * Method is called once on object init/registration.
+ */
 @Documented
-@Target( { ElementType.METHOD, ElementType.TYPE })
+@Target({ ElementType.METHOD, ElementType.TYPE })
+@Retention(RetentionPolicy.CLASS)
 public @interface UsedOnce {
 
 	// Class<?> value();
