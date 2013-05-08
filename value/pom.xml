@@ -9,10 +9,11 @@
 		<groupId>com.barchart.base</groupId>
 		<artifactId>barchart-archon</artifactId>
 		<version>2.5.10</version>
+		<relativePath />
 	</parent>
 
 	<groupId>com.barchart.util</groupId>
-	<artifactId>barchart-util</artifactId>
+	<artifactId>barchart-util-value</artifactId>
 	<version>0.0.0</version>
 	<packaging>pom</packaging>
 
@@ -20,16 +21,9 @@
 <![CDATA[
 ### ${project.artifactId}
 
-Layout Project.
+Layout Project for Values.
 ]]>
 	</description>
-
-	<url>https://github.com/barchart/barchart-util</url>
-
-	<issueManagement>
-		<system>github</system>
-		<url>https://github.com/barchart/barchart-util/issues</url>
-	</issueManagement>
 
 	<scm>
 		<url>https://github.com/barchart/barchart-util</url>
@@ -37,28 +31,13 @@ Layout Project.
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-util.git</developerConnection>
 		<tag>master</tag>
 	</scm>
-
+	
 	<modules>
 
-		<module>anno</module>
-		<module>json</module>
-		<module>ascii</module>
-		<module>bench</module>
-		<module>clone</module>
-		<module>enums</module>
-		<module>math</module>
-		<module>thread</module>
-		<module>values</module>
-		<module>collections</module>
-		<module>concurrent</module>
-		<module>aws</module>
-		<module>test</module>
-
-		<module>value/api</module>
-		<module>value/impl</module>
-
+		<module>api</module>
+		<module>impl</module>
+	
 	</modules>
-
 	<build>
 
 		<!-- Layout project is not for deployment. -->
@@ -73,17 +52,5 @@ Layout Project.
 		</plugins>
 
 	</build>
-
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<stylesheetfile>${basedir}/src/site/stylesheet.css</stylesheetfile>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
 
 </project>
