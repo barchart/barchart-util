@@ -40,7 +40,7 @@ public interface Time extends Comparable<Time>, Copyable<Time> {
 	String zone();
 
 	/**
-	 * Milliseconds since January 1, 1970, 00:00:00 GMT
+	 * Number of milliseconds since January 1, 1970, 00:00:00 UTC.
 	 */
 	long millisecond();
 
