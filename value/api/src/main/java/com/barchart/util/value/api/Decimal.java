@@ -2,6 +2,11 @@ package com.barchart.util.value.api;
 
 import aQute.bnd.annotation.ProviderType;
 
+/**
+ * A decimal value.
+ * <p>
+ * See <a href="http://en.wikipedia.org/wiki/Decimal">Decimal</a>
+ */
 @ProviderType
 public interface Decimal<T extends Decimal<T>> extends Comparable<T>,
 		Copyable<T> {
