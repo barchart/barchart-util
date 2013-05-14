@@ -42,7 +42,7 @@ public interface Time extends Comparable<Time>, Copyable<Time> {
 	/**
 	 * Milliseconds since January 1, 1970, 00:00:00 GMT
 	 */
-	long millisUTC();
+	long millisecond();
 
 	/**
 	 * Ordering based on {@link Time} based on {@link #millisUTC()}.
