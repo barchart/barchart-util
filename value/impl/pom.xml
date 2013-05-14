@@ -6,10 +6,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.barchart.base</groupId>
-		<artifactId>barchart-archon</artifactId>
-		<version>2.5.10</version>
-		<relativePath />
+		<groupId>com.barchart.util</groupId>
+		<artifactId>barchart-util-archon</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../archon</relativePath>
 	</parent>
 
 	<groupId>com.barchart.util</groupId>
@@ -24,11 +24,17 @@
 		<tag>master</tag>
 	</scm>
 
-	<properties>
-
-	</properties>
-
 	<dependencies>
+
+		<!-- Documentation annotations. -->
+		<!-- Used at build time, not used at runtime. -->
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-anno</artifactId>
+			<version>[2.1,3)</version>
+			<scope>provided</scope>
+			<optional>true</optional>
+		</dependency>
 
 	</dependencies>
 
