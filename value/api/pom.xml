@@ -30,6 +30,16 @@
 
 	<dependencies>
 
+		<!-- Documentation annotations. -->
+		<!-- Used at build time, not used at runtime. -->
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-anno</artifactId>
+			<version>[2.1,3)</version>
+			<scope>provided</scope>
+			<optional>true</optional>
+		</dependency>
+
 	</dependencies>
 
 </project>
