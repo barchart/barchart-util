@@ -40,6 +40,8 @@ Layout Project.
 
 	<modules>
 
+		<module>archon</module>
+
 		<module>anno</module>
 		<module>json</module>
 		<module>ascii</module>
