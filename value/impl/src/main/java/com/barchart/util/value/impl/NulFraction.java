@@ -1,7 +1,8 @@
 package com.barchart.util.value.impl;
 
 import temp.Fraction;
-import temp.PriceValue;
+
+import com.barchart.util.value.api.Price;
 
 class NulFraction extends BaseDecimal implements Fraction {
 
@@ -51,7 +52,7 @@ class NulFraction extends BaseDecimal implements Fraction {
 	}
 
 	@Override
-	public long priceFraction(final PriceValue price) {
+	public long priceFraction(final Price price) {
 		return 0;
 	}
 
@@ -66,7 +67,7 @@ class NulFraction extends BaseDecimal implements Fraction {
 	}
 
 	@Override
-	public long priceWhole(final PriceValue price) {
+	public long priceWhole(final Price price) {
 		return 0;
 	}
 

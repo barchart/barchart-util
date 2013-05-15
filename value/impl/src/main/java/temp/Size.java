@@ -10,7 +10,7 @@ package temp;
 import com.barchart.util.anno.NotMutable;
 
 @NotMutable
-public interface SizeValue extends Value<SizeValue>, Comparable<SizeValue> {
+public interface Size extends Comparable<Size> {
 
 	//
 
@@ -19,26 +19,26 @@ public interface SizeValue extends Value<SizeValue>, Comparable<SizeValue> {
 	int asInt();
 
 	long asLong();
-	
+
 	//
 
 	@Override
-	int compareTo(SizeValue thatSize);
+	int compareTo(Size thatSize);
 
 	@Override
 	boolean equals(Object thatSize);
 
 	//
 
-	SizeValue add(SizeValue thatSize) throws ArithmeticException;
+	Size add(Size thatSize) throws ArithmeticException;
 
-	SizeValue sub(SizeValue thatSize) throws ArithmeticException;
+	Size sub(Size thatSize) throws ArithmeticException;
 
-	SizeValue mult(long factor) throws ArithmeticException;
+	Size mult(long factor) throws ArithmeticException;
 
-	SizeValue div(long factor) throws ArithmeticException;
+	Size div(long factor) throws ArithmeticException;
 
-	long count(SizeValue thatSize) throws ArithmeticException;
+	long count(Size thatSize) throws ArithmeticException;
 
 	boolean isZero();
 

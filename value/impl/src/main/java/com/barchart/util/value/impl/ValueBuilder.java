@@ -7,28 +7,28 @@
  */
 package com.barchart.util.value.impl;
 
-import temp.DecimalValue;
 import temp.Fraction;
-import temp.PriceValue;
-import temp.SizeValue;
-import temp.TimeInterval;
-import temp.TimeValue;
+import temp.Size;
 
 import com.barchart.util.math.DoubleParts;
 import com.barchart.util.math.MathExtra;
 import com.barchart.util.math.MathIEEE754;
+import com.barchart.util.value.api.Decimal;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Time;
+import com.barchart.util.value.api.TimeInterval;
 
 public final class ValueBuilder {
 
 	private ValueBuilder() {
 	}
 
-	public static final PriceValue newPrice(final double price) {
+	public static final Price newPrice(final double price) {
 		final DoubleParts part = MathIEEE754.extractDecimal(price);
 		return ValueBuilder.newPrice(part.getMantissa(), part.getExponent());
 	}
 
-	public static final PriceValue newPrice(final long mantissa) {
+	public static final Price newPrice(final long mantissa) {
 		if (mantissa == 0) {
 			return ValueConst.ZERO_PRICE;
 		} else {
@@ -36,8 +36,8 @@ public final class ValueBuilder {
 		}
 	}
 
-	public static final PriceValue newPrice(final long mantissa,
-			final int exponent) throws ArithmeticException {
+	public static final Price newPrice(final long mantissa, final int exponent)
+			throws ArithmeticException {
 		switch (exponent) {
 		case -9:
 			return new DefPrice9(mantissa);
@@ -70,7 +70,7 @@ public final class ValueBuilder {
 		}
 	}
 
-	public static final PriceValue newPriceMutable(final long mantissa,
+	public static final Price newPriceMutable(final long mantissa,
 			final int exponent) throws ArithmeticException {
 
 		MathExtra.castIntToByte(exponent);
@@ -81,7 +81,7 @@ public final class ValueBuilder {
 
 	private static final int SIZE_CACHE_LIMIT = 1024;
 
-	private static final SizeValue[] SIZE_CACHE = new SizeValue[SIZE_CACHE_LIMIT];
+	private static final Size[] SIZE_CACHE = new Size[SIZE_CACHE_LIMIT];
 
 	static {
 		for (int k = 0; k < SIZE_CACHE_LIMIT; k++) {
@@ -90,7 +90,7 @@ public final class ValueBuilder {
 		SIZE_CACHE[0] = ValueConst.ZERO_SIZE;
 	}
 
-	public static final SizeValue newSize(final long size) {
+	public static final Size newSize(final long size) {
 		if (0 <= size && size < SIZE_CACHE_LIMIT) {
 			return SIZE_CACHE[(int) size];
 		} else {
@@ -98,15 +98,15 @@ public final class ValueBuilder {
 		}
 	}
 
-	public static final SizeValue newSizeMutable(final long size) {
+	public static final Size newSizeMutable(final long size) {
 		return new VarSize(size);
 	}
 
-	public static final TimeValue newTime(final long time) {
+	public static final Time newTime(final long time) {
 		return new DefTime(time);
 	}
 
-	public static final TimeValue newTimeMutable(final long time) {
+	public static final Time newTimeMutable(final long time) {
 		return new VarTime(time);
 	}
 
@@ -119,10 +119,10 @@ public final class ValueBuilder {
 		return false;
 	}
 
-	public static final boolean isStrictMultiple(final PriceValue priceTest,
-			final PriceValue priceStep) {
+	public static final boolean isStrictMultiple(final Price priceTest,
+			final Price priceStep) {
 		final long count = priceTest.count(priceStep);
-		final PriceValue priceBack = priceStep.mult(count);
+		final Price priceBack = priceStep.mult(count);
 		if (priceBack.equals(priceTest)) {
 			return true;
 		} else {
@@ -145,18 +145,16 @@ public final class ValueBuilder {
 		return true;
 	}
 
-	public static DecimalValue newDecimal(final long mantissa,
-			final int exponent) {
+	public static Decimal newDecimal(final long mantissa, final int exponent) {
 		return new DefDecimal(mantissa, exponent);
 	}
 
-	public static DecimalValue newDecimalMutable(final long mantissa,
+	public static Decimal newDecimalMutable(final long mantissa,
 			final int exponent) {
 		return new VarDecimal(mantissa, exponent);
 	}
 
-	public static TimeInterval newTimeInterval(final TimeValue start,
-			final TimeValue stop) {
+	public static TimeInterval newTimeInterval(final Time start, final Time stop) {
 		return new DefTimeInterval(start, stop);
 	}
 

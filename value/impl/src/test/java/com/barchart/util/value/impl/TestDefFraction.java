@@ -6,7 +6,8 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import temp.Fraction;
-import temp.PriceValue;
+
+import com.barchart.util.value.api.Price;
 
 public class TestDefFraction {
 
@@ -29,7 +30,7 @@ public class TestDefFraction {
 	@Test
 	public void testPriceFraction() {
 
-		PriceValue price;
+		Price price;
 		long fraction;
 
 		price = newPrice(123500, -3);

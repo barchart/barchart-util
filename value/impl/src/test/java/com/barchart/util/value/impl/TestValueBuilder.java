@@ -14,9 +14,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import temp.PriceValue;
-
 import com.barchart.util.bench.size.JavaSize;
+import com.barchart.util.value.api.Price;
 
 public class TestValueBuilder {
 
@@ -31,11 +30,11 @@ public class TestValueBuilder {
 	@Test
 	public void TestNewPrice1() {
 
-		final PriceValue p0 = new DefPrice0(1000);
+		final Price p0 = new DefPrice0(1000);
 
-		final PriceValue p1 = new DefPriceA(1000, 2);
+		final Price p1 = new DefPriceA(1000, 2);
 
-		final PriceValue p2 = new DefPriceB(1000, 2);
+		final Price p2 = new DefPriceB(1000, 2);
 
 		assertEquals(p1.compareTo(p2), 0);
 		assertEquals(p2.compareTo(p1), 0);

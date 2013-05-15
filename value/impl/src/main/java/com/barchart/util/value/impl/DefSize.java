@@ -7,7 +7,7 @@
  */
 package com.barchart.util.value.impl;
 
-import temp.SizeValue;
+import temp.Size;
 
 import com.barchart.util.anno.NotMutable;
 
@@ -27,7 +27,7 @@ final class DefSize extends BaseSize {
 	}
 
 	@Override
-	protected final SizeValue returnSize(final long value) {
+	protected final Size returnSize(final long value) {
 		return ValueBuilder.newSize(value);
 	}
 

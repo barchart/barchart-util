@@ -7,9 +7,8 @@
  */
 package com.barchart.util.value.impl;
 
-import temp.PriceValue;
-
 import com.barchart.util.anno.NotMutable;
+import com.barchart.util.value.api.Price;
 
 // 8 bytes on 32 bit JVM
 @NotMutable
@@ -26,7 +25,7 @@ final class NulPrice extends BasePrice {
 	}
 
 	@Override
-	protected PriceValue result(final long mantissa, final int exponent) {
+	protected Price result(final long mantissa, final int exponent) {
 		return ValueBuilder.newPrice(mantissa, exponent);
 	}
 

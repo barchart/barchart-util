@@ -2,78 +2,74 @@ package com.barchart.util.value.api;
 
 import aQute.bnd.annotation.ProviderType;
 
+import com.barchart.util.anno.NotMutable;
+
 /**
- * A decimal value.
+ * Immutable decimal value.
  * <p>
  * See <a href="http://en.wikipedia.org/wiki/Decimal">Decimal</a>
  */
+@NotMutable
 @ProviderType
-public interface Decimal<T extends Decimal<T>> extends Comparable<T>,
-		Copyable<T> {
+public interface Decimal extends Scaled<Decimal, Decimal> {
 
-	/**
-	 * a.k.a significand;
-	 * 
-	 * http://en.wikipedia.org/wiki/Significand
-	 */
+	@Override
 	long mantissa();
 
-	/**
-	 * a.k.a scale;
-	 * 
-	 * http://en.wikipedia.org/wiki/Exponentiation
-	 */
+	@Override
 	int exponent();
 
-	/** mantissa == 0 */
+	@Override
 	boolean isZero();
 
-	/** change scale */
-	T scale(int exponent) throws ArithmeticException;
-
-	/** normalize: remove non significant zeros from mantissa, if any */
-	T norm();
-
-	/** change sign */
-	T neg();
-
-	/** type safe addition for T */
-	T add(Decimal<?> that) throws ArithmeticException;
-
-	// TODO add int, double methods?
-	T add(long increment);
-
-	/** type safe subtract for T */
-	T sub(Decimal<?> that) throws ArithmeticException;
-
-	T sub(long decrement);
-
-	/** type safe multiply for T */
-	T mult(Decimal<?> factor) throws ArithmeticException;
-
-	T mult(long factor) throws ArithmeticException;
-
-	/** type safe division for T */
-	T div(Decimal<?> factor) throws ArithmeticException;
-
-	T div(long factor) throws ArithmeticException;
-
-	/** type safe division for T */
-	long count(T that) throws ArithmeticException;
-
-	boolean greaterThan(Decimal<?> that);
-
-	boolean lessThan(Decimal<?> that);
-
-	/** can be used for sorting */
 	@Override
-	int compareTo(T that);
+	Decimal scale(int exponent) throws ArithmeticException;
 
-	/** contract: must compare only to T */
+	@Override
+	Decimal norm();
+
+	@Override
+	Decimal neg();
+
+	@Override
+	Decimal add(Decimal that) throws ArithmeticException;
+
+	@Override
+	Decimal add(long increment);
+
+	@Override
+	Decimal sub(Decimal that) throws ArithmeticException;
+
+	@Override
+	Decimal sub(long decrement);
+
+	@Override
+	Decimal mult(Decimal factor) throws ArithmeticException;
+
+	@Override
+	Decimal mult(long factor) throws ArithmeticException;
+
+	@Override
+	Decimal div(Decimal factor) throws ArithmeticException;
+
+	@Override
+	Decimal div(long factor) throws ArithmeticException;
+
+	@Override
+	long count(Decimal that) throws ArithmeticException;
+
+	@Override
+	boolean greaterThan(Decimal that);
+
+	@Override
+	boolean lessThan(Decimal that);
+
+	@Override
+	int compareTo(Decimal that);
+
 	@Override
 	boolean equals(Object that);
 
-	/** can be used as keys */
 	@Override
 	int hashCode();
 

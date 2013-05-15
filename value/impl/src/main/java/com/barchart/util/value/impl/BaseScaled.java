@@ -5,17 +5,17 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package temp;
+package com.barchart.util.value.impl;
 
 import static java.lang.Math.*;
 
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.math.MathExtra;
-import com.barchart.util.value.impl.ValueFreezer;
+import com.barchart.util.value.api.Scaled;
 
 @NotMutable
-public abstract class ScaledDecimalValue<T extends ScaledDecimal<T, F> & Value<T>, F extends ScaledDecimal<F, F> & Value<F>>
-		extends ValueFreezer<T> implements ScaledDecimal<T, F> {
+public abstract class BaseScaled<T extends Scaled<T, F>, F extends Scaled<F, F>>
+		implements Scaled<T, F> {
 
 	protected abstract T result(long mantissa, int exponent);
 
@@ -291,6 +291,38 @@ public abstract class ScaledDecimalValue<T extends ScaledDecimal<T, F> & Value<T
 	public boolean equals(final Object thatValue) {
 		throw new UnsupportedOperationException(
 				"must override in sub type in order to narrow closure");
+	}
+
+	@Override
+	public T add(final long increment) {
+		throw new UnsupportedOperationException("TODO");
+	}
+
+	@Override
+	public T sub(final long decrement) {
+		throw new UnsupportedOperationException("TODO");
+	}
+
+	@Override
+	public boolean greaterThan(final T that) {
+		throw new UnsupportedOperationException("TODO");
+	}
+
+	@Override
+	public boolean lessThan(final T that) {
+		throw new UnsupportedOperationException("TODO");
+	}
+
+	@Override
+	public double asDouble() {
+		return mantissa() * Math.pow(10, exponent());
+	}
+
+	/** Convert to another scaled type. */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <X extends Scaled<?, ?>> X asScaled() {
+		return (X) this;
 	}
 
 }

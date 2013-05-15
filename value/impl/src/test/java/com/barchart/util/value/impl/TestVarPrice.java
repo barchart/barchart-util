@@ -14,7 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import temp.PriceValue;
+import com.barchart.util.value.api.Price;
 
 public class TestVarPrice {
 
@@ -28,23 +28,23 @@ public class TestVarPrice {
 
 	@Test
 	public void TestCompare1() {
-		final PriceValue p1 = newPrice(1000, 2);
-		final PriceValue p2 = newPrice(1000, 2);
+		final Price p1 = newPrice(1000, 2);
+		final Price p2 = newPrice(1000, 2);
 		assertEquals(p1.compareTo(p2), 0);
 	}
 
 	@Test
 	public void TestCompare2() {
-		final PriceValue p1 = newPriceMutable(1000, 2);
-		final PriceValue p2 = newPriceMutable(1000, 2);
+		final Price p1 = newPriceMutable(1000, 2);
+		final Price p2 = newPriceMutable(1000, 2);
 		assertEquals(p1.compareTo(p2), 0);
 	}
 
 	@Test
 	public void TestPriceMutable1() {
 
-		final PriceValue p1 = newPriceMutable(1000, 2);
-		final PriceValue p2 = newPriceMutable(1000, 2);
+		final Price p1 = newPriceMutable(1000, 2);
+		final Price p2 = newPriceMutable(1000, 2);
 
 		//
 
@@ -59,7 +59,7 @@ public class TestVarPrice {
 
 		//
 
-		final PriceValue p3 = p1.add(p2);
+		final Price p3 = p1.add(p2);
 		assertTrue(p3 instanceof VarPrice);
 		assertTrue(p3 == p1);
 		assertTrue(p2 != p1);

@@ -14,11 +14,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import temp.PriceValue;
-import temp.ValueUtil;
-
 import com.barchart.util.math.DoubleParts;
 import com.barchart.util.math.MathIEEE754;
+import com.barchart.util.value.api.Price;
 import com.barchart.util.value.impl.ValueBuilder;
 
 /**
@@ -35,7 +33,7 @@ public class TestValueUtil {
 	@Test
 	public void testAsLong() {
 		final long l = 123456789l;
-		final PriceValue pv = ValueBuilder.newPrice(l);
+		final Price pv = ValueBuilder.newPrice(l);
 		assertEquals(l, ValueUtil.asLong(pv));
 	}
 
@@ -47,7 +45,7 @@ public class TestValueUtil {
 	@Test
 	public void testAsInt() {
 		final int i = 123456;
-		final PriceValue pv = ValueBuilder.newPrice(i);
+		final Price pv = ValueBuilder.newPrice(i);
 		assertEquals(i, ValueUtil.asInt(pv));
 	}
 
@@ -60,7 +58,7 @@ public class TestValueUtil {
 	public void testAsDouble() {
 		final double d = 12345.6789;
 		final DoubleParts dp = MathIEEE754.extractDecimal(d);
-		final PriceValue pv = ValueBuilder.newPrice(dp.getMantissa(),
+		final Price pv = ValueBuilder.newPrice(dp.getMantissa(),
 				dp.getExponent());
 		assertEquals(d, ValueUtil.asDouble(pv), 0.000000001);
 
@@ -75,7 +73,7 @@ public class TestValueUtil {
 	public void testAsFloat() {
 		final float f = 12345.6789f;
 		final DoubleParts dp = MathIEEE754.extractDecimal(f);
-		final PriceValue pv = ValueBuilder.newPrice(dp.getMantissa(),
+		final Price pv = ValueBuilder.newPrice(dp.getMantissa(),
 				dp.getExponent());
 		assertEquals(f, ValueUtil.asDouble(pv), 0.000000001);
 	}

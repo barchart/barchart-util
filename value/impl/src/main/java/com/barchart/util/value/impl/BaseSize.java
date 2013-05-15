@@ -7,17 +7,17 @@
  */
 package com.barchart.util.value.impl;
 
-import temp.SizeValue;
+import temp.Size;
 
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.math.MathExtra;
 
 @NotMutable
-abstract class BaseSize extends ValueFreezer<SizeValue> implements SizeValue {
+abstract class BaseSize implements Size {
 
 	//
 
-	protected abstract SizeValue returnSize(long value);
+	protected abstract Size returnSize(long value);
 
 	@Override
 	public abstract long asLong();
@@ -31,7 +31,7 @@ abstract class BaseSize extends ValueFreezer<SizeValue> implements SizeValue {
 	}
 
 	@Override
-	public final int compareTo(final SizeValue that) {
+	public final int compareTo(final Size that) {
 		final long v1 = this.asLong();
 		final long v2 = that.asLong();
 		return v1 < v2 ? -1 : (v1 == v2 ? 0 : 1);
@@ -45,8 +45,8 @@ abstract class BaseSize extends ValueFreezer<SizeValue> implements SizeValue {
 
 	@Override
 	public final boolean equals(final Object thatSize) {
-		if (thatSize instanceof SizeValue) {
-			final SizeValue that = (SizeValue) thatSize;
+		if (thatSize instanceof Size) {
+			final Size that = (Size) thatSize;
 			return this.asLong() == that.asLong();
 		}
 		return false;
@@ -57,33 +57,33 @@ abstract class BaseSize extends ValueFreezer<SizeValue> implements SizeValue {
 		return String.format("Size > %9d", asLong()); // 16
 	}
 
-	@Override
-	public final boolean isNull() {
-		return this == ValueConst.NULL_SIZE;
-	}
+	// @Override
+	// public final boolean isNull() {
+	// return this == ValueConst.NULL_SIZE;
+	// }
 
 	@Override
-	public final SizeValue add(final SizeValue that) throws ArithmeticException {
+	public final Size add(final Size that) throws ArithmeticException {
 		return returnSize(MathExtra.longAdd(this.asLong(), that.asLong()));
 	}
 
 	@Override
-	public final SizeValue sub(final SizeValue that) throws ArithmeticException {
+	public final Size sub(final Size that) throws ArithmeticException {
 		return returnSize(MathExtra.longSub(this.asLong(), that.asLong()));
 	}
 
 	@Override
-	public final SizeValue mult(final long factor) throws ArithmeticException {
+	public final Size mult(final long factor) throws ArithmeticException {
 		return returnSize(MathExtra.longMult(this.asLong(), factor));
 	}
 
 	@Override
-	public final SizeValue div(final long factor) throws ArithmeticException {
+	public final Size div(final long factor) throws ArithmeticException {
 		return returnSize(this.asLong() / factor);
 	}
 
 	@Override
-	public final long count(final SizeValue that) throws ArithmeticException {
+	public final long count(final Size that) throws ArithmeticException {
 		return (this.asLong() / that.asLong());
 	}
 

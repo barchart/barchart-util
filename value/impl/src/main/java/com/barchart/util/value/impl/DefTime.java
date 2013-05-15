@@ -20,7 +20,7 @@ final class DefTime extends BaseTime {
 	}
 
 	@Override
-	public final long asMillisUTC() {
+	public final long millisecond() {
 		return millisUTC;
 	}
 

@@ -7,8 +7,7 @@
  */
 package com.barchart.util.value.impl;
 
-import static com.barchart.util.value.impl.ValueBuilder.*;
-import temp.SizeValue;
+import temp.Size;
 
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.NotThreadSafe;
@@ -30,19 +29,19 @@ final class VarSize extends BaseSize {
 	}
 
 	@Override
-	protected final SizeValue returnSize(final long value) {
+	protected final Size returnSize(final long value) {
 		this.value = value;
 		return this;
 	}
 
-	@Override
-	public final SizeValue freeze() {
-		return newSize(value);
-	}
+	// @Override
+	// public final Size freeze() {
+	// return newSize(value);
+	// }
 
-	@Override
-	public final boolean isFrozen() {
-		return false;
-	}
+	// @Override
+	// public final boolean isFrozen() {
+	// return false;
+	// }
 
 }

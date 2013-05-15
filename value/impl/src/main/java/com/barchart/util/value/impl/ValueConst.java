@@ -10,12 +10,13 @@ package com.barchart.util.value.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import temp.DecimalValue;
 import temp.Fraction;
-import temp.PriceValue;
-import temp.SizeValue;
-import temp.TimeInterval;
-import temp.TimeValue;
+import temp.Size;
+
+import com.barchart.util.value.api.Decimal;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Time;
+import com.barchart.util.value.api.TimeInterval;
 
 public final class ValueConst {
 
@@ -24,22 +25,22 @@ public final class ValueConst {
 	private ValueConst() {
 	}
 
-	public static final DecimalValue NULL_DECIMAL = //
+	public static final Decimal NULL_DECIMAL = //
 	new DefDecimal(0, 0);
 
-	public static final PriceValue NULL_PRICE = //
+	public static final Price NULL_PRICE = //
 	new NulPrice();
-	public static final PriceValue ZERO_PRICE = //
+	public static final Price ZERO_PRICE = //
 	new NulPrice();
 
-	public static final SizeValue NULL_SIZE = //
+	public static final Size NULL_SIZE = //
 	new NulSize();
-	public static final SizeValue ZERO_SIZE = //
+	public static final Size ZERO_SIZE = //
 	new NulSize();
 
-	public static final TimeValue NULL_TIME = //
+	public static final Time NULL_TIME = //
 	new NulTime();
-	public static final TimeValue ZERO_TIME = //
+	public static final Time ZERO_TIME = //
 	new NulTime();
 
 	public static final TimeInterval NULL_TIME_INTERVAL = //
@@ -48,7 +49,7 @@ public final class ValueConst {
 	public static final Fraction NULL_FRACTION = //
 	new NulFraction();
 
-	public static final SizeValue[] NULL_SIZE_ARRAY = new SizeValue[0];
+	public static final Size[] NULL_SIZE_ARRAY = new Size[0];
 
 	static {
 		// sizeReport(ValueConst.class);

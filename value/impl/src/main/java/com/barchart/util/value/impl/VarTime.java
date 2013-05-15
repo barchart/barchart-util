@@ -7,9 +7,6 @@
  */
 package com.barchart.util.value.impl;
 
-import static com.barchart.util.value.impl.ValueBuilder.*;
-import temp.TimeValue;
-
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.NotThreadSafe;
 
@@ -25,18 +22,18 @@ final class VarTime extends BaseTime {
 	}
 
 	@Override
-	public final long asMillisUTC() {
+	public final long millisecond() {
 		return millisUTC;
 	}
 
-	@Override
-	public final TimeValue freeze() {
-		return newTime(millisUTC);
-	}
+	// @Override
+	// public final Time freeze() {
+	// return newTime(millisUTC);
+	// }
 
-	@Override
-	public final boolean isFrozen() {
-		return false;
-	}
+	// @Override
+	// public final boolean isFrozen() {
+	// return false;
+	// }
 
 }

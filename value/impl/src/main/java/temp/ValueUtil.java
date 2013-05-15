@@ -11,6 +11,7 @@
 package temp;
 
 import com.barchart.util.math.MathExtra;
+import com.barchart.util.value.api.Scaled;
 
 /**
  * Utility class for deriving primitive representations of Value objects.
@@ -18,7 +19,7 @@ import com.barchart.util.math.MathExtra;
  * @author g-litchfield
  * 
  */
-public class ValueUtil {
+class ValueUtil {
 
 	private ValueUtil() {
 
@@ -30,7 +31,7 @@ public class ValueUtil {
 	 * @return
 	 * @throws ArithmeticException
 	 */
-	public static long asLong(final ScaledDecimal<?, ?> decimal)
+	public static long asLong(final Scaled<?, ?> decimal)
 			throws ArithmeticException {
 
 		long m = decimal.mantissa();
@@ -55,8 +56,7 @@ public class ValueUtil {
 	 * @return
 	 * @throws ArithmeticException
 	 */
-	public static int asInt(final ScaledDecimal<?, ?> sd)
-			throws ArithmeticException {
+	public static int asInt(final Scaled<?, ?> sd) throws ArithmeticException {
 
 		return MathExtra.castLongToInt(asLong(sd));
 
@@ -68,7 +68,7 @@ public class ValueUtil {
 	 * @return
 	 * @throws ArithmeticException
 	 */
-	public static double asDouble(final ScaledDecimal<?, ?> sd)
+	public static double asDouble(final Scaled<?, ?> sd)
 			throws ArithmeticException {
 
 		return sd.mantissa() * Math.pow(10, sd.exponent());
@@ -81,7 +81,7 @@ public class ValueUtil {
 	 * @return
 	 * @throws ArithmeticException
 	 */
-	public static float asFloat(final ScaledDecimal<?, ?> sd)
+	public static float asFloat(final Scaled<?, ?> sd)
 			throws ArithmeticException {
 
 		return (float) asDouble(sd);

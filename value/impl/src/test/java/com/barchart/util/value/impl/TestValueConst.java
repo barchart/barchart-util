@@ -15,10 +15,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import temp.Value;
-
-import com.barchart.util.bench.size.JavaSize;
-
 public class TestValueConst {
 
 	private static final Logger log = LoggerFactory
@@ -43,19 +39,19 @@ public class TestValueConst {
 
 		final Field[] fieldArray = klaz.getFields();
 
-		for (final Field field : fieldArray) {
-			if (Value.class.isAssignableFrom(field.getType())) {
-				try {
-					final String name = field.getName();
-					final Object value = field.get(null);
-					final int size = JavaSize.of(value);
-					text.append(String.format("%-20s %,9d", name, size));
-					text.append("\n");
-				} catch (final Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
+		// for (final Field field : fieldArray) {
+		// if (Value.class.isAssignableFrom(field.getType())) {
+		// try {
+		// final String name = field.getName();
+		// final Object value = field.get(null);
+		// final int size = JavaSize.of(value);
+		// text.append(String.format("%-20s %,9d", name, size));
+		// text.append("\n");
+		// } catch (final Exception e) {
+		// e.printStackTrace();
+		// }
+		// }
+		// }
 
 		text.append("##################################");
 		text.append("\n");

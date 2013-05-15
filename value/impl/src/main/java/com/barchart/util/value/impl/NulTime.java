@@ -14,7 +14,7 @@ import com.barchart.util.anno.NotMutable;
 final class NulTime extends BaseTime {
 
 	@Override
-	public final long asMillisUTC() {
+	public final long millisecond() {
 		return 0L;
 	}
 

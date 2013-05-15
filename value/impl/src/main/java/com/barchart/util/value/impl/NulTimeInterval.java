@@ -7,44 +7,49 @@
  */
 package com.barchart.util.value.impl;
 
-import temp.TimeInterval;
-import temp.TimeValue;
+import com.barchart.util.value.api.Time;
+import com.barchart.util.value.api.TimeInterval;
 
 public class NulTimeInterval implements TimeInterval {
 
+	// @Override
+	// public TimeInterval freeze() {
+	// return this;
+	// }
+
+	// @Override
+	// public boolean isFrozen() {
+	// return true;
+	// }
+
+	// @Override
+	// public boolean isNull() {
+	// return true;
+	// }
+
 	@Override
-	public TimeInterval freeze() {
+	public Time start() {
+		return ValueConst.NULL_TIME;
+	}
+
+	// @Override
+	// public long startAsMillis() {
+	// return 0;
+	// }
+
+	@Override
+	public Time stop() {
+		return ValueConst.NULL_TIME;
+	}
+
+	@Override
+	public TimeInterval copy() {
 		return this;
 	}
 
-	@Override
-	public boolean isFrozen() {
-		return true;
-	}
-
-	@Override
-	public boolean isNull() {
-		return true;
-	}
-
-	@Override
-	public TimeValue start() {
-		return ValueConst.NULL_TIME;
-	}
-
-	@Override
-	public long startAsMillis() {
-		return 0;
-	}
-
-	@Override
-	public TimeValue stop() {
-		return ValueConst.NULL_TIME;
-	}
-
-	@Override
-	public long stopAsMillis() {
-		return 0;
-	}
+	// @Override
+	// public long stopAsMillis() {
+	// return 0;
+	// }
 
 }

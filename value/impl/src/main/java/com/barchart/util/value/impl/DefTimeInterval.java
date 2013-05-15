@@ -7,18 +7,17 @@
  */
 package com.barchart.util.value.impl;
 
-import temp.TimeInterval;
-import temp.TimeValue;
+import com.barchart.util.value.api.Time;
+import com.barchart.util.value.api.TimeInterval;
 
-public class DefTimeInterval extends ValueFreezer<TimeInterval> implements
-		TimeInterval {
+public class DefTimeInterval implements TimeInterval {
 
 	final long start;
 	final long stop;
 
-	DefTimeInterval(final TimeValue start, final TimeValue stop) {
-		this.start = start.asMillisUTC();
-		this.stop = stop.asMillisUTC();
+	DefTimeInterval(final Time start, final Time stop) {
+		this.start = start.millisecond();
+		this.stop = stop.millisecond();
 	}
 
 	DefTimeInterval(final long start, final long stop) {
@@ -26,30 +25,30 @@ public class DefTimeInterval extends ValueFreezer<TimeInterval> implements
 		this.stop = stop;
 	}
 
-	@Override
-	public boolean isNull() {
-		return this == ValueConst.NULL_TIME_INTERVAL;
-	}
+	// @Override
+	// public boolean isNull() {
+	// return this == ValueConst.NULL_TIME_INTERVAL;
+	// }
 
 	@Override
-	public TimeValue start() {
+	public Time start() {
 		return ValueBuilder.newTime(start);
 	}
 
-	@Override
-	public long startAsMillis() {
-		return start;
-	}
+	// @Override
+	// public long startAsMillis() {
+	// return start;
+	// }
 
 	@Override
-	public TimeValue stop() {
+	public Time stop() {
 		return ValueBuilder.newTime(stop);
 	}
 
-	@Override
-	public long stopAsMillis() {
-		return stop;
-	}
+	// @Override
+	// public long stopAsMillis() {
+	// return stop;
+	// }
 
 	@Override
 	public boolean equals(final Object o) {
@@ -68,20 +67,28 @@ public class DefTimeInterval extends ValueFreezer<TimeInterval> implements
 
 		final TimeInterval tI = (TimeInterval) o;
 
-		if (this.isNull()) {
-			if (tI.isNull()) {
-				return true;
-			} else {
-				return false;
-			}
-		}
+		// if (this.isNull()) {
+		// if (tI.isNull()) {
+		// return true;
+		// } else {
+		// return false;
+		// }
+		// }
 
-		if (tI.isNull()) {
-			return false;
-		}
+		// if (tI.isNull()) {
+		// return false;
+		// }
 
-		return (start == tI.startAsMillis()) && (stop == tI.stopAsMillis());
+		// return (start == tI.startAsMillis()) && (stop == tI.stopAsMillis());
 
+		// FIXME
+		return false;
+
+	}
+
+	@Override
+	public TimeInterval copy() {
+		return this;
 	}
 
 }

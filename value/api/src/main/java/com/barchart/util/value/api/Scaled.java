@@ -5,15 +5,21 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package temp;
+package com.barchart.util.value.api;
 
 /**
- * represents type safe base 10 floating point
+ * Represents type safe base 10 floating point
+ * <p>
+ * See http://en.wikipedia.org/wiki/Floating_point
+ * <p>
  * 
- * http://en.wikipedia.org/wiki/Floating_point
+ * @param T
+ *            - Derived scaled type.
+ * @param F
+ *            - Permitted factor type.
  */
-public interface ScaledDecimal<T extends ScaledDecimal<T, F>, F extends ScaledDecimal<F, ?>>
-		extends Comparable<T> {
+public interface Scaled<T extends Scaled<T, F>, F extends Scaled<F, ?>> extends
+		Comparable<T> {
 
 	//
 
@@ -52,8 +58,15 @@ public interface ScaledDecimal<T extends ScaledDecimal<T, F>, F extends ScaledDe
 
 	//
 
+	// TODO add int, double methods?
+	/** type safe addition for long */
+	T add(long increment);
+
 	/** type safe addition for T */
 	T add(T that) throws ArithmeticException;
+
+	/** type safe subtract for long */
+	T sub(long decrement);
 
 	/** type safe subtract for T */
 	T sub(T that) throws ArithmeticException;
@@ -90,5 +103,19 @@ public interface ScaledDecimal<T extends ScaledDecimal<T, F>, F extends ScaledDe
 	int hashCode();
 
 	//
+
+	/** TODO */
+	double asDouble();
+
+	/** TODO */
+	boolean greaterThan(T that);
+
+	/** TODO */
+	boolean lessThan(T that);
+
+	//
+
+	/** Convert to another scaled type. */
+	<X extends Scaled<?, ?>> X asScaled();
 
 }

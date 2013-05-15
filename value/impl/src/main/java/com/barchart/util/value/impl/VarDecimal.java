@@ -7,11 +7,9 @@
  */
 package com.barchart.util.value.impl;
 
-import static com.barchart.util.value.impl.ValueBuilder.*;
-import temp.DecimalValue;
-
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.NotThreadSafe;
+import com.barchart.util.value.api.Decimal;
 
 // 24 bytes on 32 bit JVM
 @Mutable
@@ -37,20 +35,20 @@ final class VarDecimal extends BaseDecimal {
 	}
 
 	@Override
-	protected final DecimalValue result(final long mantissa, final int exponent) {
+	protected final Decimal result(final long mantissa, final int exponent) {
 		this.mantissa = mantissa;
 		this.exponent = exponent;
 		return this;
 	}
 
-	@Override
-	public final DecimalValue freeze() {
-		return newDecimal(mantissa, exponent);
-	}
+	// @Override
+	// public final DecimalValue freeze() {
+	// return newDecimal(mantissa, exponent);
+	// }
 
-	@Override
-	public final boolean isFrozen() {
-		return false;
-	}
+	// @Override
+	// public final boolean isFrozen() {
+	// return false;
+	// }
 
 }

@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/bsd-license.php
  */
 /**
- * private values implementation 
+ * Private implementation. 
  */
 package com.barchart.util.value.impl;
 
