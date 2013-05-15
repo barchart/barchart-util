@@ -7,22 +7,26 @@
  */
 package com.barchart.util.value.impl;
 
-import temp.Size;
-
 import com.barchart.util.anno.NotMutable;
+import com.barchart.util.value.api.Size;
 
 // 8 bytes on 32 bit JVM
 @NotMutable
 final class NulSize extends BaseSize {
 
 	@Override
-	public final long asLong() {
-		return 0L;
+	public long mantissa() {
+		return 0;
 	}
 
 	@Override
-	protected final Size returnSize(final long value) {
-		return ValueBuilder.newSize(value);
+	public int exponent() {
+		return 0;
+	}
+
+	@Override
+	protected Size result(final long mantissa, final int exponent) {
+		return ValueBuilder.newSize(mantissa, exponent);
 	}
 
 }

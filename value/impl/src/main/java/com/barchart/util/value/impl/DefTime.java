@@ -13,7 +13,7 @@ import com.barchart.util.anno.NotMutable;
 @NotMutable
 final class DefTime extends BaseTime {
 
-	private final long millisUTC;
+	final long millisUTC;
 
 	DefTime(final long millisUTC) {
 		this.millisUTC = millisUTC;

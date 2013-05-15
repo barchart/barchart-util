@@ -13,7 +13,7 @@ import com.barchart.util.anno.NotMutable;
 @NotMutable
 final class DefPrice0 extends BasePrice {
 
-	private final long mantissa;
+	final long mantissa;
 
 	DefPrice0(final long mantissa) {
 		this.mantissa = mantissa;
@@ -28,5 +28,5 @@ final class DefPrice0 extends BasePrice {
 	public final int exponent() {
 		return 0;
 	}
-	
+
 }

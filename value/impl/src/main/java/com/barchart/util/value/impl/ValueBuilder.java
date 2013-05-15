@@ -8,18 +8,20 @@
 package com.barchart.util.value.impl;
 
 import temp.Fraction;
-import temp.Size;
 
 import com.barchart.util.math.DoubleParts;
 import com.barchart.util.math.MathExtra;
 import com.barchart.util.math.MathIEEE754;
 import com.barchart.util.value.api.Decimal;
 import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
 
 /**
  * NOTE: this class is bundle-private in OSGI.
+ * <p>
+ * FIXME review optimizations.
  */
 public final class ValueBuilder {
 
@@ -88,7 +90,7 @@ public final class ValueBuilder {
 
 	static {
 		for (int k = 0; k < SIZE_CACHE_LIMIT; k++) {
-			SIZE_CACHE[k] = new DefSize(k);
+			SIZE_CACHE[k] = new DefSize(k, 0);
 		}
 		SIZE_CACHE[0] = ValueConst.ZERO_SIZE;
 	}
@@ -97,12 +99,17 @@ public final class ValueBuilder {
 		if (0 <= size && size < SIZE_CACHE_LIMIT) {
 			return SIZE_CACHE[(int) size];
 		} else {
-			return new DefSize(size);
+			return new DefSize(size, 0);
 		}
 	}
 
-	public static final Size newSizeMutable(final long size) {
-		return new VarSize(size);
+	public static final Size newSize(final long mantissa, final int exponent) {
+		return new DefSize(mantissa, exponent);
+	}
+
+	public static final Size newSizeMutable(final long mantissa,
+			final int exponent) {
+		return new VarSize(mantissa, exponent);
 	}
 
 	public static final Time newTime(final long time) {

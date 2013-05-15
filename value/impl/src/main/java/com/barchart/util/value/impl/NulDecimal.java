@@ -8,25 +8,25 @@
 package com.barchart.util.value.impl;
 
 import com.barchart.util.anno.NotMutable;
+import com.barchart.util.value.api.Decimal;
 
-// 16 bytes on 32 bit JVM
+// 8 bytes on 32 bit JVM
 @NotMutable
-final class DefPrice4 extends BasePrice {
+final class NulDecimal extends BaseDecimal {
 
-	final long mantissa;
-
-	DefPrice4(final long mantissa) {
-		this.mantissa = mantissa;
+	@Override
+	public long mantissa() {
+		return 0;
 	}
 
 	@Override
-	public final long mantissa() {
-		return mantissa;
+	public int exponent() {
+		return 0;
 	}
 
 	@Override
-	public final int exponent() {
-		return -4;
+	protected Decimal result(final long mantissa, final int exponent) {
+		return ValueBuilder.newDecimal(mantissa, exponent);
 	}
 
 }

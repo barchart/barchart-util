@@ -15,7 +15,7 @@ import com.barchart.util.anno.NotThreadSafe;
 @NotThreadSafe
 final class VarTime extends BaseTime {
 
-	private volatile long millisUTC;
+	volatile long millisUTC;
 
 	VarTime(final long millisUTC) {
 		this.millisUTC = millisUTC;

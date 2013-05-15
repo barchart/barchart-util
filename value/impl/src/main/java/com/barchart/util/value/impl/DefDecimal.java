@@ -12,8 +12,8 @@ import com.barchart.util.anno.NotMutable;
 @NotMutable
 final class DefDecimal extends BaseDecimal {
 
-	private final long mantissa;
-	private final int exponent;
+	final long mantissa;
+	final int exponent;
 
 	DefDecimal(final long mantissa, final int exponent) {
 		this.mantissa = mantissa;

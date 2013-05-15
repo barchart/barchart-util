@@ -7,36 +7,43 @@
  */
 package com.barchart.util.value.impl;
 
-import temp.Size;
-
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.NotThreadSafe;
+import com.barchart.util.value.api.Size;
 
 //16 bytes on 32 bit JVM
 @Mutable
 @NotThreadSafe
 final class VarSize extends BaseSize {
 
-	private volatile long value;
+	volatile long mantissa;
+	volatile int exponent;
 
-	VarSize(final long value) {
-		this.value = value;
+	VarSize(final long mantissa, final int exponent) {
+		this.mantissa = mantissa;
+		this.exponent = exponent;
 	}
 
 	@Override
-	public final long asLong() {
-		return value;
+	public final long mantissa() {
+		return mantissa;
 	}
 
 	@Override
-	protected final Size returnSize(final long value) {
-		this.value = value;
+	public final int exponent() {
+		return exponent;
+	}
+
+	@Override
+	protected final Size result(final long mantissa, final int exponent) {
+		this.mantissa = mantissa;
+		this.exponent = exponent;
 		return this;
 	}
 
 	// @Override
-	// public final Size freeze() {
-	// return newSize(value);
+	// public final PriceValue freeze() {
+	// return newPrice(mantissa, exponent);
 	// }
 
 	// @Override

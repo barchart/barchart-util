@@ -11,10 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import temp.Fraction;
-import temp.Size;
 
 import com.barchart.util.value.api.Decimal;
 import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
 
@@ -29,7 +29,9 @@ public final class ValueConst {
 	}
 
 	public static final Decimal NULL_DECIMAL = //
-	new DefDecimal(0, 0);
+	new NulDecimal();
+	public static final Decimal ZERO_DECIMAL = //
+	new NulDecimal();
 
 	public static final Price NULL_PRICE = //
 	new NulPrice();

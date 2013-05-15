@@ -16,8 +16,8 @@ import com.barchart.util.value.api.Decimal;
 @NotThreadSafe
 final class VarDecimal extends BaseDecimal {
 
-	private volatile long mantissa;
-	private volatile int exponent;
+	volatile long mantissa;
+	volatile int exponent;
 
 	VarDecimal(final long mantissa, final int exponent) {
 		this.mantissa = mantissa;
