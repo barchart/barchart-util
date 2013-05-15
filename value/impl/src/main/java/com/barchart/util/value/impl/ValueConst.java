@@ -18,6 +18,9 @@ import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
 
+/**
+ * NOTE: this class is bundle-private in OSGI.
+ */
 public final class ValueConst {
 
 	private static final Logger log = LoggerFactory.getLogger(ValueConst.class);
