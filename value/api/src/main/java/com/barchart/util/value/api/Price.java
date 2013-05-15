@@ -71,4 +71,7 @@ public interface Price extends Scaled<Price, Decimal> {
 	@Override
 	int hashCode();
 
+	@Override
+	<X extends Scaled<?, ?>> X asScaled();
+
 }

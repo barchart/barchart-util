@@ -73,4 +73,7 @@ public interface Decimal extends Scaled<Decimal, Decimal> {
 	@Override
 	int hashCode();
 
+	@Override
+	<X extends Scaled<?, ?>> X asScaled();
+
 }
