@@ -17,6 +17,14 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
+	<description>
+<![CDATA[
+### ${project.artifactId}
+
+OSGI/LDAP Filter Library.
+]]>
+	</description>
+
 	<scm>
 		<url>https://github.com/barchart/barchart-util</url>
 		<connection>scm:git:git://github.com/barchart/barchart-util.git</connection>
