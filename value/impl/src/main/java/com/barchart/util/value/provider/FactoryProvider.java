@@ -7,6 +7,7 @@ import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
+import com.barchart.util.value.impl.ValueBuilder;
 
 /**
  * Value factory provider.
@@ -23,26 +24,22 @@ public class FactoryProvider implements Factory {
 
 	@Override
 	public Decimal newDecimal(final long mantissa, final int exponent) {
-		// TODO Auto-generated method stub
-		return null;
+		return ValueBuilder.newDecimal(mantissa, exponent);
 	}
 
 	@Override
 	public Price newPrice(final long mantissa, final int exponent) {
-		// TODO Auto-generated method stub
-		return null;
+		return ValueBuilder.newPrice(mantissa, exponent);
 	}
 
 	@Override
 	public Size newSize(final long mantissa, final int exponent) {
-		// TODO Auto-generated method stub
-		return null;
+		return ValueBuilder.newSize(mantissa, exponent);
 	}
 
 	@Override
 	public Time newTime(final long millisecond, final String zone) {
-		// TODO Auto-generated method stub
-		return null;
+		return ValueBuilder.newTime(millisecond);
 	}
 
 }
