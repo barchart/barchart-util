@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.util.test;
+package com.barchart.util.test.concurrent;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
