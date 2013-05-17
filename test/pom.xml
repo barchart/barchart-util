@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.barchart.util</groupId>
 		<artifactId>barchart-util-archon</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.0.0</version>
 		<relativePath>../archon</relativePath>
 	</parent>
 
@@ -26,6 +26,7 @@
 
 	<dependencies>
 
+		<!-- FIXME swtich to range when conf-util is semantic. -->
 		<dependency>
 			<groupId>com.barchart.conf</groupId>
 			<artifactId>barchart-conf-util</artifactId>
