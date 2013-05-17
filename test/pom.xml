@@ -1,34 +1,28 @@
-<!--
-
-    Copyright (C) 2011-2013 Barchart, Inc. <http://www.barchart.com />
-
-    All rights reserved. Licensed under the OSI BSD License.
-
-    http://www.opensource.org/licenses/bsd-license.php
-
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<!-- Copyright (C) 2011-2013 Barchart, Inc. <http://www.barchart.com /> All 
+	rights reserved. Licensed under the OSI BSD License. http://www.opensource.org/licenses/bsd-license.php -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.barchart.base</groupId>
-		<artifactId>barchart-archon</artifactId>
-		<version>2.5.9</version>
-		<relativePath />
+		<groupId>com.barchart.util</groupId>
+		<artifactId>barchart-util-archon</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../archon</relativePath>
 	</parent>
 
 	<groupId>com.barchart.util</groupId>
 	<artifactId>barchart-util-test</artifactId>
-	<version>2.0.32-SNAPSHOT</version>
+	<version>3.0.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<scm>
 		<url>https://github.com/barchart/barchart-util</url>
 		<connection>scm:git:git://github.com/barchart/barchart-util.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-util.git</developerConnection>
-	  <tag>master</tag>
-  </scm>
+		<tag>master</tag>
+	</scm>
 
 	<dependencies>
 
@@ -37,48 +31,35 @@
 			<artifactId>barchart-conf-util</artifactId>
 			<version>1.2.0</version>
 		</dependency>
-		
-		<dependency>
-			<groupId>com.typesafe</groupId>
-			<artifactId>config</artifactId>
-			<version>1.0.0</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<!-- osgi -->
-		
+
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.core</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.compendium</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- logging -->
-
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
-   <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>provided</scope>
-    </dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
- 	</dependencies>
+	</dependencies>
 
 </project>
