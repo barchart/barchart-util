@@ -10,15 +10,17 @@ package com.barchart.util.values.json;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.util.value.api.Decimal;
 import com.barchart.util.values.api.DecimalValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
-class DecimalValueDes extends ScaledValueDes<DecimalValue, DecimalValue> {
+class DecimalValueDes extends ScaledValueDes<Decimal, Decimal> {
 
 	static Logger log = LoggerFactory.getLogger(DecimalValueDes.class);
 
-	protected DecimalValueDes(Class<DecimalValue> klaz) {
-		super(klaz);
+	@SuppressWarnings("unchecked")
+	protected <V extends Decimal> DecimalValueDes(Class<V> klaz) {
+		super((Class<Decimal>) klaz);
 	}
 
 	@Override

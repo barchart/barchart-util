@@ -13,6 +13,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import com.barchart.util.anno.NotMutable;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.TimeValue;
 
 @NotMutable
@@ -21,20 +22,20 @@ abstract class BaseTime extends ValueFreezer<TimeValue> implements TimeValue {
 	//
 
 	@Override
-	public abstract long asMillisUTC();
+	public abstract long millisecond();
 
 	//
 
 	@Override
-	public final int compareTo(final TimeValue that) {
-		final long t1 = this.asMillisUTC();
-		final long t2 = that.asMillisUTC();
+	public final int compareTo(final Time that) {
+		final long t1 = this.millisecond();
+		final long t2 = that.millisecond();
 		return t1 < t2 ? -1 : (t1 == t2 ? 0 : 1);
 	}
 
 	@Override
 	public final int hashCode() {
-		final long millis = this.asMillisUTC();
+		final long millis = this.millisecond();
 		return (int) (millis ^ (millis >>> 32));
 	}
 
@@ -54,12 +55,12 @@ abstract class BaseTime extends ValueFreezer<TimeValue> implements TimeValue {
 
 	@Override
 	public final DateTime asDateTime() {
-		return new DateTime(asMillisUTC(), DateTimeZone.UTC);
+		return new DateTime(millisecond(), DateTimeZone.UTC);
 	}
 
 	@Override
 	public final DateTime asDateTime(final DateTimeZone zone) {
-		return new DateTime(asMillisUTC(), zone);
+		return new DateTime(millisecond(), zone);
 	}
 
 	@Override

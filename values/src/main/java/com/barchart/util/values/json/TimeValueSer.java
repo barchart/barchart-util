@@ -31,7 +31,7 @@ class TimeValueSer extends ScalarSerializerBase<TimeValue> {
 			final SerializerProvider provider) throws IOException,
 			JsonProcessingException {
 
-		jgen.writeString(Long.toString(value.asMillisUTC()));
+		jgen.writeString(Long.toString(value.millisecond()));
 
 	}
 

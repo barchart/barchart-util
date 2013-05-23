@@ -59,7 +59,7 @@ public class TestVarPrice {
 
 		//
 
-		final PriceValue p3 = p1.add(p2);
+		final PriceValue p3 = (PriceValue) p1.add(p2);
 		assertTrue(p3 instanceof VarPrice);
 		assertTrue(p3 == p1);
 		assertTrue(p2 != p1);

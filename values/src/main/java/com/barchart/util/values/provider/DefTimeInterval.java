@@ -16,8 +16,8 @@ public class DefTimeInterval extends ValueFreezer<TimeInterval> implements TimeI
 	final long stop;
 	
 	DefTimeInterval(final TimeValue start, final TimeValue stop) {
-		this.start = start.asMillisUTC();
-		this.stop = stop.asMillisUTC();
+		this.start = start.millisecond();
+		this.stop = stop.millisecond();
 	}
 	
 	DefTimeInterval(final long start, final long stop) {

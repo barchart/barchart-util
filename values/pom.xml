@@ -62,6 +62,17 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-value-api</artifactId>
+			<version>[3-SNAPSHOT, 4.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-value-impl</artifactId>
+			<version>[3-SNAPSHOT, 4.0.0)</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<scope>provided</scope>

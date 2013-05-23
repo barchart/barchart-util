@@ -11,8 +11,8 @@ import org.codehaus.jackson.Version;
 import org.codehaus.jackson.map.Module;
 import org.codehaus.jackson.map.module.SimpleModule;
 
-import com.barchart.util.values.api.DecimalValue;
-import com.barchart.util.values.api.PriceValue;
+import com.barchart.util.value.api.Decimal;
+import com.barchart.util.value.api.Price;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.TimeValue;
@@ -31,13 +31,13 @@ public class ValueModule {
 
 		//
 
-		Class<DecimalValue> klazDecimal = DecimalValue.class;
+		Class<Decimal> klazDecimal = Decimal.class;
 		module.addSerializer(new DecimalValueSer(klazDecimal));
 		module.addDeserializer(klazDecimal, new DecimalValueDes(klazDecimal));
 
 		//
 
-		Class<PriceValue> klazPrice = PriceValue.class;
+		Class<Price> klazPrice = Price.class;
 		module.addSerializer(new PriceValueSer(klazPrice));
 		module.addDeserializer(klazPrice, new PriceValueDes(klazPrice));
 

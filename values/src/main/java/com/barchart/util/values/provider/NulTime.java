@@ -8,14 +8,25 @@
 package com.barchart.util.values.provider;
 
 import com.barchart.util.anno.NotMutable;
+import com.barchart.util.value.api.Time;
 
 // 8 bytes on 32 bit JVM
 @NotMutable
 final class NulTime extends BaseTime {
 
 	@Override
-	public final long asMillisUTC() {
-		return 0L;
+	public String zone() {
+		return null;
+	}
+
+	@Override
+	public long millisecond() {
+		return 0;
+	}
+
+	@Override
+	public Time copy() {
+		return this;
 	}
 
 }

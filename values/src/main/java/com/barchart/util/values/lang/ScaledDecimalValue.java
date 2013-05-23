@@ -12,12 +12,13 @@ import static java.lang.Math.min;
 
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.math.MathExtra;
+import com.barchart.util.value.api.Scaled;
 import com.barchart.util.values.api.Value;
 import com.barchart.util.values.provider.ValueFreezer;
 
 @NotMutable
-public abstract class ScaledDecimalValue<T extends ScaledDecimal<T, F> & Value<T>, F extends ScaledDecimal<F, F> & Value<F>>
-		extends ValueFreezer<T> implements ScaledDecimal<T, F> {
+public abstract class ScaledDecimalValue<T extends Scaled<T, F> & Value<T>, F extends Scaled<F, F> & Value<F>>
+		extends ValueFreezer<T> implements Scaled<T, F> {
 
 	protected abstract T result(long mantissa, int exponent);
 

@@ -3,7 +3,7 @@ package com.barchart.util.values.provider;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
 
-class NulFraction extends BaseDecimal implements Fraction {
+class NulFraction extends BaseDecimalFrozen implements Fraction {
 
 	@Override
 	public long mantissa() {

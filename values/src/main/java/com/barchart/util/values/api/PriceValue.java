@@ -8,12 +8,11 @@
 package com.barchart.util.values.api;
 
 import com.barchart.util.anno.NotMutable;
-import com.barchart.util.values.lang.ScaledDecimal;
+import com.barchart.util.value.api.Price;
 
 /** should be used for prices only */
 @NotMutable
-public interface PriceValue extends Value<PriceValue>,
-		ScaledDecimal<PriceValue, DecimalValue> {
+public interface PriceValue extends Value<PriceValue>, Price {
 
 	double asDouble();
 	

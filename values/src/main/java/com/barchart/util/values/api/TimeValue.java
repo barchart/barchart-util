@@ -13,9 +13,10 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import com.barchart.util.anno.NotMutable;
+import com.barchart.util.value.api.Time;
 
 @NotMutable
-public interface TimeValue extends Value<TimeValue>, Comparable<TimeValue> {
+public interface TimeValue extends Value<TimeValue>, Time {
 
 	//
 
@@ -28,15 +29,7 @@ public interface TimeValue extends Value<TimeValue>, Comparable<TimeValue> {
 
 	DateTime asDateTime(DateTimeZone zone);
 
-	/**
-	 * milliseconds since January 1, 1970, 00:00:00 GMT
-	 **/
-	long asMillisUTC();
-
 	//
-
-	@Override
-	int compareTo(TimeValue thatTime);
 
 	@Override
 	int hashCode();

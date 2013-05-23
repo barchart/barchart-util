@@ -97,7 +97,7 @@ public class TestScaledDecimalValue {
 	@Test
 	public void TestNormal() {
 		final PriceValue p1 = newPrice(100100, 2);
-		final PriceValue p2 = p1.scale(0);
+		final PriceValue p2 = (PriceValue) p1.scale(0);
 		// System.err.println("p1 : " + p1 + " p2 : " + p2);
 		assertTrue(p1.equals(p2));
 	}
@@ -107,7 +107,7 @@ public class TestScaledDecimalValue {
 
 		final PriceValue p1 = newPrice(100100, -2);
 
-		final double f1 = ValueUtil.asDouble(p1);
+		final double f1 = p1.asDouble();
 
 		assertEquals(f1, 1001.0, ERR);
 
@@ -118,11 +118,11 @@ public class TestScaledDecimalValue {
 
 		final PriceValue p1 = newPrice(9710013123L, -2);
 		final PriceValue p2 = newPrice(101298634, -3);
-		final PriceValue p3 = p1.add(p2);
+		final PriceValue p3 = (PriceValue) p1.add(p2);
 
-		final double d1 = ValueUtil.asDouble(p1);
-		final double d2 = ValueUtil.asDouble(p2);
-		final double d3 = ValueUtil.asDouble(p3);
+		final double d1 = p1.asDouble();
+		final double d2 = p2.asDouble();
+		final double d3 = p3.asDouble();
 
 		assertEquals(d3, d1 + d2, ERR);
 
@@ -133,11 +133,11 @@ public class TestScaledDecimalValue {
 
 		final PriceValue p1 = newPrice(13123, -2);
 		final PriceValue p2 = newPrice(9712986342L, -4);
-		final PriceValue p3 = p1.sub(p2);
+		final PriceValue p3 = (PriceValue) p1.sub(p2);
 
-		final double d1 = ValueUtil.asDouble(p1);
-		final double d2 = ValueUtil.asDouble(p2);
-		final double d3 = ValueUtil.asDouble(p3);
+		final double d1 = p1.asDouble();
+		final double d2 = p2.asDouble();
+		final double d3 = p3.asDouble();
 
 		assertEquals(d3, d1 - d2, 0.00001);
 
@@ -149,7 +149,7 @@ public class TestScaledDecimalValue {
 		final PriceValue p1 = newPrice(Long.MAX_VALUE, -2);
 		final PriceValue p2 = newPrice(Long.MAX_VALUE, -4);
 
-		final PriceValue p3 = p1.sub(p2);
+		final PriceValue p3 = (PriceValue) p1.sub(p2);
 
 		System.err.println("p1 : " + p1);
 		System.err.println("p2 : " + p2);
@@ -162,7 +162,7 @@ public class TestScaledDecimalValue {
 		final PriceValue p1 = newPrice(-10L, 0);
 		final PriceValue p2 = newPrice(Long.MAX_VALUE, 0);
 
-		final PriceValue p3 = p1.sub(p2);
+		final PriceValue p3 = (PriceValue) p1.sub(p2);
 
 		System.err.println("p1 : " + p1);
 		System.err.println("p2 : " + p2);
@@ -175,10 +175,10 @@ public class TestScaledDecimalValue {
 
 		final int factor = 124923655;
 		final PriceValue p1 = newPrice(9710013123L, -2);
-		final PriceValue p2 = p1.mult(factor);
+		final PriceValue p2 = (PriceValue) p1.mult(factor);
 
-		final double d1 = ValueUtil.asDouble(p1);
-		final double d2 = ValueUtil.asDouble(p2);
+		final double d1 = p1.asDouble();
+		final double d2 = p2.asDouble();
 
 		assertEquals(d2, d1 * factor, ERR);
 
@@ -192,9 +192,9 @@ public class TestScaledDecimalValue {
 
 		final long count = p1.count(p2);
 
-		final double d1 = ValueUtil.asDouble(p1);
+		final double d1 = p1.asDouble();
 
-		final double d2 = ValueUtil.asDouble(p2);
+		final double d2 = p2.asDouble();
 
 		assertEquals(d1 / d2, count, ERR);
 
@@ -208,9 +208,9 @@ public class TestScaledDecimalValue {
 
 		final long count = p1.count(p2);
 
-		final double d1 = ValueUtil.asDouble(p1);
+		final double d1 = p1.asDouble();
 
-		final double d2 = ValueUtil.asDouble(p2);
+		final double d2 = p2.asDouble();
 
 		assertEquals(d1 / d2, count, ERR_09);
 

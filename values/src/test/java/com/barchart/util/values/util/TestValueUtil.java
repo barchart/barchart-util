@@ -34,7 +34,7 @@ public class TestValueUtil {
 	public void testAsLong() {
 		final long l = 123456789l;
 		final PriceValue pv = ValueBuilder.newPrice(l);
-		assertEquals(l, ValueUtil.asLong(pv));
+		assertEquals(l, (long)pv.asDouble());
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class TestValueUtil {
 	public void testAsInt() {
 		final int i = 123456;
 		final PriceValue pv = ValueBuilder.newPrice(i);
-		assertEquals(i, ValueUtil.asInt(pv));
+		assertEquals(i, (int)pv.asDouble());
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class TestValueUtil {
 		final DoubleParts dp = MathIEEE754.extractDecimal(d);
 		final PriceValue pv = ValueBuilder.newPrice(dp.getMantissa(),
 				dp.getExponent());
-		assertEquals(d, ValueUtil.asDouble(pv), 0.000000001);
+		assertEquals(d, pv.asDouble(), 0.000000001);
 
 	}
 
@@ -75,7 +75,7 @@ public class TestValueUtil {
 		final DoubleParts dp = MathIEEE754.extractDecimal(f);
 		final PriceValue pv = ValueBuilder.newPrice(dp.getMantissa(),
 				dp.getExponent());
-		assertEquals(f, ValueUtil.asDouble(pv), 0.000000001);
+		assertEquals(f, pv.asDouble(), 0.000000001);
 	}
 
 }

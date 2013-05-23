@@ -12,22 +12,40 @@ import com.barchart.util.values.api.SizeValue;
 
 //16 bytes on 32 bit JVM
 @NotMutable
-final class DefSize extends BaseSize {
+final class DefSize extends BaseSizeFrozen {
 
-	private final long value;
+	final long mantissa;
+	final int exponent;
 
-	DefSize(long value) {
-		this.value = value;
+	DefSize(final long mantissa, final int exponent) {
+		this.mantissa = mantissa;
+		this.exponent = exponent;
+	}
+	
+	DefSize(final long mantissa) {
+		this.mantissa = mantissa;
+		exponent = 0;
 	}
 
 	@Override
 	public final long asLong() {
-		return value;
+		return (long) (mantissa * 10 ^ exponent); //TODO Not sure if this is right
 	}
 
 	@Override
 	protected final SizeValue returnSize(long value) {
 		return ValueBuilder.newSize(value);
 	}
+
+	@Override
+	public long mantissa() {
+		return mantissa;
+	}
+	
+	@Override
+	public int exponent() {
+		return exponent;
+	}
+	
 
 }

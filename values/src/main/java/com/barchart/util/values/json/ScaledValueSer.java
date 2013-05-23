@@ -16,9 +16,9 @@ import org.codehaus.jackson.map.ser.ScalarSerializerBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.util.values.lang.ScaledDecimal;
+import com.barchart.util.value.api.Scaled;
 
-class ScaledValueSer<T extends ScaledDecimal<T, F>, F extends ScaledDecimal<F, ?>>
+class ScaledValueSer<T extends Scaled<T, F>, F extends Scaled<F, ?>>
 		extends ScalarSerializerBase<T> {
 
 	protected ScaledValueSer(final Class<T> klaz) {
