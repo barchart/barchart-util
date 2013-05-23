@@ -9,12 +9,10 @@ package com.barchart.util.values.api;
 
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Decimal;
-import com.barchart.util.value.api.Scaled;
 
 /** generic decimal value */
 @NotMutable
-public interface DecimalValue extends Value<DecimalValue>,
-		Scaled<Decimal, Decimal>, Decimal {
+public interface DecimalValue extends Value<DecimalValue>, Decimal {
 
 	double asDouble();
 	
