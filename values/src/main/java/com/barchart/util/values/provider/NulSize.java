@@ -12,7 +12,7 @@ import com.barchart.util.values.api.SizeValue;
 
 // 8 bytes on 32 bit JVM
 @NotMutable
-final class NulSize extends BaseSizeFrozen {
+final class NulSize extends BaseSize {
 
 	@Override
 	public final long asLong() {
@@ -22,16 +22,6 @@ final class NulSize extends BaseSizeFrozen {
 	@Override
 	protected final SizeValue returnSize(long value) {
 		return ValueBuilder.newSize(value);
-	}
-
-	@Override
-	public long mantissa() {
-		return 0;
-	}
-
-	@Override
-	public int exponent() {
-		return 0;
 	}
 
 }

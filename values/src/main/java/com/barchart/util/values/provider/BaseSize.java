@@ -7,17 +7,12 @@
  */
 package com.barchart.util.values.provider;
 
-import static com.barchart.util.value.impl.ValueBuilder.newSize;
-
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.math.MathExtra;
-import com.barchart.util.value.api.Decimal;
-import com.barchart.util.value.api.Size;
-import com.barchart.util.value.impl.BaseScaled;
 import com.barchart.util.values.api.SizeValue;
 
 @NotMutable
-abstract class BaseSize extends BaseScaled<Size, Decimal> implements SizeValue {
+abstract class BaseSize extends ValueFreezer<SizeValue> implements SizeValue {
 
 	//
 
@@ -27,16 +22,24 @@ abstract class BaseSize extends BaseScaled<Size, Decimal> implements SizeValue {
 	public abstract long asLong();
 
 	//
-	
-	@Override
-	protected Size result(final long mantissa, final int exponent) {
-		return newSize(mantissa, exponent);
-	}
 
 	@Deprecated
 	@Override
 	public final int asInt() {
 		return MathExtra.castLongToInt(asLong());
+	}
+
+	@Override
+	public final int compareTo(final SizeValue that) {
+		final long v1 = this.asLong();
+		final long v2 = that.asLong();
+		return v1 < v2 ? -1 : (v1 == v2 ? 0 : 1);
+	}
+
+	@Override
+	public final int hashCode() {
+		final long value = asLong();
+		return (int) (value ^ (value >>> 32));
 	}
 
 	@Override
@@ -56,6 +59,36 @@ abstract class BaseSize extends BaseScaled<Size, Decimal> implements SizeValue {
 	@Override
 	public final boolean isNull() {
 		return this == ValueConst.NULL_SIZE;
+	}
+
+	@Override
+	public final SizeValue add(final SizeValue that) throws ArithmeticException {
+		return returnSize(MathExtra.longAdd(this.asLong(), that.asLong()));
+	}
+
+	@Override
+	public final SizeValue sub(final SizeValue that) throws ArithmeticException {
+		return returnSize(MathExtra.longSub(this.asLong(), that.asLong()));
+	}
+
+	@Override
+	public final SizeValue mult(final long factor) throws ArithmeticException {
+		return returnSize(MathExtra.longMult(this.asLong(), factor));
+	}
+
+	@Override
+	public final SizeValue div(final long factor) throws ArithmeticException {
+		return returnSize(this.asLong() / factor);
+	}
+
+	@Override
+	public final long count(final SizeValue that) throws ArithmeticException {
+		return (this.asLong() / that.asLong());
+	}
+
+	@Override
+	public final boolean isZero() {
+		return asLong() == 0L;
 	}
 
 }

@@ -8,10 +8,9 @@
 package com.barchart.util.values.api;
 
 import com.barchart.util.anno.NotMutable;
-import com.barchart.util.value.api.Size;
 
 @NotMutable
-public interface SizeValue extends Value<SizeValue>, Size {
+public interface SizeValue extends Value<SizeValue>, Comparable<SizeValue> {
 
 	//
 
@@ -24,8 +23,23 @@ public interface SizeValue extends Value<SizeValue>, Size {
 	//
 
 	@Override
+	int compareTo(SizeValue thatSize);
+
+	@Override
 	boolean equals(Object thatSize);
 
 	//
+
+	SizeValue add(SizeValue thatSize) throws ArithmeticException;
+
+	SizeValue sub(SizeValue thatSize) throws ArithmeticException;
+
+	SizeValue mult(long factor) throws ArithmeticException;
+
+	SizeValue div(long factor) throws ArithmeticException;
+
+	long count(SizeValue thatSize) throws ArithmeticException;
+
+	boolean isZero();
 
 }

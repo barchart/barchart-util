@@ -17,9 +17,9 @@ import org.codehaus.jackson.map.deser.StdDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.util.value.api.Scaled;
+import com.barchart.util.values.lang.ScaledDecimal;
 
-abstract class ScaledValueDes<T extends Scaled<T, F>, F extends Scaled<F, ?>>
+abstract class ScaledValueDes<T extends ScaledDecimal<T, F>, F extends ScaledDecimal<F, ?>>
 		extends StdDeserializer<T> {
 
 	static Logger log = LoggerFactory.getLogger(ScaledValueDes.class);

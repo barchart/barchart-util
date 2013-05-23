@@ -11,7 +11,7 @@ import com.barchart.util.anno.NotMutable;
 
 // 16 bytes on 32 bit JVM
 @NotMutable
-final class DefPrice3 extends BasePriceFrozen {
+final class DefPrice3 extends BasePrice {
 
 	private final long mantissa;
 

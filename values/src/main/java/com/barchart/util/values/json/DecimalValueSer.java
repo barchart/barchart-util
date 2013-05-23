@@ -7,13 +7,12 @@
  */
 package com.barchart.util.values.json;
 
-import com.barchart.util.value.api.Decimal;
+import com.barchart.util.values.api.DecimalValue;
 
-class DecimalValueSer extends ScaledValueSer<Decimal, Decimal> {
+class DecimalValueSer extends ScaledValueSer<DecimalValue, DecimalValue> {
 
-	@SuppressWarnings("unchecked")
-	protected <V extends Decimal> DecimalValueSer(Class<V> klaz) {
-		super((Class<Decimal>) klaz);
+	protected DecimalValueSer(Class<DecimalValue> klaz) {
+		super(klaz);
 	}
 
 }

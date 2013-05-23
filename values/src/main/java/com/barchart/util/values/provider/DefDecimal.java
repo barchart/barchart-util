@@ -10,7 +10,7 @@ package com.barchart.util.values.provider;
 import com.barchart.util.anno.NotMutable;
 
 @NotMutable
-final class DefDecimal extends BaseDecimalFrozen {
+final class DefDecimal extends BaseDecimal {
 
 	private final long mantissa;
 	private final int exponent;

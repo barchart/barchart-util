@@ -100,13 +100,6 @@ public final class ValueBuilder {
 			return new DefSize(size);
 		}
 	}
-	
-	public static final SizeValue newSize(final long mantissa, final int exponent) {
-		if(exponent == 0) {
-			return newSize(mantissa);
-		}
-		return new VarSize(mantissa, exponent);
-	}
 
 	public static final SizeValue newSizeMutable(final long size) {
 		return new VarSize(size);
@@ -176,7 +169,7 @@ public final class ValueBuilder {
 	public static final boolean isStrictMultiple(final PriceValue priceTest,
 			final PriceValue priceStep) {
 		final long count = priceTest.count(priceStep);
-		final PriceValue priceBack = (PriceValue) priceStep.mult(count);
+		final PriceValue priceBack = priceStep.mult(count);
 		if (priceBack.equals(priceTest)) {
 			return true;
 		} else {

@@ -29,14 +29,4 @@ final class NulPrice extends BasePrice {
 		return ValueBuilder.newPrice(mantissa, exponent);
 	}
 
-	@Override
-	public PriceValue freeze() {
-		return this;
-	}
-
-	@Override
-	public boolean isFrozen() {
-		return true;
-	}
-
 }

@@ -10,18 +10,16 @@ package com.barchart.util.values.json;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.util.value.api.Decimal;
-import com.barchart.util.value.api.Price;
+import com.barchart.util.values.api.DecimalValue;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
-class PriceValueDes extends ScaledValueDes<Price, Decimal> {
+class PriceValueDes extends ScaledValueDes<PriceValue, DecimalValue> {
 
 	static Logger log = LoggerFactory.getLogger(PriceValueDes.class);
 
-	@SuppressWarnings("unchecked")
-	protected <V extends Price> PriceValueDes(Class<V> klaz) {
-		super((Class<Price>) klaz);
+	protected PriceValueDes(Class<PriceValue> klaz) {
+		super(klaz);
 	}
 
 	@Override

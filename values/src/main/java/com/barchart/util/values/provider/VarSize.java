@@ -18,48 +18,31 @@ import com.barchart.util.values.api.SizeValue;
 @NotThreadSafe
 final class VarSize extends BaseSize {
 
-	volatile long mantissa;
-	volatile int exponent;
+	private volatile long value;
 
-	VarSize(final long mantissa, final int exponent) {
-		this.mantissa = mantissa;
-		this.exponent = exponent;
-	}
-	
-	VarSize(final long mantissa) {
-		this.mantissa = mantissa;
-		exponent = 0;
+	VarSize(final long value) {
+		this.value = value;
 	}
 
 	@Override
 	public final long asLong() {
-		return (long) (mantissa * 10 ^ exponent); //TODO Not sure if this is right
+		return value;
 	}
 
 	@Override
 	protected final SizeValue returnSize(final long value) {
-		this.mantissa = value;
+		this.value = value;
 		return this;
 	}
 
 	@Override
 	public final SizeValue freeze() {
-		return newSize(mantissa, exponent);
+		return newSize(value);
 	}
 
 	@Override
 	public final boolean isFrozen() {
 		return false;
-	}
-
-	@Override
-	public long mantissa() {
-		return mantissa;
-	}
-
-	@Override
-	public int exponent() {
-		return exponent;
 	}
 
 }

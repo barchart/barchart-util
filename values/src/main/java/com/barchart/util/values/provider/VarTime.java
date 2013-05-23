@@ -11,7 +11,6 @@ import static com.barchart.util.values.provider.ValueBuilder.*;
 
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.NotThreadSafe;
-import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.TimeValue;
 
 //16 bytes on 32 bit JVM
@@ -26,7 +25,7 @@ final class VarTime extends BaseTime {
 	}
 
 	@Override
-	public final long millisecond() {
+	public final long asMillisUTC() {
 		return millisUTC;
 	}
 
@@ -38,16 +37,6 @@ final class VarTime extends BaseTime {
 	@Override
 	public final boolean isFrozen() {
 		return false;
-	}
-
-	@Override
-	public String zone() {
-		return null;
-	}
-
-	@Override
-	public Time copy() {
-		return this.freeze();
 	}
 
 }
