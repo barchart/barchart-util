@@ -7,17 +7,14 @@
  */
 package com.barchart.util.values.provider;
 
-import static com.barchart.util.value.impl.ValueBuilder.newSize;
-
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.math.MathExtra;
-import com.barchart.util.value.api.Decimal;
-import com.barchart.util.value.api.Size;
 import com.barchart.util.value.impl.BaseScaled;
+import com.barchart.util.values.api.DecimalValue;
 import com.barchart.util.values.api.SizeValue;
 
 @NotMutable
-abstract class BaseSize extends BaseScaled<Size, Decimal> implements SizeValue {
+abstract class BaseSize extends BaseScaled<SizeValue, DecimalValue> implements SizeValue {
 
 	//
 
@@ -29,8 +26,8 @@ abstract class BaseSize extends BaseScaled<Size, Decimal> implements SizeValue {
 	//
 	
 	@Override
-	protected Size result(final long mantissa, final int exponent) {
-		return newSize(mantissa, exponent);
+	protected SizeValue result(final long mantissa, final int exponent) {
+		return ValueBuilder.newSize(mantissa, exponent);
 	}
 
 	@Deprecated

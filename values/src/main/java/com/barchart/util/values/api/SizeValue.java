@@ -8,10 +8,11 @@
 package com.barchart.util.values.api;
 
 import com.barchart.util.anno.NotMutable;
-import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Scaled;
 
 @NotMutable
-public interface SizeValue extends Value<SizeValue>, Size {
+public interface SizeValue extends Value<SizeValue>, 
+		Scaled<SizeValue, DecimalValue> {
 
 	//
 
