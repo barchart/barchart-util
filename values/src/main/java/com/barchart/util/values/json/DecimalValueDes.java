@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.util.value.api.Decimal;
-import com.barchart.util.value.api.Scaled;
 import com.barchart.util.values.api.DecimalValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
