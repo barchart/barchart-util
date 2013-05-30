@@ -22,7 +22,8 @@ public interface Factory {
 
 	Time newTime(long millisecond, String zone);
 	
-	//TimeInterval
-	//Schedule
+	TimeInterval newTimeInterval(long beginMill, long endMill);
+	
+	Schedule newSchedule(TimeInterval[] intervals);
 
 }

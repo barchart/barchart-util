@@ -14,6 +14,7 @@ import com.barchart.util.math.MathExtra;
 import com.barchart.util.math.MathIEEE754;
 import com.barchart.util.value.api.Decimal;
 import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
@@ -174,6 +175,10 @@ public final class ValueBuilder {
 
 	public static Fraction newFraction(final int base, final int exponent) {
 		return new DefFraction(base, exponent);
+	}
+	
+	public static Schedule newSchedule(final TimeInterval[] intervals) {
+		return new BaseSchedule(intervals);
 	}
 
 }

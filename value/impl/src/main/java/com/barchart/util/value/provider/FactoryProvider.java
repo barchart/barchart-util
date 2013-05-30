@@ -5,8 +5,10 @@ import java.util.ServiceLoader;
 import com.barchart.util.value.api.Decimal;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
+import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.value.impl.ValueBuilder;
 
 /**
@@ -40,6 +42,17 @@ public class FactoryProvider implements Factory {
 	@Override
 	public Time newTime(final long millisecond, final String zone) {
 		return ValueBuilder.newTime(millisecond);
+	}
+
+	@Override
+	public TimeInterval newTimeInterval(final long beginMill, final long endMill) {
+		return ValueBuilder.newTimeInterval(ValueBuilder.newTime(beginMill), 
+				ValueBuilder.newTime(endMill));
+	}
+
+	@Override
+	public Schedule newSchedule(TimeInterval[] intervals) {
+		return ValueBuilder.newSchedule(intervals);
 	}
 
 }
