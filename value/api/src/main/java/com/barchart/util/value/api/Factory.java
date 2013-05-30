@@ -21,5 +21,8 @@ public interface Factory {
 	Size newSize(long mantissa, int exponent);
 
 	Time newTime(long millisecond, String zone);
+	
+	//TimeInterval
+	//Schedule
 
 }
