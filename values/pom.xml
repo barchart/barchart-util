@@ -37,7 +37,7 @@
 	</properties>
 
 	<dependencies>
-
+	
 		<dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-anno</artifactId>
