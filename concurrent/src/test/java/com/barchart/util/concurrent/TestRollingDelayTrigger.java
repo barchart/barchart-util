@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.util.test.CallableTest;
+import com.barchart.util.test.concurrent.CallableTest;
 
 public class TestRollingDelayTrigger {
 
