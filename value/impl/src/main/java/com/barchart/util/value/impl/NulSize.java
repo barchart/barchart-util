@@ -7,6 +7,8 @@
  */
 package com.barchart.util.value.impl;
 
+import static com.barchart.util.value.impl.ValueBuilder.*;
+
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Size;
 
@@ -26,7 +28,7 @@ final class NulSize extends BaseSize {
 
 	@Override
 	protected Size result(final long mantissa, final int exponent) {
-		return ValueBuilder.newSize(mantissa, exponent);
+		return newSize(mantissa, exponent);
 	}
 
 }

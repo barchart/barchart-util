@@ -1,7 +1,5 @@
 package com.barchart.util.value.provider;
 
-import java.util.ServiceLoader;
-
 import com.barchart.util.value.api.Decimal;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.Price;
@@ -13,15 +11,21 @@ import com.barchart.util.value.impl.ValueBuilder;
 
 /**
  * Value factory provider.
- * <p>
- * TODO implement {@link ServiceLoader}. Will work for OSGI, Guice, plain JVM.
  */
 public class FactoryProvider implements Factory {
 
-	static FactoryProvider provider = new FactoryProvider();
+	static final Factory INSTANCE = new FactoryProvider();
 
-	public static Factory instance() {
-		return provider;
+	/**
+	 * Verify semantic version match outside OSGI.
+	 */
+	static void assertVersion() throws Exception {
+
+	}
+
+	public static Factory instance() throws Exception {
+		assertVersion();
+		return INSTANCE;
 	}
 
 	@Override
@@ -46,12 +50,12 @@ public class FactoryProvider implements Factory {
 
 	@Override
 	public TimeInterval newTimeInterval(final long beginMill, final long endMill) {
-		return ValueBuilder.newTimeInterval(ValueBuilder.newTime(beginMill), 
+		return ValueBuilder.newTimeInterval(ValueBuilder.newTime(beginMill),
 				ValueBuilder.newTime(endMill));
 	}
 
 	@Override
-	public Schedule newSchedule(TimeInterval[] intervals) {
+	public Schedule newSchedule(final TimeInterval[] intervals) {
 		return ValueBuilder.newSchedule(intervals);
 	}
 

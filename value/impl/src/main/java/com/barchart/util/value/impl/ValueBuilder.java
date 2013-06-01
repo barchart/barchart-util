@@ -7,8 +7,6 @@
  */
 package com.barchart.util.value.impl;
 
-import temp.Fraction;
-
 import com.barchart.util.math.DoubleParts;
 import com.barchart.util.math.MathExtra;
 import com.barchart.util.math.MathIEEE754;
@@ -173,10 +171,6 @@ public final class ValueBuilder {
 		return new DefTimeInterval(newTime(start), newTime(stop));
 	}
 
-	public static Fraction newFraction(final int base, final int exponent) {
-		return new DefFraction(base, exponent);
-	}
-	
 	public static Schedule newSchedule(final TimeInterval[] intervals) {
 		return new BaseSchedule(intervals);
 	}

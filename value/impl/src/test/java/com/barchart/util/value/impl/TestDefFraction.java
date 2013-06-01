@@ -6,26 +6,27 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import temp.Fraction;
+import temp.ValueBuilderTemp;
 
 import com.barchart.util.value.api.Price;
 
 public class TestDefFraction {
 
-	public static Fraction BIN_Z00 = newFraction(2, 0);
-	public static Fraction BIN_N01 = newFraction(2, -1);
-	public static Fraction BIN_N02 = newFraction(2, -2);
-	public static Fraction BIN_N03 = newFraction(2, -3);
-	public static Fraction BIN_N04 = newFraction(2, -4);
-	public static Fraction BIN_N07 = newFraction(2, -7);
+	public static Fraction BIN_Z00 = ValueBuilderTemp.newFraction(2, 0);
+	public static Fraction BIN_N01 = ValueBuilderTemp.newFraction(2, -1);
+	public static Fraction BIN_N02 = ValueBuilderTemp.newFraction(2, -2);
+	public static Fraction BIN_N03 = ValueBuilderTemp.newFraction(2, -3);
+	public static Fraction BIN_N04 = ValueBuilderTemp.newFraction(2, -4);
+	public static Fraction BIN_N07 = ValueBuilderTemp.newFraction(2, -7);
 
-	public static Fraction DEC_Z00 = newFraction(10, 0);
-	public static Fraction DEC_N01 = newFraction(10, -1);
-	public static Fraction DEC_N02 = newFraction(10, -2);
-	public static Fraction DEC_N03 = newFraction(10, -3);
-	public static Fraction DEC_N04 = newFraction(10, -4);
-	public static Fraction DEC_N05 = newFraction(10, -5);
-	public static Fraction DEC_N06 = newFraction(10, -6);
-	public static Fraction DEC_N07 = newFraction(10, -7);
+	public static Fraction DEC_Z00 = ValueBuilderTemp.newFraction(10, 0);
+	public static Fraction DEC_N01 = ValueBuilderTemp.newFraction(10, -1);
+	public static Fraction DEC_N02 = ValueBuilderTemp.newFraction(10, -2);
+	public static Fraction DEC_N03 = ValueBuilderTemp.newFraction(10, -3);
+	public static Fraction DEC_N04 = ValueBuilderTemp.newFraction(10, -4);
+	public static Fraction DEC_N05 = ValueBuilderTemp.newFraction(10, -5);
+	public static Fraction DEC_N06 = ValueBuilderTemp.newFraction(10, -6);
+	public static Fraction DEC_N07 = ValueBuilderTemp.newFraction(10, -7);
 
 	@Test
 	public void testPriceFraction() {

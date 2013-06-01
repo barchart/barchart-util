@@ -4,7 +4,7 @@ import temp.Fraction;
 
 import com.barchart.util.value.api.Price;
 
-class NulFraction extends BaseDecimal implements Fraction {
+public class NulFraction extends BaseDecimal implements Fraction {
 
 	@Override
 	public long mantissa() {

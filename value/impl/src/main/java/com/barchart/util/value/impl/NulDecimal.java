@@ -7,6 +7,8 @@
  */
 package com.barchart.util.value.impl;
 
+import static com.barchart.util.value.impl.ValueBuilder.*;
+
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Decimal;
 
@@ -26,7 +28,7 @@ final class NulDecimal extends BaseDecimal {
 
 	@Override
 	protected Decimal result(final long mantissa, final int exponent) {
-		return ValueBuilder.newDecimal(mantissa, exponent);
+		return newDecimal(mantissa, exponent);
 	}
 
 }

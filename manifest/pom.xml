@@ -12,7 +12,7 @@
 	</parent>
 
 	<groupId>com.barchart.util</groupId>
-	<artifactId>barchart-util-value-api</artifactId>
+	<artifactId>barchart-util-manifest</artifactId>
 	<version>4.0.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
@@ -36,42 +36,5 @@
 		</dependency>
 
 	</dependencies>
-
-	<build>
-		<plugins>
-
-			<!-- Remove internal service provider. -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<tasks>
-						<delete dir="target/classes/com/barchart/util/value/provider" />
-					</tasks>
-				</configuration>
-			</plugin>
-
-			<!-- Import external service provider. -->
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<configuration>
-					<instructions>
-						<Export-Package>com.barchart.util.value.api.*</Export-Package>
-						<Import-Package>com.barchart.util.value.provider.*</Import-Package>
-					</instructions>
-				</configuration>
-			</plugin>
-
-		</plugins>
-	</build>
 
 </project>

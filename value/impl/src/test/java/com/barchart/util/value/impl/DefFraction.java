@@ -5,7 +5,7 @@ import temp.Fraction;
 
 import com.barchart.util.value.api.Price;
 
-class DefFraction extends BaseDecimal implements Fraction {
+public class DefFraction extends BaseDecimal implements Fraction {
 
 	final int base;
 	final int exponent;
@@ -17,7 +17,7 @@ class DefFraction extends BaseDecimal implements Fraction {
 
 	final int places;
 
-	DefFraction(final int base, final int exponent) {
+	public DefFraction(final int base, final int exponent) {
 
 		this.base = base;
 		this.exponent = exponent;
