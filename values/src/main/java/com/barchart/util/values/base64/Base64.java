@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.util.base64;
+package com.barchart.util.values.base64;
 
 import java.util.Arrays;
 
