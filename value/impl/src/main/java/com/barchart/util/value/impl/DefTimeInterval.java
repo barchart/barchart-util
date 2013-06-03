@@ -7,6 +7,8 @@
  */
 package com.barchart.util.value.impl;
 
+import static com.barchart.util.value.impl.ValueBuilder.*;
+
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
 
@@ -27,12 +29,12 @@ public class DefTimeInterval implements TimeInterval {
 
 	@Override
 	public Time start() {
-		return ValueBuilder.newTime(start);
+		return newTime(start);
 	}
 
 	@Override
 	public Time stop() {
-		return ValueBuilder.newTime(stop);
+		return newTime(stop);
 	}
 
 	@Override

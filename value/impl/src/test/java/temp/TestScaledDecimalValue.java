@@ -10,8 +10,6 @@ package temp;
 import static com.barchart.util.value.impl.ValueBuilder.*;
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import com.barchart.util.value.api.Price;
@@ -25,14 +23,6 @@ public class TestScaledDecimalValue {
 	static final double ERR_09 = 1.0 / (3 * K);
 
 	static final double ERR_12 = 1.0 / (4 * K);
-
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	@After
-	public void tearDown() throws Exception {
-	}
 
 	@Test
 	public void TestCompare1() {

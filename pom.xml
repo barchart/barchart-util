@@ -59,6 +59,8 @@ Layout Project.
 		<module>value/api</module>
 		<module>value/impl</module>
 
+		<module>manifest</module>
+
 	</modules>
 
 	<build>

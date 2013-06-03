@@ -1,10 +1,10 @@
-package com.barchart.util.value.api;
+package com.barchart.util.value.impl;
+
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 
-public class DummyTest {
+public class TestBaseDecimal {
 
 	@Before
 	public void setUp() throws Exception {
@@ -12,11 +12,6 @@ public class DummyTest {
 
 	@After
 	public void tearDown() throws Exception {
-	}
-
-	@Test
-	public void test() {
-
 	}
 
 }

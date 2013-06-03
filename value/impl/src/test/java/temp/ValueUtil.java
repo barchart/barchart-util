@@ -19,7 +19,7 @@ import com.barchart.util.value.api.Scaled;
  * @author g-litchfield
  * 
  */
-class ValueUtil {
+public class ValueUtil {
 
 	private ValueUtil() {
 
