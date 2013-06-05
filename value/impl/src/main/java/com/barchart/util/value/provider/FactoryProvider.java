@@ -2,11 +2,13 @@ package com.barchart.util.value.provider;
 
 import com.barchart.util.value.api.Decimal;
 import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
+import com.barchart.util.value.impl.DefFraction;
 import com.barchart.util.value.impl.ValueBuilder;
 
 /**
@@ -41,6 +43,11 @@ public class FactoryProvider implements Factory {
 	@Override
 	public Size newSize(final long mantissa, final int exponent) {
 		return ValueBuilder.newSize(mantissa, exponent);
+	}
+	
+	@Override
+	public Fraction newFraction(int numerator, int denominator) {
+		return new DefFraction(numerator, denominator);
 	}
 
 	@Override

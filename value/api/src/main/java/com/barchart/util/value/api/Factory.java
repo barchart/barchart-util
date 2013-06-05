@@ -15,11 +15,13 @@ public interface Factory {
 	Price newPrice(long mantissa, int exponent);
 
 	Size newSize(long mantissa, int exponent);
+	
+	Fraction newFraction(int numerator, int denominator);
 
 	Time newTime(long millisecond, String zone);
 
 	TimeInterval newTimeInterval(long beginMill, long endMill);
-
+	
 	Schedule newSchedule(TimeInterval[] intervals);
 
 }
