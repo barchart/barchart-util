@@ -1,7 +1,5 @@
-package temp;
+package com.barchart.util.value.api;
 
-import com.barchart.util.value.api.Decimal;
-import com.barchart.util.value.api.Price;
 
 public interface Fraction extends Decimal {
 

@@ -10,9 +10,10 @@ package com.barchart.util.value.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import com.barchart.util.value.api.Decimal;
+import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
@@ -49,6 +50,12 @@ public final class ValueConst {
 
 	public static final TimeInterval NULL_TIME_INTERVAL = //
 	new NulTimeInterval();
+	
+	public static final Schedule NULL_SCHEDULE = 
+			new NulSchedule();
+	
+	public static final Fraction NULL_FRACTION = 
+			new NulFraction();
 
 	public static final Size[] NULL_SIZE_ARRAY = new Size[0];
 

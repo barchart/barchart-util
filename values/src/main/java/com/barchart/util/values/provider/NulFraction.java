@@ -12,7 +12,7 @@ class NulFraction extends BaseDecimal implements Fraction {
 
 	@Override
 	public long base() {
-		return 0;
+		return 1;
 	}
 
 	@Override
@@ -27,7 +27,7 @@ class NulFraction extends BaseDecimal implements Fraction {
 
 	@Override
 	public long denominator() {
-		return 0;
+		return 1;
 	}
 
 	@Override
@@ -37,7 +37,7 @@ class NulFraction extends BaseDecimal implements Fraction {
 
 	@Override
 	public long decimalDenominator() {
-		return 0;
+		return 1;
 	}
 
 	@Override

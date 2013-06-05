@@ -5,9 +5,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import temp.Fraction;
 import temp.ValueBuilderTemp;
 
+import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 
 public class TestDefFraction {

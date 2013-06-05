@@ -1,8 +1,8 @@
 package com.barchart.util.value.impl;
 
 import static java.lang.Math.*;
-import temp.Fraction;
 
+import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 
 public class DefFraction extends BaseDecimal implements Fraction {

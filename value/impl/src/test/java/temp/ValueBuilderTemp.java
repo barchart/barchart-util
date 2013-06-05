@@ -1,5 +1,6 @@
 package temp;
 
+import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.impl.DefFraction;
 import com.barchart.util.value.impl.NulFraction;
 

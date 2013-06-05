@@ -1,7 +1,7 @@
 package com.barchart.util.value.impl;
 
-import temp.Fraction;
 
+import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 
 public class NulFraction extends BaseDecimal implements Fraction {
