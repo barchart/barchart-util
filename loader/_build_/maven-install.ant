@@ -25,6 +25,8 @@
 			<arg value="clean" />
 			<arg value="install" />
 
+			<arg value="--update-snapshots" />
+
 		</exec>
 	</target>
 
