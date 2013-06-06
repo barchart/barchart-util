@@ -25,7 +25,7 @@
 			<arg value="clean" />
 			<arg value="install" />
 
-			<arg value="--update-snapshots" />
+			<arg value="--U" />
 
 		</exec>
 
