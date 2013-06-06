@@ -72,6 +72,9 @@ Parent Project.
 				<file>
 					<missing>disable-semantic-version.md</missing>
 				</file>
+				<property>
+					<name>!disable-semantic-version</name>
+				</property>
 			</activation>
 			<build>
 				<plugins>
