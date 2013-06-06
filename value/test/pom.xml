@@ -11,8 +11,8 @@
 		<relativePath>../archon</relativePath>
 	</parent>
 
-	<artifactId>barchart-util-value-impl</artifactId>
-	<version>5.0.0-SNAPSHOT</version>
+	<artifactId>barchart-util-value-test</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<scm>
@@ -40,18 +40,10 @@
 			<artifactId>barchart-util-value-api</artifactId>
 			<version>[5.0-SNAPSHOT,5.1-SNAPSHOT)</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.barchart.util</groupId>
-			<artifactId>barchart-util-math</artifactId>
-			<version>[2-SNAPSHOT,3-SNAPSHOT)</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.barchart.util</groupId>
-			<artifactId>barchart-util-bench</artifactId>
-			<version>[2-SNAPSHOT,3-SNAPSHOT)</version>
-			<scope>test</scope>
+			<artifactId>barchart-util-value-impl</artifactId>
+			<version>[5.0-SNAPSHOT,5.1-SNAPSHOT)</version>
 		</dependency>
 
 		<dependency>

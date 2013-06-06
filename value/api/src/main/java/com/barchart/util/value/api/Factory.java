@@ -7,6 +7,7 @@ import aQute.bnd.annotation.ProviderType;
  * <p>
  * Use {@link FactoryLoader} to load instance from provider.
  */
+// NOTE: Update implementation META-INF/service when moving this class.
 @ProviderType
 public interface Factory {
 
@@ -15,13 +16,13 @@ public interface Factory {
 	Price newPrice(long mantissa, int exponent);
 
 	Size newSize(long mantissa, int exponent);
-	
+
 	Fraction newFraction(int numerator, int denominator);
 
 	Time newTime(long millisecond, String zone);
 
 	TimeInterval newTimeInterval(long beginMill, long endMill);
-	
+
 	Schedule newSchedule(TimeInterval[] intervals);
 
 }

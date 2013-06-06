@@ -11,7 +11,7 @@ public class TestFactoryLoader {
 		return new Scanner(file, "UTF-8").useDelimiter("\\A").next();
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test(expected = RuntimeException.class)
 	public void missingProvider() throws Exception {
 
 		FactoryLoader.load();

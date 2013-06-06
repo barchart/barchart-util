@@ -36,6 +36,7 @@ Layout Project for Values.
 
 		<module>api</module>
 		<module>impl</module>
+		<module>test</module>
 	
 	</modules>
 	
