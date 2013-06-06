@@ -61,6 +61,8 @@ Layout Project.
 
 		<module>manifest</module>
 
+		<module>loader</module>
+
 	</modules>
 
 	<build>
