@@ -25,7 +25,10 @@
 			<arg value="clean" />
 			<arg value="install" />
 
+			<arg value="-U" />
+
 		</exec>
+		
 	</target>
 
 </project>
