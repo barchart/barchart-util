@@ -45,16 +45,16 @@ public class Case_01 {
 
 		};
 
-		final Flow.Builder<MarketEvent, MarketState, MarketEntity> builder = Provider
+		final Flow.Builder<MarketEvent, MarketState, MarketEntity> flowBuilder = Provider
 				.flowBuilder(MarketEvent.class, MarketState.class);
 
-		builder.executor(executor);
-		builder.listener(listener);
+		flowBuilder.executor(executor);
+		flowBuilder.listener(listener);
 
-		builder.at(STATE_1).on(EVENT_1).to(STATE_2);
-		builder.at(STATE_2).on(EVENT_2).to(STATE_3);
+		flowBuilder.at(STATE_1).on(EVENT_1).to(STATE_2);
+		flowBuilder.at(STATE_2).on(EVENT_2).to(STATE_3);
 
-		final Flow<MarketEvent, MarketState, MarketEntity> flow = builder
+		final Flow<MarketEvent, MarketState, MarketEntity> flow = flowBuilder
 				.build();
 
 		final MarketEntity market = new MarketEntity();
