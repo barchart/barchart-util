@@ -21,11 +21,6 @@ abstract class BaseSize extends BaseScaled<Size, Decimal> implements Size {
 		return newSize(mantissa, exponent);
 	}
 
-	// @Override
-	// public final boolean isNull() {
-	// return this == NULL_PRICE;
-	// }
-
 	@Override
 	public final boolean equals(final Object thatValue) {
 		if (thatValue instanceof Size) {

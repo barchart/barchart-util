@@ -7,8 +7,6 @@ import org.junit.Test;
 
 import com.barchart.util.value.api.TimeInterval;
 
-/** FIXME */
-@Ignore
 public class TestDefTimeInterval {
 
 	public static final long START1 = 0l;
