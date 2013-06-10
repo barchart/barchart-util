@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.util.flow.api.Context;
-import com.barchart.util.flow.api.Context.Builder;
 import com.barchart.util.flow.api.Flow;
 import com.barchart.util.flow.api.Listener;
 import com.barchart.util.flow.api.Transit;
@@ -45,21 +44,21 @@ public class Case_01 {
 
 		};
 
-		final Flow.Builder<MarketEvent, MarketState, MarketEntity> builder = Provider
+		final Flow.Builder<MarketEvent, MarketState, MarketEntity> flowBuilder = Provider
 				.flowBuilder(MarketEvent.class, MarketState.class);
 
-		builder.executor(executor);
-		builder.listener(listener);
+		flowBuilder.executor(executor);
+		flowBuilder.listener(listener);
 
-		builder.at(STATE_1).on(EVENT_1).to(STATE_2);
-		builder.at(STATE_2).on(EVENT_2).to(STATE_3);
+		flowBuilder.at(STATE_1).on(EVENT_1).to(STATE_2);
+		flowBuilder.at(STATE_2).on(EVENT_2).to(STATE_3);
 
-		final Flow<MarketEvent, MarketState, MarketEntity> flow = builder
+		final Flow<MarketEvent, MarketState, MarketEntity> flow = flowBuilder
 				.build();
 
 		final MarketEntity market = new MarketEntity();
 
-		final Builder<MarketEvent, MarketState, MarketEntity> contextBuilder = flow
+		final Context.Builder<MarketEvent, MarketState, MarketEntity> contextBuilder = flow
 				.contextBuilder();
 
 		final Context<MarketEvent, MarketState, MarketEntity> context = contextBuilder

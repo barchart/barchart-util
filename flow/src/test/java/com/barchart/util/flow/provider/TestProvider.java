@@ -1,7 +1,7 @@
 package com.barchart.util.flow.provider;
 
-import static com.barchart.util.flow.provider.TestEvent.*;
-import static com.barchart.util.flow.provider.TestState.*;
+import static com.barchart.util.flow.provider.TheEvent.*;
+import static com.barchart.util.flow.provider.TheState.*;
 import static org.junit.Assert.*;
 
 import java.util.concurrent.Executor;
@@ -20,8 +20,8 @@ public class TestProvider {
 
 		final Executor executor = Executors.newSingleThreadExecutor();
 
-		final Flow.Builder<TestEvent, TestState, TargetEntity> builder = Provider
-				.flowBuilder(TestEvent.class, TestState.class);
+		final Flow.Builder<TheEvent, TheState, TheTarget> builder = Provider
+				.flowBuilder(TheEvent.class, TheState.class);
 		assertNotNull(builder);
 
 		builder.at(STATE_1).on(EVENT_1).to(STATE_2);
@@ -29,16 +29,16 @@ public class TestProvider {
 
 		builder.executor(executor);
 
-		final Flow<TestEvent, TestState, TargetEntity> flow = builder.build();
+		final Flow<TheEvent, TheState, TheTarget> flow = builder.build();
 		assertNotNull(flow);
 
-		final TargetEntity market = new TargetEntity();
+		final TheTarget market = new TheTarget();
 
-		final Builder<TestEvent, TestState, TargetEntity> contextBuilder = flow
+		final Builder<TheEvent, TheState, TheTarget> contextBuilder = flow
 				.contextBuilder();
 		assertNotNull(contextBuilder);
 
-		final Context<TestEvent, TestState, TargetEntity> context = contextBuilder
+		final Context<TheEvent, TheState, TheTarget> context = contextBuilder
 				.build(market);
 		assertNotNull(context);
 
