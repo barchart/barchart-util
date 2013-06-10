@@ -3,7 +3,7 @@ package com.barchart.util.flow.api;
 import aQute.bnd.annotation.ProviderType;
 
 /**
- * Event enums must implement this type.
+ * Event enums must implement this type and can not be empty.
  */
 @ProviderType
 public interface Event<B extends Enum<B> & Event<B>> extends Base {

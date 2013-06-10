@@ -3,7 +3,7 @@ package com.barchart.util.flow.api;
 import aQute.bnd.annotation.ProviderType;
 
 /**
- * State enums must implement this type.
+ * State enums must implement this type and can not be empty.
  */
 @ProviderType
 public interface State<B extends Enum<B> & State<B>> extends Base {
