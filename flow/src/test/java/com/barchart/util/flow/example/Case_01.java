@@ -26,19 +26,23 @@ public class Case_01 {
 
 		final Listener<MarketEvent, MarketState, MarketEntity> listener = //
 		new Listener.Adapter<MarketEvent, MarketState, MarketEntity>() {
+
 			@Override
-			public void enter(final Transit<MarketEvent, MarketState> transit,
+			public void enter(
+					final Transit<MarketEvent, MarketState> transit,
 					final Context<MarketEvent, MarketState, MarketEntity> context)
 					throws Exception {
-				log.info("Enter {}", transit, context);
+				log.info("Enter {} {}", transit, context);
 			}
 
 			@Override
-			public void leave(final Transit<MarketEvent, MarketState> transit,
+			public void leave(
+					final Transit<MarketEvent, MarketState> transit,
 					final Context<MarketEvent, MarketState, MarketEntity> context)
 					throws Exception {
-				log.info("Leave {}", transit, context);
+				log.info("Leave {} {}", transit, context);
 			}
+
 		};
 
 		final Flow.Builder<MarketEvent, MarketState, MarketEntity> builder = Provider
@@ -50,7 +54,8 @@ public class Case_01 {
 		builder.at(STATE_1).on(EVENT_1).to(STATE_2);
 		builder.at(STATE_2).on(EVENT_2).to(STATE_3);
 
-		final Flow<MarketEvent, MarketState, MarketEntity> flow = builder.build();
+		final Flow<MarketEvent, MarketState, MarketEntity> flow = builder
+				.build();
 
 		final MarketEntity market = new MarketEntity();
 
