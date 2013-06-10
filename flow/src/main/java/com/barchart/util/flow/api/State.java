@@ -6,7 +6,7 @@ import aQute.bnd.annotation.ProviderType;
  * State enums must implement this type.
  */
 @ProviderType
-public interface State<B extends Enum<B>> extends Base {
+public interface State<B extends Enum<B> & State<B>> extends Base {
 
 	/**
 	 * State bean builder.

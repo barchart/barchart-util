@@ -6,7 +6,7 @@ import aQute.bnd.annotation.ProviderType;
  * Event enums must implement this type.
  */
 @ProviderType
-public interface Event<B extends Enum<B>> extends Base {
+public interface Event<B extends Enum<B> & Event<B>> extends Base {
 
 	/**
 	 * Event bean builder.
