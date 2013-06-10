@@ -1,4 +1,4 @@
-package com.barchart.util.monad;
+package com.barchart.util.functional;
 
 /**
  * Object setter *FUNCTION* in the Monadic domain

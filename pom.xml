@@ -49,6 +49,7 @@ Layout Project.
 		<module>clone</module>
 		<module>enums</module>
 		<module>math</module>
+		<module>functional</module>
 		<module>thread</module>
 		<module>values</module>
 		<module>collections</module>

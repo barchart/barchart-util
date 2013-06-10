@@ -1,4 +1,4 @@
-package com.barchart.util.monad;
+package com.barchart.util.functional;
 
 // MJS: Haskell like free standing function in Java
 
