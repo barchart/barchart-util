@@ -64,6 +64,8 @@ Layout Project.
 
 		<module>loader</module>
 
+		<module>flow</module>
+
 	</modules>
 
 	<build>
