@@ -27,7 +27,10 @@
 
 			<arg value="--update-snapshots" />
 
+			<arg value="--show-version" />
+
 		</exec>
+
 	</target>
 
 </project>

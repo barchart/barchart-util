@@ -1,7 +1,7 @@
 package com.barchart.util.flow.provider;
 
-import static com.barchart.util.flow.provider.TestProvider.TestEvent.*;
-import static com.barchart.util.flow.provider.TestProvider.TestState.*;
+import static com.barchart.util.flow.provider.TestEvent.*;
+import static com.barchart.util.flow.provider.TestState.*;
 import static org.junit.Assert.*;
 
 import java.util.concurrent.Executor;
@@ -11,33 +11,16 @@ import org.junit.Test;
 
 import com.barchart.util.flow.api.Context;
 import com.barchart.util.flow.api.Context.Builder;
-import com.barchart.util.flow.api.Event;
 import com.barchart.util.flow.api.Flow;
-import com.barchart.util.flow.api.State;
 
 public class TestProvider {
-
-	enum TestEvent implements Event<TestEvent> {
-		EVENT_1, //
-		EVENT_2, //
-	}
-
-	enum TestState implements State<TestState> {
-		STATE_1, //
-		STATE_2, //
-		STATE_3, //
-	}
-
-	static class Target {
-
-	}
 
 	@Test
 	public void flow() throws Exception {
 
 		final Executor executor = Executors.newSingleThreadExecutor();
 
-		final Flow.Builder<TestEvent, TestState, Target> builder = Provider
+		final Flow.Builder<TestEvent, TestState, TargetEntity> builder = Provider
 				.flowBuilder(TestEvent.class, TestState.class);
 		assertNotNull(builder);
 
@@ -46,16 +29,16 @@ public class TestProvider {
 
 		builder.executor(executor);
 
-		final Flow<TestEvent, TestState, Target> flow = builder.build();
+		final Flow<TestEvent, TestState, TargetEntity> flow = builder.build();
 		assertNotNull(flow);
 
-		final Target market = new Target();
+		final TargetEntity market = new TargetEntity();
 
-		final Builder<TestEvent, TestState, Target> contextBuilder = flow
+		final Builder<TestEvent, TestState, TargetEntity> contextBuilder = flow
 				.contextBuilder();
 		assertNotNull(contextBuilder);
 
-		final Context<TestEvent, TestState, Target> context = contextBuilder
+		final Context<TestEvent, TestState, TargetEntity> context = contextBuilder
 				.build(market);
 		assertNotNull(context);
 
