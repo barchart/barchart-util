@@ -17,7 +17,7 @@ public class TestMonad {
 
 	// MJS: Here we get a bytestring from a String object. Notice no checks for
 	// null or exception handling needed
-	private final MonadicGetter<String, byte[]> sessionIdToBytes =
+	private final MonadicGetter<String, byte[]> strToBytes =
 			new MonadicGetter<String, byte[]>() {
 
 				@Override
@@ -52,7 +52,7 @@ public class TestMonad {
 				};
 
 		try {
-			sessionIdToBytes.apply(str).bind(setResult);
+			strToBytes.apply(str).bind(setResult);
 
 		} catch (Failure e) {
 		}
