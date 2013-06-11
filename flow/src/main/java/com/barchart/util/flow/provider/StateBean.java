@@ -26,20 +26,23 @@ class StateBean<E extends Event<?>, S extends State<?>, A> implements
 
 		final S state;
 
-		final FlowBean.Builder<E, S, A> flow;
+		final FlowBean.Builder<E, S, A> flowBuilder;
 
 		final Map<E, S> transitionMap = new HashMap<E, S>();
 
 		volatile Listener<E, S, A> listener;
 
+		volatile FlowBean<E, S, A> flow;
+
 		Builder(final S state, final FlowBean.Builder<E, S, A> flow) {
 			this.state = state;
-			this.flow = flow;
+			this.flowBuilder = flow;
 		}
 
 		@Override
 		public Event.Builder<E, S, A> on(final E event) {
-			final EventBean.Builder<E, S, A> builder = flow.ensure(event);
+			final EventBean.Builder<E, S, A> builder = flowBuilder
+					.ensure(event);
 			builder.at(this);
 			return builder;
 		}
@@ -50,7 +53,8 @@ class StateBean<E extends Event<?>, S extends State<?>, A> implements
 			return this;
 		}
 
-		StateBean<E, S, A> build() {
+		StateBean<E, S, A> build(final FlowBean<E, S, A> flow) {
+			this.flow = flow;
 			return new StateBean<E, S, A>(this);
 		}
 
@@ -63,6 +67,8 @@ class StateBean<E extends Event<?>, S extends State<?>, A> implements
 	}
 
 	static final Logger log = LoggerFactory.getLogger(StateBean.class);
+
+	final FlowBean<E, S, A> flow;
 
 	/**
 	 * Enum state.
@@ -79,9 +85,11 @@ class StateBean<E extends Event<?>, S extends State<?>, A> implements
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	StateBean(final Builder<E, S, A> builder) {
 
+		flow = builder.flow;
+
 		state = builder.state;
 
-		transitionMap = new EnumMap(builder.flow.eventClass);
+		transitionMap = new EnumMap(builder.flowBuilder.eventClass);
 		transitionMap.putAll(builder.transitionMap);
 
 		listener = builder.listener;

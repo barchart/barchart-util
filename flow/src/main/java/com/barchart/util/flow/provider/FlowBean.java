@@ -184,6 +184,17 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 
 	}
 
+	static class FlowWrap<E extends Event<?>, S extends State<?>, A> extends
+			FlowBean<E, S, A> {
+
+		FlowWrap(
+				final com.barchart.util.flow.provider.FlowBean.Builder<E, S, A> builder) {
+			super(builder);
+			// TODO Auto-generated constructor stub
+		}
+
+	}
+
 	/**
 	 * Provide new state machine builder.
 	 */
@@ -259,7 +270,7 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 		for (final Entry<E, EventBean.Builder<E, S, A>> entry : eventSet) {
 			final E event = entry.getKey();
 			final EventBean.Builder<E, S, A> eventBuilder = entry.getValue();
-			eventMap.put(event, eventBuilder.build());
+			eventMap.put(event, eventBuilder.build(this));
 		}
 
 		/** Build states. */
@@ -268,7 +279,7 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 		for (final Entry<S, StateBean.Builder<E, S, A>> entry : stateSet) {
 			final S state = entry.getKey();
 			final StateBean.Builder<E, S, A> stateBuilder = entry.getValue();
-			stateMap.put(state, stateBuilder.build());
+			stateMap.put(state, stateBuilder.build(this));
 		}
 
 		listener = builder.listener;

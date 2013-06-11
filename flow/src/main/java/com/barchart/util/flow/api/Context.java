@@ -39,6 +39,11 @@ public interface Context<E extends Event<?>, S extends State<?>, A> extends
 	A attachment();
 
 	/**
+	 * Underlying state machine.
+	 */
+	Flow<E, S, A> flow();
+
+	/**
 	 * Current event.
 	 */
 	E event();

@@ -2,6 +2,7 @@ package com.barchart.util.flow.provider;
 
 import com.barchart.util.flow.api.Context;
 import com.barchart.util.flow.api.Event;
+import com.barchart.util.flow.api.Flow;
 import com.barchart.util.flow.api.State;
 
 /**
@@ -53,6 +54,8 @@ class ContextBean<E extends Event<?>, S extends State<?>, A> implements
 		return new Builder<E, S, A>(flow);
 	}
 
+	final FlowBean<E, S, A> flow;
+
 	final A attachment;
 
 	volatile E event;
@@ -60,11 +63,13 @@ class ContextBean<E extends Event<?>, S extends State<?>, A> implements
 
 	ContextBean(final Builder<E, S, A> builder) {
 
+		flow = builder.flow;
+
 		attachment = builder.attachment;
 
 		/** Ensure initial event. */
 		if (builder.initialEvent == null) {
-			event = builder.flow.initialEvent;
+			event = flow.initialEvent;
 		} else {
 			event = builder.initialEvent;
 		}
@@ -114,6 +119,11 @@ class ContextBean<E extends Event<?>, S extends State<?>, A> implements
 	@Override
 	public String toString() {
 		return "(" + event() + "," + state() + ") " + attachment;
+	}
+
+	@Override
+	public Flow<E, S, A> flow() {
+		return flow;
 	}
 
 }

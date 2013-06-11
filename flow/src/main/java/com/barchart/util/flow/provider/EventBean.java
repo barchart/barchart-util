@@ -22,15 +22,17 @@ class EventBean<E extends Event<?>, S extends State<?>, A> {
 
 		final E event;
 
-		final FlowBean.Builder<E, S, A> flow;
+		final FlowBean.Builder<E, S, A> flowBuilder;
 
 		final Map<S, S> transitionMap = new HashMap<S, S>();
 
 		volatile StateBean.Builder<E, S, A> sourceBean;
 
+		volatile FlowBean<E, S, A> flow;
+
 		Builder(final E event, final FlowBean.Builder<E, S, A> flow) {
 			this.event = event;
-			this.flow = flow;
+			this.flowBuilder = flow;
 		}
 
 		/**
@@ -51,7 +53,8 @@ class EventBean<E extends Event<?>, S extends State<?>, A> {
 				throw new NullPointerException("Missing target state.");
 			}
 
-			final State.Builder<E, S, A> targetBean = flow.ensure(target);
+			final State.Builder<E, S, A> targetBean = flowBuilder
+					.ensure(target);
 			if (targetBean == null) {
 				throw new IllegalStateException("Missing target bean.");
 			}
@@ -82,7 +85,8 @@ class EventBean<E extends Event<?>, S extends State<?>, A> {
 			return sourceBean;
 		}
 
-		EventBean<E, S, A> build() {
+		EventBean<E, S, A> build(final FlowBean<E, S, A> flow) {
+			this.flow = flow;
 			return new EventBean<E, S, A>(this);
 		}
 
@@ -99,6 +103,8 @@ class EventBean<E extends Event<?>, S extends State<?>, A> {
 
 	static final Logger log = LoggerFactory.getLogger(EventBean.class);
 
+	final FlowBean<E, S, A> flow;
+
 	/**
 	 * Enum event.
 	 */
@@ -112,9 +118,11 @@ class EventBean<E extends Event<?>, S extends State<?>, A> {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	EventBean(final Builder<E, S, A> builder) {
 
+		flow = builder.flow;
+
 		event = builder.event;
 
-		transitionMap = new EnumMap(builder.flow.stateClass);
+		transitionMap = new EnumMap(builder.flowBuilder.stateClass);
 		transitionMap.putAll(builder.transitionMap);
 
 	}
