@@ -26,7 +26,7 @@ class EventBean<E extends Event<?>, S extends State<?>, A> {
 
 		final Map<S, S> transitionMap = new HashMap<S, S>();
 
-		volatile StateBean.Builder<E, S, A> source;
+		volatile StateBean.Builder<E, S, A> sourceBean;
 
 		Builder(final E event, final FlowBean.Builder<E, S, A> flow) {
 			this.event = event;
@@ -36,25 +36,50 @@ class EventBean<E extends Event<?>, S extends State<?>, A> {
 		/**
 		 * Provide transient source state for "to" clause.
 		 */
-		State.Builder<E, S, A> at(final StateBean.Builder<E, S, A> source) {
-			this.source = source;
-			return source;
+		State.Builder<E, S, A> at(final StateBean.Builder<E, S, A> sourceBean) {
+			if (sourceBean == null) {
+				throw new IllegalStateException("Missing source bean.");
+			}
+			this.sourceBean = sourceBean;
+			return sourceBean;
 		}
 
 		@Override
 		public State.Builder<E, S, A> to(final S target) {
-			if (source == null) {
-				throw new IllegalStateException("Missing source state.");
+
+			if (target == null) {
+				throw new NullPointerException("Missing target state.");
 			}
-			if (source.transitionMap.containsKey(event)) {
-				throw new IllegalStateException("Duplicate event transition.");
+
+			final State.Builder<E, S, A> targetBean = flow.ensure(target);
+			if (targetBean == null) {
+				throw new IllegalStateException("Missing target bean.");
 			}
-			if (this.transitionMap.containsKey(source.state)) {
-				throw new IllegalStateException("Duplicate state transition.");
+
+			if (sourceBean == null) {
+				throw new IllegalStateException("Missing source bean.");
 			}
-			source.transitionMap.put(event, target);
-			this.transitionMap.put(source.state, target);
-			return source;
+
+			final S source = sourceBean.state;
+
+			if (sourceBean.transitionMap.containsKey(event)) {
+				throw new IllegalStateException("Duplicate event transition: "
+						+ event + " at " + source);
+			}
+
+			if (this.transitionMap.containsKey(source)) {
+				throw new IllegalStateException("Duplicate state transition: "
+						+ source + "->" + target);
+			}
+
+			/** Map event->state transition for source/target state. */
+			sourceBean.transitionMap.put(event, target);
+
+			/** Map state->state transition for this event. */
+			this.transitionMap.put(source, target);
+
+			/** Continue source build. */
+			return sourceBean;
 		}
 
 		EventBean<E, S, A> build() {

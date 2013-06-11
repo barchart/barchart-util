@@ -39,7 +39,7 @@ class StateBean<E extends Event<?>, S extends State<?>, A> implements
 
 		@Override
 		public Event.Builder<E, S, A> on(final E event) {
-			final EventBean.Builder<E, S, A> builder = flow.builder(event);
+			final EventBean.Builder<E, S, A> builder = flow.ensure(event);
 			builder.at(this);
 			return builder;
 		}

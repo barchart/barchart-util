@@ -2,10 +2,9 @@ package com.barchart.util.flow.provider;
 
 import static org.junit.Assert.*;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.barchart.util.flow.api.Context;
 import com.barchart.util.flow.api.Context.Builder;
@@ -30,19 +29,18 @@ public class TestProvider {
 	static class T {
 	}
 
+	static final Logger log = LoggerFactory.getLogger(TestProvider.class);
+
 	@Test
 	public void flow() throws Exception {
 
-		final Executor executor = Executors.newSingleThreadExecutor();
-
 		final Flow.Builder<E, S, T> builder = Provider.flowBuilder(E.class,
 				S.class);
-		assertNotNull(builder);
+
+		builder.enforce(true);
 
 		builder.at(S.CREATED).on(E.INITIAL).to(S.STATE_2);
 		builder.at(S.STATE_2).on(E.EVENT_2).to(S.TERMINATED);
-
-		builder.executor(executor);
 
 		final Flow<E, S, T> flow = builder.build();
 		assertNotNull(flow);

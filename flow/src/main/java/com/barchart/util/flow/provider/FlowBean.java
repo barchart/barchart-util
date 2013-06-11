@@ -62,7 +62,7 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 
 		}
 
-		EventBean.Builder<E, S, A> builder(final E event) {
+		EventBean.Builder<E, S, A> ensure(final E event) {
 			EventBean.Builder<E, S, A> builder = eventMap.get(event);
 			if (builder == null) {
 				builder = EventBean.newBuilder(event, this);
@@ -71,7 +71,7 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 			return builder;
 		}
 
-		StateBean.Builder<E, S, A> builder(final S state) {
+		StateBean.Builder<E, S, A> ensure(final S state) {
 			StateBean.Builder<E, S, A> builder = stateMap.get(state);
 			if (builder == null) {
 				builder = StateBean.newBuilder(state, this);
@@ -81,8 +81,11 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 		}
 
 		@Override
-		public State.Builder<E, S, A> at(final S state) {
-			return builder(state);
+		public State.Builder<E, S, A> at(final S source) {
+			if (source == null) {
+				throw new NullPointerException("Missing source state.");
+			}
+			return ensure(source);
 		}
 
 		@Override
@@ -142,19 +145,36 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 		@Override
 		public Flow<E, S, A> build() {
 
+			/** Ensure default initial event. */
 			final E[] eventArray = Util.enumValues(eventClass);
 			if (initialEvent == null) {
 				initialEvent = eventArray[0];
 			}
 
+			/** Ensure default initial state. */
 			final S[] stateArray = Util.enumValues(stateClass);
 			if (initialState == null) {
 				initialState = stateArray[0];
 			}
 
+			/** Terminal boundary consistency. */
 			if (terminalEvent != null && terminalState == null) {
 				throw new IllegalStateException(
-						"Missing terminal state for terminal event.");
+						"Terminal event requries terminal state.");
+			}
+
+			/** Ensure boundary coordinates. */
+			if (initialEvent != null) {
+				ensure(initialEvent);
+			}
+			if (terminalEvent != null) {
+				ensure(terminalEvent);
+			}
+			if (initialState != null) {
+				ensure(initialState);
+			}
+			if (terminalState != null) {
+				ensure(terminalState);
 			}
 
 			final FlowBean<E, S, A> flow = new FlowBean<E, S, A>(this);
@@ -174,7 +194,7 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 	}
 
 	/**
-	 * State machine configuration validator.
+	 * Validate state machine configuration consistency.
 	 */
 	static <E extends Event<?>, S extends State<?>, A> //
 	void validate(final FlowBean<E, S, A> flow) {
@@ -201,14 +221,23 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 	final Class<E> eventClass;
 	final Class<S> stateClass;
 
+	/**
+	 * Initial point.
+	 */
 	final E initialEvent;
 	final E terminalEvent;
 
+	/**
+	 * Terminal point.
+	 */
 	final S initialState;
 	final S terminalState;
 
 	final Executor executor;
 
+	/**
+	 * Coordinate cache.
+	 */
 	final PointMatrix<E, S> matrix;
 
 	final boolean isDebug;
@@ -224,20 +253,18 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 		eventMap = new EnumMap(builder.eventClass);
 		stateMap = new EnumMap(builder.stateClass);
 
+		/** Build events. */
 		final Set<Entry<E, EventBean.Builder<E, S, A>>> eventSet = builder.eventMap
 				.entrySet();
-
-		/** Build events. */
 		for (final Entry<E, EventBean.Builder<E, S, A>> entry : eventSet) {
 			final E event = entry.getKey();
 			final EventBean.Builder<E, S, A> eventBuilder = entry.getValue();
 			eventMap.put(event, eventBuilder.build());
 		}
 
+		/** Build states. */
 		final Set<Entry<S, StateBean.Builder<E, S, A>>> stateSet = builder.stateMap
 				.entrySet();
-
-		/** Build states. */
 		for (final Entry<S, StateBean.Builder<E, S, A>> entry : stateSet) {
 			final S state = entry.getKey();
 			final StateBean.Builder<E, S, A> stateBuilder = entry.getValue();
@@ -295,7 +322,7 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 	final Lock lock = new ReentrantLock();
 
 	/**
-	 * Use mutual thread exclusion lock, if configured.
+	 * Use mutual thread exclusion, if configured.
 	 */
 	void fireLocked(final E nextEvent, final ContextBean<E, S, A> context) {
 		if (isLocking) {
@@ -318,7 +345,7 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 		final E pastEvent = context.event();
 		final S pastState = context.state();
 
-		/** No events in termination state. */
+		/** Discard events in termination state. */
 		if (pastState == terminalState) {
 			debug("Terminal state discard at {} on {} for {}", pastState,
 					nextEvent, context);
@@ -468,6 +495,21 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 
 		text.append("\n\t enforce=");
 		text.append(isEnforce);
+
+		text.append("\n\t locking=");
+		text.append(isLocking);
+
+		text.append("\n\t initialEvent=");
+		text.append(initialEvent);
+
+		text.append("\n\t initialState=");
+		text.append(initialState);
+
+		text.append("\n\t terminalEvent=");
+		text.append(terminalEvent);
+
+		text.append("\n\t terminalState=");
+		text.append(terminalState);
 
 		final Set<Entry<E, EventBean<E, S, A>>> eventSet = eventMap.entrySet();
 		for (final Entry<E, EventBean<E, S, A>> entry : eventSet) {
