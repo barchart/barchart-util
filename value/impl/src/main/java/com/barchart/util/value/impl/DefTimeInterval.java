@@ -54,7 +54,7 @@ public class DefTimeInterval implements TimeInterval {
 
 		final TimeInterval tI = (TimeInterval) o;
 
-		return (start() == tI.start()) && (stop() == tI.stop());
+		return (start().equals(tI.start())) && (stop().equals(tI.stop()));
 
 	}
 
