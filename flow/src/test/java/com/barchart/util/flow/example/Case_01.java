@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.barchart.util.flow.api.Context;
 import com.barchart.util.flow.api.Flow;
 import com.barchart.util.flow.api.Listener;
-import com.barchart.util.flow.api.Transit;
+import com.barchart.util.flow.api.Point;
 import com.barchart.util.flow.provider.Provider;
 
 public class Case_01 {
@@ -21,31 +21,38 @@ public class Case_01 {
 
 	public static void main(final String... args) throws Exception {
 
-		final Executor executor = Executors.newSingleThreadExecutor();
+		final Executor executor = Executors
+				.newSingleThreadExecutor(new ThreadFactory("# pool"));
 
 		final Listener<MarketEvent, MarketState, MarketEntity> listener = //
 		new Listener.Adapter<MarketEvent, MarketState, MarketEntity>() {
 
 			@Override
 			public void enter(
-					final Transit<MarketEvent, MarketState> transit,
+					final Point<MarketEvent, MarketState> past,
+					final Point<MarketEvent, MarketState> next,
 					final Context<MarketEvent, MarketState, MarketEntity> context)
 					throws Exception {
-				log.info("Enter {} {}", transit, context);
+				log.info("Listener: Hello.");
 			}
 
 			@Override
 			public void leave(
-					final Transit<MarketEvent, MarketState> transit,
+					final Point<MarketEvent, MarketState> past,
+					final Point<MarketEvent, MarketState> next,
 					final Context<MarketEvent, MarketState, MarketEntity> context)
 					throws Exception {
-				log.info("Leave {} {}", transit, context);
+				log.info("Listener: Adios.");
 			}
 
 		};
 
 		final Flow.Builder<MarketEvent, MarketState, MarketEntity> flowBuilder = Provider
 				.flowBuilder(MarketEvent.class, MarketState.class);
+
+		flowBuilder.debug(true);
+		flowBuilder.enforce(true);
+		flowBuilder.locking(true);
 
 		flowBuilder.executor(executor);
 		flowBuilder.listener(listener);
@@ -55,6 +62,8 @@ public class Case_01 {
 
 		final Flow<MarketEvent, MarketState, MarketEntity> flow = flowBuilder
 				.build();
+
+		log.info("flow: \n{}", flow);
 
 		final MarketEntity market = new MarketEntity();
 
@@ -67,6 +76,8 @@ public class Case_01 {
 		log.info("context {}", context);
 
 		flow.fire(EVENT_1, context);
+
+		Thread.sleep(1 * 1000);
 
 	}
 

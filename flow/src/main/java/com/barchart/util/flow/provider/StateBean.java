@@ -3,6 +3,8 @@ package com.barchart.util.flow.provider;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,8 +12,8 @@ import org.slf4j.LoggerFactory;
 import com.barchart.util.flow.api.Context;
 import com.barchart.util.flow.api.Event;
 import com.barchart.util.flow.api.Listener;
+import com.barchart.util.flow.api.Point;
 import com.barchart.util.flow.api.State;
-import com.barchart.util.flow.api.Transit;
 
 /**
  * State implementation.
@@ -23,9 +25,10 @@ class StateBean<E extends Event<?>, S extends State<?>, A> implements
 			State.Builder<E, S, A> {
 
 		final S state;
+
 		final FlowBean.Builder<E, S, A> flow;
 
-		final Map<E, S> eventMap = new HashMap<E, S>();
+		final Map<E, S> transitionMap = new HashMap<E, S>();
 
 		volatile Listener<E, S, A> listener;
 
@@ -61,59 +64,69 @@ class StateBean<E extends Event<?>, S extends State<?>, A> implements
 
 	static final Logger log = LoggerFactory.getLogger(StateBean.class);
 
-	final Map<E, S> eventMap;
+	/**
+	 * Enum state.
+	 */
+	final S state;
+
+	/**
+	 * Event transition map for this state.
+	 */
+	final Map<E, S> transitionMap;
 
 	final Listener<E, S, A> listener;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	StateBean(final Builder<E, S, A> builder) {
 
-		eventMap = new EnumMap(builder.flow.eventClass);
-		eventMap.putAll(builder.eventMap);
+		state = builder.state;
+
+		transitionMap = new EnumMap(builder.flow.eventClass);
+		transitionMap.putAll(builder.transitionMap);
 
 		listener = builder.listener;
 
 	}
 
 	@Override
-	public void enter(final Transit<E, S> transit,
+	public void enter(final Point<E, S> past, final Point<E, S> next,
 			final Context<E, S, A> context) throws Exception {
 		if (listener == null) {
 			return;
 		}
-		listener.enter(transit, context);
+		listener.enter(past, next, context);
 	}
 
 	@Override
-	public void enterError(final Transit<E, S> transit,
+	public void enterError(final Point<E, S> past, final Point<E, S> next,
 			final Context<E, S, A> context, final Throwable cause) {
 		if (listener == null) {
 			return;
 		}
 		try {
-			listener.enterError(transit, context, cause);
+			listener.enterError(past, next, context, cause);
 		} catch (final Throwable e) {
 			log.error("Enter error failure.", e);
 		}
 	}
 
 	@Override
-	public void leave(final Transit<E, S> transit,
+	public void leave(final Point<E, S> past, final Point<E, S> next,
 			final Context<E, S, A> context) throws Exception {
 		if (listener == null) {
 			return;
 		}
-		listener.leave(transit, context);
+		listener.leave(past, next, context);
 	}
 
 	@Override
-	public void leaveError(final Transit<E, S> transit,
+	public void leaveError(final Point<E, S> past, final Point<E, S> next,
 			final Context<E, S, A> context, final Throwable cause) {
 		if (listener == null) {
 			return;
 		}
 		try {
-			listener.leaveError(transit, context, cause);
+			listener.leaveError(past, next, context, cause);
 		} catch (final Throwable e) {
 			log.error("Leave error failure.", e);
 		}
@@ -121,7 +134,17 @@ class StateBean<E extends Event<?>, S extends State<?>, A> implements
 
 	@Override
 	public String toString() {
-		return "TODO print config";
+		final StringBuilder text = new StringBuilder();
+		final Set<Entry<E, S>> entrySet = transitionMap.entrySet();
+		text.append("\n");
+		text.append(state);
+		for (final Entry<E, S> entry : entrySet) {
+			text.append("\n\t");
+			text.append(entry.getKey());
+			text.append(" -> ");
+			text.append(entry.getValue());
+		}
+		return text.toString();
 	}
 
 }

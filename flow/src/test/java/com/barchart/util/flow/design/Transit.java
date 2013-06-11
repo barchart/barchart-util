@@ -1,4 +1,7 @@
-package com.barchart.util.flow.api;
+package com.barchart.util.flow.design;
+
+import com.barchart.util.flow.api.Event;
+import com.barchart.util.flow.api.State;
 
 import aQute.bnd.annotation.ProviderType;
 

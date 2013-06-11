@@ -3,6 +3,11 @@ package com.barchart.util.flow.provider;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.barchart.util.flow.api.Event;
 import com.barchart.util.flow.api.State;
@@ -16,6 +21,7 @@ class EventBean<E extends Event<?>, S extends State<?>, A> {
 			Event.Builder<E, S, A> {
 
 		final E event;
+
 		final FlowBean.Builder<E, S, A> flow;
 
 		final Map<S, S> transitionMap = new HashMap<S, S>();
@@ -28,7 +34,7 @@ class EventBean<E extends Event<?>, S extends State<?>, A> {
 		}
 
 		/**
-		 * Provide transient source state.
+		 * Provide transient source state for "to" clause.
 		 */
 		State.Builder<E, S, A> at(final StateBean.Builder<E, S, A> source) {
 			this.source = source;
@@ -36,14 +42,18 @@ class EventBean<E extends Event<?>, S extends State<?>, A> {
 		}
 
 		@Override
-		public State.Builder<E, S, A> to(final S state) {
+		public State.Builder<E, S, A> to(final S target) {
 			if (source == null) {
 				throw new IllegalStateException("Missing source state.");
 			}
-			if (transitionMap.containsKey(source.state)) {
-				throw new IllegalStateException("Duplicate transition.");
+			if (source.transitionMap.containsKey(event)) {
+				throw new IllegalStateException("Duplicate event transition.");
 			}
-			transitionMap.put(source.state, state);
+			if (this.transitionMap.containsKey(source.state)) {
+				throw new IllegalStateException("Duplicate state transition.");
+			}
+			source.transitionMap.put(event, target);
+			this.transitionMap.put(source.state, target);
 			return source;
 		}
 
@@ -62,13 +72,22 @@ class EventBean<E extends Event<?>, S extends State<?>, A> {
 		return new Builder<E, S, A>(event, flow);
 	}
 
+	static final Logger log = LoggerFactory.getLogger(EventBean.class);
+
 	/**
-	 * State transition map.
+	 * Enum event.
+	 */
+	final E event;
+
+	/**
+	 * State transition map for this event.
 	 */
 	final Map<S, S> transitionMap;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	EventBean(final Builder<E, S, A> builder) {
+
+		event = builder.event;
 
 		transitionMap = new EnumMap(builder.flow.stateClass);
 		transitionMap.putAll(builder.transitionMap);
@@ -77,7 +96,17 @@ class EventBean<E extends Event<?>, S extends State<?>, A> {
 
 	@Override
 	public String toString() {
-		return "TODO print config";
+		final StringBuilder text = new StringBuilder();
+		final Set<Entry<S, S>> entrySet = transitionMap.entrySet();
+		text.append("\n");
+		text.append(event);
+		for (final Entry<S, S> entry : entrySet) {
+			text.append("\n\t");
+			text.append(entry.getKey());
+			text.append(" -> ");
+			text.append(entry.getValue());
+		}
+		return text.toString();
 	}
 
 }

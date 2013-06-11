@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.Executor;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +16,8 @@ import com.barchart.util.flow.api.Context;
 import com.barchart.util.flow.api.Event;
 import com.barchart.util.flow.api.Flow;
 import com.barchart.util.flow.api.Listener;
+import com.barchart.util.flow.api.Point;
 import com.barchart.util.flow.api.State;
-import com.barchart.util.flow.api.Transit;
 
 /**
  * State machine implementation.
@@ -30,13 +32,15 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 
 		final Map<S, StateBean.Builder<E, S, A>> stateMap = new HashMap<S, StateBean.Builder<E, S, A>>();
 
+		volatile boolean isDebug;
+		volatile boolean isEnforce;
+		volatile boolean isLocking;
+
 		volatile E initialEvent;
-		volatile E terminalEvent;
-
 		volatile S initialState;
-		volatile S terminalState;
 
-		volatile boolean isTrace;
+		volatile E terminalEvent;
+		volatile S terminalState;
 
 		volatile Executor executor;
 
@@ -83,6 +87,24 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 		}
 
 		@Override
+		public Flow.Builder<E, S, A> debug(final boolean isOn) {
+			this.isDebug = isOn;
+			return this;
+		}
+
+		@Override
+		public Flow.Builder<E, S, A> enforce(final boolean isOn) {
+			this.isEnforce = isOn;
+			return this;
+		}
+
+		@Override
+		public Flow.Builder<E, S, A> locking(final boolean isOn) {
+			this.isLocking = isOn;
+			return this;
+		}
+
+		@Override
 		public Flow.Builder<E, S, A> initial(final E event) {
 			this.initialEvent = event;
 			return this;
@@ -103,12 +125,6 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 		@Override
 		public Flow.Builder<E, S, A> terminal(final S state) {
 			this.terminalState = state;
-			return this;
-		}
-
-		@Override
-		public Flow.Builder<E, S, A> trace(final boolean isOn) {
-			this.isTrace = isOn;
 			return this;
 		}
 
@@ -141,6 +157,11 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 			}
 			if (initialState == null) {
 				initialState = stateArray[0];
+			}
+
+			if (terminalEvent != null && terminalState == null) {
+				throw new IllegalStateException(
+						"Missing terminal state for terminal event.");
 			}
 
 			final FlowBean<E, S, A> flow = new FlowBean<E, S, A>(this);
@@ -179,6 +200,9 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 	 */
 	final Map<S, StateBean<E, S, A>> stateMap;
 
+	/**
+	 * Global listener.
+	 */
 	final Listener<E, S, A> listener;
 
 	final Class<E> eventClass;
@@ -191,6 +215,12 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 	final S terminalState;
 
 	final Executor executor;
+
+	final PointMatrix<E, S> matrix;
+
+	final boolean isDebug;
+	final boolean isEnforce;
+	final boolean isLocking;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	FlowBean(final Builder<E, S, A> builder) {
@@ -230,6 +260,13 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 		terminalState = builder.terminalState;
 
 		executor = builder.executor;
+
+		matrix = new PointMatrix<E, S>(eventClass, stateClass);
+
+		isDebug = builder.isDebug;
+		isEnforce = builder.isEnforce;
+		isLocking = builder.isLocking;
+
 	}
 
 	@Override
@@ -240,139 +277,224 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 	@Override
 	public void fire(final E event, final Context<E, S, A> context) {
 
+		debug("Fire on {} for {}", event, context);
+
 		if (event == null) {
-			throw new NullPointerException("Missing next event.");
+			throw new NullPointerException("Missing event.");
 		}
 		if (context == null) {
 			throw new NullPointerException("Missing context.");
 		}
 
 		if (executor == null) {
-			fire(event, (ContextBean<E, S, A>) context);
+			fireLocked(event, (ContextBean<E, S, A>) context);
 		} else {
 			executor.execute(new Runnable() {
 				@Override
 				public void run() {
-					fire(event, (ContextBean<E, S, A>) context);
+					fireLocked(event, (ContextBean<E, S, A>) context);
 				}
 			});
 		}
 
 	}
 
+	final Lock lock = new ReentrantLock();
+
+	/**
+	 * Use mutual thread exclusion lock, if configured.
+	 */
+	void fireLocked(final E nextEvent, final ContextBean<E, S, A> context) {
+		if (isLocking) {
+			lock.lock();
+			try {
+				fireProcess(nextEvent, context);
+			} finally {
+				lock.unlock();
+			}
+		} else {
+			fireProcess(nextEvent, context);
+		}
+	}
+
 	/**
 	 * Machine processing logic.
 	 */
-	void fire(final E event, final ContextBean<E, S, A> context) {
+	void fireProcess(final E nextEvent, final ContextBean<E, S, A> context) {
 
 		final E pastEvent = context.event();
 		final S pastState = context.state();
 
-		/** No events after termination. */
+		/** No events in termination state. */
 		if (pastState == terminalState) {
+			debug("Terminal state discard at {} on {} for {}", pastState,
+					nextEvent, context);
 			return;
 		}
 
-		final E nextEvent = event;
-
+		/** Find past bean. */
 		final StateBean<E, S, A> pastBean = stateMap.get(pastState);
 		if (pastBean == null) {
-			throw new IllegalStateException("Unmapped past bean.");
+			log.error("Missing past bean at {} on {} for {}", pastState,
+					nextEvent, context);
+			throw new IllegalStateException("Missing past bean.");
 		}
 
-		final S nextState = pastBean.eventMap.get(nextEvent);
+		/** Find next state. */
+		final S nextState;
+		if (nextEvent == terminalEvent) {
+			debug("Terminal event request at {} on {} for {}", pastState,
+					nextEvent, context);
+			nextState = terminalState;
+		} else {
+			nextState = pastBean.transitionMap.get(nextEvent);
+		}
 		if (nextState == null) {
-			throw new IllegalStateException("Unmapped next event.");
+			if (isEnforce) {
+				log.error("Unknown next state at {} on {} for {}", pastState,
+						nextEvent, context);
+				throw new IllegalStateException("Unknown next state.");
+			} else {
+				debug("Discarded unkwown at {} on {} for {}", pastState,
+						nextEvent, context);
+				return;
+			}
 		}
 
+		/** Find next bean. */
 		final StateBean<E, S, A> nextBean = stateMap.get(nextState);
 		if (nextBean == null) {
-			throw new IllegalStateException("Unmapped next state.");
+			log.error("Missing next bean at {} on {} for {}", pastState,
+					nextEvent, context);
+			throw new IllegalStateException("Missing next bean.");
 		}
 
-		final Transit<E, S> transit = new TransitBean<E, S>(pastEvent,
-				pastState, nextEvent, nextState);
+		/** Point cache lookup. */
+		final Point<E, S> past = matrix.point(pastEvent, pastState);
+		final Point<E, S> next = matrix.point(nextEvent, nextState);
+
+		debug("Leave on {} from {}", nextEvent, context);
 
 		/** Local leave. */
 		try {
-			pastBean.leave(transit, context);
+			pastBean.leave(past, next, context);
 		} catch (final Throwable e) {
-			pastBean.leaveError(transit, context, e);
+			pastBean.leaveError(past, next, context, e);
 		}
 
 		/** Global leave. */
 		try {
-			leave(transit, context);
+			leave(past, next, context);
 		} catch (final Throwable e) {
-			leaveError(transit, context, e);
+			leaveError(past, next, context, e);
 		}
 
 		context.event(nextEvent);
 		context.state(nextState);
 
+		debug("Enter on {} into {}", nextEvent, context);
+
 		/** Local enter. */
 		try {
-			nextBean.enter(transit, context);
+			nextBean.enter(past, next, context);
 		} catch (final Throwable e) {
-			nextBean.enterError(transit, context, e);
+			nextBean.enterError(past, next, context, e);
 		}
 
 		/** Global enter. */
 		try {
-			enter(transit, context);
+			enter(past, next, context);
 		} catch (final Throwable e) {
-			enterError(transit, context, e);
+			enterError(past, next, context, e);
 		}
 
 	}
 
 	@Override
-	public void enter(final Transit<E, S> transit,
+	public void enter(final Point<E, S> past, final Point<E, S> next,
 			final Context<E, S, A> context) throws Exception {
 		if (listener == null) {
 			return;
 		}
-		listener.enter(transit, context);
+		listener.enter(past, next, context);
 	}
 
 	@Override
-	public void enterError(final Transit<E, S> transit,
+	public void enterError(final Point<E, S> past, final Point<E, S> next,
 			final Context<E, S, A> context, final Throwable cause) {
 		if (listener == null) {
 			return;
 		}
 		try {
-			listener.leaveError(transit, context, cause);
+			listener.enterError(past, next, context, cause);
 		} catch (final Throwable e) {
 			log.error("Enter error failure.", e);
 		}
 	}
 
 	@Override
-	public void leave(final Transit<E, S> transit,
+	public void leave(final Point<E, S> past, final Point<E, S> next,
 			final Context<E, S, A> context) throws Exception {
 		if (listener == null) {
 			return;
 		}
-		listener.leave(transit, context);
+		listener.leave(past, next, context);
 	}
 
 	@Override
-	public void leaveError(final Transit<E, S> transit,
+	public void leaveError(final Point<E, S> past, final Point<E, S> next,
 			final Context<E, S, A> context, final Throwable cause) {
 		if (listener == null) {
 			return;
 		}
 		try {
-			listener.leaveError(transit, context, cause);
+			listener.leaveError(past, next, context, cause);
 		} catch (final Throwable e) {
 			log.error("Leave error failure.", e);
 		}
 	}
 
+	/**
+	 * Process flow debug log, when enabled.
+	 */
+	void debug(final String format, final Object... arguments) {
+		if (isDebug && log.isDebugEnabled()) {
+			log.debug(format, arguments);
+		}
+	}
+
 	@Override
 	public String toString() {
-		return "TODO print config";
+		final StringBuilder text = new StringBuilder();
+
+		text.append("\n");
+		text.append("---");
+
+		text.append("\n\t debug=");
+		text.append(isDebug);
+
+		text.append("\n\t enforce=");
+		text.append(isEnforce);
+
+		final Set<Entry<E, EventBean<E, S, A>>> eventSet = eventMap.entrySet();
+		for (final Entry<E, EventBean<E, S, A>> entry : eventSet) {
+			text.append("\n");
+			text.append("---");
+			text.append(entry.getValue());
+		}
+
+		final Set<Entry<S, StateBean<E, S, A>>> stateSet = stateMap.entrySet();
+		for (final Entry<S, StateBean<E, S, A>> entry : stateSet) {
+			text.append("\n");
+			text.append("---");
+			text.append(entry.getValue());
+		}
+
+		text.append("\n");
+		text.append("---");
+		text.append("\n");
+
+		return text.toString();
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.barchart.util.flow.api;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.locks.ReentrantLock;
 
 import aQute.bnd.annotation.ProviderType;
 
@@ -10,6 +11,9 @@ import aQute.bnd.annotation.ProviderType;
 @ProviderType
 public interface Flow<E extends Event<?>, S extends State<?>, A> {
 
+	/**
+	 * Flow builder. Must configure and build in single thread.
+	 */
 	@ProviderType
 	interface Builder<E extends Event<?>, S extends State<?>, A> {
 
@@ -19,8 +23,7 @@ public interface Flow<E extends Event<?>, S extends State<?>, A> {
 		State.Builder<E, S, A> at(S state);
 
 		/**
-		 * Optional initial context event. Initial event will substitute any
-		 * missing past event. When omitted, will use first
+		 * Optional initial context event. When omitted, will use first
 		 * {@link Event#ordinal()} event.
 		 */
 		Builder<E, S, A> initial(E event);
@@ -38,7 +41,7 @@ public interface Flow<E extends Event<?>, S extends State<?>, A> {
 		Builder<E, S, A> initial(S state);
 
 		/**
-		 * Optional terminal context state. Terminal state will ignore any
+		 * Optional terminal context state. Terminal state will discard any
 		 * further events.
 		 */
 		Builder<E, S, A> terminal(S state);
@@ -49,13 +52,23 @@ public interface Flow<E extends Event<?>, S extends State<?>, A> {
 		Builder<E, S, A> listener(Listener<E, S, A> listener);
 
 		/**
-		 * Enable flow log.
+		 * Enable flow debug log.
 		 */
-		Builder<E, S, A> trace(boolean isOn);
+		Builder<E, S, A> debug(boolean isOn);
 
 		/**
-		 * Provide flow transition executor. When omitted,
-		 * {@link Flow#fire(Event, Context)} will be executed in band.
+		 * Throw exceptions on unknown transitions, otherwise discard events.
+		 */
+		Builder<E, S, A> enforce(boolean isOn);
+
+		/**
+		 * Use thread-safe locking via {@link ReentrantLock}.
+		 */
+		Builder<E, S, A> locking(boolean isOn);
+
+		/**
+		 * Provide flow transition out-of-band executor. When omitted,
+		 * {@link Flow#fire(Event, Context)} will be executed in-band.
 		 */
 		Builder<E, S, A> executor(Executor executor);
 

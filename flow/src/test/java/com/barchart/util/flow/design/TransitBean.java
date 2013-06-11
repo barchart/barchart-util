@@ -1,8 +1,7 @@
-package com.barchart.util.flow.provider;
+package com.barchart.util.flow.design;
 
 import com.barchart.util.flow.api.Event;
 import com.barchart.util.flow.api.State;
-import com.barchart.util.flow.api.Transit;
 
 /**
  * Transition implementation.
@@ -10,10 +9,13 @@ import com.barchart.util.flow.api.Transit;
 class TransitBean<E extends Event<?>, S extends State<?>> implements
 		Transit<E, S> {
 
-	final E pastEvent;
-	final S pastState;
-	final E nextEvent;
-	final S nextState;
+	volatile E pastEvent;
+	volatile S pastState;
+	volatile E nextEvent;
+	volatile S nextState;
+
+	TransitBean() {
+	}
 
 	TransitBean(final E pastEvent, final S pastState, final E nextEvent,
 			final S nextState) {
@@ -41,6 +43,16 @@ class TransitBean<E extends Event<?>, S extends State<?>> implements
 	@Override
 	public S nextState() {
 		return nextState;
+	}
+
+	/**
+	 * Replace past with next.
+	 */
+	void push(final E event, final S state) {
+		pastEvent = nextEvent;
+		pastState = nextState;
+		nextEvent = event;
+		nextState = state;
 	}
 
 	@Override

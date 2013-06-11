@@ -16,7 +16,9 @@ class ContextBean<E extends Event<?>, S extends State<?>, A> implements
 		final FlowBean<E, S, A> flow;
 
 		volatile A attachment;
+
 		volatile E initialEvent;
+
 		volatile S initialState;
 
 		public Builder(final FlowBean<E, S, A> flow) {
@@ -60,12 +62,14 @@ class ContextBean<E extends Event<?>, S extends State<?>, A> implements
 
 		attachment = builder.attachment;
 
+		/** Ensure initial event. */
 		if (builder.initialEvent == null) {
 			event = builder.flow.initialEvent;
 		} else {
 			event = builder.initialEvent;
 		}
 
+		/** Ensure initial state. */
 		if (builder.initialState == null) {
 			state = builder.flow.initialState;
 		} else {
@@ -109,8 +113,7 @@ class ContextBean<E extends Event<?>, S extends State<?>, A> implements
 
 	@Override
 	public String toString() {
-		return "{ event=" + event() + ", state=" + state() + ", attachment="
-				+ attachment + " }";
+		return "(" + event() + "," + state() + ") " + attachment;
 	}
 
 }
