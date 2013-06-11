@@ -51,12 +51,11 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 
 		Builder(final Class<E> eventClass, final Class<S> stateClass) {
 
-			if (!Enum.class.isAssignableFrom(eventClass)) {
-				throw new IllegalStateException("Event type must extend Enum.");
-			}
-			if (!Enum.class.isAssignableFrom(stateClass)) {
-				throw new IllegalStateException("State type must extend Enum.");
-			}
+			Util.assertEnumType(eventClass);
+			Util.assertEnumType(stateClass);
+
+			Util.assertEnumNotEmpty(eventClass);
+			Util.assertEnumNotEmpty(stateClass);
 
 			this.eventClass = eventClass;
 			this.stateClass = stateClass;
@@ -144,17 +143,11 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 		public Flow<E, S, A> build() {
 
 			final E[] eventArray = Util.enumValues(eventClass);
-			if (eventArray.length == 0) {
-				throw new IllegalStateException("Event enum is empty.");
-			}
 			if (initialEvent == null) {
 				initialEvent = eventArray[0];
 			}
 
 			final S[] stateArray = Util.enumValues(stateClass);
-			if (stateArray.length == 0) {
-				throw new IllegalStateException("State enum is empty.");
-			}
 			if (initialState == null) {
 				initialState = stateArray[0];
 			}
@@ -185,7 +178,7 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 	 */
 	static <E extends Event<?>, S extends State<?>, A> //
 	void validate(final FlowBean<E, S, A> flow) {
-		log.error("TODO");
+		log.error("TODO validate");
 	}
 
 	static final Logger log = LoggerFactory.getLogger(FlowBean.class);

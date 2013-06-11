@@ -8,6 +8,26 @@ import java.lang.reflect.Method;
 class Util {
 
 	/**
+	 * Verify class extends enum.
+	 */
+	static void assertEnumType(final Class<?> klaz) {
+		if (Enum.class.isAssignableFrom(klaz)) {
+			return;
+		}
+		throw new IllegalStateException("Type must extend Enum. " + klaz);
+	}
+
+	/**
+	 * Verify enum has members.
+	 */
+	static void assertEnumNotEmpty(final Class<?> klaz) {
+		if (enumValues(klaz).length > 0) {
+			return;
+		}
+		throw new IllegalStateException("Enum must not be empty. " + klaz);
+	}
+
+	/**
 	 * Extract value array form {@link Enum} class.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })

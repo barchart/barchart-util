@@ -1,7 +1,5 @@
 package com.barchart.util.flow.provider;
 
-import static com.barchart.util.flow.provider.TheEvent.*;
-import static com.barchart.util.flow.provider.TheState.*;
 import static org.junit.Assert.*;
 
 import java.util.concurrent.Executor;
@@ -11,35 +9,50 @@ import org.junit.Test;
 
 import com.barchart.util.flow.api.Context;
 import com.barchart.util.flow.api.Context.Builder;
+import com.barchart.util.flow.api.Event;
 import com.barchart.util.flow.api.Flow;
+import com.barchart.util.flow.api.State;
 
 public class TestProvider {
+
+	enum E implements Event<E> {
+		INITIAL, //
+		EVENT_2, //
+		TERMINAL, //
+	}
+
+	enum S implements State<S> {
+		CREATED, //
+		STATE_2, //
+		TERMINATED, //
+	}
+
+	static class T {
+	}
 
 	@Test
 	public void flow() throws Exception {
 
 		final Executor executor = Executors.newSingleThreadExecutor();
 
-		final Flow.Builder<TheEvent, TheState, TheTarget> builder = Provider
-				.flowBuilder(TheEvent.class, TheState.class);
+		final Flow.Builder<E, S, T> builder = Provider.flowBuilder(E.class,
+				S.class);
 		assertNotNull(builder);
 
-		builder.at(STATE_1).on(EVENT_1).to(STATE_2);
-		builder.at(STATE_2).on(EVENT_2).to(STATE_3);
+		builder.at(S.CREATED).on(E.INITIAL).to(S.STATE_2);
+		builder.at(S.STATE_2).on(E.EVENT_2).to(S.TERMINATED);
 
 		builder.executor(executor);
 
-		final Flow<TheEvent, TheState, TheTarget> flow = builder.build();
+		final Flow<E, S, T> flow = builder.build();
 		assertNotNull(flow);
 
-		final TheTarget market = new TheTarget();
+		final T market = new T();
 
-		final Builder<TheEvent, TheState, TheTarget> contextBuilder = flow
-				.contextBuilder();
+		final Builder<E, S, T> contextBuilder = flow.contextBuilder();
 		assertNotNull(contextBuilder);
 
-		final Context<TheEvent, TheState, TheTarget> context = contextBuilder
-				.build(market);
+		final Context<E, S, T> context = contextBuilder.build(market);
 		assertNotNull(context);
 
 	}
