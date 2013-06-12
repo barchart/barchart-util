@@ -88,7 +88,7 @@ public interface Flow<E extends Event<?>, S extends State<?>, A> {
 	Context.Builder<E, S, A> contextBuilder();
 
 	/**
-	 * Fire next context event.
+	 * Fire external event.
 	 */
 	void fire(E event, Context<E, S, A> context) throws RuntimeException;
 

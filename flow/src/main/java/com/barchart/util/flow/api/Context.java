@@ -39,9 +39,9 @@ public interface Context<E extends Event<?>, S extends State<?>, A> extends
 	A attachment();
 
 	/**
-	 * Underlying state machine.
+	 * Fire internal event.
 	 */
-	Flow<E, S, A> flow();
+	void fire(E event) throws RuntimeException;
 
 	/**
 	 * Current event.

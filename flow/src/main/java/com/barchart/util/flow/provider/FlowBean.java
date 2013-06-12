@@ -23,7 +23,7 @@ import com.barchart.util.flow.api.State;
  * State machine implementation.
  */
 class FlowBean<E extends Event<?>, S extends State<?>, A> implements
-		Flow<E, S, A>, Listener<E, S, A> {
+		Flow<E, S, A> {
 
 	static class Builder<E extends Event<?>, S extends State<?>, A> implements
 			Flow.Builder<E, S, A> {
@@ -184,16 +184,27 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 
 	}
 
-	static class FlowWrap<E extends Event<?>, S extends State<?>, A> extends
-			FlowBean<E, S, A> {
-
-		FlowWrap(
-				final com.barchart.util.flow.provider.FlowBean.Builder<E, S, A> builder) {
-			super(builder);
-			// TODO Auto-generated constructor stub
+	/**
+	 * Nested event fire proxy.
+	 */
+	final Flow<E, S, A> proxy = new Flow<E, S, A>() {
+		@Override
+		public Context.Builder<E, S, A> contextBuilder() {
+			return FlowBean.this.contextBuilder();
 		}
 
-	}
+		@Override
+		public void fire(final E event, final Context<E, S, A> context)
+				throws RuntimeException {
+
+			FlowBean.this.fire(event, context);
+		}
+
+		@Override
+		public String toString() {
+			return FlowBean.this.toString();
+		}
+	};
 
 	/**
 	 * Provide new state machine builder.
@@ -441,8 +452,7 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 
 	}
 
-	@Override
-	public void enter(final Point<E, S> past, final Point<E, S> next,
+	void enter(final Point<E, S> past, final Point<E, S> next,
 			final Context<E, S, A> context) throws Exception {
 		if (listener == null) {
 			return;
@@ -450,8 +460,7 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 		listener.enter(past, next, context);
 	}
 
-	@Override
-	public void enterError(final Point<E, S> past, final Point<E, S> next,
+	void enterError(final Point<E, S> past, final Point<E, S> next,
 			final Context<E, S, A> context, final Throwable cause) {
 		if (listener == null) {
 			return;
@@ -463,8 +472,7 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 		}
 	}
 
-	@Override
-	public void leave(final Point<E, S> past, final Point<E, S> next,
+	void leave(final Point<E, S> past, final Point<E, S> next,
 			final Context<E, S, A> context) throws Exception {
 		if (listener == null) {
 			return;
@@ -472,8 +480,7 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 		listener.leave(past, next, context);
 	}
 
-	@Override
-	public void leaveError(final Point<E, S> past, final Point<E, S> next,
+	void leaveError(final Point<E, S> past, final Point<E, S> next,
 			final Context<E, S, A> context, final Throwable cause) {
 		if (listener == null) {
 			return;
