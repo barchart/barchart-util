@@ -33,5 +33,4 @@ public class TestNornalizeNullValues {
 		decimal.norm();
 	}
 	
-	
 }
