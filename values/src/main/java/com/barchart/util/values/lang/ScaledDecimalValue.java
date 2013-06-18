@@ -27,6 +27,11 @@ public abstract class ScaledDecimalValue<T extends ScaledDecimal<T, F> & Value<T
 	public final T norm() {
 
 		long m = mantissa();
+		
+		if(m == 0) {
+			return (T) this;
+		}
+		
 		int e = exponent();
 
 		final int p = e;
