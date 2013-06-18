@@ -25,6 +25,11 @@ public abstract class BaseScaled<T extends Scaled<T, F>, F extends Scaled<F, F>>
 	public final T norm() {
 
 		long m = mantissa();
+		
+		if(m == 0) {
+			return (T) this;
+		}
+		
 		int e = exponent();
 
 		final int p = e;
