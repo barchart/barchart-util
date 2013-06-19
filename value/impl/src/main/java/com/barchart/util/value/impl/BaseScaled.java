@@ -242,9 +242,7 @@ public abstract class BaseScaled<T extends Scaled<T, F>, F extends Scaled<F, F>>
 
 	@Override
 	public final T neg() {
-
 		return result(-mantissa(), exponent());
-
 	}
 
 	@Override
@@ -299,13 +297,64 @@ public abstract class BaseScaled<T extends Scaled<T, F>, F extends Scaled<F, F>>
 	}
 
 	@Override
-	public T add(final long increment) {
-		throw new UnsupportedOperationException("TODO");
+	public T add(long increment) {
+		
+		int exO = exponent();
+		int ex = exponent();
+		long ma = mantissa();
+		
+		if(ex == 0) {
+			return result(MathExtra.longAdd(mantissa(), increment), ex);
+		} else if(ex > 0) {
+			
+			while(ex > 0) {
+				ma = MathExtra.longMult10(ma);
+				ex--;
+			}
+			
+			return result(MathExtra.longAdd(ma, increment), 0);
+			
+		} else {
+			
+			while(ex < 0) {
+				increment = MathExtra.longMult10(increment);
+				ex++;
+			}
+			
+			return result(MathExtra.longAdd(ma, increment), exO);
+			
+		}
+		
 	}
 
 	@Override
-	public T sub(final long decrement) {
-		throw new UnsupportedOperationException("TODO");
+	public T sub(long decrement) {
+		
+		int exO = exponent();
+		int ex = exponent();
+		long ma = mantissa();
+		
+		if(ex == 0) {
+			return result(MathExtra.longSub(mantissa(), decrement), ex);
+		} else if(ex > 0) {
+			
+			while(ex > 0) {
+				ma = MathExtra.longMult10(ma);
+				ex--;
+			}
+			
+			return result(MathExtra.longSub(ma, decrement), ex);
+			
+		} else {
+			
+			while(ex < 0) {
+				decrement = MathExtra.longMult10(decrement);
+				ex++;
+			}
+			
+			return result(MathExtra.longSub(ma, decrement), exO);
+			
+		}
 	}
 
 	@Override
