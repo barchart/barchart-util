@@ -7,7 +7,10 @@
  */
 package com.barchart.util.value.impl;
 
-import static java.lang.Math.*;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
+import java.math.BigDecimal;
 
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.math.MathExtra;
@@ -224,8 +227,16 @@ public abstract class BaseScaled<T extends Scaled<T, F>, F extends Scaled<F, F>>
 	@Override
 	public final T div(final long factor) throws ArithmeticException {
 
+		if(factor == 0) {
+			throw new ArithmeticException("Division by zero");
+		}
+		
 		long m = this.mantissa();
 		int e = this.exponent();
+		
+		if(m == 0) {
+			return result(m, e);
+		}
 
 		while (true) {
 			final long r = m * 10L;
@@ -276,6 +287,10 @@ public abstract class BaseScaled<T extends Scaled<T, F>, F extends Scaled<F, F>>
 
 		long m1 = this.mantissa();
 		final long m2 = that.mantissa();
+		
+		if(m1 == 0) {
+			return result(m1, e1);
+		}
 
 		while (true) {
 			final long r = m1 * 10L;
@@ -359,17 +374,26 @@ public abstract class BaseScaled<T extends Scaled<T, F>, F extends Scaled<F, F>>
 
 	@Override
 	public boolean greaterThan(final T that) {
-		throw new UnsupportedOperationException("TODO");
+		return this.compareTo(that) > 0;
 	}
 
 	@Override
 	public boolean lessThan(final T that) {
-		throw new UnsupportedOperationException("TODO");
+		return this.compareTo(that) < 0;
 	}
 
 	@Override
 	public double asDouble() {
-		return mantissa() * Math.pow(10, exponent());
+		
+		final double result = new BigDecimal(mantissa())
+				.movePointRight(exponent())
+				.doubleValue();
+		
+		if(Double.isInfinite(result)) {
+			throw new ArithmeticException("Overflow exception");
+		}
+		
+		return result;
 	}
 
 	/** Convert to another scaled type. */

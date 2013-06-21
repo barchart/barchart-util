@@ -5,10 +5,26 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import com.barchart.util.value.api.Decimal;
+import com.barchart.util.value.api.Price;
 
 public class TestBaseScaled {
 	
 	private static final long TIMEOUT_MILLIS = 250;
+	
+	@Test(timeout = TIMEOUT_MILLIS)
+	public void testDiv() {
+		Price price = ValueConst.ZERO_PRICE;
+		price.div(25);
+	}
+	
+	@Test(timeout = TIMEOUT_MILLIS)
+	public void testScaledDiv() {
+
+		Price price = ValueConst.ZERO_PRICE;
+		Decimal denom = ValueBuilder.newDecimal(1, 0);
+		price.div(denom);
+		
+	}
 	
 	@Test(timeout = TIMEOUT_MILLIS)
 	public void testAddLong() {
@@ -60,30 +76,63 @@ public class TestBaseScaled {
 	@Test(timeout = TIMEOUT_MILLIS)
 	public void testGreaterThan() {
 		
-		/*
-		 * TODO
-		 */
-		assertTrue(false);
+		/* Not equals */
+		Decimal bigger = ValueBuilder.newDecimal(1, 0);
+		Decimal smaller = ValueBuilder.newDecimal(1, 0);
+		assertFalse(bigger.greaterThan(smaller));
+		
+		bigger = ValueBuilder.newDecimal(1, 0);
+		smaller = ValueBuilder.newDecimal(0, 0);
+		assertTrue(bigger.greaterThan(smaller));
+		
+		bigger = ValueBuilder.newDecimal(1, 0);
+		smaller = ValueBuilder.newDecimal(5, -1);
+		assertTrue(bigger.greaterThan(smaller));
+		
+		bigger = ValueBuilder.newDecimal(0, 0);
+		smaller = ValueBuilder.newDecimal(-1, 0);
+		assertTrue(bigger.greaterThan(smaller));
+
+		bigger = ValueBuilder.newDecimal(-5, -1);
+		smaller = ValueBuilder.newDecimal(-1, 0);
+		assertTrue(bigger.greaterThan(smaller));
 		
 	}
 	
 	@Test(timeout = TIMEOUT_MILLIS)
 	public void testLessThan() {
 		
-		/*
-		 * TODO
-		 */
-		assertTrue(false);
+		/* Not equals */
+		Decimal bigger = ValueBuilder.newDecimal(1, 0);
+		Decimal smaller = ValueBuilder.newDecimal(1, 0);
+		assertFalse(smaller.lessThan(bigger));
+		
+		bigger = ValueBuilder.newDecimal(1, 0);
+		smaller = ValueBuilder.newDecimal(0, 0);
+		assertTrue(smaller.lessThan(bigger));
+		
+		bigger = ValueBuilder.newDecimal(1, 0);
+		smaller = ValueBuilder.newDecimal(5, -1);
+		assertTrue(smaller.lessThan(bigger));
+		
+		bigger = ValueBuilder.newDecimal(0, 0);
+		smaller = ValueBuilder.newDecimal(-1, 0);
+		assertTrue(smaller.lessThan(bigger));
+
+		bigger = ValueBuilder.newDecimal(-5, -1);
+		smaller = ValueBuilder.newDecimal(-1, 0);
+		assertTrue(smaller.lessThan(bigger));
 		
 	}
 
 	@Test(timeout = TIMEOUT_MILLIS)
 	public void testAsDouble() {
 		
-		/*
-		 * TODO not formatted correctly
-		 */
-		assertTrue(false);
+		Price price = ValueBuilder.newPriceMutable(-111, -1);
+		
+		double doubFromString = Double.parseDouble(price.toString());
+		
+		assertTrue(Double.compare(doubFromString, price.asDouble()) == 0);
 		
 	}
 	

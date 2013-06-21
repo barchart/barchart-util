@@ -4,16 +4,16 @@ import com.barchart.util.value.api.Price;
 
 public class TestAsDouble {
 	
+	/*
+	 * DELTE ME
+	 */
+	
 	public static void main(final String[] args) {
 		
-		Price price = ValueConst.ZERO_PRICE;
+		Price price = ValueBuilder.newPriceMutable(-111, -1);
 		
-		price.add(100);
-		
-		price.div(25);
-		
+		System.out.println(price);
 		System.out.println(price.asDouble());
-		
 		
 	}
 
