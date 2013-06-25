@@ -12,6 +12,9 @@ import com.barchart.util.anno.NotMutable;
 @NotMutable
 @ProviderType
 public interface Decimal extends Scaled<Decimal, Decimal> {
+	
+	/** Special decimal value @see {isNull} */
+	Decimal NULL = FactoryLoader.load().newDecimal(0, 0);
 
 	@Override
 	long mantissa();

@@ -2,6 +2,9 @@ package com.barchart.util.value.api;
 
 
 public interface Fraction extends Decimal {
+	
+	/** Special fraction value @see {isNull} */
+	Fraction NULL = FactoryLoader.load().newFraction(0, 1);
 
 	long base();
 

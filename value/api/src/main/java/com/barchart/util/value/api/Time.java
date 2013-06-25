@@ -25,6 +25,9 @@ import com.barchart.util.anno.NotMutable;
 @ProviderType
 public interface Time extends Comparable<Time>, Copyable<Time> {
 
+	/** Special time value @see {isNull} */
+	Time NULL = FactoryLoader.load().newTime(0, "");
+	
 	/**
 	 * Time zone ID form the TZ database.
 	 * <p>
