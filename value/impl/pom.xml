@@ -12,14 +12,14 @@
 	</parent>
 
 	<artifactId>barchart-util-value-impl</artifactId>
-	<version>7.0.0</version>
+	<version>7.0.1-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<scm>
 		<url>https://github.com/barchart/barchart-util</url>
 		<connection>scm:git:git://github.com/barchart/barchart-util.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-util.git</developerConnection>
-		<tag>barchart-util-value-impl-7.0.0</tag>
+		<tag>master</tag>
 	</scm>
 
 	<dependencies>
