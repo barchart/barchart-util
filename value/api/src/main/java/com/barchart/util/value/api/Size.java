@@ -11,6 +11,9 @@ import com.barchart.util.anno.NotMutable;
 @ProviderType
 public interface Size extends Scaled<Size, Decimal> {
 
+	/** Special size value @see {isNull} */
+	Size NULL = FactoryLoader.load().newSize(0, 0);
+	
 	@Override
 	long mantissa();
 
