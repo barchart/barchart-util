@@ -11,6 +11,9 @@ import com.barchart.util.anno.NotMutable;
 @ProviderType
 public interface Price extends Scaled<Price, Decimal> {
 
+	/** Special price value @see {isNull} */
+	Price NULL = FactoryLoader.load().newPrice(0, 0);
+
 	@Override
 	long mantissa();
 
