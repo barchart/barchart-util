@@ -20,14 +20,14 @@
 
 	<groupId>com.barchart.util</groupId>
 	<artifactId>barchart-util-aws</artifactId>
-	<version>2.0.31</version>
+	<version>2.0.32-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<scm>
 		<url>https://github.com/barchart/barchart-util</url>
 		<connection>scm:git:git://github.com/barchart/barchart-util.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-util.git</developerConnection>
-		<tag>barchart-util-aws-2.0.31</tag>
+		<tag>master</tag>
 	</scm>
   
 	 <dependencies>
