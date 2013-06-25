@@ -13,14 +13,14 @@
 
 	<groupId>com.barchart.util</groupId>
 	<artifactId>barchart-util-loader</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<scm>
 		<url>https://github.com/barchart/barchart-util</url>
 		<connection>scm:git:git://github.com/barchart/barchart-util.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-util.git</developerConnection>
-		<tag>barchart-util-loader-1.0.2</tag>
+		<tag>master</tag>
 	</scm>
 
 	<dependencies>
