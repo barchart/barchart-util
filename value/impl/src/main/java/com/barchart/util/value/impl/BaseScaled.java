@@ -85,20 +85,30 @@ public abstract class BaseScaled<T extends Scaled<T, F>, F extends Scaled<F, F>>
 		long m2 = that.mantissa();
 
 		if (e1 != e2) {
-			if ((m1 ^ m2) < 0) {
-				// different sign
+			if ((m1 ^ m2) < 0) { // different sign
 				return m1 >= 0 ? +1 : -1;
-			} else {
-				// identical sign
-				final int e = max(e1, e2);
-				while (e > e1) {
-					m1 /= 10L;
+			} else { // identical sign
+				
+				while(e1 > 0) {
+					e1--;
+					m1 = MathExtra.longMult10(m1);
+				}
+				
+				while(e1 < 0) {
 					e1++;
+					m2 = MathExtra.longMult10(m2);
 				}
-				while (e > e2) {
-					m2 /= 10L;
+				
+				while(e2 > 0) {
+					e2--;
+					m2 = MathExtra.longMult10(m2);
+				}
+				
+				while(e2 < 0) {
 					e2++;
+					m1 = MathExtra.longMult10(m1);
 				}
+				
 			}
 
 		}

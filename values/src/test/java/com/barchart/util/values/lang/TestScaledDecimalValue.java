@@ -9,6 +9,7 @@ package com.barchart.util.values.lang;
 
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
@@ -113,6 +114,16 @@ public class TestScaledDecimalValue {
 
 	}
 
+	@Test
+	public void TestComp() {
+		
+		final PriceValue p1 = newPrice(35, 0);
+		final PriceValue p2 = newPrice(3, 1);
+		
+		assertFalse(p1.equals(p2));
+		
+	}
+	
 	@Test
 	public void TestAdd() {
 

@@ -136,4 +136,23 @@ public class TestBaseScaled {
 		
 	}
 	
+	@Test
+	public void testCompareTo() {
+		
+		Price p1 = ValueBuilder.newPrice(35, 0);
+		Price p2 = ValueBuilder.newPrice(3, 1);
+		
+		assertFalse(p1.equals(p2));
+		assertFalse(p2.compareTo(p1) > 0);
+		assertTrue(p1.compareTo(p2) > 0);
+		
+		p1 = ValueBuilder.newPrice(35, -1);
+		p2 = ValueBuilder.newPrice(3, 0);
+		
+		assertFalse(p1.equals(p2));
+		assertFalse(p2.compareTo(p1) > 0);
+		assertTrue(p1.compareTo(p2) > 0);
+		
+	}
+	
 }
