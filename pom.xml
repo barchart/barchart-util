@@ -65,6 +65,8 @@ Layout Project.
 		<module>loader</module>
 
 		<module>flow</module>
+		
+		<module>jmx</module>
 
 	</modules>
 
