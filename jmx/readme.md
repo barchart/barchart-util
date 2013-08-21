@@ -1,3 +1,3 @@
-### barchart-util-flow
+### barchart-util-jmx
 
-Simple Finite-state machine http://en.wikipedia.org/wiki/Finite-state_machine.
+Helper for JMX.
