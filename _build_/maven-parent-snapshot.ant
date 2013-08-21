@@ -1,6 +1,6 @@
 <!--
 
-    Copyright (C) 2011-2013 Barchart, Inc. <http://www.barchart.com/>
+    Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com/>
 
     All rights reserved. Licensed under the OSI BSD License.
 
@@ -12,20 +12,27 @@
 	<echo message="basedir : ${basedir}" />
 
 	<target name="maven">
-		
+
 		<condition property="executable" value="mvn">
 			<os family="unix" />
 		</condition>
 		<condition property="executable" value="mvn.bat">
 			<os family="windows" />
 		</condition>
-		
+
+		<!-- http://mojo.codehaus.org/versions-maven-plugin/examples/update-parent.html -->
+
 		<exec executable="${executable}">
-			
+
 			<arg value="versions:update-parent" />
-			
+
+			<arg value="--define" />
+			<arg value="allowSnapshots=true" />
+
+			<arg value="-U" />
+
 		</exec>
-		
+
 	</target>
 
 </project>
