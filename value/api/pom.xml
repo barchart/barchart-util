@@ -35,10 +35,16 @@
 		</dependency>
 
 		<!-- Common service loader. -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-loader</artifactId>
 			<version>[1-SNAPSHOT,2-SNAPSHOT)</version>
+		</dependency> -->
+
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-math</artifactId>
+			<version>[2-SNAPSHOT,3-SNAPSHOT)</version>
 		</dependency>
 
 		<dependency>
