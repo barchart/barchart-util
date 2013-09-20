@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class TestFactoryLoader {
 
-	static String readText(final File file) throws Exception {
+	/*static String readText(final File file) throws Exception {
 		return new Scanner(file, "UTF-8").useDelimiter("\\A").next();
 	}
 
@@ -17,5 +17,5 @@ public class TestFactoryLoader {
 		FactoryLoader.load();
 
 	}
-
+*/
 }
