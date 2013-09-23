@@ -27,6 +27,7 @@ import com.google.common.reflect.Reflection;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigList;
+import com.typesafe.config.ConfigObject;
 import com.typesafe.config.ConfigValue;
 
 public class HoconProxyLoader {
@@ -62,18 +63,21 @@ public class HoconProxyLoader {
 
 		registerTypeAdapter(String.class, new StringAdapter());
 
-		// registerTypeAdapter(List.class, new ListAdapter(typeAdapters));
 	}
 
 	public void registerTypeAdapter(Class<?> clazz, TypeAdapter<?> typeAdapter) {
 		typeAdapters.put(clazz, typeAdapter);
 	}
 
-	public <T> T load(Class<T> clazz, File hoconFile) {
-		Config config = ConfigFactory.parseFile(hoconFile);
+	public <T> T loadProxy(Class<T> clazz, File hoconFile) {
+		Config hoconConfig = ConfigFactory.parseFile(hoconFile);
+		return loadProxy(clazz, hoconConfig);
+	}
 
-		InvocationHandler handler = new InvocationHandlerImpl<T>(clazz, config);
-		return Reflection.newProxy(clazz, handler);
+	public <T> T loadProxy(Class<T> clazz, Config hoconConfig) {
+
+		InterfaceAdapter<T> interfaceAdapter = new InterfaceAdapter<T>(clazz);
+		return interfaceAdapter.convertValue(hoconConfig.root());
 	}
 
 	private final class InvocationHandlerImpl<T> implements InvocationHandler {
@@ -86,6 +90,9 @@ public class HoconProxyLoader {
 
 		@Override
 		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+			if (method.getName().equals("toString")) {
+				return resultMap.toString();
+			}
 			return resultMap.get(method.getName());
 		}
 
@@ -152,37 +159,82 @@ public class HoconProxyLoader {
 
 		private boolean handleSpecialCases(Method m) {
 			if (m.getReturnType().getName().equals("java.util.List")) {
-				handleList(m);
+				handleReturnedList(m);
+				return true;
+			}
+
+			if (m.getReturnType().isInterface()) {
+				handleReturnedInterface(m);
 				return true;
 			}
 			return false;
 		}
 
-		private void handleList(Method m) {
+		private void handleReturnedList(Method m) {
 			Type genericReturnType = m.getGenericReturnType();
 			if (genericReturnType instanceof ParameterizedType) {
 				ParameterizedType pType = (ParameterizedType) genericReturnType;
 				Type actualReturnType = pType.getActualTypeArguments()[0];
+
 				TypeAdapter<?> adapter = getAdapter(actualReturnType);
 				String path = nameMorpher.getConfigPath(m.getName());
 				ConfigList configList = config.getList(path);
 				ImmutableList.Builder<Object> resultBuilder = ImmutableList.builder();
 				for (int i = 0; i < configList.size(); i++) {
-					resultBuilder.add(adapter.convertValue(configList.get(i)));
+					Object convertedValue = adapter.convertValue(configList.get(i));
+					resultBuilder.add(convertedValue);
 				}
 				builder.put(m.getName(), resultBuilder.build());
+
 			} else {
 				throw new HoconProxyException("Method " + m + " has unparameterized list as return type.");
 			}
 
 		}
 
+		private void handleReturnedInterface(Method m) {
+			String path = nameMorpher.getConfigPath(m.getName());
+			Config subConfig = config.getConfig(path);
+			Object subProxy = loadProxy(m.getReturnType(), subConfig);
+			builder.put(m.getName(), subProxy);
+		}
+
+		@SuppressWarnings("unchecked")
 		private TypeAdapter<?> getAdapter(Type returnType) {
 			TypeAdapter<?> typeAdapter = typeAdapters.get(returnType);
+
+			if (typeAdapter == null) {
+				if (returnType instanceof Class && ((Class<?>) returnType).isInterface()) {
+					typeAdapter = new InterfaceAdapter<Object>((Class<Object>) returnType);
+				}
+			}
+
 			if (typeAdapter == null) {
 				throw new IllegalStateException("No TypeAdapter available for " + returnType);
 			}
 			return typeAdapter;
+		}
+
+	}
+
+	private final class InterfaceAdapter<T> implements TypeAdapter<T> {
+
+		private final Class<T> clazz;
+
+		public InterfaceAdapter(Class<T> clazz) {
+			this.clazz = clazz;
+		}
+
+		@Override
+		public T convertValue(ConfigValue configValue) {
+			if (ConfigObject.class.isAssignableFrom(configValue.getClass())) {
+				ConfigObject configObject = (ConfigObject) configValue;
+				Config c = configObject.toConfig();
+				InvocationHandler handler = new InvocationHandlerImpl<T>(clazz, c);
+				return Reflection.newProxy(clazz, handler);
+			} else {
+				throw new HoconProxyException("ConfigValue " + configValue + " is not a config.  Cannot create adapter for " + clazz);
+			}
 		}
 
 	}

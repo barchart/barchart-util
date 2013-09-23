@@ -67,7 +67,7 @@ public class BasicTypesTest {
 	public static void setup() {
 		HoconProxyLoader loader = new HoconProxyLoader();
 		rawConfig = ConfigFactory.parseFile(new File(CONFIG_FILE));
-		proxyConfig = loader.load(TestConfigInterface.class, new File(CONFIG_FILE));
+		proxyConfig = loader.loadProxy(TestConfigInterface.class, new File(CONFIG_FILE));
 	}
 
 	@Test
