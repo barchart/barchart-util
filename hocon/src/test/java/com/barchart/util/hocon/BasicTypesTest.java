@@ -3,6 +3,7 @@ package com.barchart.util.hocon;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -51,6 +52,10 @@ public class BasicTypesTest {
 		public double getDoubleObjectValue();
 
 		public boolean getBooleanObjectValue();
+		
+		public List<String> getStringList();
+		
+		public List<Integer> getIntegerList();
 
 	}
 
@@ -139,5 +144,16 @@ public class BasicTypesTest {
 	public void testBooleanObjectValue() {
 		assertEquals(rawConfig.getBoolean("boolean_object_value"), proxyConfig.getBooleanObjectValue());
 	}
+	
+	@Test
+	public void testStringList() {
+		assertEquals(rawConfig.getStringList("string_list"), proxyConfig.getStringList());
+	}
+	
+	@Test
+	public void testIntegerList() {
+		assertEquals(rawConfig.getIntList("integer_list"), proxyConfig.getIntegerList());
+	}
+	
 
 }

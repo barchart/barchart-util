@@ -7,7 +7,7 @@ public class DoubleAdapter implements TypeAdapter<Double> {
 
 	@Override
 	public Double convertValue(ConfigValue configValue) {
-		return (Double) configValue.unwrapped();
+		return ((Double) configValue.unwrapped());
 	}
 
 }
