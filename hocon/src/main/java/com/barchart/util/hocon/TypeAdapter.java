@@ -6,5 +6,4 @@ public interface TypeAdapter<T> {
 	
 	public T convertValue(ConfigValue configValue);
 	
-	
 }

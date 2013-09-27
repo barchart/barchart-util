@@ -30,7 +30,7 @@ import com.typesafe.config.ConfigList;
 import com.typesafe.config.ConfigObject;
 import com.typesafe.config.ConfigValue;
 
-public class HoconProxyLoader {
+public final class HoconProxyLoader {
 
 	private static final Logger logger = LoggerFactory.getLogger(HoconProxyLoader.class);
 
@@ -75,7 +75,6 @@ public class HoconProxyLoader {
 	}
 
 	public <T> T loadProxy(Class<T> clazz, Config hoconConfig) {
-
 		InterfaceAdapter<T> interfaceAdapter = new InterfaceAdapter<T>(clazz);
 		return interfaceAdapter.convertValue(hoconConfig.root());
 	}
