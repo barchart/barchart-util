@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import com.barchart.util.hocon.types.BooleanAdapter;
 import com.barchart.util.hocon.types.ByteAdapter;
 import com.barchart.util.hocon.types.DoubleAdapter;
+import com.barchart.util.hocon.types.FileAdapter;
 import com.barchart.util.hocon.types.FloatAdapter;
 import com.barchart.util.hocon.types.IntegerAdapter;
 import com.barchart.util.hocon.types.LongAdapter;
@@ -62,7 +63,7 @@ public final class HoconProxyLoader {
 		registerTypeAdapter(Boolean.class, new BooleanAdapter());
 
 		registerTypeAdapter(String.class, new StringAdapter());
-
+		registerTypeAdapter(File.class, new FileAdapter());
 	}
 
 	public void registerTypeAdapter(Class<?> clazz, TypeAdapter<?> typeAdapter) {

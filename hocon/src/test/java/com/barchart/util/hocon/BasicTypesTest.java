@@ -56,6 +56,8 @@ public class BasicTypesTest {
 		public List<String> getStringList();
 		
 		public List<Integer> getIntegerList();
+		
+		public File getTestFile();
 
 	}
 
@@ -155,5 +157,9 @@ public class BasicTypesTest {
 		assertEquals(rawConfig.getIntList("integer_list"), proxyConfig.getIntegerList());
 	}
 	
-
+	@Test
+	public void testFileValue() {
+		assertEquals(new File(rawConfig.getString("test_file")), proxyConfig.getTestFile());
+	}
+	
 }
