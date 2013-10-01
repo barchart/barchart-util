@@ -58,6 +58,8 @@ public class BasicTypesTest {
 		public List<Integer> getIntegerList();
 		
 		public File getTestFile();
+		
+		public Config getTypesafeConfig();
 
 	}
 
@@ -160,6 +162,11 @@ public class BasicTypesTest {
 	@Test
 	public void testFileValue() {
 		assertEquals(new File(rawConfig.getString("test_file")), proxyConfig.getTestFile());
+	}
+	
+	@Test
+	public void testTypesafeConfig() {
+		assertEquals(rawConfig.getConfig("typesafe_config"), proxyConfig.getTypesafeConfig());
 	}
 	
 }

@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.util.hocon.types.BooleanAdapter;
 import com.barchart.util.hocon.types.ByteAdapter;
+import com.barchart.util.hocon.types.ConfigAdapter;
 import com.barchart.util.hocon.types.DoubleAdapter;
 import com.barchart.util.hocon.types.FileAdapter;
 import com.barchart.util.hocon.types.FloatAdapter;
@@ -64,6 +65,7 @@ public final class HoconProxyLoader {
 
 		registerTypeAdapter(String.class, new StringAdapter());
 		registerTypeAdapter(File.class, new FileAdapter());
+		registerTypeAdapter(Config.class, new ConfigAdapter());
 	}
 
 	public void registerTypeAdapter(Class<?> clazz, TypeAdapter<?> typeAdapter) {
@@ -163,11 +165,22 @@ public final class HoconProxyLoader {
 				return true;
 			}
 
+			if (m.getReturnType().getName().equals("com.typesafe.config.Config")) {
+				handleReturnedConfig(m);
+				return true;
+			}
+
 			if (m.getReturnType().isInterface()) {
 				handleReturnedInterface(m);
 				return true;
 			}
 			return false;
+		}
+
+		private void handleReturnedConfig(Method m) {
+			String path = nameMorpher.getConfigPath(m.getName());
+			Config configResult = config.getConfig(path);
+			builder.put(m.getName(), configResult);
 		}
 
 		private void handleReturnedList(Method m) {
