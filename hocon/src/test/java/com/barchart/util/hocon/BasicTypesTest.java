@@ -21,6 +21,11 @@ public class BasicTypesTest {
 
 	private static final double DELTA = Double.MIN_VALUE;
 
+	public static enum TestEnum {
+		OPTION_A,
+		OPTION_B, ;
+	}
+
 	public static interface TestConfigInterface {
 
 		public String getStringValue();
@@ -52,14 +57,16 @@ public class BasicTypesTest {
 		public double getDoubleObjectValue();
 
 		public boolean getBooleanObjectValue();
-		
+
 		public List<String> getStringList();
-		
+
 		public List<Integer> getIntegerList();
-		
+
 		public File getTestFile();
-		
+
 		public Config getTypesafeConfig();
+
+		public TestEnum getTestEnum();
 
 	}
 
@@ -148,25 +155,30 @@ public class BasicTypesTest {
 	public void testBooleanObjectValue() {
 		assertEquals(rawConfig.getBoolean("boolean_object_value"), proxyConfig.getBooleanObjectValue());
 	}
-	
+
 	@Test
 	public void testStringList() {
 		assertEquals(rawConfig.getStringList("string_list"), proxyConfig.getStringList());
 	}
-	
+
 	@Test
 	public void testIntegerList() {
 		assertEquals(rawConfig.getIntList("integer_list"), proxyConfig.getIntegerList());
 	}
-	
+
 	@Test
 	public void testFileValue() {
 		assertEquals(new File(rawConfig.getString("test_file")), proxyConfig.getTestFile());
 	}
-	
+
 	@Test
 	public void testTypesafeConfig() {
 		assertEquals(rawConfig.getConfig("typesafe_config"), proxyConfig.getTypesafeConfig());
 	}
-	
+
+	@Test
+	public void testEnum() {
+		assertEquals(TestEnum.valueOf(rawConfig.getString("test_enum").toUpperCase()), proxyConfig.getTestEnum());
+	}
+
 }

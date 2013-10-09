@@ -170,11 +170,29 @@ public final class HoconProxyLoader {
 				return true;
 			}
 
+			if (m.getReturnType().isEnum()) {
+				handleReturnedEnum(m);
+				return true;
+			}
+
 			if (m.getReturnType().isInterface()) {
 				handleReturnedInterface(m);
 				return true;
 			}
 			return false;
+		}
+
+		private void handleReturnedEnum(Method m) {
+			Object[] enumConstants = m.getReturnType().getEnumConstants();
+			String path = nameMorpher.getConfigPath(m.getName());
+			String literalString = config.getString(path).toUpperCase();
+			for (Object enumConstant : enumConstants) {
+				if (literalString.equals(enumConstant.toString())) {
+					builder.put(m.getName(), enumConstant);
+					return;
+				}
+			}
+			throw new IllegalStateException("Could not find enum for " + literalString + "( type=" + m.getReturnType() + ")");
 		}
 
 		private void handleReturnedConfig(Method m) {
