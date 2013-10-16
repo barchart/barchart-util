@@ -13,7 +13,7 @@
 
 	<groupId>com.barchart.util</groupId>
 	<artifactId>barchart-util-jmx</artifactId>
-	<version>1.1.0</version>
+	<version>1.1.1-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<description>
@@ -30,7 +30,7 @@ Helper for JMX.
 		<url>https://github.com/barchart/barchart-util</url>
 		<connection>scm:git:git://github.com/barchart/barchart-util.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-util.git</developerConnection>
-		<tag>barchart-util-jmx-1.1.0</tag>
+		<tag>master</tag>
 	</scm>
 
 	<dependencies>
