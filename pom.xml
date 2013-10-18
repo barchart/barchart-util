@@ -69,6 +69,8 @@ Layout Project.
 		
 		<module>jmx</module>
 
+		<module>crypto</module>
+
 	</modules>
 
 	<build>
