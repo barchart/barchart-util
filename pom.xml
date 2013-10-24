@@ -55,6 +55,7 @@ Layout Project.
 		<module>values</module>
 		<module>collections</module>
 		<module>concurrent</module>
+		<module>observer</module>
 		<module>aws</module>
 		<module>test</module>
 
