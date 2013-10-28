@@ -89,8 +89,7 @@
 				<configuration>
 					<instructions>
 						<Export-Package>com.barchart.util.value.api.*</Export-Package>
-						<Import-Package>com.barchart.util.value.provider.*</Import-Package>
-            <Import-Package>org.slf4j.*</Import-Package>
+						<Import-Package>com.barchart.util.value.provider.*,org.slf4j.*,com.barchart.util.math.*</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>
