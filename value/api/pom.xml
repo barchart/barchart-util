@@ -90,6 +90,7 @@
 					<instructions>
 						<Export-Package>com.barchart.util.value.api.*</Export-Package>
 						<Import-Package>com.barchart.util.value.provider.*</Import-Package>
+            <Import-Package>org.slf4j.*</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>
