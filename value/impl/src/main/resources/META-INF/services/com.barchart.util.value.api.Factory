@@ -1,5 +1,0 @@
-#
-# Implementation for the factory.
-# com.barchart.util.value.api.Factory
-#
-com.barchart.util.value.impl.FactoryImpl

@@ -6,24 +6,16 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.barchart.base</groupId>
-		<artifactId>barchart-archon</artifactId>
-		<version>2.5.12</version>
-		<relativePath />
+		<groupId>com.barchart.util</groupId>
+		<artifactId>barchart-util-archon</artifactId>
+		<version>1.1.2</version>
+		<relativePath>../archon</relativePath>
 	</parent>
 
 	<groupId>com.barchart.util</groupId>
 	<artifactId>barchart-util-value</artifactId>
-	<version>0.0.0</version>
-	<packaging>pom</packaging>
-
-	<description>
-<![CDATA[
-### ${project.artifactId}
-
-Layout Project for Values.
-]]>
-	</description>
+	<version>1.0.1-SNAPSHOT</version>
+	<packaging>bundle</packaging>
 
 	<scm>
 		<url>https://github.com/barchart/barchart-util</url>
@@ -31,14 +23,6 @@ Layout Project for Values.
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-util.git</developerConnection>
 		<tag>master</tag>
 	</scm>
-	
-	<modules>
-
-		<module>api</module>
-		<module>impl</module>
-		<module>test</module>
-	
-	</modules>
 	
 	<build>
 
