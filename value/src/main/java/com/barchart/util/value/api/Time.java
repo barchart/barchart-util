@@ -5,6 +5,7 @@ import java.util.TimeZone;
 import aQute.bnd.annotation.ProviderType;
 
 import com.barchart.util.anno.NotMutable;
+import com.barchart.util.value.impl.ValueConst;
 
 /**
  * Time value.
@@ -26,7 +27,7 @@ import com.barchart.util.anno.NotMutable;
 public interface Time extends Comparable<Time>, Existential {
 
 	/** Special time value @see {isNull} */
-	Time NULL = FactoryLoader.load().newTime(0, "");
+	Time NULL = ValueConst.NULL_TIME;
 	
 	/**
 	 * Time zone ID form the TZ database.

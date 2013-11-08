@@ -21,10 +21,8 @@ import aQute.bnd.annotation.ProviderType;
  *            - Permitted factor type.
  */
 @ProviderType
-public interface Scaled<T extends Scaled<T, F>, F extends Scaled<F, ?>> extends
+public interface Scaled<T extends Scaled<T>> extends
 		Comparable<T>, Existential {
-
-	//
 
 	/**
 	 * a.k.a significand;
@@ -86,10 +84,10 @@ public interface Scaled<T extends Scaled<T, F>, F extends Scaled<F, ?>> extends
 	//
 
 	/** type safe multiply for T, F */
-	T mult(F factor) throws ArithmeticException;
+	T mult(Scaled<?> factor) throws ArithmeticException;
 
 	/** type safe division for T, F */
-	T div(F factor) throws ArithmeticException;
+	T div(Scaled<?> factor) throws ArithmeticException;
 
 	//
 
@@ -116,10 +114,6 @@ public interface Scaled<T extends Scaled<T, F>, F extends Scaled<F, ?>> extends
 	/** TODO */
 	boolean lessThan(T that);
 
-	//
-
-	/** Convert to another scaled type. */
-	<X extends Scaled<?, ?>> X asScaled();
 	
 	@Override
 	boolean isNull();

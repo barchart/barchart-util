@@ -7,9 +7,6 @@
  */
 package com.barchart.util.value.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.barchart.util.value.api.Decimal;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
@@ -22,8 +19,6 @@ import com.barchart.util.value.api.TimeInterval;
  * NOTE: this class is bundle-private in OSGI.
  */
 public final class ValueConst {
-
-	private static final Logger log = LoggerFactory.getLogger(ValueConst.class);
 
 	private ValueConst() {
 	}
@@ -59,8 +54,6 @@ public final class ValueConst {
 
 	public static final Size[] NULL_SIZE_ARRAY = new Size[0];
 
-	static {
-		// sizeReport(ValueConst.class);
-	}
+	
 
 }

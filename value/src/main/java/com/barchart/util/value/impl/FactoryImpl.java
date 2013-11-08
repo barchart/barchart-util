@@ -13,13 +13,8 @@ import com.barchart.util.value.api.TimeInterval;
  * Value factory implementation.
  */
 public class FactoryImpl implements Factory {
-
-	/**
-	 * Verify semantic version match outside OSGI.
-	 */
-	void assertVersion() {
-		// TODO
-	}
+	
+	public static final Factory factory = new FactoryImpl();
 
 	@Override
 	public Decimal newDecimal(final long mantissa, final int exponent) {

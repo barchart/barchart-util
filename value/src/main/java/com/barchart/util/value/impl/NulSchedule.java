@@ -1,6 +1,5 @@
 package com.barchart.util.value.impl;
 
-import com.barchart.util.value.api.Schedule;
 
 public class NulSchedule extends BaseSchedule {
 

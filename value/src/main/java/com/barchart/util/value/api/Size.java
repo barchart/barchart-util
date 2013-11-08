@@ -3,16 +3,17 @@ package com.barchart.util.value.api;
 import aQute.bnd.annotation.ProviderType;
 
 import com.barchart.util.anno.NotMutable;
+import com.barchart.util.value.impl.ValueConst;
 
 /**
  * Immutable size value.
  */
 @NotMutable
 @ProviderType
-public interface Size extends Scaled<Size, Decimal> {
+public interface Size extends Scaled<Size> {
 
 	/** Special size value @see {isNull} */
-	Size NULL = FactoryLoader.load().newSize(0, 0);
+	Size NULL = ValueConst.NULL_SIZE;
 	
 	@Override
 	long mantissa();
@@ -45,13 +46,13 @@ public interface Size extends Scaled<Size, Decimal> {
 	Size sub(long decrement);
 
 	@Override
-	Size mult(Decimal factor) throws ArithmeticException;
+	Size mult(Scaled<?> factor) throws ArithmeticException;
 
 	@Override
 	Size mult(long factor) throws ArithmeticException;
 
 	@Override
-	Size div(Decimal factor) throws ArithmeticException;
+	Size div(Scaled<?> factor) throws ArithmeticException;
 
 	@Override
 	Size div(long factor) throws ArithmeticException;
@@ -74,9 +75,6 @@ public interface Size extends Scaled<Size, Decimal> {
 	@Override
 	int hashCode();
 
-	@Override
-	<X extends Scaled<?, ?>> X asScaled();
-	
 	@Override
 	boolean isNull();
 

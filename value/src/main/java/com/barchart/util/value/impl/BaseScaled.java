@@ -16,8 +16,8 @@ import com.barchart.util.math.MathExtra;
 import com.barchart.util.value.api.Scaled;
 
 @NotMutable
-public abstract class BaseScaled<T extends Scaled<T, F>, F extends Scaled<F, F>>
-		implements Scaled<T, F> {
+public abstract class BaseScaled<T extends Scaled<T>>
+		implements Scaled<T> {
 
 	protected abstract T result(long mantissa, int exponent);
 
@@ -276,7 +276,7 @@ public abstract class BaseScaled<T extends Scaled<T, F>, F extends Scaled<F, F>>
 	}
 
 	@Override
-	public final T mult(final F that) throws ArithmeticException {
+	public final T mult(final Scaled<?> that) throws ArithmeticException {
 
 		final int e1 = this.exponent();
 		final int e2 = that.exponent();
@@ -289,7 +289,7 @@ public abstract class BaseScaled<T extends Scaled<T, F>, F extends Scaled<F, F>>
 	}
 
 	@Override
-	public final T div(final F that) throws ArithmeticException {
+	public final T div(final Scaled<?> that) throws ArithmeticException {
 
 		int e1 = this.exponent();
 		final int e2 = that.exponent();
@@ -403,13 +403,6 @@ public abstract class BaseScaled<T extends Scaled<T, F>, F extends Scaled<F, F>>
 		}
 		
 		return result;
-	}
-
-	/** Convert to another scaled type. */
-	@SuppressWarnings("unchecked")
-	@Override
-	public <X extends Scaled<?, ?>> X asScaled() {
-		return (X) this;
 	}
 
 }

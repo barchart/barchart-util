@@ -1,15 +1,14 @@
 package com.barchart.util.value.api;
 
+import com.barchart.util.value.impl.ValueConst;
+
 import aQute.bnd.annotation.ProviderType;
 
 @ProviderType
 public interface TimeInterval extends Existential {
 
 	/** Special time interval value @see {isNull} */
-	TimeInterval NULL = FactoryLoader.load().newTimeInterval(0, 0);
-	
-	// Name?
-	// TimeZone?
+	TimeInterval NULL = ValueConst.NULL_TIME_INTERVAL;
 	
 	Time start();
 

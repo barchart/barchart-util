@@ -3,6 +3,7 @@ package com.barchart.util.value.api;
 import aQute.bnd.annotation.ProviderType;
 
 import com.barchart.util.anno.NotMutable;
+import com.barchart.util.value.impl.ValueConst;
 
 /**
  * Immutable decimal value.
@@ -11,11 +12,11 @@ import com.barchart.util.anno.NotMutable;
  */
 @NotMutable
 @ProviderType
-public interface Decimal extends Scaled<Decimal, Decimal>, Existential {
+public interface Decimal extends Scaled<Decimal>, Existential {
 	
 	/** Special decimal value @see {isNull} */
-	Decimal NULL = FactoryLoader.load().newDecimal(0, 0);
-
+	Decimal NULL = ValueConst.NULL_DECIMAL;
+	
 	@Override
 	long mantissa();
 
@@ -47,13 +48,13 @@ public interface Decimal extends Scaled<Decimal, Decimal>, Existential {
 	Decimal sub(long decrement);
 
 	@Override
-	Decimal mult(Decimal factor) throws ArithmeticException;
+	Decimal mult(Scaled<?> factor) throws ArithmeticException;
 
 	@Override
 	Decimal mult(long factor) throws ArithmeticException;
 
 	@Override
-	Decimal div(Decimal factor) throws ArithmeticException;
+	Decimal div(Scaled<?> factor) throws ArithmeticException;
 
 	@Override
 	Decimal div(long factor) throws ArithmeticException;
@@ -76,9 +77,6 @@ public interface Decimal extends Scaled<Decimal, Decimal>, Existential {
 	@Override
 	int hashCode();
 
-	@Override
-	<X extends Scaled<?, ?>> X asScaled();
-	
 	@Override
 	boolean isNull();
 

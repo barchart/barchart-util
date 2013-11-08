@@ -14,13 +14,13 @@ public class NulTimeInterval implements TimeInterval {
 
 	@Override
 	public Time start() {
-		return ValueConst.NULL_TIME;
+		return Time.NULL;
 	}
 
 
 	@Override
 	public Time stop() {
-		return ValueConst.NULL_TIME;
+		return Time.NULL;
 	}
 
 

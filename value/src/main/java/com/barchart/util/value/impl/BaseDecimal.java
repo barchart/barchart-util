@@ -13,18 +13,13 @@ import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Decimal;
 
 @NotMutable
-abstract class BaseDecimal extends BaseScaled<Decimal, Decimal> implements
+abstract class BaseDecimal extends BaseScaled<Decimal> implements
 		Decimal {
 
 	@Override
 	protected Decimal result(final long mantissa, final int exponent) {
 		return newDecimal(mantissa, exponent);
 	}
-
-	// @Override
-	// public final boolean isNull() {
-	// return this == NULL_DECIMAL;
-	// }
 
 	@Override
 	public final boolean equals(final Object thatValue) {

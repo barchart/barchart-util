@@ -7,24 +7,18 @@
  */
 package com.barchart.util.value.impl;
 
-import static com.barchart.util.value.impl.ValueBuilder.*;
+import static com.barchart.util.value.impl.ValueBuilder.newPrice;
 
 import com.barchart.util.anno.NotMutable;
-import com.barchart.util.value.api.Decimal;
 import com.barchart.util.value.api.Price;
 
 @NotMutable
-abstract class BasePrice extends BaseScaled<Price, Decimal> implements Price {
+abstract class BasePrice extends BaseScaled<Price> implements Price {
 
 	@Override
 	protected Price result(final long mantissa, final int exponent) {
 		return newPrice(mantissa, exponent);
 	}
-
-	// @Override
-	// public final boolean isNull() {
-	// return this == NULL_PRICE;
-	// }
 
 	@Override
 	public final boolean equals(final Object thatValue) {
