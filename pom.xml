@@ -57,10 +57,8 @@ Layout Project.
 		<module>concurrent</module>
 		<module>observer</module>
 		<module>aws</module>
+		<module>value</module>
 		<module>test</module>
-
-		<module>value/api</module>
-		<module>value/impl</module>
 
 		<module>manifest</module>
 
