@@ -1,4 +1,4 @@
-package com.barchart.util.value.impl;
+package com.barchart.util.value;
 
 import com.barchart.util.value.api.Decimal;
 import com.barchart.util.value.api.Factory;
@@ -8,6 +8,8 @@ import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
+import com.barchart.util.value.impl.DefFraction;
+import com.barchart.util.value.impl.ValueBuilder;
 
 /**
  * Value factory implementation.
