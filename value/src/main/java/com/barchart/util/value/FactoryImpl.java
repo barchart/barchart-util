@@ -24,8 +24,8 @@ public class FactoryImpl implements Factory {
 	}
 
 	@Override
-	public Fraction newFraction(final int numerator, final int denominator) {
-		return new DefFraction(numerator, denominator);
+	public Fraction newFraction(final int base, final int exponent) {
+		return new DefFraction(base, exponent);
 	}
 
 	@Override
