@@ -3,7 +3,7 @@ package com.barchart.util.value.api;
 import aQute.bnd.annotation.ProviderType;
 
 import com.barchart.util.anno.NotMutable;
-import com.barchart.util.value.impl.ValueConst;
+import com.barchart.util.value.FactoryImpl;
 
 /**
  * Immutable size value.
@@ -13,7 +13,7 @@ import com.barchart.util.value.impl.ValueConst;
 public interface Size extends Scaled<Size> {
 
 	/** Special size value @see {isNull} */
-	Size NULL = ValueConst.NULL_SIZE;
+	Size NULL = new FactoryImpl().newSize(0, 0);
 	
 	@Override
 	long mantissa();

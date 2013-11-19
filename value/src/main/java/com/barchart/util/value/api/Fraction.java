@@ -1,12 +1,11 @@
 package com.barchart.util.value.api;
 
-import com.barchart.util.value.impl.ValueConst;
-
+import com.barchart.util.value.FactoryImpl;
 
 public interface Fraction extends Decimal, Existential {
 	
 	/** Special fraction value @see {isNull} */
-	Fraction NULL = ValueConst.NULL_FRACTION;
+	Fraction NULL = new FactoryImpl().newFraction(0, 1);
 
 	long base();
 

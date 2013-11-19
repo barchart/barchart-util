@@ -3,7 +3,7 @@ package com.barchart.util.value.api;
 import aQute.bnd.annotation.ProviderType;
 
 import com.barchart.util.anno.NotMutable;
-import com.barchart.util.value.impl.ValueConst;
+import com.barchart.util.value.FactoryImpl;
 
 /**
  * Immutable price value.
@@ -13,7 +13,7 @@ import com.barchart.util.value.impl.ValueConst;
 public interface Price extends Scaled<Price> {
 
 	/** Special price value @see {isNull} */
-	Price NULL = ValueConst.NULL_PRICE;
+	Price NULL = new FactoryImpl().newPrice(0,0);
 
 	@Override
 	long mantissa();

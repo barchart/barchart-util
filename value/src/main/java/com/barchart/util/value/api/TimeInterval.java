@@ -1,14 +1,14 @@
 package com.barchart.util.value.api;
 
-import com.barchart.util.value.impl.ValueConst;
-
 import aQute.bnd.annotation.ProviderType;
+
+import com.barchart.util.value.FactoryImpl;
 
 @ProviderType
 public interface TimeInterval extends Existential {
 
 	/** Special time interval value @see {isNull} */
-	TimeInterval NULL = ValueConst.NULL_TIME_INTERVAL;
+	TimeInterval NULL = new FactoryImpl().newTimeInterval(0, 0);
 	
 	Time start();
 

@@ -5,7 +5,7 @@ import java.util.TimeZone;
 import aQute.bnd.annotation.ProviderType;
 
 import com.barchart.util.anno.NotMutable;
-import com.barchart.util.value.impl.ValueConst;
+import com.barchart.util.value.FactoryImpl;
 
 /**
  * Time value.
@@ -27,7 +27,7 @@ import com.barchart.util.value.impl.ValueConst;
 public interface Time extends Comparable<Time>, Existential {
 
 	/** Special time value @see {isNull} */
-	Time NULL = ValueConst.NULL_TIME;
+	Time NULL = new FactoryImpl().newTime(0, "UTC");
 	
 	/**
 	 * Time zone ID form the TZ database.

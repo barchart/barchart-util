@@ -3,7 +3,7 @@ package com.barchart.util.value.api;
 import aQute.bnd.annotation.ProviderType;
 
 import com.barchart.util.anno.NotMutable;
-import com.barchart.util.value.impl.ValueConst;
+import com.barchart.util.value.FactoryImpl;
 
 /**
  * Immutable decimal value.
@@ -15,7 +15,7 @@ import com.barchart.util.value.impl.ValueConst;
 public interface Decimal extends Scaled<Decimal>, Existential {
 	
 	/** Special decimal value @see {isNull} */
-	Decimal NULL = ValueConst.NULL_DECIMAL;
+	Decimal NULL = new FactoryImpl().newDecimal(0, 0);
 	
 	@Override
 	long mantissa();
@@ -79,5 +79,5 @@ public interface Decimal extends Scaled<Decimal>, Existential {
 
 	@Override
 	boolean isNull();
-
+	
 }
