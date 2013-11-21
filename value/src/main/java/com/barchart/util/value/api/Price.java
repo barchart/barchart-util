@@ -14,6 +14,10 @@ public interface Price extends Scaled<Price> {
 
 	/** Special price value @see {isNull} */
 	Price NULL = new FactoryImpl().newPrice(0,0);
+	
+	Price ZERO = new FactoryImpl().newPrice(0,0);
+	
+	Price ONE = new FactoryImpl().newPrice(1,0);
 
 	@Override
 	long mantissa();

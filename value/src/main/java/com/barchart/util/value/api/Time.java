@@ -30,7 +30,7 @@ public interface Time extends Comparable<Time>, Existential {
 	Time NULL = new FactoryImpl().newTime(0, "UTC");
 	
 	/**
-	 * Time zone ID form the TZ database.
+	 * Time zone ID from the TZ database.
 	 * <p>
 	 * Compatible with both JDK and JodaTime.
 	 * <p>

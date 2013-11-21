@@ -15,6 +15,10 @@ public interface Size extends Scaled<Size> {
 	/** Special size value @see {isNull} */
 	Size NULL = new FactoryImpl().newSize(0, 0);
 	
+	Size ZERO = new FactoryImpl().newSize(0, 0);
+	
+	Size ONE = new FactoryImpl().newSize(1, 0);
+	
 	@Override
 	long mantissa();
 
