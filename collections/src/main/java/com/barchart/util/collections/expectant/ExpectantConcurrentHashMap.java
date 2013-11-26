@@ -1,16 +1,16 @@
-package com.barchart.util.collections;
+package com.barchart.util.collections.expectant;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Hashmap superclass which throws IllegalStateException instead of returning
- * null for missing keys.
+ * ConcurrentHashmap superclass which throws IllegalStateException instead of 
+ * returning null for missing keys.
  *
  * @param <K> the type of keys maintained by this map
  * @param <V> the type of mapped values
  */
 @SuppressWarnings("serial")
-public class ExpectantHashMap<K, V> extends HashMap<K, V> {
+public class ExpectantConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 
 	@Override
 	public V get(Object key) {
