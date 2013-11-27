@@ -5,8 +5,6 @@ import java.lang.reflect.Array;
 /**
  * A fast array based bi-directional map between two sets of enums.
  * 
- * @author Gavin M Litchfield
- *
  * @param <K> 
  * @param <V>
  */

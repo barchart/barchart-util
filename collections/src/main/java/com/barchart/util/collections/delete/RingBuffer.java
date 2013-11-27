@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.util.collections;
+package com.barchart.util.collections.delete;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +14,7 @@ import java.util.Map;
  * http://en.wikipedia.org/wiki/Circular_buffer
  */
 
-public interface RingBuffer<V> {
+interface RingBuffer<V> {
 
 	/** count non null items */
 	int count();

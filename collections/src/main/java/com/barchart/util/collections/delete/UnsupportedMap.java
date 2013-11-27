@@ -5,13 +5,13 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.util.collections;
+package com.barchart.util.collections.delete;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-public class UnsupportedMap<K, V> implements Map<K, V> {
+class UnsupportedMap<K, V> implements Map<K, V> {
 
 	@Override
 	public void clear() {

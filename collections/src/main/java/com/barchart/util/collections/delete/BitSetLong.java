@@ -5,9 +5,9 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.util.collections;
+package com.barchart.util.collections.delete;
 
-public interface BitSetLong {
+interface BitSetLong {
 
 	// return only
 	long bitSet();

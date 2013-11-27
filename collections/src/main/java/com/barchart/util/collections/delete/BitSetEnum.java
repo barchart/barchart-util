@@ -5,10 +5,10 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.util.collections;
+package com.barchart.util.collections.delete;
 
 // enum represented as long bit set
-public interface BitSetEnum<E> {
+interface BitSetEnum<E> {
 
 	long NUL = 0L;
 

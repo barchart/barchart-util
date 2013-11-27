@@ -5,13 +5,14 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.util.collections;
+package com.barchart.util.collections.delete;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
+import java.util.ListIterator;
 
-public class UnsupportedSet<T> implements Set<T> {
+class UnsupportedList<T> implements List<T> {
 
 	@Override
 	public boolean add(T e) {
@@ -19,7 +20,17 @@ public class UnsupportedSet<T> implements Set<T> {
 	}
 
 	@Override
+	public void add(int index, T element) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public boolean addAll(Collection<? extends T> c) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean addAll(int index, Collection<? extends T> c) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -39,6 +50,16 @@ public class UnsupportedSet<T> implements Set<T> {
 	}
 
 	@Override
+	public T get(int index) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public int indexOf(Object o) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public boolean isEmpty() {
 		throw new UnsupportedOperationException();
 	}
@@ -49,7 +70,27 @@ public class UnsupportedSet<T> implements Set<T> {
 	}
 
 	@Override
+	public int lastIndexOf(Object o) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ListIterator<T> listIterator() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ListIterator<T> listIterator(int index) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public boolean remove(Object o) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public T remove(int index) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -64,7 +105,17 @@ public class UnsupportedSet<T> implements Set<T> {
 	}
 
 	@Override
+	public T set(int index, T element) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public int size() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public List<T> subList(int fromIndex, int toIndex) {
 		throw new UnsupportedOperationException();
 	}
 

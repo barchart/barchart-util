@@ -5,12 +5,12 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.util.collections;
+package com.barchart.util.collections.delete;
 
 import com.barchart.util.math.MathExtra;
 import com.barchart.util.values.lang.ScaledDecimal;
 
-public abstract class ScadecRingBufferBase<K extends ScaledDecimal<K, ?>, V>
+abstract class ScadecRingBufferBase<K extends ScaledDecimal<K, ?>, V>
 		extends RingBufferBase<V> implements ScadecRingBuffer<K, V> {
 
 	@Override

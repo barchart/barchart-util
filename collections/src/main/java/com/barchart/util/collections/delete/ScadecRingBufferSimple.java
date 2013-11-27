@@ -5,14 +5,31 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.util.collections;
+package com.barchart.util.collections.delete;
 
-import com.barchart.util.anno.NotThreadSafe;
+import com.barchart.util.values.lang.ScaledDecimal;
 
-@NotThreadSafe
-public class RingBufferSimple<V> extends RingBufferBase<V> {
+class ScadecRingBufferSimple<K extends ScaledDecimal<K, ?>, V> extends
+		ScadecRingBufferBase<K, V> {
+
+	@SuppressWarnings("unchecked")
+	public ScadecRingBufferSimple(final int size, final K keyStep) {
+		checkKeyStep(keyStep);
+		this.keyStep = keyStep;
+		if (size <= 0) {
+			throw new IllegalArgumentException("size <= 0");
+		}
+		this.array = (V[]) new Object[size];
+	}
 
 	protected final V[] array;
+
+	protected final K keyStep;
+
+	@Override
+	public K keyStep() {
+		return keyStep;
+	}
 
 	@Override
 	public final int length() {
@@ -27,14 +44,6 @@ public class RingBufferSimple<V> extends RingBufferBase<V> {
 	@Override
 	protected final void arraySet(final int clue, final V value) {
 		array[clue] = value;
-	}
-
-	@SuppressWarnings("unchecked")
-	public RingBufferSimple(final int size) {
-		if (size <= 0) {
-			throw new IllegalArgumentException("size <= 0");
-		}
-		this.array = (V[]) new Object[size];
 	}
 
 	@Override

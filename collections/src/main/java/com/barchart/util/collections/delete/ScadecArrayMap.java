@@ -5,13 +5,13 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.util.collections;
+package com.barchart.util.collections.delete;
 
 import java.util.Map;
 
 import com.barchart.util.values.lang.ScaledDecimal;
 
-public interface ScadecArrayMap<T extends ScaledDecimal<T, ?>, V>
+interface ScadecArrayMap<T extends ScaledDecimal<T, ?>, V>
 		extends Map<T, V> {
 
 	int limit();

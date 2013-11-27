@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.util.collections;
+package com.barchart.util.collections.delete;
 
 import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.values.lang.ScaledDecimal;
@@ -13,7 +13,7 @@ import com.barchart.util.values.lang.ScaledDecimal;
 // TODO implement LIMIT
 
 @NotThreadSafe
-public abstract class ScadecArrayMapWriteable<T extends ScaledDecimal<T, ?>, V>
+abstract class ScadecArrayMapWriteable<T extends ScaledDecimal<T, ?>, V>
 		extends ScadecArrayMapReadable<T, V> {
 
 	//

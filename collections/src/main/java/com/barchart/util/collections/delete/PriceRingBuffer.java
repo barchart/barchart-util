@@ -5,11 +5,11 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.util.collections;
+package com.barchart.util.collections.delete;
 
 import com.barchart.util.values.api.PriceValue;
 
-public class PriceRingBuffer<V> extends ScadecRingBufferSimple<PriceValue, V> {
+class PriceRingBuffer<V> extends ScadecRingBufferSimple<PriceValue, V> {
 
 	public PriceRingBuffer(final int size, final PriceValue keyStep) {
 		super(size, keyStep);

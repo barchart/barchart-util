@@ -5,11 +5,11 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.util.collections;
+package com.barchart.util.collections.delete;
 
 import com.barchart.util.values.lang.ScaledDecimal;
 
-public interface ScadecRingBuffer<K extends ScaledDecimal<K, ?>, V> extends
+interface ScadecRingBuffer<K extends ScaledDecimal<K, ?>, V> extends
 		RingBuffer<V> {
 
 	int index(K key) throws ArrayIndexOutOfBoundsException;

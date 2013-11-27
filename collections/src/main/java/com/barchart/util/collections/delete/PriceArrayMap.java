@@ -5,14 +5,14 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.util.collections;
+package com.barchart.util.collections.delete;
 
 import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.provider.ValueConst;
 
 @NotThreadSafe
-public class PriceArrayMap<V> extends ScadecArrayMapWriteable<PriceValue, V> {
+class PriceArrayMap<V> extends ScadecArrayMapWriteable<PriceValue, V> {
 
 	protected V[] valueArray;
 

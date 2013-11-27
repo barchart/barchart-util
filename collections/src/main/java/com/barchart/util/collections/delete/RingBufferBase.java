@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.util.collections;
+package com.barchart.util.collections.delete;
 
 import java.lang.reflect.Array;
 import java.util.HashMap;
@@ -50,7 +50,7 @@ import com.barchart.util.anno.NotThreadSafe;
  * 
  **/
 @NotThreadSafe
-public abstract class RingBufferBase<V> implements RingBuffer<V> {
+abstract class RingBufferBase<V> implements RingBuffer<V> {
 
 	//
 

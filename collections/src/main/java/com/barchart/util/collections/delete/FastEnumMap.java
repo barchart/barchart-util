@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.util.collections;
+package com.barchart.util.collections.delete;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,7 +20,7 @@ import com.barchart.util.thread.Runner;
 import com.barchart.util.thread.RunnerLoop;
 
 @NotThreadSafe
-public class FastEnumMap<K extends BitSetEnum<K>, V> extends FastEnumBase<K>
+class FastEnumMap<K extends BitSetEnum<K>, V> extends FastEnumBase<K>
 		implements RunnerLoop<Entry<K, V>>, Map<K, V> {
 
 	protected final FastEnumSet<K> enumSet = new FastEnumSet<K>(enumValues);

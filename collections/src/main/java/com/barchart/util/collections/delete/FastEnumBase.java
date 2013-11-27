@@ -5,7 +5,8 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.util.collections;
+package com.barchart.util.collections.delete;
+
 
 class FastEnumBase<T extends BitSetEnum<T>> {
 
