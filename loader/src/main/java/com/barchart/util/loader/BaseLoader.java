@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  * <li>user static provider
  * <li>java service loader
  */
-public abstract class BaseLoader<T> implements Producer<T> {
+abstract class BaseLoader<T> implements Producer<T> {
 
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 
