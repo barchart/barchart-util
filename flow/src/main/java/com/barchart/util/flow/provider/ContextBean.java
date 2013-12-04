@@ -87,7 +87,7 @@ class ContextBean<E extends Event<?>, S extends State<?>, A> implements
 	@Override
 	public void fire(final E event) {
 		internalEvent = event;
-		throw new RuntimeException("TODO");
+		flow.fire(event, this);
 	}
 
 	@Override
