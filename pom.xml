@@ -40,35 +40,9 @@ Layout Project.
 
 	<modules>
 
-		<module>archon</module>
-
-		<module>anno</module>
-		<module>json</module>
-		<module>ascii</module>
-		<module>bench</module>
-		<module>clone</module>
-		<module>enums</module>
-		<module>hocon</module>
-		<module>math</module>
-		<module>functional</module>
-		<module>thread</module>
-		<module>values</module>
-		<module>collections</module>
-		<module>concurrent</module>
-		<module>observer</module>
-		<module>aws</module>
+		<module>common</module>
 		<module>value</module>
 		<module>test</module>
-
-		<module>manifest</module>
-
-		<module>loader</module>
-
-		<module>flow</module>
-		
-		<module>jmx</module>
-
-		<module>crypto</module>
 
 	</modules>
 
