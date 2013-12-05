@@ -7,13 +7,9 @@
  */
 package com.barchart.util.value.impl;
 
-import com.barchart.util.anno.Mutable;
-import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.value.api.Decimal;
 
 // 24 bytes on 32 bit JVM
-@Mutable
-@NotThreadSafe
 final class VarDecimal extends BaseDecimal {
 
 	volatile long mantissa;

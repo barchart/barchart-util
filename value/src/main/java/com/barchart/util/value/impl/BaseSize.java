@@ -9,10 +9,8 @@ package com.barchart.util.value.impl;
 
 import static com.barchart.util.value.impl.ValueBuilder.newSize;
 
-import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Size;
 
-@NotMutable
 abstract class BaseSize extends BaseScaled<Size> implements Size {
 
 	@Override

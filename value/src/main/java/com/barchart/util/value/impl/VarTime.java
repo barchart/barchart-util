@@ -7,12 +7,8 @@
  */
 package com.barchart.util.value.impl;
 
-import com.barchart.util.anno.Mutable;
-import com.barchart.util.anno.NotThreadSafe;
 
 //16 bytes on 32 bit JVM
-@Mutable
-@NotThreadSafe
 final class VarTime extends BaseTime {
 
 	volatile long millisUTC;
@@ -25,15 +21,5 @@ final class VarTime extends BaseTime {
 	public final long millisecond() {
 		return millisUTC;
 	}
-
-	// @Override
-	// public final Time freeze() {
-	// return newTime(millisUTC);
-	// }
-
-	// @Override
-	// public final boolean isFrozen() {
-	// return false;
-	// }
 
 }

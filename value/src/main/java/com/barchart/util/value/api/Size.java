@@ -1,15 +1,10 @@
 package com.barchart.util.value.api;
 
-import aQute.bnd.annotation.ProviderType;
-
-import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.FactoryImpl;
 
 /**
  * Immutable size value.
  */
-@NotMutable
-@ProviderType
 public interface Size extends Scaled<Size> {
 
 	/** Special size value @see {isNull} */

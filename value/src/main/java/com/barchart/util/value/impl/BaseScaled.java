@@ -11,11 +11,8 @@ import static java.lang.Math.min;
 
 import java.math.BigDecimal;
 
-import com.barchart.util.anno.NotMutable;
-import com.barchart.util.math.MathExtra;
 import com.barchart.util.value.api.Scaled;
 
-@NotMutable
 public abstract class BaseScaled<T extends Scaled<T>>
 		implements Scaled<T> {
 

@@ -1,10 +1,7 @@
 package com.barchart.util.value.api;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.barchart.util.value.FactoryImpl;
 
-@ProviderType
 public interface TimeInterval extends Existential {
 
 	/** Special time interval value @see {isNull} */

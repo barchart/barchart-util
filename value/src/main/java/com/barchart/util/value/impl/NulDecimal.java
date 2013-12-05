@@ -9,11 +9,9 @@ package com.barchart.util.value.impl;
 
 import static com.barchart.util.value.impl.ValueBuilder.*;
 
-import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Decimal;
 
 // 8 bytes on 32 bit JVM
-@NotMutable
 final class NulDecimal extends BaseDecimal {
 
 	@Override

@@ -7,10 +7,8 @@
  */
 package com.barchart.util.value.impl;
 
-import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Time;
 
-@NotMutable
 abstract class BaseTime implements Time {
 
 	static final String UTC = "UTC".intern();

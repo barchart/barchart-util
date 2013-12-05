@@ -23,27 +23,6 @@
   	<dependencies>
   	
   		<dependency>
-  			<groupId>com.barchart.util</groupId>
-  			<artifactId>barchart-util-anno</artifactId>
-  			<version>[2.1-SNAPSHOT,3-SNAPSHOT)</version>
-  			<scope>provided</scope>
-  			<optional>true</optional>
-  		</dependency>
-  	
-  		<dependency>
-  			<groupId>com.barchart.util</groupId>
-  			<artifactId>barchart-util-math</artifactId>
-  			<version>[2-SNAPSHOT,3-SNAPSHOT)</version>
-  		</dependency>
-  		
-  		<dependency>
-  			<groupId>com.barchart.util</groupId>
-  			<artifactId>barchart-util-bench</artifactId>
-  			<version>[2-SNAPSHOT,3-SNAPSHOT)</version>
-  			<scope>test</scope>
-  		</dependency>
-  		
-  		<dependency>
   			<groupId>org.slf4j</groupId>
   			<artifactId>slf4j-api</artifactId>
   			<scope>provided</scope>

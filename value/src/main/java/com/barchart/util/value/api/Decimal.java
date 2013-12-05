@@ -1,8 +1,5 @@
 package com.barchart.util.value.api;
 
-import aQute.bnd.annotation.ProviderType;
-
-import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.FactoryImpl;
 
 /**
@@ -10,8 +7,6 @@ import com.barchart.util.value.FactoryImpl;
  * <p>
  * See <a href="http://en.wikipedia.org/wiki/Decimal">Decimal</a>
  */
-@NotMutable
-@ProviderType
 public interface Decimal extends Scaled<Decimal>, Existential {
 	
 	/** Special decimal value @see {isNull} */

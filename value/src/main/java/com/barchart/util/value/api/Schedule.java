@@ -4,9 +4,6 @@ import java.util.List;
 
 import com.barchart.util.value.FactoryImpl;
 
-import aQute.bnd.annotation.ProviderType;
-
-@ProviderType
 public interface Schedule extends List<TimeInterval>, Existential {
 	
 	/** Special schedule value @see {isNull} */

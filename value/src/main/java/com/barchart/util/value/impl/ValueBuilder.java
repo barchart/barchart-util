@@ -7,9 +7,6 @@
  */
 package com.barchart.util.value.impl;
 
-import com.barchart.util.math.DoubleParts;
-import com.barchart.util.math.MathExtra;
-import com.barchart.util.math.MathIEEE754;
 import com.barchart.util.value.api.Decimal;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;

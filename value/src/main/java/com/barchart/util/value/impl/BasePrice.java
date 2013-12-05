@@ -9,10 +9,8 @@ package com.barchart.util.value.impl;
 
 import static com.barchart.util.value.impl.ValueBuilder.newPrice;
 
-import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Price;
 
-@NotMutable
 abstract class BasePrice extends BaseScaled<Price> implements Price {
 
 	@Override

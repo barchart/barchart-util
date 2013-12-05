@@ -7,9 +7,6 @@
  */
 package com.barchart.util.value.impl;
 
-import com.barchart.util.anno.NotMutable;
-
-@NotMutable
 final class DefDecimal extends BaseDecimal {
 
 	final long mantissa;

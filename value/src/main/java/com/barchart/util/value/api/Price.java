@@ -1,15 +1,10 @@
 package com.barchart.util.value.api;
 
-import aQute.bnd.annotation.ProviderType;
-
-import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.FactoryImpl;
 
 /**
  * Immutable price value.
  */
-@NotMutable
-@ProviderType
 public interface Price extends Scaled<Price> {
 
 	/** Special price value @see {isNull} */

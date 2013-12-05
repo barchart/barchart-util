@@ -7,8 +7,6 @@
  */
 package com.barchart.util.value.api;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Represents type safe base 10 floating point
  * <p>
@@ -20,7 +18,6 @@ import aQute.bnd.annotation.ProviderType;
  * @param F
  *            - Permitted factor type.
  */
-@ProviderType
 public interface Scaled<T extends Scaled<T>> extends
 		Comparable<T>, Existential {
 

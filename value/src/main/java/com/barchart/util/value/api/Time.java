@@ -2,9 +2,6 @@ package com.barchart.util.value.api;
 
 import java.util.TimeZone;
 
-import aQute.bnd.annotation.ProviderType;
-
-import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.FactoryImpl;
 
 /**
@@ -22,8 +19,6 @@ import com.barchart.util.value.FactoryImpl;
  * "http://www.oracle.com/technetwork/java/javase/tzupdater-readme-136440.html"
  * >JDK updater</a>
  */
-@NotMutable
-@ProviderType
 public interface Time extends Comparable<Time>, Existential {
 
 	/** Special time value @see {isNull} */

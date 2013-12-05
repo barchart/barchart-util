@@ -9,10 +9,8 @@ package com.barchart.util.value.impl;
 
 import static com.barchart.util.value.impl.ValueBuilder.*;
 
-import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Decimal;
 
-@NotMutable
 abstract class BaseDecimal extends BaseScaled<Decimal> implements
 		Decimal {
 

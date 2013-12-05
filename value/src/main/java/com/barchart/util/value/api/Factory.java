@@ -1,14 +1,11 @@
 package com.barchart.util.value.api;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Value factory.
  * <p>
  * Use {@link FactoryLoader} to load instance from provider.
  */
 // NOTE: Update implementation META-INF/service when moving this class.
-@ProviderType
 public interface Factory {
 
 	Decimal newDecimal(long mantissa, int exponent);

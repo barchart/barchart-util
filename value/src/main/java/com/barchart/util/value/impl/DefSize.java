@@ -7,10 +7,7 @@
  */
 package com.barchart.util.value.impl;
 
-import com.barchart.util.anno.NotMutable;
-
 //XXX bytes on 32 bit JVM
-@NotMutable
 final class DefSize extends BaseSize {
 
 	final long mantissa;

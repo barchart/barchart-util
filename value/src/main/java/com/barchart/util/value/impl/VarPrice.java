@@ -7,13 +7,9 @@
  */
 package com.barchart.util.value.impl;
 
-import com.barchart.util.anno.Mutable;
-import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.value.api.Price;
 
 // 24 bytes on 32 bit JVM
-@Mutable
-@NotThreadSafe
 final class VarPrice extends BasePrice {
 
 	private volatile long mantissa;

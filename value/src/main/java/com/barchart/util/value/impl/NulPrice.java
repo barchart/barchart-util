@@ -9,11 +9,9 @@ package com.barchart.util.value.impl;
 
 import static com.barchart.util.value.impl.ValueBuilder.*;
 
-import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Price;
 
 // 8 bytes on 32 bit JVM
-@NotMutable
 final class NulPrice extends BasePrice {
 
 	@Override
