@@ -9,8 +9,8 @@
 	</parent>
   
   	<groupId>com.barchart.util</groupId>
-  	<artifactId>barchart-util-common</artifactId>
-  	<version>1.0.3-SNAPSHOT</version>
+  	<artifactId>barchart-util-flow</artifactId>
+  	<version>1.0.1-SNAPSHOT</version>
   	<packaging>bundle</packaging>
   	
   	<scm>
@@ -21,12 +21,6 @@
   	</scm>
   	
   	<dependencies>
-  	
-  		<dependency>
-			 <groupId>com.typesafe</groupId>
-			 <artifactId>config</artifactId>
-			 <scope>provided</scope>
-		 </dependency>
   	
   		<!-- Logging framework. -->
 		<dependency>
