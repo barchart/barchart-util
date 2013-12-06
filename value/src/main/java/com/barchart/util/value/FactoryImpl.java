@@ -34,6 +34,11 @@ public class FactoryImpl implements Factory {
 	}
 
 	@Override
+	public Price newPrice(double price) {
+		return ValueBuilder.newPrice(price);
+	}
+	
+	@Override
 	public Schedule newSchedule(final TimeInterval[] intervals) {
 		return ValueBuilder.newSchedule(intervals);
 	}
@@ -46,6 +51,11 @@ public class FactoryImpl implements Factory {
 	@Override
 	public Time newTime(final long millisecond, final String zone) {
 		return ValueBuilder.newTime(millisecond);
+	}
+	
+	@Override
+	public Time newTime(long millisecond) {
+		return newTime(millisecond, "UTC");
 	}
 
 	@Override
