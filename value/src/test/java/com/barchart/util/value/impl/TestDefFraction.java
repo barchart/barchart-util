@@ -5,14 +5,14 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.barchart.util.value.FactoryImpl;
-import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.ValueFactoryImpl;
+import com.barchart.util.value.api.ValueFactory;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 
 public class TestDefFraction {
 
-	public static Factory vals = new FactoryImpl();
+	public static ValueFactory vals = new ValueFactoryImpl();
 	
 	public static Fraction BIN_Z00 = vals.newFraction(2, 0);
 	public static Fraction BIN_N01 = vals.newFraction(2, -1);

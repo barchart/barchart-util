@@ -1,6 +1,4 @@
-package com.barchart.util.value.api.identifier;
-
-import com.barchart.util.value.api.Existential;
+package com.barchart.util.common.identifier;
 
 public abstract class Identifier<V extends Comparable<V>, T extends Identifier<V,T>> 
 		implements Comparable<T>, Existential {

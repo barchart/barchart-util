@@ -1,7 +1,7 @@
 package com.barchart.util.value;
 
 import com.barchart.util.value.api.Decimal;
-import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.api.ValueFactory;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
@@ -14,9 +14,9 @@ import com.barchart.util.value.impl.ValueBuilder;
 /**
  * Value factory implementation.
  */
-public class FactoryImpl implements Factory {
+public class ValueFactoryImpl implements ValueFactory {
 	
-	public static final Factory factory = new FactoryImpl();
+	public static final ValueFactory factory = new ValueFactoryImpl();
 
 	@Override
 	public Decimal newDecimal(final long mantissa, final int exponent) {

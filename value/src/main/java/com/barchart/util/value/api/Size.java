@@ -1,6 +1,6 @@
 package com.barchart.util.value.api;
 
-import com.barchart.util.value.FactoryImpl;
+import com.barchart.util.value.ValueFactoryImpl;
 
 /**
  * Immutable size value.
@@ -8,11 +8,11 @@ import com.barchart.util.value.FactoryImpl;
 public interface Size extends Scaled<Size> {
 
 	/** Special size value @see {isNull} */
-	Size NULL = new FactoryImpl().newSize(0, 0);
+	Size NULL = new ValueFactoryImpl().newSize(0, 0);
 	
-	Size ZERO = new FactoryImpl().newSize(0, 0);
+	Size ZERO = new ValueFactoryImpl().newSize(0, 0);
 	
-	Size ONE = new FactoryImpl().newSize(1, 0);
+	Size ONE = new ValueFactoryImpl().newSize(1, 0);
 	
 	@Override
 	long mantissa();

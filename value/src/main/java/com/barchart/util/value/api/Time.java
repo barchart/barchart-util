@@ -2,7 +2,7 @@ package com.barchart.util.value.api;
 
 import java.util.TimeZone;
 
-import com.barchart.util.value.FactoryImpl;
+import com.barchart.util.value.ValueFactoryImpl;
 
 /**
  * Time value.
@@ -22,7 +22,7 @@ import com.barchart.util.value.FactoryImpl;
 public interface Time extends Comparable<Time>, Existential {
 
 	/** Special time value @see {isNull} */
-	Time NULL = new FactoryImpl().newTime(0, "UTC");
+	Time NULL = new ValueFactoryImpl().newTime(0, "UTC");
 	
 	/**
 	 * Time zone ID from the TZ database.

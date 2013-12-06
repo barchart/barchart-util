@@ -1,6 +1,6 @@
 package com.barchart.util.value.api;
 
-import com.barchart.util.value.FactoryImpl;
+import com.barchart.util.value.ValueFactoryImpl;
 
 /**
  * Immutable decimal value.
@@ -10,7 +10,7 @@ import com.barchart.util.value.FactoryImpl;
 public interface Decimal extends Scaled<Decimal>, Existential {
 	
 	/** Special decimal value @see {isNull} */
-	Decimal NULL = new FactoryImpl().newDecimal(0, 0);
+	Decimal NULL = new ValueFactoryImpl().newDecimal(0, 0);
 	
 	@Override
 	long mantissa();

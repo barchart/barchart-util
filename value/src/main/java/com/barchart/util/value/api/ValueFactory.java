@@ -6,7 +6,7 @@ package com.barchart.util.value.api;
  * Use {@link FactoryLoader} to load instance from provider.
  */
 // NOTE: Update implementation META-INF/service when moving this class.
-public interface Factory {
+public interface ValueFactory {
 
 	Decimal newDecimal(long mantissa, int exponent);
 

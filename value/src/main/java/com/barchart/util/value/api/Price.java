@@ -1,6 +1,6 @@
 package com.barchart.util.value.api;
 
-import com.barchart.util.value.FactoryImpl;
+import com.barchart.util.value.ValueFactoryImpl;
 
 /**
  * Immutable price value.
@@ -8,11 +8,11 @@ import com.barchart.util.value.FactoryImpl;
 public interface Price extends Scaled<Price> {
 
 	/** Special price value @see {isNull} */
-	Price NULL = new FactoryImpl().newPrice(0,0);
+	Price NULL = new ValueFactoryImpl().newPrice(0,0);
 	
-	Price ZERO = new FactoryImpl().newPrice(0,0);
+	Price ZERO = new ValueFactoryImpl().newPrice(0,0);
 	
-	Price ONE = new FactoryImpl().newPrice(1,0);
+	Price ONE = new ValueFactoryImpl().newPrice(1,0);
 
 	@Override
 	long mantissa();
