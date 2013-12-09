@@ -1,7 +1,7 @@
 package com.barchart.util.common.identifier;
 
 public abstract class Identifier<V extends Comparable<V>, T extends Identifier<V,T>> 
-		implements Comparable<T>, Existential {
+		implements Comparable<T> {
 	
 	private final V id;
 	private final Class<T> clazz;
@@ -23,17 +23,16 @@ public abstract class Identifier<V extends Comparable<V>, T extends Identifier<V
 	public V id() {
 		return id;
 	}
+	
+	public boolean isNull() {
+		return false;
+	}
 		
 	@Override
 	public int compareTo(final T o) {
 		return id.compareTo(o.id());
 	}
 
-	@Override
-	public boolean isNull() {
-		return false;
-	}
-	
 	@Override
 	public int hashCode() {
 		return id.hashCode();
