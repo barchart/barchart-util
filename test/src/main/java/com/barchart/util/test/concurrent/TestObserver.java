@@ -19,6 +19,7 @@ public class TestObserver<T> implements Observer<T> {
 
 	@Override
 	public void onError(final Throwable error_) {
+		error_.printStackTrace();
 		completed = true;
 		error = error_;
 	}
@@ -44,6 +45,21 @@ public class TestObserver<T> implements Observer<T> {
 					return completed;
 				}
 			}, 5000);
+		}
+
+		return this;
+
+	}
+	
+	public TestObserver<T> sync(final int waitTime) throws Exception {
+
+		if (!completed) {
+			CallableTest.waitFor(new Callable<Boolean>() {
+				@Override
+				public Boolean call() throws Exception {
+					return completed;
+				}
+			}, waitTime);
 		}
 
 		return this;
