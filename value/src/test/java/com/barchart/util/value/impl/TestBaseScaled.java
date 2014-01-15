@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import com.barchart.util.value.api.Decimal;
 import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
 
 public class TestBaseScaled {
 	
@@ -152,6 +153,29 @@ public class TestBaseScaled {
 		assertFalse(p1.equals(p2));
 		assertFalse(p2.compareTo(p1) > 0);
 		assertTrue(p1.compareTo(p2) > 0);
+		
+	}
+	
+	@Test
+	public void testAbs() {
+		
+		Decimal d = ValueBuilder.newDecimal(1, 0);
+		assertTrue(d.equals(d.abs()));
+		
+		Decimal d2 = ValueBuilder.newDecimal(-1, 0);
+		assertTrue(d.equals(d2.abs()));
+		
+		Price p1 = ValueBuilder.newPrice(1, 0);
+		assertTrue(p1.equals(p1.abs()));
+		
+		Price p2 = ValueBuilder.newPrice(-1, 0);
+		assertTrue(p1.equals(p2.abs()));
+		
+		Size s1 = ValueBuilder.newSize(1, 0);
+		assertTrue(s1.equals(s1.abs()));
+		
+		Size s2 = ValueBuilder.newSize(-1, 0);
+		assertTrue(s1.equals(s2.abs()));
 		
 	}
 	

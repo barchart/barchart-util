@@ -33,6 +33,9 @@ public interface Size extends Scaled<Size> {
 	Size neg();
 
 	@Override
+	Size abs();
+	
+	@Override
 	Size add(Size that) throws ArithmeticException;
 
 	@Override

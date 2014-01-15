@@ -29,6 +29,9 @@ public interface Decimal extends Scaled<Decimal>, Existential {
 
 	@Override
 	Decimal neg();
+	
+	@Override
+	Decimal abs();
 
 	@Override
 	Decimal add(Decimal that) throws ArithmeticException;

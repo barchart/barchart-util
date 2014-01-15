@@ -53,6 +53,9 @@ public interface Scaled<T extends Scaled<T>> extends
 
 	/** change sign */
 	T neg();
+	
+	/** absolute value */
+	T abs();
 
 	//
 
@@ -85,7 +88,7 @@ public interface Scaled<T extends Scaled<T>> extends
 
 	/** type safe division for T, F */
 	T div(Scaled<?> factor) throws ArithmeticException;
-
+	
 	//
 
 	/** can be used for sorting */

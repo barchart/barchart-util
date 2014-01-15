@@ -101,7 +101,7 @@ public class DefFraction extends BaseDecimal implements Fraction {
 			exponent++;
 		}
 
-		mantissa = abs(mantissa);
+		mantissa = Math.abs(mantissa);
 		mantissa %= decimalDenominator;
 		mantissa *= denominator;
 		mantissa /= decimalDenominator;

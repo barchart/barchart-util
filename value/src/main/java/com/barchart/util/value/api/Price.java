@@ -31,6 +31,9 @@ public interface Price extends Scaled<Price> {
 
 	@Override
 	Price neg();
+	
+	@Override
+	Price abs();
 
 	@Override
 	Price add(Price that) throws ArithmeticException;

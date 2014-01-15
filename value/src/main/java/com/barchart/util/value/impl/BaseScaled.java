@@ -261,6 +261,11 @@ public abstract class BaseScaled<T extends Scaled<T>>
 	public final T neg() {
 		return result(-mantissa(), exponent());
 	}
+	
+	@Override
+	public final T abs() {
+		return result(Math.abs(mantissa()), exponent());
+	}
 
 	@Override
 	public final boolean equalsScale(final T that) {
