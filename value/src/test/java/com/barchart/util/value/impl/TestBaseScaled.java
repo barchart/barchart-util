@@ -165,16 +165,16 @@ public class TestBaseScaled {
 		Decimal d2 = ValueBuilder.newDecimal(-1, 0);
 		assertTrue(d.equals(d2.abs()));
 		
-		Price p1 = ValueBuilder.newPrice(1, 0);
+		Price p1 = ValueBuilder.newPrice(5, 1);
 		assertTrue(p1.equals(p1.abs()));
 		
-		Price p2 = ValueBuilder.newPrice(-1, 0);
+		Price p2 = ValueBuilder.newPrice(-5, 1);
 		assertTrue(p1.equals(p2.abs()));
 		
-		Size s1 = ValueBuilder.newSize(1, 0);
+		Size s1 = ValueBuilder.newSize(11, -1);
 		assertTrue(s1.equals(s1.abs()));
 		
-		Size s2 = ValueBuilder.newSize(-1, 0);
+		Size s2 = ValueBuilder.newSize(-11, -1);
 		assertTrue(s1.equals(s2.abs()));
 		
 	}
