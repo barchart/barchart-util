@@ -1,13 +1,14 @@
 package com.barchart.util.value;
 
+import com.barchart.util.value.api.Bool;
 import com.barchart.util.value.api.Decimal;
-import com.barchart.util.value.api.ValueFactory;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
+import com.barchart.util.value.api.ValueFactory;
 import com.barchart.util.value.impl.DefFraction;
 import com.barchart.util.value.impl.ValueBuilder;
 
@@ -62,6 +63,11 @@ public class ValueFactoryImpl implements ValueFactory {
 	public TimeInterval newTimeInterval(final long beginMill, final long endMill) {
 		return ValueBuilder.newTimeInterval(ValueBuilder.newTime(beginMill),
 				ValueBuilder.newTime(endMill));
+	}
+
+	@Override
+	public Bool newBoolean(boolean value) {
+		return ValueBuilder.newBoolean(value);
 	}
 
 }

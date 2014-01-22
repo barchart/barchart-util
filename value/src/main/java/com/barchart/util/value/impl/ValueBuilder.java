@@ -7,6 +7,7 @@
  */
 package com.barchart.util.value.impl;
 
+import com.barchart.util.value.api.Bool;
 import com.barchart.util.value.api.Decimal;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
@@ -170,6 +171,10 @@ public final class ValueBuilder {
 
 	public static Schedule newSchedule(final TimeInterval[] intervals) {
 		return new BaseSchedule(intervals);
+	}
+
+	public static Bool newBoolean(final boolean value) {
+		return new DefBool(value);
 	}
 
 }

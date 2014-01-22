@@ -31,4 +31,6 @@ public interface ValueFactory {
 
 	Schedule newSchedule(TimeInterval[] intervals);
 
+	Bool newBoolean(boolean value);
+
 }
