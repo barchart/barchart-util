@@ -52,6 +52,7 @@ public class ASCII {
 	public static final byte EQUAL = '=';
 	public static final byte COLON = ':';
 	public static final byte PERCENT = '%';
+	public static final byte SLASH = '/';
 
 	public static final String STRING_DOT = ".";
 	public static final String STRING_EMPTY = "";
@@ -154,21 +155,21 @@ public class ASCII {
 		;
 		public final byte code;
 
-		Hex(char code) {
+		Hex(final char code) {
 			this.code = (byte) code;
 		}
 	}
 
 	final static Hex[] hexValues = Hex.values();
 
-	public static final String toHexString(byte[] array) {
+	public static final String toHexString(final byte[] array) {
 		final int size = array.length;
 		final byte[] hexArray = new byte[size * 2];
 		int i = 0;
 		for (int k = 0; k < size; k++) {
-			byte value = array[k];
-			byte hex0 = (byte) ((value & 0xF0) >>> 4);
-			byte hex1 = (byte) ((value & 0x0F));
+			final byte value = array[k];
+			final byte hex0 = (byte) ((value & 0xF0) >>> 4);
+			final byte hex1 = (byte) ((value & 0x0F));
 			hexArray[i++] = hexValues[hex0].code;
 			hexArray[i++] = hexValues[hex1].code;
 		}
