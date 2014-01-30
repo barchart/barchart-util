@@ -1,5 +1,6 @@
 package com.barchart.util.value.api;
 
+import java.util.Date;
 import java.util.TimeZone;
 
 import com.barchart.util.value.ValueFactoryImpl;
@@ -21,9 +22,7 @@ import com.barchart.util.value.ValueFactoryImpl;
  */
 public interface Time extends Comparable<Time>, Existential {
 
-	/** Special time value @see {isNull} */
-	Time NULL = new ValueFactoryImpl().newTime(0, "UTC");
-	
+
 	/**
 	 * Time zone ID from the TZ database.
 	 * <p>
@@ -66,4 +65,7 @@ public interface Time extends Comparable<Time>, Existential {
 	@Override
 	boolean isNull();
 	
+	/** Special time value @see {isNull} */
+	Time NULL = new ValueFactoryImpl().newTime(0, "UTC");
+
 }

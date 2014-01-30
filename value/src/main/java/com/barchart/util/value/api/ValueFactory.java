@@ -16,7 +16,7 @@ public interface ValueFactory {
 
 	Size newSize(long mantissa, int exponent);
 
-	Fraction newFraction(int numerator, int denominator);
+	Fraction newFraction(int base, int exponent);
 
 	Time newTime(long millisecond, String zone);
 	
