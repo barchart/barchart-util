@@ -7,15 +7,13 @@
  */
 package com.barchart.util.value.impl;
 
-import static com.barchart.util.value.impl.ValueBuilder.newSize;
-
 import com.barchart.util.value.api.Size;
 
 abstract class BaseSize extends BaseScaled<Size> implements Size {
 
 	@Override
 	protected Size result(final long mantissa, final int exponent) {
-		return newSize(mantissa, exponent);
+		return vals.newSize(mantissa, exponent);
 	}
 
 	@Override

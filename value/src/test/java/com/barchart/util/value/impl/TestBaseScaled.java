@@ -1,28 +1,33 @@
 package com.barchart.util.value.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Decimal;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.ValueFactory;
 
 public class TestBaseScaled {
 	
+	public static final ValueFactory vals = new ValueFactoryImpl();
+
 	private static final long TIMEOUT_MILLIS = 250;
 	
 	@Test(timeout = TIMEOUT_MILLIS)
 	public void testDiv() {
-		Price price = ValueConst.ZERO_PRICE;
+		Price price = Price.ZERO;
 		price.div(25);
 	}
 	
 	@Test(timeout = TIMEOUT_MILLIS)
 	public void testScaledDiv() {
 
-		Price price = ValueConst.ZERO_PRICE;
-		Decimal denom = ValueBuilder.newDecimal(1, 0);
+		Price price = Price.ZERO;
+		Decimal denom = vals.newDecimal(1, 0);
 		price.div(denom);
 		
 	}
@@ -30,21 +35,21 @@ public class TestBaseScaled {
 	@Test(timeout = TIMEOUT_MILLIS)
 	public void testAddLong() {
 		
-		Decimal answer = ValueBuilder.newDecimal(2, 0);
-		Decimal decimal = ValueBuilder.newDecimalMutable(1, 0);
-		decimal.add(1);
+		Decimal answer = vals.newDecimal(2, 0);
+		Decimal decimal = vals.newDecimal(1, 0);
+		decimal = decimal.add(1);
 		
 		assertTrue(decimal.equals(answer));
 
-		answer = ValueBuilder.newDecimal(11, -1);
-		decimal = ValueBuilder.newDecimalMutable(1, -1);
-		decimal.add(1);
+		answer = vals.newDecimal(11, -1);
+		decimal = vals.newDecimal(1, -1);
+		decimal = decimal.add(1);
 		
 		assertTrue(decimal.equals(answer));
 		
-		answer = ValueBuilder.newDecimal(11, 0);
-		decimal = ValueBuilder.newDecimalMutable(1, 1);
-		decimal.add(1);
+		answer = vals.newDecimal(11, 0);
+		decimal = vals.newDecimal(1, 1);
+		decimal = decimal.add(1);
 		
 		assertTrue(decimal.equals(answer));
 		
@@ -53,22 +58,22 @@ public class TestBaseScaled {
 	@Test(timeout = TIMEOUT_MILLIS)
 	public void testSubLong() {
 		
-		Decimal answer = ValueBuilder.newDecimal(1, 0);
-		Decimal decimal = ValueBuilder.newDecimalMutable(2, 0);
-		decimal.sub(1);
+		Decimal answer = vals.newDecimal(1, 0);
+		Decimal decimal = vals.newDecimal(2, 0);
+		decimal = decimal.sub(1);
 		
 		assertTrue(decimal.equals(answer));
 		
-		answer = ValueBuilder.newDecimal(-9, -1);
-		decimal = ValueBuilder.newDecimalMutable(1, -1);
+		answer = vals.newDecimal(-9, -1);
+		decimal = vals.newDecimal(1, -1);
 		
-		decimal.sub(1);
+		decimal = decimal.sub(1);
 		
 		assertTrue(decimal.equals(answer));
 		
-		answer = ValueBuilder.newDecimal(9, 0);
-		decimal = ValueBuilder.newDecimalMutable(1, 1);
-		decimal.sub(1);
+		answer = vals.newDecimal(9, 0);
+		decimal = vals.newDecimal(1, 1);
+		decimal = decimal.sub(1);
 		
 		assertTrue(decimal.equals(answer));
 		
@@ -78,24 +83,24 @@ public class TestBaseScaled {
 	public void testGreaterThan() {
 		
 		/* Not equals */
-		Decimal bigger = ValueBuilder.newDecimal(1, 0);
-		Decimal smaller = ValueBuilder.newDecimal(1, 0);
+		Decimal bigger = vals.newDecimal(1, 0);
+		Decimal smaller = vals.newDecimal(1, 0);
 		assertFalse(bigger.greaterThan(smaller));
 		
-		bigger = ValueBuilder.newDecimal(1, 0);
-		smaller = ValueBuilder.newDecimal(0, 0);
+		bigger = vals.newDecimal(1, 0);
+		smaller = vals.newDecimal(0, 0);
 		assertTrue(bigger.greaterThan(smaller));
 		
-		bigger = ValueBuilder.newDecimal(1, 0);
-		smaller = ValueBuilder.newDecimal(5, -1);
+		bigger = vals.newDecimal(1, 0);
+		smaller = vals.newDecimal(5, -1);
 		assertTrue(bigger.greaterThan(smaller));
 		
-		bigger = ValueBuilder.newDecimal(0, 0);
-		smaller = ValueBuilder.newDecimal(-1, 0);
+		bigger = vals.newDecimal(0, 0);
+		smaller = vals.newDecimal(-1, 0);
 		assertTrue(bigger.greaterThan(smaller));
 
-		bigger = ValueBuilder.newDecimal(-5, -1);
-		smaller = ValueBuilder.newDecimal(-1, 0);
+		bigger = vals.newDecimal(-5, -1);
+		smaller = vals.newDecimal(-1, 0);
 		assertTrue(bigger.greaterThan(smaller));
 		
 	}
@@ -104,24 +109,24 @@ public class TestBaseScaled {
 	public void testLessThan() {
 		
 		/* Not equals */
-		Decimal bigger = ValueBuilder.newDecimal(1, 0);
-		Decimal smaller = ValueBuilder.newDecimal(1, 0);
+		Decimal bigger = vals.newDecimal(1, 0);
+		Decimal smaller = vals.newDecimal(1, 0);
 		assertFalse(smaller.lessThan(bigger));
 		
-		bigger = ValueBuilder.newDecimal(1, 0);
-		smaller = ValueBuilder.newDecimal(0, 0);
+		bigger = vals.newDecimal(1, 0);
+		smaller = vals.newDecimal(0, 0);
 		assertTrue(smaller.lessThan(bigger));
 		
-		bigger = ValueBuilder.newDecimal(1, 0);
-		smaller = ValueBuilder.newDecimal(5, -1);
+		bigger = vals.newDecimal(1, 0);
+		smaller = vals.newDecimal(5, -1);
 		assertTrue(smaller.lessThan(bigger));
 		
-		bigger = ValueBuilder.newDecimal(0, 0);
-		smaller = ValueBuilder.newDecimal(-1, 0);
+		bigger = vals.newDecimal(0, 0);
+		smaller = vals.newDecimal(-1, 0);
 		assertTrue(smaller.lessThan(bigger));
 
-		bigger = ValueBuilder.newDecimal(-5, -1);
-		smaller = ValueBuilder.newDecimal(-1, 0);
+		bigger = vals.newDecimal(-5, -1);
+		smaller = vals.newDecimal(-1, 0);
 		assertTrue(smaller.lessThan(bigger));
 		
 	}
@@ -129,7 +134,7 @@ public class TestBaseScaled {
 	@Test(timeout = TIMEOUT_MILLIS)
 	public void testAsDouble() {
 		
-		Price price = ValueBuilder.newPriceMutable(-111, -1);
+		Price price = vals.newPrice(-111, -1);
 		
 		double doubFromString = Double.parseDouble(price.toString());
 		
@@ -140,15 +145,15 @@ public class TestBaseScaled {
 	@Test
 	public void testCompareTo() {
 		
-		Price p1 = ValueBuilder.newPrice(35, 0);
-		Price p2 = ValueBuilder.newPrice(3, 1);
+		Price p1 = vals.newPrice(35, 0);
+		Price p2 = vals.newPrice(3, 1);
 		
 		assertFalse(p1.equals(p2));
 		assertFalse(p2.compareTo(p1) > 0);
 		assertTrue(p1.compareTo(p2) > 0);
 		
-		p1 = ValueBuilder.newPrice(35, -1);
-		p2 = ValueBuilder.newPrice(3, 0);
+		p1 = vals.newPrice(35, -1);
+		p2 = vals.newPrice(3, 0);
 		
 		assertFalse(p1.equals(p2));
 		assertFalse(p2.compareTo(p1) > 0);
@@ -159,22 +164,22 @@ public class TestBaseScaled {
 	@Test
 	public void testAbs() {
 		
-		Decimal d = ValueBuilder.newDecimal(1, 0);
+		Decimal d = vals.newDecimal(1, 0);
 		assertTrue(d.equals(d.abs()));
 		
-		Decimal d2 = ValueBuilder.newDecimal(-1, 0);
+		Decimal d2 = vals.newDecimal(-1, 0);
 		assertTrue(d.equals(d2.abs()));
 		
-		Price p1 = ValueBuilder.newPrice(5, 1);
+		Price p1 = vals.newPrice(5, 1);
 		assertTrue(p1.equals(p1.abs()));
 		
-		Price p2 = ValueBuilder.newPrice(-5, 1);
+		Price p2 = vals.newPrice(-5, 1);
 		assertTrue(p1.equals(p2.abs()));
 		
-		Size s1 = ValueBuilder.newSize(11, -1);
+		Size s1 = vals.newSize(11, -1);
 		assertTrue(s1.equals(s1.abs()));
 		
-		Size s2 = ValueBuilder.newSize(-11, -1);
+		Size s2 = vals.newSize(-11, -1);
 		assertTrue(s1.equals(s2.abs()));
 		
 	}

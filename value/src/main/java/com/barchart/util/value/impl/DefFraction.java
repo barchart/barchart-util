@@ -1,6 +1,6 @@
 package com.barchart.util.value.impl;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
 
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
@@ -82,9 +82,6 @@ public class DefFraction extends BaseDecimal implements Fraction {
 
 	@Override
 	public long priceFraction(final Price price) {
-		// if (price == null || price.isNull()) {
-		// return 0;
-		// }
 		return priceFraction(price.mantissa(), price.exponent());
 	}
 
@@ -113,7 +110,7 @@ public class DefFraction extends BaseDecimal implements Fraction {
 	public long priceWhole(Price price) {
 
 		if (price == null) {
-			price = ValueConst.NULL_PRICE;
+			price = Price.NULL;
 		}
 		return priceWhole(price.mantissa(), price.exponent());
 	}

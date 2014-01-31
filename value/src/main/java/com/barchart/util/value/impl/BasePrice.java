@@ -7,15 +7,13 @@
  */
 package com.barchart.util.value.impl;
 
-import static com.barchart.util.value.impl.ValueBuilder.newPrice;
-
 import com.barchart.util.value.api.Price;
 
 abstract class BasePrice extends BaseScaled<Price> implements Price {
 
 	@Override
 	protected Price result(final long mantissa, final int exponent) {
-		return newPrice(mantissa, exponent);
+		return vals.newPrice(mantissa, exponent);
 	}
 
 	@Override

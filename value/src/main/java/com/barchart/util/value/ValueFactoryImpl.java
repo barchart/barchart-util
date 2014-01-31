@@ -1,73 +1,131 @@
 package com.barchart.util.value;
 
+import java.util.Date;
+import java.util.TimeZone;
+
 import com.barchart.util.value.api.Bool;
+import com.barchart.util.value.api.Day;
 import com.barchart.util.value.api.Decimal;
 import com.barchart.util.value.api.Fraction;
+import com.barchart.util.value.api.LocalTime;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.value.api.ValueFactory;
-import com.barchart.util.value.impl.DefFraction;
 import com.barchart.util.value.impl.ValueBuilder;
 
 /**
  * Value factory implementation.
  */
-public class ValueFactoryImpl implements ValueFactory {
-	
-	public static final ValueFactory factory = new ValueFactoryImpl();
+public class ValueFactoryImpl extends ValueBuilder implements ValueFactory {
 
-	@Override
-	public Decimal newDecimal(final long mantissa, final int exponent) {
-		return ValueBuilder.newDecimal(mantissa, exponent);
+	public ValueFactoryImpl() {
+		super();
 	}
 
-	@Override
-	public Fraction newFraction(final int base, final int exponent) {
-		return new DefFraction(base, exponent);
-	}
+	/* ***** ***** Decimals ***** ***** */
 
 	@Override
-	public Price newPrice(final long mantissa, final int exponent) {
-		return ValueBuilder.newPrice(mantissa, exponent);
+	public Decimal newDecimal(long mantissa, int exponent) {
+		return decimal(mantissa, exponent);
+	}
+
+	/* ***** ***** Prices ***** ***** */
+
+	@Override
+	public Price newPrice(long mantissa, int exponent) {
+		return price(mantissa, exponent);
 	}
 
 	@Override
 	public Price newPrice(double price) {
-		return ValueBuilder.newPrice(price);
+		return price(price);
 	}
-	
+
+	/* ***** ***** Sizes ***** ***** */
+
 	@Override
-	public Schedule newSchedule(final TimeInterval[] intervals) {
-		return ValueBuilder.newSchedule(intervals);
+	public Size newSize(long mantissa, int exponent) {
+		return size(mantissa, exponent);
 	}
 
 	@Override
-	public Size newSize(final long mantissa, final int exponent) {
-		return ValueBuilder.newSize(mantissa, exponent);
+	public Size newSize(long size) {
+		return size(size);
+	}
+
+	/* ***** ***** Fractions ***** ***** */
+
+	@Override
+	public Fraction newFraction(int base, int exponent) {
+		return fraction(base, exponent);
+	}
+
+	/* ***** ***** Times ***** ***** */
+
+	@Override
+	public Time newTime(long millisecond, TimeZone zone) {
+		return time(millisecond, zone);
 	}
 
 	@Override
-	public Time newTime(final long millisecond, final String zone) {
-		return ValueBuilder.newTime(millisecond);
+	public Time newTime(long millisecond, String zone) {
+		return time(millisecond, zone);
 	}
-	
+
 	@Override
 	public Time newTime(long millisecond) {
-		return newTime(millisecond, "UTC");
+		return time(millisecond);
 	}
 
 	@Override
-	public TimeInterval newTimeInterval(final long beginMill, final long endMill) {
-		return ValueBuilder.newTimeInterval(ValueBuilder.newTime(beginMill),
-				ValueBuilder.newTime(endMill));
+	public Time newTime(Date date) {
+		return time(date.getTime());
+	}
+
+	@Override
+	public Time newTime(Date date, TimeZone zone) {
+		return time(date.getTime(), zone);
+	}
+
+	@Override
+	public Time newTime(Date date, String zone) {
+		return time(date.getTime(), zone);
+	}
+
+	/* ***** ***** Local Times ***** ***** */
+
+	@Override
+	public LocalTime newLocalTime(long millisecond) {
+		return localTime(millisecond);
+	}
+
+	/* ***** ***** Day ***** ***** */
+
+	@Override
+	public Day newDay(long UTCmillis) {
+		return day(UTCmillis);
+	}
+
+	/* ***** ***** Time intervals ***** ***** */
+
+	@Override
+	public TimeInterval newTimeInterval(long beginMill, long endMill) {
+		return timeInterval(beginMill, endMill);
+	}
+
+	/* ***** ***** Schedule ***** ***** */
+
+	@Override
+	public Schedule newSchedule(TimeInterval[] intervals) {
+		return schedule(intervals);
 	}
 
 	@Override
 	public Bool newBoolean(boolean value) {
-		return ValueBuilder.newBoolean(value);
+		return bool(value);
 	}
-
+	
 }

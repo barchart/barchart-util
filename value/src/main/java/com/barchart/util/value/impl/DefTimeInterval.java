@@ -7,12 +7,15 @@
  */
 package com.barchart.util.value.impl;
 
-import static com.barchart.util.value.impl.ValueBuilder.*;
-
+import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
+import com.barchart.util.value.api.ValueFactory;
 
 public class DefTimeInterval implements TimeInterval {
+
+	// USE INTERNAL CONSTRUCTORS NOT FACTORY
+	private static final ValueFactory vals = new ValueFactoryImpl();
 
 	final long start;
 	final long stop;
@@ -29,12 +32,12 @@ public class DefTimeInterval implements TimeInterval {
 
 	@Override
 	public Time start() {
-		return newTime(start);
+		return vals.newTime(start);
 	}
 
 	@Override
 	public Time stop() {
-		return newTime(stop);
+		return vals.newTime(stop);
 	}
 
 	@Override

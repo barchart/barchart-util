@@ -1,5 +1,6 @@
 package com.barchart.util.value.api;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -10,37 +11,40 @@ import com.barchart.util.value.ValueFactoryImpl;
  * <p>
  * Represented by 2 components:
  * <li>milliseconds in the UTC time zone
- * <li>time zone in which to interpret time
+ * <li>default time zone for this instant, UTC is default
  * <p>
- * Depending on implementation, periodic time zone update is required for
- * accurate time zone interpretation.
- * <li>see <a href="http://joda-time.sourceforge.net/tz_update.html">Joda Time
- * updater</a>
- * <li>see <a href=
- * "http://www.oracle.com/technetwork/java/javase/tzupdater-readme-136440.html"
- * >JDK updater</a>
+ * Depending on implementation, periodic time zone update is required for accurate time zone interpretation.
+ * <li>see <a href="http://joda-time.sourceforge.net/tz_update.html">Joda Time updater</a>
+ * <li>see <a href= "http://www.oracle.com/technetwork/java/javase/tzupdater-readme-136440.html" >JDK updater</a>
  */
 public interface Time extends Comparable<Time>, Existential {
-
-
-	/**
-	 * Time zone ID from the TZ database.
-	 * <p>
-	 * Compatible with both JDK and JodaTime.
-	 * <p>
-	 * The return value is guaranteed to be interned, see
-	 * {@link String#intern()}, and can be used for "==" instance equality.
-	 * <p>
-	 * See<a href="https://en.wikipedia.org/wiki/Tz_database">TZ Database</a>
-	 * 
-	 * @see TimeZone
-	 */
-	String zone();
 
 	/**
 	 * Number of milliseconds since January 1, 1970, 00:00:00 UTC.
 	 */
 	long millisecond();
+
+	/**
+	 * Default time zone for this instant, UTC default.
+	 * <p>
+	 * Compatible with both JDK and JodaTime.
+	 * <p>
+	 * See<a href="https://en.wikipedia.org/wiki/Tz_database">TZ Database</a>
+	 * 
+	 * @see TimeZone
+	 */
+	TimeZone zone();
+
+	/**
+	 * @return the java.util.Date representation of this instant in time.
+	 */
+	Date asDate();
+
+	/**
+	 * @param format
+	 * @return a String representation of this instant in time in the time zone of the DateFormat.
+	 */
+	String format(DateFormat format);
 
 	/**
 	 * Ordering based on {@link Time} based on {@link #millisUTC()}.
@@ -56,8 +60,6 @@ public interface Time extends Comparable<Time>, Existential {
 
 	/**
 	 * Equality of {@link Time} based on {@link #millisUTC()}.
-	 * <p>
-	 * TODO should zone be part of equals?
 	 */
 	@Override
 	boolean equals(Object thatTime);

@@ -7,8 +7,13 @@
  */
 package com.barchart.util.value.impl;
 
+import java.util.TimeZone;
+
 import com.barchart.util.value.api.Bool;
+import com.barchart.util.value.api.Day;
 import com.barchart.util.value.api.Decimal;
+import com.barchart.util.value.api.Fraction;
+import com.barchart.util.value.api.LocalTime;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
@@ -20,25 +25,19 @@ import com.barchart.util.value.api.TimeInterval;
  * <p>
  * FIXME review optimizations.
  */
-public final class ValueBuilder {
+public class ValueBuilder {
 
-	private ValueBuilder() {
+	private static final TimeZone UTC = TimeZone.getTimeZone("UTC");
+
+	public ValueBuilder() {
 	}
 
-	public static final Price newPrice(final double price) {
+	protected final Price price(final double price) {
 		final DoubleParts part = MathIEEE754.extractDecimal(price);
-		return ValueBuilder.newPrice(part.getMantissa(), part.getExponent());
+		return price(part.getMantissa(), part.getExponent());
 	}
 
-	public static final Price newPrice(final long mantissa) {
-		if (mantissa == 0) {
-			return ValueConst.ZERO_PRICE;
-		} else {
-			return new DefPrice0(mantissa);
-		}
-	}
-
-	public static final Price newPrice(final long mantissa, final int exponent)
+	protected final Price price(final long mantissa, final int exponent)
 			throws ArithmeticException {
 		switch (exponent) {
 		case -9:
@@ -60,7 +59,7 @@ public final class ValueBuilder {
 		case -1:
 			return new DefPrice1(mantissa);
 		case 00:
-			return newPrice(mantissa);
+				return new DefPrice0(mantissa);
 		default:
 			MathExtra.castIntToByte(exponent);
 			final int mantSmall = (int) mantissa;
@@ -72,15 +71,6 @@ public final class ValueBuilder {
 		}
 	}
 
-	public static final Price newPriceMutable(final long mantissa,
-			final int exponent) throws ArithmeticException {
-
-		MathExtra.castIntToByte(exponent);
-
-		return new VarPrice(mantissa, exponent);
-
-	}
-
 	private static final int SIZE_CACHE_LIMIT = 1024;
 
 	private static final Size[] SIZE_CACHE = new Size[SIZE_CACHE_LIMIT];
@@ -89,10 +79,10 @@ public final class ValueBuilder {
 		for (int k = 0; k < SIZE_CACHE_LIMIT; k++) {
 			SIZE_CACHE[k] = new DefSize(k, 0);
 		}
-		SIZE_CACHE[0] = ValueConst.ZERO_SIZE;
+		SIZE_CACHE[0] = Size.ZERO;
 	}
 
-	public static final Size newSize(final long size) {
+	protected final Size size(final long size) {
 		if (0 <= size && size < SIZE_CACHE_LIMIT) {
 			return SIZE_CACHE[(int) size];
 		} else {
@@ -100,81 +90,77 @@ public final class ValueBuilder {
 		}
 	}
 
-	public static final Size newSize(final long mantissa, final int exponent) {
+	protected final Size size(final long mantissa, final int exponent) {
 		return new DefSize(mantissa, exponent);
 	}
 
-	public static final Size newSizeMutable(final long mantissa,
-			final int exponent) {
-		return new VarSize(mantissa, exponent);
+	protected final Time time(final long time) {
+		return new TimeImpl(time, UTC);
 	}
 
-	public static final Time newTime(final long time) {
-		return new DefTime(time);
-	}
-
-	public static final Time newTimeMutable(final long time) {
-		return new VarTime(time);
-	}
-
-	private static final boolean hasZeroBytes(final byte[] array) {
-		for (final byte b : array) {
-			if (b == 0) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static final boolean isStrictMultiple(final Price priceTest,
-			final Price priceStep) {
-		final long count = priceTest.count(priceStep);
-		final Price priceBack = priceStep.mult(count);
-		if (priceBack.equals(priceTest)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+	// public static final boolean isStrictMultiple(final Price priceTest,
+	// final Price priceStep) {
+	// final long count = priceTest.count(priceStep);
+	// final Price priceBack = priceStep.mult(count);
+	// if (priceBack.equals(priceTest)) {
+	// return true;
+	// } else {
+	// return false;
+	// }
+	// }
 
 	// do not use - not thread safe
 	// public static final boolean isPureAscii(final String string) {
 	// return ASCII.ASCII_ENCODER.canEncode(string);
 	// }
+	// public static final boolean isPureAscii(final CharSequence seq) {
+	// final int size = seq.length();
+	// for (int k = 0; k < size; k++) {
+	// if ((seq.charAt(k) & 0xFF00) != 0) {
+	// return false;
+	// }
+	// }
+	// return true;
+	// }
 
-	public static final boolean isPureAscii(final CharSequence seq) {
-		final int size = seq.length();
-		for (int k = 0; k < size; k++) {
-			if ((seq.charAt(k) & 0xFF00) != 0) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public static Decimal newDecimal(final long mantissa, final int exponent) {
+	protected Decimal decimal(final long mantissa, final int exponent) {
 		return new DefDecimal(mantissa, exponent);
 	}
 
-	public static Decimal newDecimalMutable(final long mantissa,
-			final int exponent) {
-		return new VarDecimal(mantissa, exponent);
-	}
-
-	public static TimeInterval newTimeInterval(final Time start, final Time stop) {
+	protected TimeInterval timeInterval(final Time start, final Time stop) {
 		return new DefTimeInterval(start, stop);
 	}
 
-	public static TimeInterval newTimeInterval(final long start, final long stop) {
-		return new DefTimeInterval(newTime(start), newTime(stop));
+	protected TimeInterval timeInterval(final long start, final long stop) {
+		return new DefTimeInterval(time(start), time(stop));
 	}
 
-	public static Schedule newSchedule(final TimeInterval[] intervals) {
+	protected Schedule schedule(final TimeInterval[] intervals) {
 		return new BaseSchedule(intervals);
 	}
 
-	public static Bool newBoolean(final boolean value) {
+	protected Bool bool(final boolean value) {
 		return new DefBool(value);
+	}
+
+	protected Fraction fraction(int base, int exponent) {
+		return new DefFraction(base, exponent);
+	}
+
+	protected Time time(long millisecond, String zone) {
+		return new TimeImpl(millisecond, TimeZone.getTimeZone(zone));
+	}
+
+	protected Time time(long millisecond, final TimeZone zone) {
+		return new TimeImpl(millisecond, zone);
+	}
+
+	protected LocalTime localTime(long millisecond) {
+		return new LocalTimeImpl(millisecond);
+	}
+
+	protected Day day(long millisecond) {
+		return new DayImpl(millisecond);
 	}
 
 }

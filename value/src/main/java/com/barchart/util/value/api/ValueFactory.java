@@ -1,36 +1,57 @@
 package com.barchart.util.value.api;
 
+import java.util.Date;
+import java.util.TimeZone;
+
 /**
- * Value factory.
- * <p>
- * Use {@link FactoryLoader} to load instance from provider.
+ * Value factory. All values, all the time.
+ * 
  */
 // NOTE: Update implementation META-INF/service when moving this class.
 public interface ValueFactory {
 
+	/* ***** ***** Decimals ***** ***** */
 	Decimal newDecimal(long mantissa, int exponent);
 
+	/* ***** ***** Prices ***** ***** */
 	Price newPrice(long mantissa, int exponent);
 	
 	Price newPrice(double price);
 
+	/* ***** ***** Sizes ***** ***** */
 	Size newSize(long mantissa, int exponent);
 
+	Size newSize(long size);
+
+	/* ***** ***** Fractions ***** ***** */
 	Fraction newFraction(int base, int exponent);
 
-	Time newTime(long millisecond, String zone);
-	
-	/**
-	 * Assumes UTC
-	 * @param millisecond
-	 * @return
-	 */
-	Time newTime(long millisecond);
+	/* ***** ***** Times ***** ***** */
+	Time newTime(long UTCmillis);
 
+	Time newTime(long UTCmillis, TimeZone zone);
+
+	Time newTime(long UTCmillis, String zone);
+
+	Time newTime(Date date);
+
+	Time newTime(Date date, TimeZone zone);
+
+	Time newTime(Date date, String zone);
+
+	/* ***** ***** LocalTimes ***** ***** */
+	LocalTime newLocalTime(long UTCmillis);
+
+	/* ***** ***** Day ***** ***** */
+	Day newDay(long UTCmillis);
+
+	/* ***** ***** Time Intervals ***** ***** */
 	TimeInterval newTimeInterval(long beginMill, long endMill);
 
+	/* ***** ***** Schedules ***** ***** */
 	Schedule newSchedule(TimeInterval[] intervals);
 
+	/* DELTE ME */
 	Bool newBoolean(boolean value);
 
 }

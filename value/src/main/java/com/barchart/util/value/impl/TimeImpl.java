@@ -7,18 +7,40 @@
  */
 package com.barchart.util.value.impl;
 
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 import com.barchart.util.value.api.Time;
 
-abstract class BaseTime implements Time {
+final class TimeImpl implements Time {
 
-	static final String UTC = "UTC".intern();
+	private final long millsUTC;
+	private final TimeZone zone;
+
+	TimeImpl(final long millsUTC, final TimeZone zone) {
+		this.millsUTC = millsUTC;
+		this.zone = zone;
+	}
 
 	@Override
-	public abstract long millisecond();
+	public final long millisecond() {
+		return millsUTC;
+	}
 
 	@Override
-	public String zone() {
-		return UTC;
+	public TimeZone zone() {
+		return zone;
+	}
+
+	@Override
+	public Date asDate() {
+		return new Date(millsUTC);
+	}
+
+	@Override
+	public String format(final DateFormat format) {
+		return format.format(asDate());
 	}
 
 	//
