@@ -218,9 +218,8 @@ class FlowBean<E extends Event<?>, S extends State<?>, A> implements
 	/**
 	 * Validate state machine configuration consistency.
 	 */
-	static <E extends Event<?>, S extends State<?>, A> //
-	void validate(final FlowBean<E, S, A> flow) {
-		log.error("TODO validate");
+	static <E extends Event<?>, S extends State<?>, A> void validate(final FlowBean<E, S, A> flow) {
+		// TODO validate state machine flow
 	}
 
 	static final Logger log = LoggerFactory.getLogger(FlowBean.class);
