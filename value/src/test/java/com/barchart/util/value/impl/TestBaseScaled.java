@@ -159,6 +159,12 @@ public class TestBaseScaled {
 		assertFalse(p2.compareTo(p1) > 0);
 		assertTrue(p1.compareTo(p2) > 0);
 		
+		p1 = vals.newPrice(552.391686);
+		p2 = vals.newPrice(555.750);
+		
+		System.out.println(p1.compareTo(p2));
+		System.out.println(p2.compareTo(p1));
+
 	}
 	
 	@Test

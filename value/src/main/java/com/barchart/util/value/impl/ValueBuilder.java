@@ -10,10 +10,8 @@ package com.barchart.util.value.impl;
 import java.util.TimeZone;
 
 import com.barchart.util.value.api.Bool;
-import com.barchart.util.value.api.Day;
 import com.barchart.util.value.api.Decimal;
 import com.barchart.util.value.api.Fraction;
-import com.barchart.util.value.api.LocalTime;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
@@ -153,14 +151,6 @@ public class ValueBuilder {
 
 	protected Time time(long millisecond, final TimeZone zone) {
 		return new TimeImpl(millisecond, zone);
-	}
-
-	protected LocalTime localTime(long millisecond) {
-		return new LocalTimeImpl(millisecond);
-	}
-
-	protected Day day(long millisecond) {
-		return new DayImpl(millisecond);
 	}
 
 }

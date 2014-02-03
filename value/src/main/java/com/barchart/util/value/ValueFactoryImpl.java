@@ -4,10 +4,8 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import com.barchart.util.value.api.Bool;
-import com.barchart.util.value.api.Day;
 import com.barchart.util.value.api.Decimal;
 import com.barchart.util.value.api.Fraction;
-import com.barchart.util.value.api.LocalTime;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
@@ -93,20 +91,6 @@ public class ValueFactoryImpl extends ValueBuilder implements ValueFactory {
 	@Override
 	public Time newTime(Date date, String zone) {
 		return time(date.getTime(), zone);
-	}
-
-	/* ***** ***** Local Times ***** ***** */
-
-	@Override
-	public LocalTime newLocalTime(long millisecond) {
-		return localTime(millisecond);
-	}
-
-	/* ***** ***** Day ***** ***** */
-
-	@Override
-	public Day newDay(long UTCmillis) {
-		return day(UTCmillis);
 	}
 
 	/* ***** ***** Time intervals ***** ***** */

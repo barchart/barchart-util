@@ -39,12 +39,6 @@ public interface ValueFactory {
 
 	Time newTime(Date date, String zone);
 
-	/* ***** ***** LocalTimes ***** ***** */
-	LocalTime newLocalTime(long UTCmillis);
-
-	/* ***** ***** Day ***** ***** */
-	Day newDay(long UTCmillis);
-
 	/* ***** ***** Time Intervals ***** ***** */
 	TimeInterval newTimeInterval(long beginMill, long endMill);
 
