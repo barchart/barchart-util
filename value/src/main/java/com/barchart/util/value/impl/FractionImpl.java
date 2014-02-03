@@ -5,7 +5,7 @@ import static java.lang.Math.pow;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 
-public class DefFraction extends BaseDecimal implements Fraction {
+class FractionImpl extends BaseDecimal implements Fraction {
 
 	final int base;
 	final int exponent;
@@ -17,7 +17,7 @@ public class DefFraction extends BaseDecimal implements Fraction {
 
 	final int places;
 
-	public DefFraction(final int base, final int exponent) {
+	FractionImpl(final int base, final int exponent) {
 
 		this.base = base;
 		this.exponent = exponent;

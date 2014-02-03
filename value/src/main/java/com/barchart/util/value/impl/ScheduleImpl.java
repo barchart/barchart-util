@@ -6,15 +6,15 @@ import java.util.Collections;
 import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.value.api.Schedule;
 
-public class BaseSchedule extends ArrayList<TimeInterval> implements Schedule {
+public class ScheduleImpl extends ArrayList<TimeInterval> implements Schedule {
 
 	private static final long serialVersionUID = 6395361163935322895L;
 
-	public BaseSchedule() {
+	public ScheduleImpl() {
 		super();
 	}
 	
-	public BaseSchedule(final TimeInterval[] intervals) {
+	public ScheduleImpl(final TimeInterval[] intervals) {
 		super();
 		Collections.addAll(this, intervals);
 	}

@@ -12,7 +12,7 @@ import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.value.api.ValueFactory;
 
-public class DefTimeInterval implements TimeInterval {
+class TimeIntervalImpl implements TimeInterval {
 
 	// USE INTERNAL CONSTRUCTORS NOT FACTORY
 	private static final ValueFactory vals = new ValueFactoryImpl();
@@ -20,12 +20,12 @@ public class DefTimeInterval implements TimeInterval {
 	final long start;
 	final long stop;
 
-	DefTimeInterval(final Time start, final Time stop) {
+	TimeIntervalImpl(final Time start, final Time stop) {
 		this.start = start.millisecond();
 		this.stop = stop.millisecond();
 	}
 
-	DefTimeInterval(final long start, final long stop) {
+	TimeIntervalImpl(final long start, final long stop) {
 		this.start = start;
 		this.stop = stop;
 	}

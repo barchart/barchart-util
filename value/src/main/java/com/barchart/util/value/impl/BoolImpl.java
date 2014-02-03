@@ -9,10 +9,18 @@ package com.barchart.util.value.impl;
 
 import com.barchart.util.value.api.Bool;
 
-abstract class BaseBool implements Bool {
+final class BoolImpl implements Bool {
+
+	private final boolean value;
+
+	BoolImpl(final boolean value) {
+		this.value = value;
+	}
 
 	@Override
-	public abstract boolean value();
+	public final boolean value() {
+		return value;
+	}
 
 	//
 

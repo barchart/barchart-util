@@ -126,23 +126,23 @@ public class ValueBuilder {
 	}
 
 	protected TimeInterval timeInterval(final Time start, final Time stop) {
-		return new DefTimeInterval(start, stop);
+		return new TimeIntervalImpl(start, stop);
 	}
 
 	protected TimeInterval timeInterval(final long start, final long stop) {
-		return new DefTimeInterval(time(start), time(stop));
+		return new TimeIntervalImpl(time(start), time(stop));
 	}
 
 	protected Schedule schedule(final TimeInterval[] intervals) {
-		return new BaseSchedule(intervals);
+		return new ScheduleImpl(intervals);
 	}
 
 	protected Bool bool(final boolean value) {
-		return new DefBool(value);
+		return new BoolImpl(value);
 	}
 
 	protected Fraction fraction(int base, int exponent) {
-		return new DefFraction(base, exponent);
+		return new FractionImpl(base, exponent);
 	}
 
 	protected Time time(long millisecond, String zone) {
