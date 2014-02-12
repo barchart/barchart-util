@@ -26,7 +26,7 @@ import com.barchart.util.value.api.TimeInterval;
 public class ValueBuilder {
 
 	private static final TimeZone UTC = TimeZone.getTimeZone("UTC");
-
+	
 	public ValueBuilder() {
 	}
 
@@ -95,6 +95,14 @@ public class ValueBuilder {
 	protected final Time time(final long time) {
 		return new TimeImpl(time, UTC);
 	}
+	
+	protected Time time(long millisecond, String zone) {
+		return new TimeImpl(millisecond, TimeZone.getTimeZone(zone));
+	}
+
+	protected Time time(long millisecond, final TimeZone zone) {
+		return new TimeImpl(millisecond, zone);
+	}
 
 	// public static final boolean isStrictMultiple(final Price priceTest,
 	// final Price priceStep) {
@@ -143,14 +151,6 @@ public class ValueBuilder {
 
 	protected Fraction fraction(int base, int exponent) {
 		return new FractionImpl(base, exponent);
-	}
-
-	protected Time time(long millisecond, String zone) {
-		return new TimeImpl(millisecond, TimeZone.getTimeZone(zone));
-	}
-
-	protected Time time(long millisecond, final TimeZone zone) {
-		return new TimeImpl(millisecond, zone);
 	}
 
 }
