@@ -64,9 +64,15 @@ public interface Size extends Scaled<Size> {
 
 	@Override
 	boolean greaterThan(Size that);
+	
+	@Override
+	boolean greaterThanOrEquals(Size that);
 
 	@Override
 	boolean lessThan(Size that);
+	
+	@Override
+	boolean lessThanOrEquals(Size that);
 
 	@Override
 	int compareTo(Size that);

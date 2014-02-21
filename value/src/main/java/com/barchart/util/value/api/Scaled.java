@@ -105,15 +105,15 @@ public interface Scaled<T extends Scaled<T>> extends
 
 	//
 
-	/** TODO */
 	double asDouble();
 
-	/** TODO */
 	boolean greaterThan(T that);
+	
+	boolean greaterThanOrEquals(T that);
 
-	/** TODO */
 	boolean lessThan(T that);
 
+	boolean lessThanOrEquals(T that);
 	
 	@Override
 	boolean isNull();

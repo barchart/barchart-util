@@ -66,7 +66,13 @@ public interface Price extends Scaled<Price> {
 	boolean greaterThan(Price that);
 
 	@Override
+	boolean greaterThanOrEquals(Price that);
+	
+	@Override
 	boolean lessThan(Price that);
+	
+	@Override
+	boolean lessThanOrEquals(Price that);
 
 	@Override
 	int compareTo(Price that);

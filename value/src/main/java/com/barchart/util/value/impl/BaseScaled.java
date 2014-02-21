@@ -394,10 +394,20 @@ public abstract class BaseScaled<T extends Scaled<T>>
 	}
 
 	@Override
+	public boolean greaterThanOrEquals(final T that) {
+		return this.compareTo(that) >= 0;
+	}
+	
+	@Override
 	public boolean lessThan(final T that) {
 		return this.compareTo(that) < 0;
 	}
 
+	@Override
+	public boolean lessThanOrEquals(final T that) {
+		return this.compareTo(that) <= 0;
+	}
+	
 	@Override
 	public double asDouble() {
 		

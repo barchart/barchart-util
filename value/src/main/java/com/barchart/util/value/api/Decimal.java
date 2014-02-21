@@ -64,7 +64,13 @@ public interface Decimal extends Scaled<Decimal>, Existential {
 	boolean greaterThan(Decimal that);
 
 	@Override
+	boolean greaterThanOrEquals(Decimal that);
+	
+	@Override
 	boolean lessThan(Decimal that);
+	
+	@Override
+	boolean lessThanOrEquals(Decimal that);
 
 	@Override
 	int compareTo(Decimal that);
