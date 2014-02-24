@@ -29,6 +29,11 @@ public class ValueFactoryImpl extends ValueBuilder implements ValueFactory {
 	public Decimal newDecimal(long mantissa, int exponent) {
 		return decimal(mantissa, exponent);
 	}
+	
+	@Override
+	public Decimal newDecimal(final double dec) {
+		return decimal(dec);
+	}
 
 	/* ***** ***** Prices ***** ***** */
 

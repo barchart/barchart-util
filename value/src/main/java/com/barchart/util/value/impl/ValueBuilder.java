@@ -34,7 +34,7 @@ public class ValueBuilder {
 		final DoubleParts part = MathIEEE754.extractDecimal(price);
 		return price(part.getMantissa(), part.getExponent());
 	}
-
+	
 	protected final Price price(final long mantissa, final int exponent)
 			throws ArithmeticException {
 		switch (exponent) {
@@ -131,6 +131,11 @@ public class ValueBuilder {
 
 	protected Decimal decimal(final long mantissa, final int exponent) {
 		return new DefDecimal(mantissa, exponent);
+	}
+	
+	protected final Decimal decimal(final double dec) {
+		final DoubleParts part = MathIEEE754.extractDecimal(dec);
+		return decimal(part.getMantissa(), part.getExponent());
 	}
 
 	protected TimeInterval timeInterval(final Time start, final Time stop) {

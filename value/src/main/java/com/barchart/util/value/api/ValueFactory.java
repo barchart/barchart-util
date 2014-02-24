@@ -12,6 +12,8 @@ public interface ValueFactory {
 
 	/* ***** ***** Decimals ***** ***** */
 	Decimal newDecimal(long mantissa, int exponent);
+	
+	Decimal newDecimal(double decimal);
 
 	/* ***** ***** Prices ***** ***** */
 	Price newPrice(long mantissa, int exponent);
