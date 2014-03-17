@@ -47,11 +47,22 @@ public interface Scaled<T extends Scaled<T>> extends
 
 	/** change scale */
 	T scale(int exponent) throws ArithmeticException;
+	
+	/**
+	 * Returns this T rounded to a maximum significant digits (rounding half up)
+	 * <p>
+	 * Maximum significant digits must be a positive number or an Illegal Argument Exception 
+	 * will be thrown.
+	 * 
+	 * @param maxSigDigits
+	 * @return
+	 */
+	T round(int maxSigDigits);
 
 	/** normalize: remove non significant zeros from mantissa, if any */
 	T norm();
 
-	/** change sign */
+	/** flip sign */
 	T neg();
 	
 	/** absolute value */
@@ -59,7 +70,6 @@ public interface Scaled<T extends Scaled<T>> extends
 
 	//
 
-	// TODO add int, double methods?
 	/** type safe addition for long */
 	T add(long increment);
 
@@ -74,10 +84,10 @@ public interface Scaled<T extends Scaled<T>> extends
 
 	/** type safe multiply for T */
 	T mult(long factor) throws ArithmeticException;
-
+	
 	/** type safe division for T */
 	T div(long factor) throws ArithmeticException;
-
+	
 	/** type safe division for T */
 	long count(T that) throws ArithmeticException;
 
@@ -85,9 +95,31 @@ public interface Scaled<T extends Scaled<T>> extends
 
 	/** type safe multiply for T, F */
 	T mult(Scaled<?> factor) throws ArithmeticException;
+	
+	/** 
+	 * Type safe multiplication for T, F with rounding of significant digits (rounding half up)
+	 * <p>
+	 * Note this method can still throw an ArithmeticException
+	 * @param factor
+	 * @param maxSigDigitsn the number of decimal places to round to
+	 * @return
+	 * @throws ArithmeticException
+	 */
+	T mult(Scaled<?> factor, int maxSigDigits) throws ArithmeticException;
 
 	/** type safe division for T, F */
 	T div(Scaled<?> factor) throws ArithmeticException;
+	
+	/** 
+	 * Type safe division for T, F with rounding of significant digits (rounding half up)
+	 * <p>
+	 * Note this method can still throw an ArithmeticException
+	 * @param factor
+	 * @param maxSigDigits the number of decimal places to round to
+	 * @return
+	 * @throws ArithmeticException
+	 */	
+	T div(Scaled<?> factor, int maxSigDigits) throws ArithmeticException;
 	
 	//
 

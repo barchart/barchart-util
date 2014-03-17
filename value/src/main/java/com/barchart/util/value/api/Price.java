@@ -25,6 +25,9 @@ public interface Price extends Scaled<Price> {
 
 	@Override
 	Price scale(int exponent) throws ArithmeticException;
+	
+	@Override
+	Price round(int maxSigDigits);
 
 	@Override
 	Price norm();
@@ -49,16 +52,22 @@ public interface Price extends Scaled<Price> {
 
 	@Override
 	Price mult(Scaled<?> factor) throws ArithmeticException;
+	
+	@Override
+	Price mult(Scaled<?> factor, int maxSigDigits) throws ArithmeticException;
 
 	@Override
 	Price mult(long factor) throws ArithmeticException;
-
+	
 	@Override
 	Price div(Scaled<?> factor) throws ArithmeticException;
+	
+	@Override
+	Price div(Scaled<?> factor, int maxSigDigits) throws ArithmeticException;
 
 	@Override
 	Price div(long factor) throws ArithmeticException;
-
+	
 	@Override
 	long count(Price that) throws ArithmeticException;
 

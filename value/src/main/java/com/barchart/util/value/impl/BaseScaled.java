@@ -18,7 +18,6 @@ import com.barchart.util.value.api.ValueFactory;
 public abstract class BaseScaled<T extends Scaled<T>>
 		implements Scaled<T> {
 
-	// USE INTERNAL CONSTRUCTORS NOT FACTORY
 	public static ValueFactory vals = new ValueFactoryImpl();
 
 	protected abstract T result(long mantissa, int exponent);
@@ -51,7 +50,6 @@ public abstract class BaseScaled<T extends Scaled<T>>
 
 	}
 
-	// yes, same type
 	@SuppressWarnings("unchecked")
 	@Override
 	public final T scale(final int exponent) throws ArithmeticException {
@@ -74,6 +72,44 @@ public abstract class BaseScaled<T extends Scaled<T>>
 
 		return result(m, e);
 
+	}
+	
+	@Override
+	public final T round(final int maxSigDigits) {
+		
+		if(maxSigDigits < 0) {
+			throw new IllegalArgumentException("Max significant digits must be positive");
+		}
+		
+		long m = mantissa();
+		int e = exponent();
+		
+		/* If rounding is needed */
+		if(e < 0 && e < (maxSigDigits * -1)) {
+			
+			/* Truncate unused decimals */
+			long powDif = 1; 
+			for(int i = 0; i < (((maxSigDigits * -1) - e) - 1); i++) {
+				powDif = MathExtra.longMult10(powDif);
+			}
+			m /= powDif;
+			
+			/* Store 1's digit, determines rounding */
+			long rnd = m - ((m / 10) * 10);
+			
+			/* Truncate last decimal */
+			m /= 10;
+			
+			/* Increment if rounding up */
+			if(rnd >= 5) {
+				m++;
+			}
+			
+			e = maxSigDigits * -1;
+		}
+		
+		return result(m, e);
+		
 	}
 
 	@Override
@@ -234,7 +270,7 @@ public abstract class BaseScaled<T extends Scaled<T>>
 		return result(MathExtra.longMult(mantissa(), factor), exponent());
 
 	}
-
+	
 	@Override
 	public final T div(final long factor) throws ArithmeticException {
 
@@ -261,7 +297,7 @@ public abstract class BaseScaled<T extends Scaled<T>>
 		return result(m / factor, e);
 
 	}
-
+	
 	@Override
 	public final T neg() {
 		return result(-mantissa(), exponent());
@@ -294,6 +330,11 @@ public abstract class BaseScaled<T extends Scaled<T>>
 		return result(MathExtra.longMult(m1, m2), e1 + e2);
 
 	}
+	
+	@Override
+	public final T mult(Scaled<?> factor, int maxSigDigits) throws ArithmeticException {
+		return mult(factor).round(maxSigDigits);
+	}
 
 	@Override
 	public final T div(final Scaled<?> that) throws ArithmeticException {
@@ -319,6 +360,11 @@ public abstract class BaseScaled<T extends Scaled<T>>
 
 		return result(m1 / m2, e1 - e2);
 
+	}
+	
+	@Override
+	public T div(Scaled<?> factor, int maxSigDigits) throws ArithmeticException {
+		return div(factor).round(maxSigDigits);
 	}
 
 	@Override

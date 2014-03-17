@@ -25,6 +25,9 @@ public interface Size extends Scaled<Size> {
 
 	@Override
 	Size scale(int exponent) throws ArithmeticException;
+	
+	@Override
+	Size round(int maxSigDigits);
 
 	@Override
 	Size norm();
@@ -49,16 +52,22 @@ public interface Size extends Scaled<Size> {
 
 	@Override
 	Size mult(Scaled<?> factor) throws ArithmeticException;
+	
+	@Override
+	Size mult(Scaled<?> factor, int maxSigDigits) throws ArithmeticException;
 
 	@Override
 	Size mult(long factor) throws ArithmeticException;
-
+	
 	@Override
 	Size div(Scaled<?> factor) throws ArithmeticException;
+	
+	@Override
+	Size div(Scaled<?> factor, int maxSigDigits) throws ArithmeticException;
 
 	@Override
 	Size div(long factor) throws ArithmeticException;
-
+	
 	@Override
 	long count(Size that) throws ArithmeticException;
 

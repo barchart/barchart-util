@@ -1,5 +1,6 @@
 package com.barchart.util.value.impl;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -16,6 +17,29 @@ public class TestBaseScaled {
 	public static final ValueFactory vals = new ValueFactoryImpl();
 
 	private static final long TIMEOUT_MILLIS = 250;
+	
+	@Test
+	public void testRound() {
+		
+		Price price = vals.newPrice(123456, -4);
+		assertEquals(vals.newPrice(1235, -2), price.round(2));
+		
+		price = vals.newPrice(1234567890, -8);
+		assertEquals(vals.newPrice(1235, -2), price.round(2));
+		
+		price = vals.newPrice(12345, 1);
+		assertEquals(vals.newPrice(12345, 1), price.round(100));
+		
+		try {
+			price.round(-1);
+			assertTrue(false);
+		} catch (IllegalArgumentException e) {
+			assertTrue(true);
+		} catch (Exception ex) {
+			assertTrue(false);
+		}
+		
+	}
 	
 	@Test(timeout = TIMEOUT_MILLIS)
 	public void testDiv() {
@@ -162,8 +186,8 @@ public class TestBaseScaled {
 		p1 = vals.newPrice(552.391686);
 		p2 = vals.newPrice(555.750);
 		
-		System.out.println(p1.compareTo(p2));
-		System.out.println(p2.compareTo(p1));
+		assertTrue(p1.compareTo(p2) < 0);
+		assertTrue(p2.compareTo(p1) > 0);
 
 	}
 	

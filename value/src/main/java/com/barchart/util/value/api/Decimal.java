@@ -23,6 +23,9 @@ public interface Decimal extends Scaled<Decimal>, Existential {
 
 	@Override
 	Decimal scale(int exponent) throws ArithmeticException;
+	
+	@Override
+	Decimal round(int maxSigDigits);
 
 	@Override
 	Decimal norm();
@@ -47,16 +50,22 @@ public interface Decimal extends Scaled<Decimal>, Existential {
 
 	@Override
 	Decimal mult(Scaled<?> factor) throws ArithmeticException;
+	
+	@Override
+	Decimal mult(Scaled<?> factor, int maxSigDigits) throws ArithmeticException;
 
 	@Override
 	Decimal mult(long factor) throws ArithmeticException;
-
+	
 	@Override
 	Decimal div(Scaled<?> factor) throws ArithmeticException;
+	
+	@Override
+	Decimal div(Scaled<?> factor, int maxSigDigits) throws ArithmeticException;
 
 	@Override
 	Decimal div(long factor) throws ArithmeticException;
-
+	
 	@Override
 	long count(Decimal that) throws ArithmeticException;
 
