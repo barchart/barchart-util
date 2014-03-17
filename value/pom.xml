@@ -10,14 +10,14 @@
   	
   	<groupId>com.barchart.util</groupId>
   	<artifactId>barchart-util-value</artifactId>
-  	<version>1.1.1</version>
+  	<version>1.1.2-SNAPSHOT</version>
   	<packaging>bundle</packaging>
   	
   	<scm>
 		<url>https://github.com/barchart/barchart-util</url>
 		<connection>scm:git:git://github.com/barchart/barchart-util.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-util.git</developerConnection>
-  	  <tag>barchart-util-value-1.1.1</tag>
+  	  <tag>HEAD</tag>
   </scm>
   	
   	<dependencies>
