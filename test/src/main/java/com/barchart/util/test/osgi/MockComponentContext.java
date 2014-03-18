@@ -16,7 +16,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.ComponentInstance;
 
-import com.barchart.conf.util.BaseComp;
+import com.barchart.osgi.component.base.HoconComponent;
 
 public class MockComponentContext implements ComponentContext {
 
@@ -26,12 +26,7 @@ public class MockComponentContext implements ComponentContext {
 	}
 
 	public MockComponentContext(final String config) {
-		properties.put(BaseComp.PROP_CONFIG, config);
-		// final Config c = ConfigFactory.parseString(config);
-		// final Map<String, String> props = Util.wrap(c);
-		// for (final Map.Entry<String, String> entry : props.entrySet()) {
-		// properties.put(entry.getKey(), entry.getValue());
-		// }
+		properties.put(HoconComponent.OSGI_CONF, config);
 	}
 
 	@SuppressWarnings("rawtypes")

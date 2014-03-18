@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.osgi.service.component.ComponentContext;
 
-import com.barchart.conf.util.BaseComponent;
+import com.barchart.osgi.component.base.BaseComponent;
 
 public class ComponentInitializer<C extends BaseComponent> {
 

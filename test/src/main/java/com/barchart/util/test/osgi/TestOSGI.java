@@ -1,6 +1,6 @@
 package com.barchart.util.test.osgi;
 
-import com.barchart.conf.util.BaseComponent;
+import com.barchart.osgi.component.base.BaseComponent;
 
 public class TestOSGI {
 
