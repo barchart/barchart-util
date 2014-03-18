@@ -12,6 +12,10 @@ public class TestObserver<T> implements Observer<T> {
 	public Throwable error = null;
 	public List<T> results = new ArrayList<T>();
 
+	public static <T> TestObserver<T> create() {
+		return new TestObserver<T>();
+	}
+
 	@Override
 	public void onNext(final T next_) {
 		results.add(next_);
@@ -50,7 +54,7 @@ public class TestObserver<T> implements Observer<T> {
 		return this;
 
 	}
-	
+
 	public TestObserver<T> sync(final int waitTime) throws Exception {
 
 		if (!completed) {
