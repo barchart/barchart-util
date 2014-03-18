@@ -27,7 +27,6 @@
 		<dependency>
 		    <groupId>com.netflix.rxjava</groupId>
 		    <artifactId>rxjava-core</artifactId>
-		    <version>[0.14.0,0.15-SNAPSHOT)</version>
 		</dependency>
 		
 		<dependency>
