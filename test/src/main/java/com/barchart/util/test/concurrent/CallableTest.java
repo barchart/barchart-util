@@ -22,7 +22,7 @@ public final class CallableTest {
 	 */
 	public static void waitFor(final Callable<Boolean> condition)
 			throws Exception {
-		waitFor(condition, null, 1000);
+		waitFor(condition, null, 10 * 1000);
 	}
 
 	/**
@@ -30,7 +30,7 @@ public final class CallableTest {
 	 */
 	public static void waitFor(final Callable<Boolean> condition,
 			final String message) throws Exception {
-		waitFor(condition, message, 1000);
+		waitFor(condition, message, 10 * 1000);
 	}
 
 	/**

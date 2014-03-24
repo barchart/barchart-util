@@ -18,7 +18,7 @@ import com.barchart.util.value.ValueFactoryImpl;
  * <li>see <a href= "http://www.oracle.com/technetwork/java/javase/tzupdater-readme-136440.html" >JDK updater</a>
  */
 public interface Time extends Comparable<Time>, Existential {
-
+	
 	/**
 	 * Number of milliseconds since January 1, 1970, 00:00:00 UTC.
 	 */
