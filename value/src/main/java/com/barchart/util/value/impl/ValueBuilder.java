@@ -20,8 +20,6 @@ import com.barchart.util.value.api.TimeInterval;
 
 /**
  * NOTE: this class is bundle-private in OSGI.
- * <p>
- * FIXME review optimizations.
  */
 public class ValueBuilder {
 
@@ -57,7 +55,7 @@ public class ValueBuilder {
 		case -1:
 			return new DefPrice1(mantissa);
 		case 00:
-				return new DefPrice0(mantissa);
+			return new DefPrice0(mantissa);
 		default:
 			MathExtra.castIntToByte(exponent);
 			final int mantSmall = (int) mantissa;

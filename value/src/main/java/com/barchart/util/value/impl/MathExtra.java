@@ -12,7 +12,7 @@ class MathExtra {
 		if (result == value) {
 			return result;
 		} else {
-			throw new ArithmeticException("can not cast char to byte");
+			throw new ArithmeticException("can not cast char to byte " + value);
 		}
 	}
 
@@ -22,7 +22,7 @@ class MathExtra {
 		if (result == value) {
 			return result;
 		} else {
-			throw new ArithmeticException("can not cast int to byte");
+			throw new ArithmeticException("can not cast int to byte " + value);
 		}
 	}
 
@@ -32,7 +32,7 @@ class MathExtra {
 		if (result == value) {
 			return result;
 		} else {
-			throw new ArithmeticException("can not cast long to byte");
+			throw new ArithmeticException("can not cast long to byte " + value);
 		}
 	}
 
@@ -42,7 +42,7 @@ class MathExtra {
 		if (result == value) {
 			return result;
 		} else {
-			throw new ArithmeticException("can not cast long to int");
+			throw new ArithmeticException("can not cast long to int " + value);
 		}
 	}
 
