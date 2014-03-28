@@ -19,17 +19,23 @@ import com.barchart.util.value.impl.ValueBuilder;
  */
 public class ValueFactoryImpl extends ValueBuilder implements ValueFactory {
 
+	public static final ValueFactory instance = new ValueFactoryImpl();
+
 	public ValueFactoryImpl() {
 		super();
+	}
+
+	public static ValueFactory getInstance() {
+		return instance;
 	}
 
 	/* ***** ***** Decimals ***** ***** */
 
 	@Override
-	public Decimal newDecimal(long mantissa, int exponent) {
+	public Decimal newDecimal(final long mantissa, final int exponent) {
 		return decimal(mantissa, exponent);
 	}
-	
+
 	@Override
 	public Decimal newDecimal(final double dec) {
 		return decimal(dec);
@@ -38,83 +44,83 @@ public class ValueFactoryImpl extends ValueBuilder implements ValueFactory {
 	/* ***** ***** Prices ***** ***** */
 
 	@Override
-	public Price newPrice(long mantissa, int exponent) {
+	public Price newPrice(final long mantissa, final int exponent) {
 		return price(mantissa, exponent);
 	}
 
 	@Override
-	public Price newPrice(double price) {
+	public Price newPrice(final double price) {
 		return price(price);
 	}
 
 	/* ***** ***** Sizes ***** ***** */
 
 	@Override
-	public Size newSize(long mantissa, int exponent) {
+	public Size newSize(final long mantissa, final int exponent) {
 		return size(mantissa, exponent);
 	}
 
 	@Override
-	public Size newSize(long size) {
+	public Size newSize(final long size) {
 		return size(size);
 	}
 
 	/* ***** ***** Fractions ***** ***** */
 
 	@Override
-	public Fraction newFraction(int base, int exponent) {
+	public Fraction newFraction(final int base, final int exponent) {
 		return fraction(base, exponent);
 	}
 
 	/* ***** ***** Times ***** ***** */
 
 	@Override
-	public Time newTime(long millisecond, TimeZone zone) {
+	public Time newTime(final long millisecond, final TimeZone zone) {
 		return time(millisecond, zone);
 	}
 
 	@Override
-	public Time newTime(long millisecond, String zone) {
+	public Time newTime(final long millisecond, final String zone) {
 		return time(millisecond, zone);
 	}
 
 	@Override
-	public Time newTime(long millisecond) {
+	public Time newTime(final long millisecond) {
 		return time(millisecond);
 	}
 
 	@Override
-	public Time newTime(Date date) {
+	public Time newTime(final Date date) {
 		return time(date.getTime());
 	}
 
 	@Override
-	public Time newTime(Date date, TimeZone zone) {
+	public Time newTime(final Date date, final TimeZone zone) {
 		return time(date.getTime(), zone);
 	}
 
 	@Override
-	public Time newTime(Date date, String zone) {
+	public Time newTime(final Date date, final String zone) {
 		return time(date.getTime(), zone);
 	}
 
 	/* ***** ***** Time intervals ***** ***** */
 
 	@Override
-	public TimeInterval newTimeInterval(long beginMill, long endMill) {
+	public TimeInterval newTimeInterval(final long beginMill, final long endMill) {
 		return timeInterval(beginMill, endMill);
 	}
 
 	/* ***** ***** Schedule ***** ***** */
 
 	@Override
-	public Schedule newSchedule(TimeInterval[] intervals) {
+	public Schedule newSchedule(final TimeInterval[] intervals) {
 		return schedule(intervals);
 	}
 
 	@Override
-	public Bool newBoolean(boolean value) {
+	public Bool newBoolean(final boolean value) {
 		return bool(value);
 	}
-	
+
 }
