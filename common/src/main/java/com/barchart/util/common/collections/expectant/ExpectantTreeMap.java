@@ -10,7 +10,7 @@ import java.util.TreeMap;
  * @param <V> the type of mapped values
  */
 @SuppressWarnings("serial")
-public class ExpectantTreeMap<K, V> extends TreeMap<K, V> {
+public class ExpectantTreeMap<K, V> extends TreeMap<K, V> implements ExcpectantNavigableMap<K, V> {
 
 	@Override
 	public V get(Object key) {

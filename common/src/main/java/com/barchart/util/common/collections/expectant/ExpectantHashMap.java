@@ -10,7 +10,7 @@ import java.util.HashMap;
  * @param <V> the type of mapped values
  */
 @SuppressWarnings("serial")
-public class ExpectantHashMap<K, V> extends HashMap<K, V> {
+public class ExpectantHashMap<K, V> extends HashMap<K, V> implements ExpectantMap<K, V> {
 
 	@Override
 	public V get(Object key) {

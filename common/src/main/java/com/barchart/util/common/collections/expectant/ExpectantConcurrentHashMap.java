@@ -10,7 +10,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @param <V> the type of mapped values
  */
 @SuppressWarnings("serial")
-public class ExpectantConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
+public class ExpectantConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> 
+		implements ExpectantConcurrentMap<K, V> {
 
 	@Override
 	public V get(Object key) {
