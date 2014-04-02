@@ -4,8 +4,6 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import com.barchart.util.value.ValueFactoryImpl;
-
 /**
  * Time value.
  * <p>
@@ -68,6 +66,41 @@ public interface Time extends Comparable<Time>, Existential {
 	boolean isNull();
 	
 	/** Special time value @see {isNull} */
-	Time NULL = new ValueFactoryImpl().newTime(0, "UTC");
+	Time NULL = new Time() {
+		
+		private final TimeZone utc = TimeZone.getTimeZone("UTC");
+		private final Date date = new Date(0);
+
+		@Override
+		public long millisecond() {
+			return 0;
+		}
+
+		@Override
+		public TimeZone zone() {
+			return utc;
+		}
+
+		@Override
+		public Date asDate() {
+			return date;
+		}
+
+		@Override
+		public String format(DateFormat format) {
+			return "NULL";
+		}
+
+		@Override
+		public int compareTo(Time thatTime) {
+			return 0;
+		}
+
+		@Override
+		public boolean isNull() {
+			return true;
+		}
+		
+	};
 
 }

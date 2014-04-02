@@ -1,11 +1,6 @@
 package com.barchart.util.value.api;
 
-import com.barchart.util.value.ValueFactoryImpl;
-
 public interface Bool extends Comparable<Bool>, Existential {
-
-	/** Special time value @see {isNull} */
-	Bool NULL = new ValueFactoryImpl().newBoolean(false);
 
 	boolean value();
 
@@ -20,5 +15,25 @@ public interface Bool extends Comparable<Bool>, Existential {
 
 	@Override
 	boolean isNull();
+	
+	/** Special time value @see {isNull} */
+	Bool NULL = new Bool() {
+
+		@Override
+		public boolean value() {
+			return false;
+		}
+
+		@Override
+		public int compareTo(Bool that) {
+			return that.isNull() ? 0 : -1;
+		}
+
+		@Override
+		public boolean isNull() {
+			return true;
+		}
+		
+	};
 	
 }
