@@ -5,7 +5,7 @@ import com.barchart.util.value.ValueFactoryImpl;
 public interface Fraction extends Decimal, Existential {
 	
 	/** Special fraction value @see {isNull} */
-	Fraction NULL = new ValueFactoryImpl().newFraction(0, 1);
+	Fraction NULL = new ValueFactoryImpl().newFraction(10, -1);
 
 	long base();
 

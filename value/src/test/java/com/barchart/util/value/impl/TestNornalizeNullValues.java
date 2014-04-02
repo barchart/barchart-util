@@ -10,7 +10,7 @@ import com.barchart.util.value.api.ValueFactory;
 
 public class TestNornalizeNullValues {
 
-	public static ValueFactory vals = new ValueFactoryImpl();
+	public static ValueFactory vals = ValueFactoryImpl.instance;
 
 	private static final long TIMEOUT_MILLIS = 250;
 

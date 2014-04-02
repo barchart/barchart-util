@@ -19,6 +19,10 @@ class FractionImpl extends BaseDecimal implements Fraction {
 
 	FractionImpl(final int base, final int exponent) {
 
+		if(base == 0) {
+			throw new IllegalStateException("Base cannot be zero");
+		}
+		
 		this.base = base;
 		this.exponent = exponent;
 
