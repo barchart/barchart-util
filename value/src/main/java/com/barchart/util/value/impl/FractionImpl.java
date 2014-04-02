@@ -28,10 +28,15 @@ class FractionImpl extends BaseDecimal implements Fraction {
 		decimalExponent = exponent;
 		decimalDenominator = (long) pow(10, -decimalExponent);
 
+		if(decimalDenominator == 0) {
+			throw new IllegalStateException("Decimal Denominator Cannot Be Zero, base = " 
+					+ base + " exponent = " + exponent);
+		}
+		
 		places = 1 + (int) Math.log10(denominator);
 
 	}
-
+	
 	@Override
 	public long mantissa() {
 		return 0;

@@ -21,6 +21,7 @@ public class ValueFactoryImpl extends ValueBuilder implements ValueFactory {
 
 	public static final ValueFactory instance = new ValueFactoryImpl();
 
+	@Deprecated
 	public ValueFactoryImpl() {
 		super();
 	}
