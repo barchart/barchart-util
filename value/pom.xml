@@ -10,7 +10,7 @@
   	
   	<groupId>com.barchart.util</groupId>
   	<artifactId>barchart-util-value</artifactId>
-  	<version>1.2.2-SNAPSHOT</version>
+  	<version>1.2.3-SNAPSHOT</version>
   	<packaging>bundle</packaging>
   	
   	<scm>

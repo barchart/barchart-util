@@ -43,6 +43,7 @@ Layout Project.
 		<module>common</module>
 		<module>flow</module>
 		<module>value</module>
+		<module>rx</module>
 		<module>test</module>
 
 	</modules>
