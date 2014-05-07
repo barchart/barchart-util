@@ -18,7 +18,7 @@ import com.barchart.util.value.api.ValueFactory;
 public abstract class BaseScaled<T extends Scaled<T>>
 		implements Scaled<T> {
 
-	public static ValueFactory vals = new ValueFactoryImpl();
+	public static ValueFactory vals = ValueFactoryImpl.instance;
 
 	protected abstract T result(long mantissa, int exponent);
 
@@ -115,6 +115,8 @@ public abstract class BaseScaled<T extends Scaled<T>>
 	@Override
 	public final int compareTo(final T that) {
 
+		// TODO How do we handle NULL values?
+		
 		int e1 = this.exponent();
 		int e2 = that.exponent();
 
