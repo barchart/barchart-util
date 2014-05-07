@@ -15,11 +15,8 @@ import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Scaled;
 import com.barchart.util.value.api.ValueFactory;
 
-public abstract class BaseScaled<T extends Scaled<T>>
-		implements Scaled<T> {
-
-	public static ValueFactory vals = ValueFactoryImpl.instance;
-
+public abstract class BaseScaled<T extends Scaled<T>> implements Scaled<T> {
+	
 	protected abstract T result(long mantissa, int exponent);
 
 	// yes, same type

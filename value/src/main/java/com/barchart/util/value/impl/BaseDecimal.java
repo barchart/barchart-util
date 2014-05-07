@@ -7,14 +7,14 @@
  */
 package com.barchart.util.value.impl;
 
+import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Decimal;
 
-abstract class BaseDecimal extends BaseScaled<Decimal> implements
-		Decimal {
-
+abstract class BaseDecimal extends BaseScaled<Decimal> implements Decimal {
+	
 	@Override
 	protected Decimal result(final long mantissa, final int exponent) {
-		return vals.newDecimal(mantissa, exponent);
+		return ValueFactoryImpl.instance.newDecimal(mantissa, exponent);
 	}
 
 	@Override
