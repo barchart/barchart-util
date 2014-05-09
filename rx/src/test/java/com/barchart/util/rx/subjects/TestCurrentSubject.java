@@ -65,4 +65,21 @@ public class TestCurrentSubject {
 
 	}
 
+	@Test
+	public void testCurrent() throws Exception {
+
+		final CurrentSubject<Integer> s = CurrentSubject.create();
+
+		assertNull(s.peek());
+		s.onNext(1);
+		assertEquals(1, (int) s.peek());
+		s.onNext(2);
+		assertEquals(2, (int) s.peek());
+		s.onNext(3);
+		assertEquals(3, (int) s.peek());
+		s.onCompleted();
+		assertEquals(3, (int) s.peek());
+
+	}
+
 }
