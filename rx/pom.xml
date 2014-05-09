@@ -27,6 +27,12 @@
 			<artifactId>rxjava-core</artifactId>
 		</dependency>
   	
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+  	
   		<!-- Logging framework. -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
