@@ -14,117 +14,117 @@ public interface Schedule extends List<TimeInterval>, Existential {
 
 		@Override
 		public int size() {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean isEmpty() {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean contains(Object o) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Iterator<TimeInterval> iterator() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Object[] toArray() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public <T> T[] toArray(T[] a) {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean add(TimeInterval e) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean remove(Object o) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean containsAll(Collection<?> c) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean addAll(Collection<? extends TimeInterval> c) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean addAll(int index, Collection<? extends TimeInterval> c) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean removeAll(Collection<?> c) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean retainAll(Collection<?> c) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public void clear() {
-			
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public TimeInterval get(int index) {
-			return TimeInterval.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public TimeInterval set(int index, TimeInterval element) {
-			return TimeInterval.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public void add(int index, TimeInterval element) {
-			
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public TimeInterval remove(int index) {
-			return TimeInterval.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public int indexOf(Object o) {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public int lastIndexOf(Object o) {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public ListIterator<TimeInterval> listIterator() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public ListIterator<TimeInterval> listIterator(int index) {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public List<TimeInterval> subList(int fromIndex, int toIndex) {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override

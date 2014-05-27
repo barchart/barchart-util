@@ -92,132 +92,132 @@ public interface Decimal extends Scaled<Decimal>, Existential {
 
 		@Override
 		public boolean equalsScale(Decimal that) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public double asDouble() {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public long mantissa() {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public int exponent() {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean isZero() {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
-		public Decimal scale(int exponent) throws ArithmeticException {return this;}
+		public Decimal scale(int exponent) throws ArithmeticException {
+			throw new UnsupportedOperationException();
+		}
 
 		@Override
 		public Decimal round(int maxSigDigits) {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Decimal norm() {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Decimal neg() {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Decimal abs() {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Decimal add(Decimal that) throws ArithmeticException {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Decimal add(long increment) {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Decimal sub(Decimal that) throws ArithmeticException {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Decimal sub(long decrement) {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Decimal mult(Scaled<?> factor) throws ArithmeticException {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
-		public Decimal mult(Scaled<?> factor, int maxSigDigits)
-				throws ArithmeticException {
-			return this;
+		public Decimal mult(Scaled<?> factor, int maxSigDigits) throws ArithmeticException {
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Decimal mult(long factor) throws ArithmeticException {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Decimal div(Scaled<?> factor) throws ArithmeticException {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
-		public Decimal div(Scaled<?> factor, int maxSigDigits)
-				throws ArithmeticException {
-			return this;
+		public Decimal div(Scaled<?> factor, int maxSigDigits) throws ArithmeticException {
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Decimal div(long factor) throws ArithmeticException {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public long count(Decimal that) throws ArithmeticException {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean greaterThan(Decimal that) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean greaterThanOrEquals(Decimal that) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean lessThan(Decimal that) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean lessThanOrEquals(Decimal that) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public int compareTo(Decimal that) {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override

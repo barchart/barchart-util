@@ -11,9 +11,7 @@ import static java.lang.Math.min;
 
 import java.math.BigDecimal;
 
-import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Scaled;
-import com.barchart.util.value.api.ValueFactory;
 
 public abstract class BaseScaled<T extends Scaled<T>> implements Scaled<T> {
 	

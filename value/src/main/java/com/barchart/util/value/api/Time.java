@@ -68,32 +68,29 @@ public interface Time extends Comparable<Time>, Existential {
 	/** Special time value @see {isNull} */
 	Time NULL = new Time() {
 		
-		private final TimeZone utc = TimeZone.getTimeZone("UTC");
-		private final Date date = new Date(0);
-
 		@Override
 		public long millisecond() {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public TimeZone zone() {
-			return utc;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Date asDate() {
-			return date;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String format(DateFormat format) {
-			return "NULL";
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public int compareTo(Time thatTime) {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override

@@ -96,134 +96,132 @@ public interface Price extends Scaled<Price> {
 
 		@Override
 		public boolean equalsScale(Price that) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public double asDouble() {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public long mantissa() {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public int exponent() {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean isZero() {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price scale(int exponent) throws ArithmeticException {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price round(int maxSigDigits) {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price norm() {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price neg() {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price abs() {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price add(Price that) throws ArithmeticException {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price add(long increment) {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price sub(Price that) throws ArithmeticException {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price sub(long decrement) {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price mult(Scaled<?> factor) throws ArithmeticException {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
-		public Price mult(Scaled<?> factor, int maxSigDigits)
-				throws ArithmeticException {
-			return this;
+		public Price mult(Scaled<?> factor, int maxSigDigits) throws ArithmeticException {
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price mult(long factor) throws ArithmeticException {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price div(Scaled<?> factor) throws ArithmeticException {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
-		public Price div(Scaled<?> factor, int maxSigDigits)
-				throws ArithmeticException {
-			return this;
+		public Price div(Scaled<?> factor, int maxSigDigits) throws ArithmeticException {
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price div(long factor) throws ArithmeticException {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public long count(Price that) throws ArithmeticException {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean greaterThan(Price that) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean greaterThanOrEquals(Price that) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean lessThan(Price that) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean lessThanOrEquals(Price that) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public int compareTo(Price that) {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override

@@ -21,12 +21,12 @@ public interface Bool extends Comparable<Bool>, Existential {
 
 		@Override
 		public boolean value() {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public int compareTo(Bool that) {
-			return that.isNull() ? 0 : -1;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override

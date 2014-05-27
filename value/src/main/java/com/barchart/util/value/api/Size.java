@@ -96,134 +96,132 @@ public interface Size extends Scaled<Size> {
 
 		@Override
 		public boolean equalsScale(Size that) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public double asDouble() {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public long mantissa() {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public int exponent() {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean isZero() {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Size scale(int exponent) throws ArithmeticException {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Size round(int maxSigDigits) {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Size norm() {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Size neg() {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Size abs() {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Size add(Size that) throws ArithmeticException {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Size add(long increment) {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Size sub(Size that) throws ArithmeticException {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Size sub(long decrement) {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Size mult(Scaled<?> factor) throws ArithmeticException {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
-		public Size mult(Scaled<?> factor, int maxSigDigits)
-				throws ArithmeticException {
-			return this;
+		public Size mult(Scaled<?> factor, int maxSigDigits) throws ArithmeticException {
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Size mult(long factor) throws ArithmeticException {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Size div(Scaled<?> factor) throws ArithmeticException {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
-		public Size div(Scaled<?> factor, int maxSigDigits)
-				throws ArithmeticException {
-			return this;
+		public Size div(Scaled<?> factor, int maxSigDigits) throws ArithmeticException {
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Size div(long factor) throws ArithmeticException {
-			return this;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public long count(Size that) throws ArithmeticException {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean greaterThan(Size that) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean greaterThanOrEquals(Size that) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean lessThan(Size that) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean lessThanOrEquals(Size that) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public int compareTo(Size that) {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override

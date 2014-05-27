@@ -14,12 +14,12 @@ public interface TimeInterval extends Existential {
 
 		@Override
 		public Time start() {
-			return Time.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Time stop() {
-			return Time.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
