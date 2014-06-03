@@ -23,7 +23,7 @@ public class TestTimeImpl {
 
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-		assertTrue(time.format(format).equals("2014-01-31T09:00:00"));
+		assertTrue(time.format(format).equals("2014-01-31T10:00:00"));
 
 		final TimeZone utc = TimeZone.getTimeZone("UTC");
 		format.setTimeZone(utc);

@@ -56,6 +56,14 @@ class TimeIntervalImpl implements TimeInterval {
 		}
 
 		final TimeInterval tI = (TimeInterval) o;
+		
+		if(tI.isNull() && !this.isNull()) {
+			return false;
+		} else if(this.isNull() && !tI.isNull()) {
+			return false;
+		} else if(this.isNull() && tI.isNull()) {
+			return true;
+		}
 
 		return (start().equals(tI.start())) && (stop().equals(tI.stop()));
 
