@@ -1,11 +1,11 @@
-package com.barchart.util.common.collections.strict.impl;
+package com.barchart.util.common.collections.strict;
 
-import java.util.TreeMap;
+import java.util.HashMap;
 
-import com.barchart.util.common.collections.strict.api.StrictNavigableMap;
+import com.barchart.util.common.collections.strict.api.StrictMap;
 
 /**
- * TreeMap superclass which throws an IllegalStateException in the following cases:
+ * Hashmap superclass which throws an IllegalStateException in the following cases:
  * User attempts to add a null value    
  * User attempts to add a pre-existing key
  * User attempts to get or remove a non-existing key
@@ -14,11 +14,11 @@ import com.barchart.util.common.collections.strict.api.StrictNavigableMap;
  * @param <V> the type of mapped values
  */
 @SuppressWarnings("serial")
-public class StrictTreeMap<K, V> extends TreeMap<K, V> implements StrictNavigableMap<K, V> {
+public class StrictHashMap<K, V> extends HashMap<K, V> implements StrictMap<K, V> {
 	
 	private final Class<K> clazz;
 	
-	public StrictTreeMap(final Class<K> clazz) {
+	public StrictHashMap(final Class<K> clazz) {
 		this.clazz = clazz;
 	}
 	

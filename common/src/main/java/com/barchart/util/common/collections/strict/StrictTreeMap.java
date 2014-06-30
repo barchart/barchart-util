@@ -1,11 +1,11 @@
-package com.barchart.util.common.collections.strict.impl;
+package com.barchart.util.common.collections.strict;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.TreeMap;
 
-import com.barchart.util.common.collections.strict.api.StrictConcurrentMap;
+import com.barchart.util.common.collections.strict.api.StrictNavigableMap;
 
 /**
- * ConcurrentHashmap superclass which throws an IllegalStateException in the following cases:
+ * TreeMap superclass which throws an IllegalStateException in the following cases:
  * User attempts to add a null value    
  * User attempts to add a pre-existing key
  * User attempts to get or remove a non-existing key
@@ -14,12 +14,11 @@ import com.barchart.util.common.collections.strict.api.StrictConcurrentMap;
  * @param <V> the type of mapped values
  */
 @SuppressWarnings("serial")
-public class StrictConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> 
-		implements StrictConcurrentMap<K, V> {
+public class StrictTreeMap<K, V> extends TreeMap<K, V> implements StrictNavigableMap<K, V> {
 	
 	private final Class<K> clazz;
 	
-	public StrictConcurrentHashMap(final Class<K> clazz) {
+	public StrictTreeMap(final Class<K> clazz) {
 		this.clazz = clazz;
 	}
 	
@@ -75,5 +74,4 @@ public class StrictConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V>
 		
 		return super.put(key, value);
 	}
-	
 }
