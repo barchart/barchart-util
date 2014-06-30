@@ -1,4 +1,4 @@
-package com.barchart.util.common.collections.strict;
+package com.barchart.util.common.collections.strict.api;
 
 import java.util.Map;
 
@@ -13,4 +13,6 @@ import java.util.Map;
  */
 public interface StrictMap<K, V> extends Map<K, V> {
 
+	V replace(K key, V value);
+	
 }

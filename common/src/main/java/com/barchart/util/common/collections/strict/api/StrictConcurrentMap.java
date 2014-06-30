@@ -1,4 +1,4 @@
-package com.barchart.util.common.collections.strict;
+package com.barchart.util.common.collections.strict.api;
 
 import java.util.concurrent.ConcurrentMap;
 
@@ -12,5 +12,7 @@ import java.util.concurrent.ConcurrentMap;
  * @param <V> the type of mapped values
  */
 public interface StrictConcurrentMap<K, V> extends ConcurrentMap<K, V> {
+	
+	V replace(K key, V value);
 
 }

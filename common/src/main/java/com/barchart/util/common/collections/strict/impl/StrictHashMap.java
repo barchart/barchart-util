@@ -1,6 +1,8 @@
-package com.barchart.util.common.collections.strict;
+package com.barchart.util.common.collections.strict.impl;
 
 import java.util.HashMap;
+
+import com.barchart.util.common.collections.strict.api.StrictMap;
 
 /**
  * Hashmap superclass which throws an IllegalStateException in the following cases:
@@ -13,9 +15,30 @@ import java.util.HashMap;
  */
 @SuppressWarnings("serial")
 public class StrictHashMap<K, V> extends HashMap<K, V> implements StrictMap<K, V> {
+	
+	private final Class<K> clazz;
+	
+	public StrictHashMap(final Class<K> clazz) {
+		this.clazz = clazz;
+	}
+	
+	@Override
+	public V replace(final K key, final V value) {
+		
+		if(!super.containsKey(key)) {
+			throw new IllegalStateException("Unknown Key " + key.toString());
+		} else {
+			return super.put(key, value);
+		}
+		
+	}
 
 	@Override
 	public V get(final Object key) {
+		
+		if(!clazz.isInstance(key)) {
+			throw new IllegalStateException("Invalid key class - " + key.getClass().getCanonicalName());
+		}
 		
 		if(!super.containsKey(key)) {
 			throw new IllegalStateException("Unknown Key " + key.toString());
@@ -26,6 +49,10 @@ public class StrictHashMap<K, V> extends HashMap<K, V> implements StrictMap<K, V
 	
 	@Override
 	public V remove(final Object key) {
+		
+		if(!clazz.isInstance(key)) {
+			throw new IllegalStateException("Invalid key class - " + key.getClass().getCanonicalName());
+		}
 		
 		if(!super.containsKey(key)) {
 			throw new IllegalStateException("Unknown Key " + key.toString());

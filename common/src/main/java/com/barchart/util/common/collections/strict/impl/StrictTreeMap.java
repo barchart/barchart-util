@@ -1,6 +1,8 @@
-package com.barchart.util.common.collections.strict;
+package com.barchart.util.common.collections.strict.impl;
 
 import java.util.TreeMap;
+
+import com.barchart.util.common.collections.strict.api.StrictNavigableMap;
 
 /**
  * TreeMap superclass which throws an IllegalStateException in the following cases:
@@ -13,9 +15,30 @@ import java.util.TreeMap;
  */
 @SuppressWarnings("serial")
 public class StrictTreeMap<K, V> extends TreeMap<K, V> implements StrictNavigableMap<K, V> {
+	
+	private final Class<K> clazz;
+	
+	public StrictTreeMap(final Class<K> clazz) {
+		this.clazz = clazz;
+	}
+	
+	@Override
+	public V replace(final K key, final V value) {
+		
+		if(!super.containsKey(key)) {
+			throw new IllegalStateException("Unknown Key " + key.toString());
+		} else {
+			return super.put(key, value);
+		}
+		
+	}
 
 	@Override
-	public V get(Object key) {
+	public V get(final Object key) {
+		
+		if(!clazz.isInstance(key)) {
+			throw new IllegalStateException("Invalid key class - " + key.getClass().getCanonicalName());
+		}
 		
 		if(!super.containsKey(key)) {
 			throw new IllegalStateException("Unknown Key " + key.toString());
@@ -25,7 +48,11 @@ public class StrictTreeMap<K, V> extends TreeMap<K, V> implements StrictNavigabl
 	}
 	
 	@Override
-	public V remove(Object key) {
+	public V remove(final Object key) {
+		
+		if(!clazz.isInstance(key)) {
+			throw new IllegalStateException("Invalid key class - " + key.getClass().getCanonicalName());
+		}
 		
 		if(!super.containsKey(key)) {
 			throw new IllegalStateException("Unknown Key " + key.toString());

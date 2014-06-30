@@ -1,4 +1,4 @@
-package com.barchart.util.common.collections.strict;
+package com.barchart.util.common.collections.strict.api;
 
 import java.util.NavigableMap;
 
@@ -13,4 +13,6 @@ import java.util.NavigableMap;
  */
 public interface StrictNavigableMap<K, V> extends NavigableMap<K, V> {
 
+	V replace(K key, V value);
+	
 }

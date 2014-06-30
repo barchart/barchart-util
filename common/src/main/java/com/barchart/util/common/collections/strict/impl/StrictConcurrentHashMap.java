@@ -1,6 +1,8 @@
-package com.barchart.util.common.collections.strict;
+package com.barchart.util.common.collections.strict.impl;
 
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.barchart.util.common.collections.strict.api.StrictConcurrentMap;
 
 /**
  * ConcurrentHashmap superclass which throws an IllegalStateException in the following cases:
@@ -14,9 +16,30 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("serial")
 public class StrictConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> 
 		implements StrictConcurrentMap<K, V> {
+	
+	private final Class<K> clazz;
+	
+	public StrictConcurrentHashMap(final Class<K> clazz) {
+		this.clazz = clazz;
+	}
+	
+	@Override
+	public V replace(final K key, final V value) {
+		
+		if(!super.containsKey(key)) {
+			throw new IllegalStateException("Unknown Key " + key.toString());
+		} else {
+			return super.put(key, value);
+		}
+		
+	}
 
 	@Override
-	public V get(Object key) {
+	public V get(final Object key) {
+		
+		if(!clazz.isInstance(key)) {
+			throw new IllegalStateException("Invalid key class - " + key.getClass().getCanonicalName());
+		}
 		
 		if(!super.containsKey(key)) {
 			throw new IllegalStateException("Unknown Key " + key.toString());
@@ -26,7 +49,11 @@ public class StrictConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V>
 	}
 	
 	@Override
-	public V remove(Object key) {
+	public V remove(final Object key) {
+		
+		if(!clazz.isInstance(key)) {
+			throw new IllegalStateException("Invalid key class - " + key.getClass().getCanonicalName());
+		}
 		
 		if(!super.containsKey(key)) {
 			throw new IllegalStateException("Unknown Key " + key.toString());
