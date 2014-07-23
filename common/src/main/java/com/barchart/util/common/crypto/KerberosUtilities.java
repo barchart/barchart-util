@@ -13,10 +13,11 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.barchart.util.common.encoding.Base64;
 
 /**
  * Kerberos utilities.
@@ -110,14 +111,14 @@ public class KerberosUtilities {
 	 * Convert into Base-64.
 	 */
 	public static byte[] base64decode(final String text) {
-		return DatatypeConverter.parseBase64Binary(text);
+		return Base64.decode(text);
 	}
 
 	/**
 	 * Convert from Base-64.
 	 */
 	public static String base64encode(final byte[] array) {
-		return DatatypeConverter.printBase64Binary(array);
+		return Base64.encode(array);
 	}
 
 	/**
