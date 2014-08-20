@@ -10,8 +10,6 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
 
-import com.barchart.news.server.api.SharedExecutorService;
-import com.barchart.osgi.component.base.BaseComponent;
 import com.barchart.util.cluster.hazelcast.HazelcastCluster;
 import com.barchart.util.cluster.hazelcast.HazelcastStoreRegistry;
 import com.barchart.util.common.aws.EC2Util;
@@ -28,7 +26,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.MapLoader;
 
 @Component(name = HazelcastClusterProvider.NAME, immediate = true, configurationPolicy = ConfigurationPolicy.REQUIRE)
-public class HazelcastClusterProvider extends BaseComponent implements
+public class HazelcastClusterProvider extends DefaultComponent implements
 		HazelcastCluster {
 
 	public static final String NAME = "barchart.news.modules.hazelcast.cluster";
@@ -338,17 +336,6 @@ public class HazelcastClusterProvider extends BaseComponent implements
 
 	protected void unbind(final HazelcastStoreRegistry sr_) {
 		storeRegistry = null;
-	}
-
-	SharedExecutorService executor;
-
-	@Reference
-	protected void bind(final SharedExecutorService ex) {
-		executor = ex;
-	}
-
-	protected void unbind(final SharedExecutorService ex) {
-		executor = null;
 	}
 
 	@Override

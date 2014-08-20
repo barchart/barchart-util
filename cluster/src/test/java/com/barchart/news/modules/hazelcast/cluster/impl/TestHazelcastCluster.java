@@ -19,8 +19,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.news.server.api.SharedExecutorService;
-import com.barchart.news.server.executor.MockExecutorProvider;
 import com.barchart.util.cluster.hazelcast.HazelcastStoreRegistry;
 import com.barchart.util.cluster.hazelcast.impl.HazelcastClusterProvider;
 import com.barchart.util.test.concurrent.CallableTest;
@@ -50,8 +48,8 @@ public class TestHazelcastCluster {
 		// testData
 		final byte[] data = new byte[] { 1, 2, 3 };
 		cl1.getInstance().getMap("testCache").put("KEY", data);
-		final byte[] retrieved =
-				(byte[]) cl2.getInstance().getMap("testCache").get("KEY");
+		final byte[] retrieved = (byte[]) cl2.getInstance().getMap("testCache")
+				.get("KEY");
 
 		assertArrayEquals(data, retrieved);
 
@@ -117,9 +115,6 @@ public class TestHazelcastCluster {
 	// @Test
 	public void testAdapterFailure() throws Exception {
 		final HazelcastClusterProvider cp = new HazelcastClusterProvider();
-		ComponentUtil.bind(cp,
-				ComponentUtil.activate(new MockExecutorProvider()),
-				SharedExecutorService.class);
 		ComponentUtil.activate(cp, getConfig("cp"));
 		assertNotNull(cp.getInstance());
 	}
@@ -133,9 +128,6 @@ public class TestHazelcastCluster {
 
 	@Before
 	public void setUp() throws Exception {
-
-		final MockExecutorProvider exec = new MockExecutorProvider();
-		ComponentUtil.activate(exec);
 
 		final TestStoreRegistry registry = new TestStoreRegistry();
 
@@ -152,21 +144,18 @@ public class TestHazelcastCluster {
 		// Balls this is slow
 
 		cl1 = new HazelcastClusterProvider();
-		ComponentUtil.bind(cl1, exec, SharedExecutorService.class);
 		ComponentUtil.bind(cl1, registry, HazelcastStoreRegistry.class);
 		ComponentUtil.activate(cl1, getConfig("c1"));
 
 		Thread.sleep(100);
 
 		cl2 = new HazelcastClusterProvider();
-		ComponentUtil.bind(cl2, exec, SharedExecutorService.class);
 		ComponentUtil.bind(cl2, registry, HazelcastStoreRegistry.class);
 		ComponentUtil.activate(cl2, getConfig("c2"));
 
 		Thread.sleep(100);
 
 		cl3 = new HazelcastClusterProvider();
-		ComponentUtil.bind(cl3, exec, SharedExecutorService.class);
 		ComponentUtil.bind(cl3, registry, HazelcastStoreRegistry.class);
 		ComponentUtil.activate(cl3, getConfig("c3"));
 
@@ -222,8 +211,7 @@ public class TestHazelcastCluster {
 
 	private static class TestLoader implements MapLoader<String, byte[]> {
 
-		protected final Map<String, byte[]> data =
-				new HashMap<String, byte[]>();
+		protected final Map<String, byte[]> data = new HashMap<String, byte[]>();
 
 		private final boolean loadAll;
 

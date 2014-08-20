@@ -10,7 +10,7 @@
 
 	<groupId>com.barchart.util</groupId>
 	<artifactId>barchart-util-cluster</artifactId>
-	<version>1.0.10-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<properties>
@@ -18,22 +18,19 @@
 	</properties>
 
 	<scm>
-		<url>https://github.com/barchart/barchart-news</url>
-		<connection>scm:git:git://github.com/barchart/barchart-news.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-news.git</developerConnection>
+		<url>https://github.com/barchart/barchart-util</url>
+		<connection>scm:git:git://github.com/barchart/barchart-util.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-util.git</developerConnection>
 	  <tag>master</tag>
   </scm>
 
 	<dependencies>
 
-          <!--
 		<dependency>
-			<groupId>com.barchart.news</groupId>
-			<artifactId>barchart-news-util</artifactId>
-			<version>[2-SNAPSHOT,3-SNAPSHOT)</version>
+			<groupId>com.barchart.osgi</groupId>
+			<artifactId>barchart-osgi-component</artifactId>
 		</dependency>
-                -->
-
+		
 		<dependency>
 			<groupId>com.barchart.wrap</groupId>
 			<artifactId>barchart-wrap-hazelcast-all</artifactId>
@@ -45,19 +42,10 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>com.barchart.news</groupId>
-			<artifactId>barchart-news-mocks</artifactId>
-			<version>[3-SNAPSHOT,4-SNAPSHOT)</version>
-			<scope>test</scope>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-test</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>com.barchart.news</groupId>
-			<artifactId>barchart-news-services</artifactId>
-			<version>[3-SNAPSHOT,4-SNAPSHOT)</version>
-			<scope>test</scope>
-		</dependency>
-
+		
 	</dependencies>
 
 </project>

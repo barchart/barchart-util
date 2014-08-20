@@ -7,7 +7,6 @@ import java.util.Set;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import com.barchart.osgi.component.base.BaseComponent;
 import com.barchart.util.cluster.hazelcast.HazelcastCluster;
 import com.barchart.util.common.status.GroupStatus;
 import com.barchart.util.common.status.MemberStatus;
@@ -19,7 +18,7 @@ import com.hazelcast.partition.MigrationEvent;
 import com.hazelcast.partition.MigrationListener;
 
 @Component(immediate = true)
-public class HazelcastClusterStatus extends BaseComponent implements
+public class HazelcastClusterStatus extends DefaultComponent implements
 		GroupStatus {
 
 	/*
