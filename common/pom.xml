@@ -27,7 +27,7 @@
 			 <artifactId>config</artifactId>
 			 <scope>provided</scope>
 		 </dependency>
-  	
+
   		<!-- Logging framework. -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
