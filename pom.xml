@@ -41,6 +41,7 @@ Layout Project.
 	<modules>
 
 		<module>common</module>
+		<module>cluster</module>
 		<module>flow</module>
 		<module>value</module>
 		<module>rx</module>
