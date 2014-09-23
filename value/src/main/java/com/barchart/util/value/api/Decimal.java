@@ -6,7 +6,7 @@ package com.barchart.util.value.api;
  * See <a href="http://en.wikipedia.org/wiki/Decimal">Decimal</a>
  */
 public interface Decimal extends Scaled<Decimal>, Existential {
-
+	
 	@Override
 	long mantissa();
 
@@ -18,7 +18,7 @@ public interface Decimal extends Scaled<Decimal>, Existential {
 
 	@Override
 	Decimal scale(int exponent) throws ArithmeticException;
-
+	
 	@Override
 	Decimal round(int maxSigDigits);
 
@@ -27,7 +27,7 @@ public interface Decimal extends Scaled<Decimal>, Existential {
 
 	@Override
 	Decimal neg();
-
+	
 	@Override
 	Decimal abs();
 
@@ -45,22 +45,22 @@ public interface Decimal extends Scaled<Decimal>, Existential {
 
 	@Override
 	Decimal mult(Scaled<?> factor) throws ArithmeticException;
-
+	
 	@Override
 	Decimal mult(Scaled<?> factor, int maxSigDigits) throws ArithmeticException;
 
 	@Override
 	Decimal mult(long factor) throws ArithmeticException;
-
+	
 	@Override
 	Decimal div(Scaled<?> factor) throws ArithmeticException;
-
+	
 	@Override
 	Decimal div(Scaled<?> factor, int maxSigDigits) throws ArithmeticException;
 
 	@Override
 	Decimal div(long factor) throws ArithmeticException;
-
+	
 	@Override
 	long count(Decimal that) throws ArithmeticException;
 
@@ -69,10 +69,10 @@ public interface Decimal extends Scaled<Decimal>, Existential {
 
 	@Override
 	boolean greaterThanOrEquals(Decimal that);
-
+	
 	@Override
 	boolean lessThan(Decimal that);
-
+	
 	@Override
 	boolean lessThanOrEquals(Decimal that);
 
@@ -87,7 +87,7 @@ public interface Decimal extends Scaled<Decimal>, Existential {
 
 	@Override
 	boolean isNull();
-
+	
 	Decimal NULL = new Decimal() {
 
 		@Override
@@ -102,14 +102,12 @@ public interface Decimal extends Scaled<Decimal>, Existential {
 
 		@Override
 		public long mantissa() {
-			return 0;
-			// throw new UnsupportedOperationException();
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public int exponent() {
-			return 0;
-			// throw new UnsupportedOperationException();
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
@@ -226,7 +224,7 @@ public interface Decimal extends Scaled<Decimal>, Existential {
 		public boolean isNull() {
 			return true;
 		}
-
+		
 	};
-
+	
 }
