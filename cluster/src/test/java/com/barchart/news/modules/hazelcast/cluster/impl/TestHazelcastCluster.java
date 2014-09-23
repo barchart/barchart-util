@@ -19,8 +19,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.barchart.util.cluster.hazelcast.HazelcastClusterProvider;
 import com.barchart.util.cluster.hazelcast.HazelcastStoreRegistry;
-import com.barchart.util.cluster.hazelcast.impl.HazelcastClusterProvider;
 import com.barchart.util.test.concurrent.CallableTest;
 import com.barchart.util.test.osgi.ComponentUtil;
 import com.hazelcast.core.IMap;

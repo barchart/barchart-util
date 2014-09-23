@@ -1,4 +1,4 @@
-package com.barchart.util.cluster.hazelcast.impl;
+package com.barchart.util.cluster.hazelcast;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,8 +10,6 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
 
-import com.barchart.util.cluster.hazelcast.HazelcastCluster;
-import com.barchart.util.cluster.hazelcast.HazelcastStoreRegistry;
 import com.barchart.util.common.aws.EC2Util;
 import com.hazelcast.client.ClientConfig;
 import com.hazelcast.client.HazelcastClient;
@@ -29,7 +27,7 @@ import com.hazelcast.core.MapLoader;
 public class HazelcastClusterProvider extends DefaultComponent implements
 		HazelcastCluster {
 
-	public static final String NAME = "barchart.news.modules.hazelcast.cluster";
+	public static final String NAME = "barchart.util.cluster.hazelcast";
 
 	private HazelcastInstance hazelcast;
 
