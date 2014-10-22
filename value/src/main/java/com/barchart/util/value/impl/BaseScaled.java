@@ -209,8 +209,6 @@ public abstract class BaseScaled<T extends Scaled<T>> implements Scaled<T> {
 
 	}
 
-	// static final long SIGN = 1L << Long.SIZE;
-
 	@Override
 	public final T add(final T that) throws ArithmeticException {
 
@@ -263,7 +261,7 @@ public abstract class BaseScaled<T extends Scaled<T>> implements Scaled<T> {
 
 	@Override
 	public final T mult(final long factor) throws ArithmeticException {
-
+		
 		return result(MathExtra.longMult(mantissa(), factor), exponent());
 
 	}
@@ -317,7 +315,7 @@ public abstract class BaseScaled<T extends Scaled<T>> implements Scaled<T> {
 
 	@Override
 	public final T mult(final Scaled<?> that) throws ArithmeticException {
-
+		
 		final int e1 = this.exponent();
 		final int e2 = that.exponent();
 
@@ -335,7 +333,7 @@ public abstract class BaseScaled<T extends Scaled<T>> implements Scaled<T> {
 
 	@Override
 	public final T div(final Scaled<?> that) throws ArithmeticException {
-
+		
 		int e1 = this.exponent();
 		final int e2 = that.exponent();
 
