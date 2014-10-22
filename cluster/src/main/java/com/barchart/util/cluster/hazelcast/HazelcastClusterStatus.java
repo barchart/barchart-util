@@ -1,4 +1,4 @@
-package com.barchart.util.cluster.hazelcast.impl;
+package com.barchart.util.cluster.hazelcast;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -7,7 +7,6 @@ import java.util.Set;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import com.barchart.util.cluster.hazelcast.HazelcastCluster;
 import com.barchart.util.common.status.GroupStatus;
 import com.barchart.util.common.status.MemberStatus;
 import com.barchart.util.common.status.ServiceState;
