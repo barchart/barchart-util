@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentMap;
  * @param <K> the type of keys maintained by this map
  * @param <V> the type of mapped values
  */
-public interface StrictConcurrentMap<K, V> extends ConcurrentMap<K, V> {
+public interface StrictConcurrentMap<K, V> extends ConcurrentMap<K, V>, StrictMap<K, V> {
 	
 	V replace(K key, V value);
 
