@@ -70,19 +70,19 @@ public class ConfigModuleTest {
 	
 	private static class Component1 {
 		@Inject
-		@Named("component1")
+		@Named("Component1")
 		Config config;		
 	}
 	
 	private static class Component2 {
 		@Inject
-		@Named("component2")
+		@Named("Component2")
 		Config config;		
 	}
 	
 	private static class Component3 {
 		@Inject
-		@Named("component3")
+		@Named("Component3")
 		Config config;
 	}
 	
