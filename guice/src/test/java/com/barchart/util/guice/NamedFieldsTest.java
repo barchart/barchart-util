@@ -43,7 +43,7 @@ public class NamedFieldsTest {
 
 	public static final String EMPTY_LIST = "emptyList";
 
-	private static final class StringField extends FieldTarget {
+	private static final class StringField extends TestCase {
 
 		@Inject
 		@Named(STRING_FIELD)
@@ -55,7 +55,7 @@ public class NamedFieldsTest {
 		}
 	}
 
-	private static final class ConfigField extends FieldTarget {
+	private static final class ConfigField extends TestCase {
 
 		@Inject
 		@Named(CONFIG_FIELD)
@@ -68,7 +68,7 @@ public class NamedFieldsTest {
 
 	}
 
-	private static final class SmallIntegerNumberToIntegerField extends FieldTarget {
+	private static final class SmallIntegerNumberToIntegerField extends TestCase {
 
 		@Inject
 		@Named(SMALL_INTEGER_NUMBER_FIELD)
@@ -85,7 +85,7 @@ public class NamedFieldsTest {
 		}
 	}
 
-	private static final class SmallIntegerNumberToLongField extends FieldTarget {
+	private static final class SmallIntegerNumberToLongField extends TestCase {
 
 		@Inject
 		@Named(SMALL_INTEGER_NUMBER_FIELD)
@@ -102,7 +102,7 @@ public class NamedFieldsTest {
 		}
 	}
 
-	private static final class SmallIntegerNumberToShortField extends FieldTarget {
+	private static final class SmallIntegerNumberToShortField extends TestCase {
 		@Inject
 		@Named(SMALL_INTEGER_NUMBER_FIELD)
 		private short primitiveField;
@@ -118,7 +118,7 @@ public class NamedFieldsTest {
 		}
 	}
 
-	private static final class SmallIntegerNumberToByteField extends FieldTarget {
+	private static final class SmallIntegerNumberToByteField extends TestCase {
 		@Inject
 		@Named(SMALL_INTEGER_NUMBER_FIELD)
 		private byte primitiveField;
@@ -134,7 +134,7 @@ public class NamedFieldsTest {
 		}
 	}
 
-	private static final class SmallIntegerNumberToDoubleField extends FieldTarget {
+	private static final class SmallIntegerNumberToDoubleField extends TestCase {
 
 		@Inject
 		@Named(SMALL_INTEGER_NUMBER_FIELD)
@@ -151,7 +151,7 @@ public class NamedFieldsTest {
 		}
 	}
 
-	private static final class SmallIntegerNumberToFloatField extends FieldTarget {
+	private static final class SmallIntegerNumberToFloatField extends TestCase {
 
 		@Inject
 		@Named(SMALL_INTEGER_NUMBER_FIELD)
@@ -169,7 +169,7 @@ public class NamedFieldsTest {
 
 	}
 
-	private static final class BooleanField extends FieldTarget {
+	private static final class BooleanField extends TestCase {
 
 		@Inject
 		@Named(BOOLEAN_FIELD)
@@ -187,7 +187,7 @@ public class NamedFieldsTest {
 
 	}
 
-	private static final class StringListField extends FieldTarget {
+	private static final class StringListField extends TestCase {
 
 		@Inject
 		@Named(STRING_LIST_FIELD)
@@ -200,7 +200,7 @@ public class NamedFieldsTest {
 
 	}
 
-	private static final class LongListField extends FieldTarget {
+	private static final class LongListField extends TestCase {
 
 		@Inject
 		@Named(NUMBER_LIST_FIELD)
@@ -213,7 +213,7 @@ public class NamedFieldsTest {
 
 	}
 
-	private static final class IntListField extends FieldTarget {
+	private static final class IntListField extends TestCase {
 
 		@Inject
 		@Named(NUMBER_LIST_FIELD)
@@ -226,7 +226,7 @@ public class NamedFieldsTest {
 
 	}
 
-	private static final class ShortListField extends FieldTarget {
+	private static final class ShortListField extends TestCase {
 
 		@Inject
 		@Named(NUMBER_LIST_FIELD)
@@ -239,7 +239,7 @@ public class NamedFieldsTest {
 
 	}
 
-	private static final class ByteListField extends FieldTarget {
+	private static final class ByteListField extends TestCase {
 
 		@Inject
 		@Named(NUMBER_LIST_FIELD)
@@ -252,7 +252,7 @@ public class NamedFieldsTest {
 
 	}
 
-	private static final class DoubleListField extends FieldTarget {
+	private static final class DoubleListField extends TestCase {
 
 		@Inject
 		@Named(NUMBER_LIST_FIELD)
@@ -265,7 +265,7 @@ public class NamedFieldsTest {
 
 	}
 
-	private static final class FloatListField extends FieldTarget {
+	private static final class FloatListField extends TestCase {
 
 		@Inject
 		@Named(NUMBER_LIST_FIELD)
@@ -278,7 +278,7 @@ public class NamedFieldsTest {
 
 	}
 
-	private static final class ConfigListField extends FieldTarget {
+	private static final class ConfigListField extends TestCase {
 
 		@Inject
 		@Named(CONFIG_LIST_FIELD)
@@ -293,7 +293,7 @@ public class NamedFieldsTest {
 
 	}
 
-	private static final class BooleanListField extends FieldTarget {
+	private static final class BooleanListField extends TestCase {
 
 		@Inject
 		@Named(BOOLEAN_LIST_FIELD)
@@ -305,7 +305,7 @@ public class NamedFieldsTest {
 		}
 	}
 
-	private static final class EmptyLists extends FieldTarget {
+	private static final class EmptyLists extends TestCase {
 
 		@Inject
 		@Named(EMPTY_LIST)
@@ -358,7 +358,7 @@ public class NamedFieldsTest {
 
 	}
 
-	private static final class TypeMismatchList extends FieldTarget {
+	private static final class TypeMismatchList extends TestCase {
 
 		// String list in the config getting injected into a List<Integer> ?!?
 		// Unchecked generic casting makes it possible. Should be caught on
@@ -487,12 +487,9 @@ public class NamedFieldsTest {
 		return injector.getInstance(clazz);
 	}
 
-	private void runTest(Class<? extends FieldTarget> clazz) {
+	private void runTest(Class<? extends TestCase> clazz) {
 		get(clazz).test();
 	}
 
-	private static abstract class FieldTarget {
-		@Test
-		abstract void test();
-	}
+
 }

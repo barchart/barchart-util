@@ -14,6 +14,22 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.util.guice.converters.BooleanConverter;
+import com.barchart.util.guice.converters.BooleanListConverter;
+import com.barchart.util.guice.converters.ByteConverter;
+import com.barchart.util.guice.converters.ByteListConverter;
+import com.barchart.util.guice.converters.DoubleConverter;
+import com.barchart.util.guice.converters.DoubleListConverter;
+import com.barchart.util.guice.converters.FloatConverter;
+import com.barchart.util.guice.converters.FloatListConverter;
+import com.barchart.util.guice.converters.IntegerConverter;
+import com.barchart.util.guice.converters.IntegerListConverter;
+import com.barchart.util.guice.converters.LongConverter;
+import com.barchart.util.guice.converters.LongListConverter;
+import com.barchart.util.guice.converters.ShortConverter;
+import com.barchart.util.guice.converters.ShortListConverter;
+import com.barchart.util.guice.converters.StringConverter;
+import com.barchart.util.guice.converters.StringListConverter;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
@@ -42,6 +58,8 @@ public final class ConfigModule extends AbstractModule {
 
 	private final String applicationConf;
 
+	private List<ValueConverter> converters;
+
 	public ConfigModule(File configDirectory) {
 		this(configDirectory, APPLICATION_CONF);
 
@@ -53,11 +71,30 @@ public final class ConfigModule extends AbstractModule {
 		}
 		this.configDirectory = configDirectory;
 		this.applicationConf = applicationConf;
-		addTypeConverter(new NumberConverter());
+		converters = new ArrayList<ValueConverter>();
+		converters.add(new StringConverter());
+		converters.add(new BooleanConverter());
+		converters.add(new LongConverter());
+		converters.add(new IntegerConverter());
+		converters.add(new ShortConverter());
+		converters.add(new ByteConverter());
+		converters.add(new DoubleConverter());
+		converters.add(new FloatConverter());
+		// converters.add(new ConfigConverter());
+		converters.add(new ConfigListConverter());
+		converters.add(new StringListConverter());
+		converters.add(new BooleanListConverter());
+		converters.add(new LongListConverter());
+		converters.add(new IntegerListConverter());
+		converters.add(new ShortListConverter());
+		converters.add(new ByteListConverter());
+		converters.add(new DoubleListConverter());
+		converters.add(new FloatListConverter());
+
 	}
 
-	private <T> void addTypeConverter(ValueConveter<T> numberConverter) {
-
+	public void addConverter(ValueConverter valueConverter) {
+		converters.add(valueConverter);
 	}
 
 	@Override
@@ -66,6 +103,9 @@ public final class ConfigModule extends AbstractModule {
 		bind(Config.class).toInstance(getApplicationConf());
 		File[] configFiles = configDirectory.listFiles(FILENAME_FILTER);
 		for (File file : configFiles) {
+			// ConfigFileForBinding configFileForBinding = new
+			// ConfigFileForBinding(file);
+			// configFileForBinding.applyBindings();
 			bindValues(file);
 		}
 
@@ -115,150 +155,9 @@ public final class ConfigModule extends AbstractModule {
 	}
 
 	private void bindNamedValue(String key, ConfigValue value) {
-		switch (value.valueType()) {
-		case STRING:
-			bind(String.class).annotatedWith(Names.named(key)).toInstance((String) value.unwrapped());
-			break;
-		case OBJECT:
-			break;
-		case LIST:
-			bindList(key, value);
-			break;
-		case NULL:
-			break;
-		case NUMBER:
-			bindNumber(key, value);
-			break;
-		case BOOLEAN:
-			bindBoolean(key, value);
-			break;
+		for (ValueConverter converter : converters) {
+			converter.applyBindings(binder(), key, value);
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private void bindList(String key, ConfigValue value) {
-		List<?> unwrapped = (List<?>) value.unwrapped();
-
-		if (areListContentsCastable(unwrapped, String.class)) {
-			bind(new TypeLiteral<List<String>>() {
-			}).annotatedWith(Names.named(key)).toInstance((List<String>) unwrapped);
-		}
-
-		if (areListContentsCastable(unwrapped, Boolean.class)) {
-			bind(new TypeLiteral<List<Boolean>>() {
-			}).annotatedWith(Names.named(key)).toInstance((List<Boolean>) unwrapped);
-		}
-
-		if (areListContentsCastable(unwrapped, HashMap.class)) {
-			bind(new TypeLiteral<List<Config>>() {
-			}).annotatedWith(Names.named(key)).toInstance((List<Config>) value.atKey(key).getConfigList(key));
-		}
-
-		if (areListContentsCastable(unwrapped, Number.class)) {
-			bind(new TypeLiteral<List<Long>>() {
-			}).annotatedWith(Names.named(key)).toInstance(convertToLongList((List<Number>) unwrapped));
-
-			bind(new TypeLiteral<List<Integer>>() {
-			}).annotatedWith(Names.named(key)).toInstance(convertToIntegerList((List<Number>) unwrapped));
-
-			bind(new TypeLiteral<List<Short>>() {
-			}).annotatedWith(Names.named(key)).toInstance(convertToShortList((List<Number>) unwrapped));
-
-			bind(new TypeLiteral<List<Byte>>() {
-			}).annotatedWith(Names.named(key)).toInstance(convertToByteList((List<Number>) unwrapped));
-
-			bind(new TypeLiteral<List<Double>>() {
-			}).annotatedWith(Names.named(key)).toInstance(convertToDoubleList((List<Number>) unwrapped));
-
-			bind(new TypeLiteral<List<Float>>() {
-			}).annotatedWith(Names.named(key)).toInstance(convertToFloatList((List<Number>) unwrapped));
-
-		}
-
-	}
-
-	private List<Long> convertToLongList(List<Number> unwrapped) {
-		ArrayList<Long> list = new ArrayList<Long>();
-		for (Number number : unwrapped) {
-			list.add(number.longValue());
-		}
-		return Collections.unmodifiableList(list);
-	}
-
-	private List<Integer> convertToIntegerList(List<Number> unwrapped) {
-		ArrayList<Integer> list = new ArrayList<Integer>();
-		for (Number number : unwrapped) {
-			list.add(number.intValue());
-		}
-		return Collections.unmodifiableList(list);
-	}
-
-	private List<Short> convertToShortList(List<Number> unwrapped) {
-		ArrayList<Short> list = new ArrayList<Short>();
-		for (Number number : unwrapped) {
-			list.add(number.shortValue());
-		}
-		return Collections.unmodifiableList(list);
-	}
-
-	private List<Byte> convertToByteList(List<Number> unwrapped) {
-		ArrayList<Byte> list = new ArrayList<Byte>();
-		for (Number number : unwrapped) {
-			list.add(number.byteValue());
-		}
-		return Collections.unmodifiableList(list);
-	}
-
-	private List<Double> convertToDoubleList(List<Number> unwrapped) {
-		ArrayList<Double> list = new ArrayList<Double>();
-		for (Number number : unwrapped) {
-			list.add(number.doubleValue());
-		}
-		return Collections.unmodifiableList(list);
-	}
-
-	private List<Float> convertToFloatList(List<Number> unwrapped) {
-		ArrayList<Float> list = new ArrayList<Float>();
-		for (Number number : unwrapped) {
-			list.add(number.floatValue());
-		}
-		return Collections.unmodifiableList(list);
-	}
-
-	private boolean areListContentsCastable(List<?> unwrapped, Class<?> genericParameter) {
-		if (unwrapped.isEmpty()) {
-			return true;
-		} else {
-			return genericParameter.isAssignableFrom(unwrapped.get(0).getClass());
-		}
-	}
-
-	private void bindBoolean(String key, ConfigValue value) {
-		bind(Boolean.class).annotatedWith(Names.named(key)).toInstance((Boolean) value.unwrapped());
-	}
-
-	private void bindNumber(String key, ConfigValue value) {
-		Number number = (Number) value.unwrapped();
-		bind(Long.class).annotatedWith(Names.named(key)).toInstance(number.longValue());
-		bind(Integer.class).annotatedWith(Names.named(key)).toInstance(number.intValue());
-		bind(Short.class).annotatedWith(Names.named(key)).toInstance(number.shortValue());
-		bind(Byte.class).annotatedWith(Names.named(key)).toInstance(number.byteValue());
-		bind(Double.class).annotatedWith(Names.named(key)).toInstance(number.doubleValue());
-		bind(Float.class).annotatedWith(Names.named(key)).toInstance(number.floatValue());
-	}
-
-	private Map<String, Config> findComponentConfigList() {
-		Map<String, Config> map = new HashMap<String, Config>();
-		Config applicationConf = getApplicationConf();
-		if (applicationConf != null) {
-			for (Config componentConf : applicationConf.getConfigList(COMPONENT_LIST)) {
-				String type = componentConf.getString(COMPONENT_TYPE);
-				if (type != null) {
-					map.put(type, componentConf);
-				}
-			}
-		}
-		return map;
 	}
 
 	private Config getApplicationConf() {
@@ -270,9 +169,20 @@ public final class ConfigModule extends AbstractModule {
 		}
 	}
 
-	public static final class NumberBinder {
+	private class ConfigFileForBinding {
 
-		public void apply(ConfigValue configValue) {
+		private final String filename;
+
+		private final Config config;
+
+		public ConfigFileForBinding(File file) {
+			this.filename = file.getName();
+			this.config = ConfigFactory.parseFile(file);
+
+		}
+
+		public void applyBindings() {
+			// TODO Auto-generated method stub
 
 		}
 
