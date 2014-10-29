@@ -41,6 +41,8 @@ public final class ConfigModule extends AbstractModule {
 
 	private static final Logger logger = LoggerFactory.getLogger(ConfigModule.class);
 
+	private static final String DEFAULT_CONFIG_FILENAME = "application.conf";
+
 	private static final String APPLICATION_CONF = "application.conf";
 
 	private static final String COMPONENT_LIST = "component";
@@ -100,24 +102,9 @@ public final class ConfigModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bind(ConfigDirectory.class).toInstance(new ConfigDirectory(configDirectory));
-		bind(Config.class).toInstance(getApplicationConf());
-		File[] configFiles = configDirectory.listFiles(FILENAME_FILTER);
-		for (File file : configFiles) {
-			// ConfigFileForBinding configFileForBinding = new
-			// ConfigFileForBinding(file);
-			// configFileForBinding.applyBindings();
-			bindValues(file);
-		}
-
-	}
-
-	private void bindValues(File file) {
-		Config config = ConfigFactory.parseFile(file);
-
-		bindConfigs(config);
-
-		for (Entry<String, ConfigValue> entry : config.entrySet()) {
-			bindNamedValue(entry.getKey(), entry.getValue());
+		for (File file : configDirectory.listFiles(FILENAME_FILTER)) {
+			ConfigFile configFile = new ConfigFile(file);
+			configFile.applyBindings();
 		}
 	}
 
@@ -154,36 +141,47 @@ public final class ConfigModule extends AbstractModule {
 		}
 	}
 
-	private void bindNamedValue(String key, ConfigValue value) {
-		for (ValueConverter converter : converters) {
-			converter.applyBindings(binder(), key, value);
-		}
-	}
-
-	private Config getApplicationConf() {
-		File applicationConfFile = new File(configDirectory, applicationConf);
-		if (applicationConfFile.exists()) {
-			return ConfigFactory.parseFile(applicationConfFile);
-		} else {
-			return null;
-		}
-	}
-
-	private class ConfigFileForBinding {
+	private class ConfigFile {
 
 		private final String filename;
 
 		private final Config config;
 
-		public ConfigFileForBinding(File file) {
+		private String shortname;
+
+		public ConfigFile(File file) {
 			this.filename = file.getName();
+			this.shortname = filename.replaceAll("\\..*$", "");
 			this.config = ConfigFactory.parseFile(file);
 
 		}
 
 		public void applyBindings() {
-			// TODO Auto-generated method stub
 
+			applyBindings(shortname + "/");
+
+			if (DEFAULT_CONFIG_FILENAME.equals(filename)) {
+				bind(Config.class).toInstance(config);
+				bind(Config.class).annotatedWith(Names.named("/")).toInstance(config);
+				applyBindings("");
+			}
+
+			bindConfigs(config);
+		}
+
+		private void applyBindings(String prefix) {
+			bind(Config.class).annotatedWith(Names.named(prefix)).toInstance(config);
+			for (Entry<String, ConfigValue> entry : config.entrySet()) {
+				String key = prefix + entry.getKey();
+				ConfigValue value = entry.getValue();
+				bindNamedValue(key, value);
+			}
+		}
+
+		private void bindNamedValue(String key, ConfigValue value) {
+			for (ValueConverter converter : converters) {
+				converter.applyBindings(binder().withSource(filename), key, value);
+			}
 		}
 
 	}

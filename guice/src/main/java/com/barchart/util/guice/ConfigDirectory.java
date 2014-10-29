@@ -14,4 +14,8 @@ public final class ConfigDirectory {
 		return new File(configDirectory, filename);
 	}
 
+	public File getFile() {
+		return configDirectory;
+	}
+
 }
