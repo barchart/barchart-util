@@ -1,6 +1,7 @@
 package com.barchart.util.guice;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
@@ -86,14 +87,16 @@ public final class ComponentModule extends AbstractModule {
 
 			Class<?> componentClass = getComponentClass(type);
 			for (Class<?> bindingType : getBindingTypesForClass(componentClass)) {
-				logger.info("Bind " + type + ", named " + name + ", to " + componentClass);
 				
 				@SuppressWarnings("unchecked")
 				LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) binder() //
 					.withSource(config) //
 					.bind(bindingType) //
 					.annotatedWith(Names.named(name));
-				bindingBuilder.to(bindingType).in(Singleton.class);
+				bindingBuilder.to(componentClass).in(Singleton.class);
+				
+				
+				logger.info("Binding type: " + bindingType);
 				expose(bindingType).annotatedWith(Names.named(name));
 			}
 
@@ -104,10 +107,19 @@ public final class ComponentModule extends AbstractModule {
 		// is null, then return an emptylist
 		private List<Class<?>> getBindingTypesForClass(Class<?> componentClass) {
 			List<Class<?>> list = new ArrayList<Class<?>>();
-			if (componentClass != null) {
-				//TODO: Interfaces and superclasses
-				list.add(componentClass);
-//				componentClass.getInterfaces()
+			for (Class<?> clazz : getInclusiveSuperclasses(componentClass)) {
+				list.add(clazz);
+				list.addAll(Arrays.asList(clazz.getInterfaces()));
+			}
+			return list;
+		}
+
+		// Return a collection of this class (if not null, and all superclasses)
+		private Collection<Class<?>> getInclusiveSuperclasses(Class<?> clazz) {
+			List<Class<?>> list = new ArrayList<Class<?>>();
+			while (clazz != null) {
+				list.add(clazz);
+				clazz = clazz.getSuperclass();
 			}
 			return list;
 		}
