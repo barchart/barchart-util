@@ -45,6 +45,7 @@ Layout Project.
 		<module>flow</module>
 		<module>value</module>
 		<module>rx</module>
+		<module>guice</module>
 		<module>test</module>
 
 	</modules>
