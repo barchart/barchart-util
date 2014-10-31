@@ -1,9 +1,7 @@
-package com.barchart.util.guice.component;
+package com.barchart.util.guice;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
-
-import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,15 +15,19 @@ import com.google.inject.Singleton;
 @Singleton
 class AnnotationScanner {
 
+	static {
+		//TODO: scan for annotations in static block?
+	}
+	
 	private static final Logger logger = LoggerFactory.getLogger(AnnotationScanner.class);
 
 	private Multimap<Class<? extends Annotation>, Class<?>> annotationToClassMap;
 
 	public AnnotationScanner() {
 		annotationToClassMap = HashMultimap.create();
-		logger.info("Start scanning");
+//		logger.info("Start scanning");
 		scan();
-		logger.info("Stop scanning");
+//		logger.info("Stop scanning");
 	}
 
 	private void scan() {
@@ -58,7 +60,7 @@ class AnnotationScanner {
 			Class<?> load = info.load();
 			return load;
 		} catch (NoClassDefFoundError error) {
-			logger.debug("Could not load: " + error.getMessage());
+//			logger.debug("Could not load: " + error.getMessage());
 			return null;
 		}
 	}

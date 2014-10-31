@@ -1,4 +1,4 @@
-package com.barchart.util.guice.component;
+package com.barchart.util.guice;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 

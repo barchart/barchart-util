@@ -6,6 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.barchart.util.guice.Component;
 import com.google.inject.Injector;
 import com.typesafe.config.Config;
 

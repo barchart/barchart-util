@@ -62,20 +62,21 @@ public final class GuiceConfigBuilder {
 	}
 
 	public Injector build() {
+		AnnotationScanner annotationScanner = new AnnotationScanner();
 		final ConfigDirectory configDirectory = new ConfigDirectory(directory);
 		addDefaultValueConverters();
 		List<Config> configFiles = readConfigFiles(configDirectory);
-		
+
 		initialModules.add(new AbstractModule() {
 			@Override
 			protected void configure() {
 				bind(ConfigDirectory.class).toInstance(configDirectory);
 			}
 		});
-		
-		Injector initialInjector = Guice.createInjector(initialModules);
-		Injector configValueInjector = initialInjector.createChildInjector(new ConfigValueBinderModule(configFiles, valueConverters));
-		return configValueInjector;
+
+		initialModules.add(new ConfigValueBinderModule(configFiles, valueConverters));
+		initialModules.add(new ComponentModule(configFiles, valueConverters, annotationScanner));
+		return Guice.createInjector(initialModules);
 	}
 
 	private void addDefaultValueConverters() {

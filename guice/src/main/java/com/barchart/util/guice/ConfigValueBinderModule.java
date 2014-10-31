@@ -15,9 +15,9 @@ import com.typesafe.config.ConfigValue;
 public final class ConfigValueBinderModule extends AbstractModule {
 
 	private static final Logger logger = LoggerFactory.getLogger(ConfigValueBinderModule.class);
-	
+
 	private final List<Config> configFiles;
-	
+
 	private final List<ValueConverter> valueConverters;
 
 	public ConfigValueBinderModule(List<Config> configFiles, List<ValueConverter> valueConverters) {
@@ -51,28 +51,19 @@ public final class ConfigValueBinderModule extends AbstractModule {
 		}
 
 		public void applyBindings() {
-			
+
 			if (Filetypes.isDefaultConfigFile(config)) {
 				bind(Config.class).toInstance(config);
 				bind(Config.class).annotatedWith(Names.named("/")).toInstance(config);
 			}
-			
+
 			UniqueObjectPathSet objectPaths = new UniqueObjectPathSet();
 			for (Entry<String, ConfigValue> entry : config.entrySet()) {
 				String configValuePath = entry.getKey();
 				objectPaths.add(configValuePath);
 				bindConfigValue(configValuePath, entry.getValue());
 			}
-			applyConfigBindings(objectPaths);
-		}
-
-		private void applyConfigBindings(UniqueObjectPathSet objectPaths) {
-			bindConfigValue("", config.root());
-			
-			for (String objectPath : objectPaths) {
-				Config object = config.getConfig(objectPath);
-				bindConfigValue(objectPath, object.root());
-			}
+			bindConfigObjectPaths(objectPaths);
 		}
 
 		private void bindConfigValue(String key, ConfigValue value) {
@@ -81,6 +72,15 @@ public final class ConfigValueBinderModule extends AbstractModule {
 				if (Filetypes.isDefaultConfigFile(config)) {
 					converter.applyBindings(binder(), key, value);
 				}
+			}
+		}
+
+		private void bindConfigObjectPaths(UniqueObjectPathSet objectPaths) {
+			bindConfigValue("", config.root());
+
+			for (String objectPath : objectPaths) {
+				Config object = config.getConfig(objectPath);
+				bindConfigValue(objectPath, object.root());
 			}
 		}
 
