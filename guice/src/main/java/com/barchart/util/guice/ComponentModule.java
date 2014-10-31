@@ -138,7 +138,7 @@ public final class ComponentModule extends AbstractModule {
 		}
 
 		private void bindConfigObjectPaths(UniqueObjectPathSet objectPaths) {
-			bindConfigValue("#", config.root());
+			bindConfigValue("", config.root());
 
 			for (String objectPath : objectPaths) {
 				Config object = config.getConfig(objectPath);

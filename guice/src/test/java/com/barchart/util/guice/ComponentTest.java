@@ -14,6 +14,8 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.typesafe.config.Config;
+
 @RunWith(Enclosed.class)
 public class ComponentTest {
 
@@ -168,21 +170,21 @@ public class ComponentTest {
 		}
 
 		public static final class TestCase {
-			
+
 			@Inject
 			@Named("compound1")
 			private CompoundComponent compoundComponent;
 
 		}
 	}
-	
+
 	public static final class ExternalComponentFile extends InjectorTest {
-		
+
 		@Before
 		public void init() {
 			setup("src/test/resources/componenttest");
 		}
-		
+
 		@Test
 		public void test() {
 			TestCase testCase = get(TestCase.class);
@@ -190,7 +192,7 @@ public class ComponentTest {
 		}
 
 		public static final class TestCase {
-			
+
 			@Inject
 			@Named("external")
 			private BasicComponent external;
@@ -198,6 +200,50 @@ public class ComponentTest {
 		}
 	}
 
+	public static final class ReadGlobalConfiguration extends InjectorTest {
+
+		private TestCase testCase;
+
+		@Before
+		public void init() {
+			setup("src/test/resources/componenttest");
+			this.testCase = get(TestCase.class);
+		}
+
+		@Test
+		public void testName() {
+			assertEquals("configreader", testCase.reader.name);
+		}
+		
+		@Test
+		public void testCommonString() {
+			assertEquals("common", testCase.reader.commonString);
+		}
+		
+		@Test
+		public void testCommonObject() {
+			assertEquals("common_object", testCase.reader.commonConfigObject.getString("value"));
+		}
+		
+		@Test
+		public void testNumberFromOtherFile() {
+			assertEquals(42, testCase.reader.numberFromOtherFile);
+		}
+		
+		@Test
+		public void testComponentConfig() {
+			assertEquals("configreader", testCase.reader.componentConfig.getString("name"));
+		}
+
+		public static final class TestCase {
+
+			@Inject
+			@Named("configreader")
+			private CommonConfigReader reader;
+
+		}
+
+	}
 }
 
 interface ComponentInterface {
@@ -242,4 +288,28 @@ final class CompoundComponent extends AbstractComponent {
 		return name;
 	}
 
+}
+
+@Component("test.common_config_reader")
+final class CommonConfigReader {
+
+	@Inject
+	@Named("#name")
+	public String name;
+
+	@Inject
+	@Named("#")
+	public Config componentConfig;
+	
+	@Inject
+	@Named("common_config_string")
+	public String commonString;
+
+	@Inject
+	@Named("common_config_object")
+	public Config commonConfigObject;
+
+	@Inject
+	@Named("other/number")
+	public int numberFromOtherFile;
 }
