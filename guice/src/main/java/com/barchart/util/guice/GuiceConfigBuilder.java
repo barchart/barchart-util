@@ -22,6 +22,7 @@ import com.barchart.util.guice.converters.ShortConverter;
 import com.barchart.util.guice.converters.ShortListConverter;
 import com.barchart.util.guice.converters.StringConverter;
 import com.barchart.util.guice.converters.StringListConverter;
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -61,13 +62,20 @@ public final class GuiceConfigBuilder {
 	}
 
 	public Injector build() {
-		ConfigDirectory configDirectory = new ConfigDirectory(directory);
+		final ConfigDirectory configDirectory = new ConfigDirectory(directory);
 		addDefaultValueConverters();
 		List<Config> configFiles = readConfigFiles(configDirectory);
+		
+		initialModules.add(new AbstractModule() {
+			@Override
+			protected void configure() {
+				bind(ConfigDirectory.class).toInstance(configDirectory);
+			}
+		});
+		
 		Injector initialInjector = Guice.createInjector(initialModules);
 		Injector configValueInjector = initialInjector.createChildInjector(new ConfigValueBinderModule(configFiles, valueConverters));
 		return configValueInjector;
-
 	}
 
 	private void addDefaultValueConverters() {

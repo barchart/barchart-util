@@ -3,14 +3,21 @@ package com.barchart.util.guice;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.barchart.util.guice.component.UniqueObjectPathSet;
 import com.google.inject.AbstractModule;
+import com.google.inject.name.Names;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigValue;
 
 public final class ConfigValueBinderModule extends AbstractModule {
 
+	private static final Logger logger = LoggerFactory.getLogger(ConfigValueBinderModule.class);
+	
 	private final List<Config> configFiles;
+	
 	private final List<ValueConverter> valueConverters;
 
 	public ConfigValueBinderModule(List<Config> configFiles, List<ValueConverter> valueConverters) {
@@ -24,7 +31,6 @@ public final class ConfigValueBinderModule extends AbstractModule {
 			if (Filetypes.isConfigFile(config)) {
 				ConfigFileBinder configFileBinder = new ConfigFileBinder(config);
 				configFileBinder.applyBindings();
-
 			}
 		}
 	}
@@ -45,6 +51,12 @@ public final class ConfigValueBinderModule extends AbstractModule {
 		}
 
 		public void applyBindings() {
+			
+			if (Filetypes.isDefaultConfigFile(config)) {
+				bind(Config.class).toInstance(config);
+				bind(Config.class).annotatedWith(Names.named("/")).toInstance(config);
+			}
+			
 			UniqueObjectPathSet objectPaths = new UniqueObjectPathSet();
 			for (Entry<String, ConfigValue> entry : config.entrySet()) {
 				String configValuePath = entry.getKey();
@@ -55,6 +67,8 @@ public final class ConfigValueBinderModule extends AbstractModule {
 		}
 
 		private void applyConfigBindings(UniqueObjectPathSet objectPaths) {
+			bindConfigValue("", config.root());
+			
 			for (String objectPath : objectPaths) {
 				Config object = config.getConfig(objectPath);
 				bindConfigValue(objectPath, object.root());

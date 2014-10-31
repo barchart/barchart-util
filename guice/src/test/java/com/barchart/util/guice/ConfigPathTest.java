@@ -1,8 +1,6 @@
 package com.barchart.util.guice;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
+import static org.junit.Assert.assertEquals;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -10,13 +8,12 @@ import javax.inject.Named;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.typesafe.config.Config;
 
 public class ConfigPathTest {
 
-	private static final File CONFIGURATION_DIRECTORY = new File("src/test/resources/configpathtest");
+	private static final String CONFIGURATION_DIRECTORY = "src/test/resources/configpathtest";
 
 	private static final class TestConfigDirectory extends TestCase {
 
@@ -107,8 +104,9 @@ public class ConfigPathTest {
 
 	@Before
 	public void setup() {
-		ConfigModule configModule = new ConfigModule(CONFIGURATION_DIRECTORY);
-		this.injector = Guice.createInjector(configModule);
+		this.injector = GuiceConfigBuilder.create() //
+				.setDirectory(CONFIGURATION_DIRECTORY) //
+				.build();
 	}
 
 	private <T> T get(Class<T> clazz) {

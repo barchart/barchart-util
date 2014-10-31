@@ -1,5 +1,8 @@
 package com.barchart.util.guice.converters;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.barchart.util.guice.ValueConverter;
 import com.google.inject.Binder;
 import com.google.inject.name.Names;
@@ -8,6 +11,8 @@ import com.typesafe.config.ConfigValue;
 import com.typesafe.config.ConfigValueType;
 
 public class ConfigConverter implements ValueConverter {
+
+	private static final Logger logger = LoggerFactory.getLogger(ConfigConverter.class);
 
 	private static final String TEMPORARY_CONFIG_PATH = "configPath";
 
