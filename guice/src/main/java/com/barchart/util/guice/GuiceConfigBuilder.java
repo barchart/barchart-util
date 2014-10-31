@@ -2,7 +2,6 @@ package com.barchart.util.guice;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.barchart.util.guice.converters.BooleanConverter;
@@ -31,14 +30,14 @@ import com.typesafe.config.ConfigFactory;
 
 public final class GuiceConfigBuilder {
 
-	private final ArrayList<Module> initialModules;
+	private final ArrayList<Module> modules;
 
 	private final ArrayList<ValueConverter> valueConverters;
 
 	private File directory;
 
 	GuiceConfigBuilder() {
-		this.initialModules = new ArrayList<Module>();
+		this.modules = new ArrayList<Module>();
 		this.valueConverters = new ArrayList<ValueConverter>();
 	}
 
@@ -47,7 +46,7 @@ public final class GuiceConfigBuilder {
 	}
 
 	public GuiceConfigBuilder addModule(Module module) {
-		initialModules.add(module);
+		modules.add(module);
 		return this;
 	}
 
@@ -62,21 +61,12 @@ public final class GuiceConfigBuilder {
 	}
 
 	public Injector build() {
-		AnnotationScanner annotationScanner = new AnnotationScanner();
-		final ConfigDirectory configDirectory = new ConfigDirectory(directory);
 		addDefaultValueConverters();
-		List<Config> configFiles = readConfigFiles(configDirectory);
-
-		initialModules.add(new AbstractModule() {
-			@Override
-			protected void configure() {
-				bind(ConfigDirectory.class).toInstance(configDirectory);
-			}
-		});
-
-		initialModules.add(new ConfigValueBinderModule(configFiles, valueConverters));
-		initialModules.add(new ComponentModule(configFiles, valueConverters, annotationScanner));
-		return Guice.createInjector(initialModules);
+		List<Config> configFiles = readConfigFiles();
+		modules.add(new BasicModule());
+		modules.add(new ConfigValueBinderModule(configFiles, valueConverters));
+		modules.add(new ComponentModule(configFiles, valueConverters, new AnnotationScanner()));
+		return Guice.createInjector(modules);
 	}
 
 	private void addDefaultValueConverters() {
@@ -100,7 +90,8 @@ public final class GuiceConfigBuilder {
 		valueConverters.add(new FloatListConverter());
 	}
 
-	private List<Config> readConfigFiles(ConfigDirectory configDirectory) {
+	private List<Config> readConfigFiles() {
+		ConfigDirectory configDirectory = new ConfigDirectory(directory);
 		List<Config> list = new ArrayList<Config>();
 		for (File file : configDirectory.listFiles(".conf")) {
 			list.add(ConfigFactory.parseFile(file));
@@ -114,4 +105,12 @@ public final class GuiceConfigBuilder {
 		return list;
 	}
 
+	private class BasicModule extends AbstractModule {
+
+		@Override
+		protected void configure() {
+			bind(ConfigDirectory.class).toInstance(new ConfigDirectory(directory));
+		}
+
+	}
 }
