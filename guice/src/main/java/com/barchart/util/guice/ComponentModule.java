@@ -94,8 +94,6 @@ public final class ComponentModule extends AbstractModule {
 					.annotatedWith(Names.named(name));
 				bindingBuilder.to(componentClass).in(Singleton.class);
 				
-				
-				logger.info("Binding type: " + bindingType);
 				expose(bindingType).annotatedWith(Names.named(name));
 			}
 
@@ -158,11 +156,11 @@ public final class ComponentModule extends AbstractModule {
 			}
 			if (list.size() == 0) {
 				// TODO: Throw exception?
-				logger.warn("No @Component classes found for configured component type " + componentType);
+				logger.warn("No @Component classes found for configured component type \"" + componentType + "\"");
 				return null;
 			} else if (list.size() > 1) {
 				// TODO: Throw exception?
-				logger.warn("Multiple @Component classes found for component type: " + componentType + ".  classes=" + list + ".  Using the first one.");
+				logger.warn("Multiple @Component classes found for component type: \"" + componentType + "\".  classes=" + list + ".  Using the first one.");
 			}
 			return list.get(0);
 		}

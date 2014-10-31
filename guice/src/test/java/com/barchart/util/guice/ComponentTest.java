@@ -1,193 +1,223 @@
 package com.barchart.util.guice;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import javax.inject.Inject;
 //import javax.inject.Named;
 import javax.inject.Named;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Injector;
-
+@RunWith(Enclosed.class)
 public class ComponentTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(ComponentTest.class);
 
-	public static interface ComponentInterface {
-		public String getName();
-	}
+	public static final class InjectComponent1 extends InjectorTest {
 
-	public static interface Component1Interface {
-
-	}
-
-	public static abstract class AbstractComponent implements ComponentInterface {
-
-	}
-
-	@Component("component1")
-	public static final class Component1 extends AbstractComponent implements Component1Interface {
-
-		@Inject
-		@Named("#name")
-		private String name;
-
-		@Override
-		public String getName() {
-			return name;
+		@Before
+		public void init() {
+			setup("src/test/resources/componenttest");
 		}
 
-		@Override
-		public String toString() {
-			return "Component1 [name=" + name + "]";
+		@Test
+		public void test() {
+			assertEquals("basic1", get(TestCase.class).basicComponent.getName());
 		}
 
-	}
+		public static final class TestCase {
+			@Inject
+			@Named("basic1")
+			private BasicComponent basicComponent;
 
-	@Component("component2")
-	public static final class Component2 extends AbstractComponent {
-
-		@Inject
-		@Named("#name")
-		private String name;
-
-		@Override
-		public String getName() {
-			return name;
-		}
-
-		@Override
-		public String toString() {
-			return "Component2 [name=" + name + "]";
-		}
-
-	}
-
-	private static final class InjectComponent1 extends TestCase {
-		@Inject
-		@Named("comp1")
-		private Component1 component1;
-
-		@Override
-		void test() {
-			assertEquals("comp1", component1.getName());
 		}
 	}
 
-	private static final class InjectComponent1ByInterface extends TestCase {
+	public static final class InjectComponent1ByInterface extends InjectorTest {
 
-		@Inject
-		@Named("comp1")
-		private Component1Interface component1;
+		@Before
+		public void init() {
+			setup("src/test/resources/componenttest");
+		}
 
-		@Override
-		void test() {
-			assertEquals("comp1", ((Component1) component1).getName());
+		@Test
+		public void test() {
+			assertEquals("basic1", get(TestCase.class).getName());
+		}
+
+		public static final class TestCase {
+			@Inject
+			@Named("basic1")
+			private BasicComponentnterface basicComponent;
+
+			public String getName() {
+				return ((BasicComponent) basicComponent).getName();
+			}
+
 		}
 	}
 
-	private static final class InjectComponent1BySuperclass extends TestCase {
+	public static final class InjectComponent1BySuperclass extends InjectorTest {
 
-		@Inject
-		@Named("comp1")
-		private AbstractComponent component1;
+		@Before
+		public void init() {
+			setup("src/test/resources/componenttest");
+		}
 
-		@Override
-		void test() {
-			assertEquals("comp1", component1.getName());
+		@Test
+		public void test() {
+			assertEquals("basic1", get(TestCase.class).basicComponent.getName());
+		}
+
+		public static final class TestCase {
+
+			@Inject
+			@Named("basic1")
+			private AbstractComponent basicComponent;
+
 		}
 
 	}
 
-	private static final class InjectComponent1BySuperclassesInterface extends TestCase {
+	public static final class InjectComponent1BySuperclassesInterface extends InjectorTest {
 
-		@Inject
-		@Named("comp1")
-		private ComponentInterface component1;
+		@Before
+		public void init() {
+			setup("src/test/resources/componenttest");
+		}
 
-		@Override
-		void test() {
-			assertEquals("comp1", component1.getName());
+		@Test
+		public void test() {
+			assertEquals("basic1", get(TestCase.class).basicComponent.getName());
+		}
+
+		public static final class TestCase {
+			@Inject
+			@Named("basic1")
+			private ComponentInterface basicComponent;
+
 		}
 	}
 
-	private static final class InjectComponent1BySuperSuperClass extends TestCase {
+	public static final class InjectComponent1BySuperSuperClass extends InjectorTest {
 
-		@Inject
-		@Named("comp1")
-		private Object component1;
+		@Before
+		public void init() {
+			setup("src/test/resources/componenttest");
+		}
 
-		@Override
-		void test() {
-			assertEquals("comp1", ((Component1) component1).getName());
+		@Test
+		public void test() {
+			assertEquals("basic1", get(TestCase.class).getName());
+		}
+
+		public static final class TestCase {
+			@Inject
+			@Named("basic1")
+			private Object basicComponent;
+
+			public Object getName() {
+				return ((BasicComponent) basicComponent).getName();
+			}
 		}
 	}
 
-	private static final class DuplicateComponentInjections extends TestCase {
+	public static final class DuplicateComponentInjections extends InjectorTest {
 
-		@Inject
-		@Named("comp1")
-		private Component1 instance1;
+		@Before
+		public void init() {
+			setup("src/test/resources/componenttest");
+		}
 
-		@Inject
-		@Named("comp1")
-		private Component1 instance2;
+		@Test
+		public void test() {
+			TestCase testCase = get(TestCase.class);
+			Assert.assertSame(testCase.basicComponentField1, testCase.basicComponentField2);
+		}
 
-		@Override
-		void test() {
-			assertSame(instance1, instance2);
+		public static final class TestCase {
+			@Inject
+			@Named("basic1")
+			private BasicComponent basicComponentField1;
+
+			@Inject
+			@Named("basic1")
+			private BasicComponent basicComponentField2;
+
 		}
 	}
 
-	@Test
-	public void testComponent1Injection() {
-		runTest(InjectComponent1.class);
+	public static final class Component2ReferencesComponent1 extends InjectorTest {
+
+		@Before
+		public void init() {
+			setup("src/test/resources/componenttest");
+		}
+
+		@Test
+		public void test() {
+			TestCase testCase = get(TestCase.class);
+			assertEquals("compound1", testCase.compoundComponent.getName());
+			assertEquals("basic1", testCase.compoundComponent.basicComponent.getName());
+		}
+
+		public static final class TestCase {
+			
+			@Inject
+			@Named("compound1")
+			private CompoundComponent compoundComponent;
+
+		}
 	}
 
-	@Test
-	public void testInjectComponent1ByInterface() {
-		runTest(InjectComponent1ByInterface.class);
+}
+
+interface ComponentInterface {
+	public String getName();
+}
+
+interface BasicComponentnterface {
+
+}
+
+abstract class AbstractComponent implements ComponentInterface {
+
+}
+
+@Component("test.basic_component")
+final class BasicComponent extends AbstractComponent implements BasicComponentnterface {
+
+	@Inject
+	@Named("#name")
+	public String name;
+
+	@Override
+	public String getName() {
+		return name;
 	}
 
-	@Test
-	public void testInjectComponent1BySuperclass() {
-		runTest(InjectComponent1BySuperclass.class);
-	}
+}
 
-	@Test
-	public void testInjectComponent1BySuperclassesInterface() {
-		runTest(InjectComponent1BySuperclassesInterface.class);
-	}
+@Component("test.compound_component")
+final class CompoundComponent extends AbstractComponent {
 
-	@Test
-	public void testInjectComponent1BySuperSuperClass() {
-		runTest(InjectComponent1BySuperSuperClass.class);
-	}
+	@Inject
+	@Named("#name")
+	public String name;
 
-	@Test
-	public void testDuplicateComponentInjections() {
-		runTest(DuplicateComponentInjections.class);
-	}
+	@Inject
+	@Named("basic1")
+	public BasicComponent basicComponent;
 
-	private Injector injector;
-
-	@Before
-	public void setup() {
-		this.injector = GuiceConfigBuilder.create() //
-				.setDirectory("src/test/resources/componenttest") //
-				.build();
-	}
-
-	private <T> T get(Class<T> clazz) {
-		return injector.getInstance(clazz);
-	}
-
-	private void runTest(Class<? extends TestCase> clazz) {
-		get(clazz).test();
+	@Override
+	public String getName() {
+		return name;
 	}
 
 }
