@@ -1,6 +1,6 @@
 package com.barchart.util.guice;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import javax.inject.Inject;
 //import javax.inject.Named;
@@ -59,7 +59,7 @@ public class ComponentTest {
 
 	}
 
-	private static final class Component1Injection extends TestCase {
+	private static final class InjectComponent1 extends TestCase {
 		@Inject
 		@Named("comp1")
 		private Component1 component1;
@@ -70,10 +70,50 @@ public class ComponentTest {
 		}
 	}
 
+	private static final class DuplicateComponentInjections extends TestCase {
+
+		@Inject
+		@Named("comp1")
+		private Component1 instance1;
+
+		@Inject
+		@Named("comp1")
+		private Component1 instance2;
+
+		@Override
+		void test() {
+			assertSame(instance1, instance2);
+		}
+	}
+
+	private static final class BindByInterface extends TestCase {
+		
+		@Inject
+		@Named("comp2")
+		private ComponentInterface component1;
+
+		@Inject
+		@Named("comp1")
+		private ComponentInterface component2;
+		
+		@Override
+		void test() {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+
 	@Test
 	public void testComponent1Injection() {
-		runTest(Component1Injection.class);
+		runTest(InjectComponent1.class);
 	}
+	
+	@Test
+	public void testDuplicateComponentInjections() {
+		runTest(DuplicateComponentInjections.class);
+	}
+	
+	
 
 	private Injector injector;
 
