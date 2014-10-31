@@ -175,6 +175,28 @@ public class ComponentTest {
 
 		}
 	}
+	
+	public static final class ExternalComponentFile extends InjectorTest {
+		
+		@Before
+		public void init() {
+			setup("src/test/resources/componenttest");
+		}
+		
+		@Test
+		public void test() {
+			TestCase testCase = get(TestCase.class);
+			assertEquals("external", testCase.external.getName());
+		}
+
+		public static final class TestCase {
+			
+			@Inject
+			@Named("external")
+			private BasicComponent external;
+
+		}
+	}
 
 }
 
