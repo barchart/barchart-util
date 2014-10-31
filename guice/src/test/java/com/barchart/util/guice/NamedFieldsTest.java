@@ -13,6 +13,7 @@ import javax.inject.Named;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.barchart.util.guice.component.GuiceConfigurator;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
@@ -479,8 +480,9 @@ public class NamedFieldsTest {
 
 	@Before
 	public void setup() {
-		ConfigModule configModule = new ConfigModule(new File("src/test/resources/namedfieldtest"));
-		this.injector = Guice.createInjector(configModule);
+		this.injector = GuiceConfigBuilder.create() //
+				.setDirectory("src/test/resources/namedfieldtest") //
+				.build();
 	}
 
 	private <T> T get(Class<T> clazz) {
@@ -490,6 +492,5 @@ public class NamedFieldsTest {
 	private void runTest(Class<? extends TestCase> clazz) {
 		get(clazz).test();
 	}
-
 
 }

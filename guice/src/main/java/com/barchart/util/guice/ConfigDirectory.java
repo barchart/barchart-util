@@ -29,7 +29,7 @@ public final class ConfigDirectory {
 		return Arrays.asList(configDirectory.listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
-				return name.endsWith("." + fileExtension);
+				return name.endsWith(fileExtension);
 			}
 		}));
 	}
