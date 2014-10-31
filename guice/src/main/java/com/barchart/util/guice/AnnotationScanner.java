@@ -1,12 +1,15 @@
 package com.barchart.util.guice;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.ClassPath.ClassInfo;
@@ -15,52 +18,52 @@ import com.google.inject.Singleton;
 @Singleton
 class AnnotationScanner {
 
+	private static final Multimap<Class<? extends Annotation>, Class<?>> annotationToClassMap;
 	static {
-		//TODO: scan for annotations in static block?
-	}
-	
-	private static final Logger logger = LoggerFactory.getLogger(AnnotationScanner.class);
-
-	private Multimap<Class<? extends Annotation>, Class<?>> annotationToClassMap;
-
-	public AnnotationScanner() {
-		annotationToClassMap = HashMultimap.create();
-//		logger.info("Start scanning");
-		scan();
-//		logger.info("Stop scanning");
-	}
-
-	private void scan() {
-		
 		try {
-			ClassPath classPath = ClassPath.from(getClass().getClassLoader());
+			ImmutableMultimap.Builder<Class<? extends Annotation>, Class<?>> builder = ImmutableMultimap.builder();
+
+			ClassPath classPath = ClassPath.from(AnnotationScanner.class.getClassLoader());
 			for (ClassInfo info : classPath.getTopLevelClasses()) {
 				Class<?> clazz = loadClass(info);
 				if (clazz != null) {
-					checkForAnnotations(clazz);
+					for (Class<? extends Annotation> annotationType : getAnnotationTypes(clazz)) {
+						builder.put(annotationType, clazz);
+					}
+
 					for (Class<?> declaredClass : clazz.getDeclaredClasses()) {
-						checkForAnnotations(declaredClass);
+						for (Class<? extends Annotation> annotationType : getAnnotationTypes(declaredClass)) {
+							builder.put(annotationType, declaredClass);
+						}
 					}
 				}
 			}
+			annotationToClassMap = builder.build();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private void checkForAnnotations(Class<?> clazz) {
-		for (Annotation annotation : clazz.getAnnotations()) {
-			Class<? extends Annotation> annotationType = annotation.annotationType();
-			annotationToClassMap.put(annotationType, clazz);
-		}
+	private static final Logger logger = LoggerFactory.getLogger(AnnotationScanner.class);
+
+	public AnnotationScanner() {
 	}
 
-	private Class<?> loadClass(ClassInfo info) {
+	private static List<Class<? extends Annotation>> getAnnotationTypes(Class<?> clazz) {
+		List<Class<? extends Annotation>> list = new ArrayList<Class<? extends Annotation>>();
+		for (Annotation annotation : clazz.getAnnotations()) {
+			Class<? extends Annotation> annotationType = annotation.annotationType();
+			list.add(annotationType);
+		}
+		return list;
+	}
+
+	private static Class<?> loadClass(ClassInfo info) {
 		try {
 			Class<?> load = info.load();
 			return load;
 		} catch (NoClassDefFoundError error) {
-//			logger.debug("Could not load: " + error.getMessage());
+			// logger.debug("Could not load: " + error.getMessage());
 			return null;
 		}
 	}
