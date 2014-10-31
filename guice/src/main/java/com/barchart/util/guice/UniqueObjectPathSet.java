@@ -1,4 +1,4 @@
-package com.barchart.util.guice.component;
+package com.barchart.util.guice;
 
 import java.util.HashSet;
 import java.util.Iterator;

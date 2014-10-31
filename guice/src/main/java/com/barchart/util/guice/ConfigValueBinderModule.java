@@ -6,7 +6,6 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.util.guice.component.UniqueObjectPathSet;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import com.typesafe.config.Config;

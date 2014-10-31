@@ -9,6 +9,7 @@ import com.barchart.util.guice.converters.BooleanListConverter;
 import com.barchart.util.guice.converters.ByteConverter;
 import com.barchart.util.guice.converters.ByteListConverter;
 import com.barchart.util.guice.converters.ConfigConverter;
+import com.barchart.util.guice.converters.ConfigListConverter;
 import com.barchart.util.guice.converters.DoubleConverter;
 import com.barchart.util.guice.converters.DoubleListConverter;
 import com.barchart.util.guice.converters.FloatConverter;

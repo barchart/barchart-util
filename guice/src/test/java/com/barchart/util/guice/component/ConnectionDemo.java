@@ -1,12 +1,12 @@
 package com.barchart.util.guice.component;
 
-import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.barchart.util.guice.Component;
+import com.barchart.util.guice.GuiceConfigBuilder;
 import com.google.inject.Injector;
 import com.typesafe.config.Config;
 
@@ -66,18 +66,13 @@ public class ConnectionDemo {
 	/**
 	 * For the cases where you don't know the names of all the components you
 	 * are interested in, you can have a list of all components of a given type
-	 * injected.  We could also inject a name to instance map as well, if we want.
+	 * injected. We could also inject a name to instance map as well, if we
+	 * want.
 	 */
 	@Inject
 	private List<Connection> allConnections;
 
 	ConnectionDemo() {
-
-	}
-
-	public static void main(String[] args) {
-		Injector injector = GuiceConfigurator.createInjector(new File("./src/st/resources/connectiondemo"));
-		ConnectionDemo demo = injector.getInstance(ConnectionDemo.class);
 
 	}
 
@@ -120,4 +115,11 @@ public class ConnectionDemo {
 
 	}
 
+	public static void main(String[] args) {
+		Injector injector = GuiceConfigBuilder.create() //
+				.setDirectory("./src/test/resources/connectiondemo") //
+				.build();
+		ConnectionDemo demo = injector.getInstance(ConnectionDemo.class);
+		System.out.println(demo);
+	}
 }

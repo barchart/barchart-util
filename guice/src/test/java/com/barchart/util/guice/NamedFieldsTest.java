@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,9 +12,7 @@ import javax.inject.Named;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.util.guice.component.GuiceConfigurator;
 import com.google.inject.ConfigurationException;
-import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.typesafe.config.Config;

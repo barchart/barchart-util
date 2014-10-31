@@ -1,8 +1,9 @@
-package com.barchart.util.guice;
+package com.barchart.util.guice.converters;
 
 import java.util.HashMap;
 import java.util.List;
 
+import com.barchart.util.guice.ValueConverter;
 import com.google.inject.Binder;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
