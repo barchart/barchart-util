@@ -64,11 +64,11 @@ public final class ComponentModule extends AbstractModule {
 			@SuppressWarnings("unchecked")
 			Multibinder<Object> setBinder = (Multibinder<Object>) Multibinder.newSetBinder(binder(), bindingType);
 			logger.info("Multibinder for " + entry.getElement() + " , count: " + entry.getCount());
-			for (int i =0 ;i < entry.getCount(); i++) {
-				setBinder.addBinding().to(Key.get(bindingType, Names.named("__internal_list_" + i)));
+			for (int i = 0; i < entry.getCount(); i++) {
+				setBinder.addBinding().to(Key.get(bindingType, Names.named("__internal_list_" + i))).in(Singleton.class);
 			}
 		}
-		
+
 	}
 
 	private List<Config> loadComponentConfigs() {
@@ -170,25 +170,29 @@ public final class ComponentModule extends AbstractModule {
 			bindConfiguration();
 			final String name = getName(config);
 			for (Class<?> bindingType : bindingTypes) {
-
 				if (name != null) {
-					@SuppressWarnings("unchecked")
-					LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) binder() //
-							.withSource(config) //
-							.bind(bindingType) //
-							.annotatedWith(Names.named(name));
-					bindingBuilder.to(componentClass).in(Singleton.class);
-					expose(bindingType).annotatedWith(Names.named(name));
+					bindByName(name, bindingType);
 				}
-
-				int index = bindingTypeCounter.add(bindingType, 1);
-				@SuppressWarnings("unchecked")
-				LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) bind(Key.get(bindingType, Names.named("__internal_list_" + index)));
-				bindingBuilder.to(componentClass).in(Singleton.class);
-				expose(Key.get(bindingType, Names.named("__internal_list_" + index)));
-
+				exposeToComponentList(bindingType);
 			}
+		}
 
+		private void exposeToComponentList(Class<?> bindingType) {
+			int index = bindingTypeCounter.add(bindingType, 1);
+			@SuppressWarnings("unchecked")
+			LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) bind(Key.get(bindingType, Names.named("__internal_list_" + index)));
+			bindingBuilder.to(componentClass).in(Singleton.class);
+			expose(Key.get(bindingType, Names.named("__internal_list_" + index)));
+		}
+
+		private void bindByName(String name, Class<?> bindingType) {
+			@SuppressWarnings("unchecked")
+			LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) binder() //
+					.withSource(config) //
+					.bind(bindingType) //
+					.annotatedWith(Names.named(name));
+			bindingBuilder.to(componentClass).in(Singleton.class);
+			expose(bindingType).annotatedWith(Names.named(name));
 		}
 
 		private void bindConfiguration() {
