@@ -13,6 +13,7 @@ import com.typesafe.config.ConfigValue;
 
 public final class ConfigValueBinderModule extends AbstractModule {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(ConfigValueBinderModule.class);
 
 	private final List<Config> configFiles;

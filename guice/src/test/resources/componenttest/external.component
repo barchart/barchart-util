@@ -1,2 +1,2 @@
-type = "test.basic_component"
+type = "test.external_component"
 name = "external"

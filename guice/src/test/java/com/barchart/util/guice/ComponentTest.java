@@ -192,14 +192,14 @@ public class ComponentTest {
 		@Test
 		public void test() {
 			TestCase testCase = get(TestCase.class);
-			assertEquals("external", testCase.external.getName());
+			assertEquals("external", testCase.external.name);
 		}
 
 		public static final class TestCase {
 
 			@Inject
 			@Named("external")
-			private BasicComponent external;
+			private ExternalComponent external;
 
 		}
 	}
@@ -262,7 +262,7 @@ public class ComponentTest {
 		public void testName() {
 			TestCase testCase = get(TestCase.class);
 			logger.info("Object List: " + testCase.set);
-			assertEquals(4, testCase.set.size());
+			assertEquals(6, testCase.set.size());
 		}
 		
 		public static final class TestCase {
@@ -284,12 +284,12 @@ public class ComponentTest {
 		public void testName() {
 			TestCase testCase = get(TestCase.class);
 			assertEquals(3, testCase.list.size());
-			assertSame(getFromList(testCase.list, "basic1"), testCase.comp1);
-			assertSame(getFromList(testCase.list, "basic2"), testCase.comp2);
-			assertSame(getFromList(testCase.list, "basic3"), testCase.comp3);
+			assertSame(getFromSet(testCase.list, "basic1"), testCase.comp1);
+			assertSame(getFromSet(testCase.list, "basic2"), testCase.comp2);
+			assertSame(getFromSet(testCase.list, "basic3"), testCase.comp3);
 		}
 
-		private BasicComponent getFromList(List<BasicComponent> list, String name) {
+		private BasicComponent getFromSet(Set<BasicComponent> list, String name) {
 			for (BasicComponent component : list) {
 				if (component.getName().equals(name)) {
 					return component;
@@ -302,7 +302,7 @@ public class ComponentTest {
 		public static final class TestCase {
 
 			@Inject
-			private List<BasicComponent> list;
+			private Set<BasicComponent> list;
 			
 			@Inject
 			@Named("basic1")
@@ -386,4 +386,13 @@ final class CommonConfigReader {
 	@Inject
 	@Named("other/number")
 	public int numberFromOtherFile;
+}
+
+
+@Component("test.external_component")
+final class ExternalComponent {
+	
+	@Inject
+	@Named("#name")
+	public String name;
 }

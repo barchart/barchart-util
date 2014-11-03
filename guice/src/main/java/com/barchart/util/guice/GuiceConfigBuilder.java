@@ -67,9 +67,6 @@ public final class GuiceConfigBuilder {
 		modules.add(new BasicModule());
 		modules.add(new ConfigValueBinderModule(configFiles, valueConverters));
 		modules.add(new ComponentModule(configFiles, valueConverters, new AnnotationScanner()));
-//		modules.add(new ComponentMultibindings());
-//		Injector componentInjector = Guice.createInjector(modules);
-//		return componentInjector.createChildInjector(new ComponentListModule(componentInjector));
 		return Guice.createInjector(modules);
 	}
 
@@ -97,13 +94,10 @@ public final class GuiceConfigBuilder {
 	private List<Config> readConfigFiles() {
 		ConfigDirectory configDirectory = new ConfigDirectory(directory);
 		List<Config> list = new ArrayList<Config>();
-		for (File file : configDirectory.listFiles(".conf")) {
+		for (File file : configDirectory.listFiles(Filetypes.CONFIG_FILE_EXTENSION)) {
 			list.add(ConfigFactory.parseFile(file));
 		}
-		for (File file : configDirectory.listFiles(".component")) {
-			list.add(ConfigFactory.parseFile(file));
-		}
-		for (File file : configDirectory.listFiles(".module")) {
+		for (File file : configDirectory.listFiles(Filetypes.COMPONENT_FILE_EXTENSION)) {
 			list.add(ConfigFactory.parseFile(file));
 		}
 		return list;

@@ -8,7 +8,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.reflect.ClassPath;
@@ -18,7 +17,11 @@ import com.google.inject.Singleton;
 @Singleton
 class AnnotationScanner {
 
+	@SuppressWarnings("unused")
+	private static final Logger logger = LoggerFactory.getLogger(AnnotationScanner.class);
+
 	private static final Multimap<Class<? extends Annotation>, Class<?>> annotationToClassMap;
+
 	static {
 		try {
 			ImmutableMultimap.Builder<Class<? extends Annotation>, Class<?>> builder = ImmutableMultimap.builder();
@@ -40,11 +43,9 @@ class AnnotationScanner {
 			}
 			annotationToClassMap = builder.build();
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new ExceptionInInitializerError(e);
 		}
 	}
-
-	private static final Logger logger = LoggerFactory.getLogger(AnnotationScanner.class);
 
 	public AnnotationScanner() {
 	}

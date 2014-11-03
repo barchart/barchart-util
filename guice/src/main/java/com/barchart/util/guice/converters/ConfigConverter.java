@@ -12,6 +12,7 @@ import com.typesafe.config.ConfigValueType;
 
 public class ConfigConverter implements ValueConverter {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(ConfigConverter.class);
 
 	private static final String TEMPORARY_CONFIG_PATH = "configPath";
