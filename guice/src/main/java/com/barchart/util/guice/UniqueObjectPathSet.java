@@ -3,7 +3,7 @@ package com.barchart.util.guice;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class UniqueObjectPathSet implements Iterable<String> {
+class UniqueObjectPathSet implements Iterable<String> {
 
 	private final HashSet<String> set;
 

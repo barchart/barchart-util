@@ -22,7 +22,7 @@ import com.google.inject.name.Names;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigValue;
 
-public final class ComponentModule extends AbstractModule {
+final class ComponentModule extends AbstractModule {
 
 	private static final Logger logger = LoggerFactory.getLogger(ComponentModule.class);
 

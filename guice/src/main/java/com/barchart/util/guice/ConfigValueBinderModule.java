@@ -11,7 +11,7 @@ import com.google.inject.name.Names;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigValue;
 
-public final class ConfigValueBinderModule extends AbstractModule {
+final class ConfigValueBinderModule extends AbstractModule {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(ConfigValueBinderModule.class);
