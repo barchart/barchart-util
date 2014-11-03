@@ -3,7 +3,6 @@ package com.barchart.util.guice;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -60,7 +59,7 @@ public class ComponentTest {
 		public static final class TestCase {
 			@Inject
 			@Named("basic1")
-			private BasicComponentnterface basicComponent;
+			private BasicComponenInterface basicComponent;
 
 			public String getName() {
 				return ((BasicComponent) basicComponent).getName();
@@ -261,7 +260,6 @@ public class ComponentTest {
 		@Test
 		public void testName() {
 			TestCase testCase = get(TestCase.class);
-			logger.info("Object List: " + testCase.set);
 			assertEquals(6, testCase.set.size());
 		}
 		
@@ -272,7 +270,7 @@ public class ComponentTest {
 	}
 	
 
-	public static final class InjectComponentList extends InjectorTest {
+	public static final class MultibindingContainsSameInstances extends InjectorTest {
 
 
 		@Before
@@ -281,7 +279,7 @@ public class ComponentTest {
 		}
 
 		@Test
-		public void testName() {
+		public void test() {
 			TestCase testCase = get(TestCase.class);
 			assertEquals(3, testCase.list.size());
 			assertSame(getFromSet(testCase.list, "basic1"), testCase.comp1);
@@ -318,13 +316,64 @@ public class ComponentTest {
 			
 		}
 	}
+	
+	
+	public static final class MultibindingsByInterface extends InjectorTest {
+
+
+		@Before
+		public void init() {
+			setup("src/test/resources/componenttest");
+		}
+
+		@Test
+		public void test() {
+			TestCase testCase = get(TestCase.class);
+			assertEquals(3, testCase.set.size());
+			assertSame(getFromSet(testCase.set, "basic1"), testCase.comp1);
+			assertSame(getFromSet(testCase.set, "basic2"), testCase.comp2);
+			assertSame(getFromSet(testCase.set, "basic3"), testCase.comp3);
+		}
+
+		private BasicComponent getFromSet(Set<BasicComponenInterface> list, String name) {
+			for (BasicComponenInterface component : list) {
+				BasicComponent basicComponent = (BasicComponent) component;
+				if (basicComponent.getName().equals(name)) {
+					return basicComponent;
+				}
+			}
+			Assert.fail("Could not find " + name);
+			return null;
+		}
+
+		public static final class TestCase {
+
+			@Inject
+			private Set<BasicComponenInterface> set;
+			
+			@Inject
+			@Named("basic1")
+			private BasicComponent comp1;
+
+			@Inject
+			@Named("basic2")
+			private BasicComponent comp2;
+			
+			@Inject
+			@Named("basic3")
+			private BasicComponent comp3;
+			
+		}
+	}
+	
+	
 }
 
 interface ComponentInterface {
 	public String getName();
 }
 
-interface BasicComponentnterface {
+interface BasicComponenInterface {
 
 }
 
@@ -333,7 +382,7 @@ abstract class AbstractComponent implements ComponentInterface {
 }
 
 @Component("test.basic_component")
-final class BasicComponent extends AbstractComponent implements BasicComponentnterface {
+final class BasicComponent extends AbstractComponent implements BasicComponenInterface {
 
 	@Inject
 	@Named("#name")

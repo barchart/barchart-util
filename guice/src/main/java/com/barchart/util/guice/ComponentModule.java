@@ -52,7 +52,6 @@ public final class ComponentModule extends AbstractModule {
 			ComponentConfigurationModule configurationModule = new ComponentConfigurationModule(componentClass, bindingTypes, componentConfig,
 					bindingTypeCounter);
 			install(configurationModule);
-
 		}
 		bindMultibindings(bindingTypeCounter);
 
@@ -63,9 +62,8 @@ public final class ComponentModule extends AbstractModule {
 			Class<?> bindingType = entry.getElement();
 			@SuppressWarnings("unchecked")
 			Multibinder<Object> setBinder = (Multibinder<Object>) Multibinder.newSetBinder(binder(), bindingType);
-			logger.info("Multibinder for " + entry.getElement() + " , count: " + entry.getCount());
 			for (int i = 0; i < entry.getCount(); i++) {
-				setBinder.addBinding().to(Key.get(bindingType, Names.named("__internal_list_" + i))).in(Singleton.class);
+				setBinder.addBinding().to(Key.get(bindingType, Names.named("__internal_list_" + i)));
 			}
 		}
 
@@ -167,6 +165,7 @@ public final class ComponentModule extends AbstractModule {
 
 		@Override
 		protected void configure() {
+			bind(componentClass).in(Singleton.class);
 			bindConfiguration();
 			final String name = getName(config);
 			for (Class<?> bindingType : bindingTypes) {
@@ -181,7 +180,7 @@ public final class ComponentModule extends AbstractModule {
 			int index = bindingTypeCounter.add(bindingType, 1);
 			@SuppressWarnings("unchecked")
 			LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) bind(Key.get(bindingType, Names.named("__internal_list_" + index)));
-			bindingBuilder.to(componentClass).in(Singleton.class);
+			bindingBuilder.to(componentClass);
 			expose(Key.get(bindingType, Names.named("__internal_list_" + index)));
 		}
 
@@ -191,7 +190,7 @@ public final class ComponentModule extends AbstractModule {
 					.withSource(config) //
 					.bind(bindingType) //
 					.annotatedWith(Names.named(name));
-			bindingBuilder.to(componentClass).in(Singleton.class);
+			bindingBuilder.to(componentClass);
 			expose(bindingType).annotatedWith(Names.named(name));
 		}
 
