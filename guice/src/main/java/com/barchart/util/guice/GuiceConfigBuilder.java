@@ -67,6 +67,9 @@ public final class GuiceConfigBuilder {
 		modules.add(new BasicModule());
 		modules.add(new ConfigValueBinderModule(configFiles, valueConverters));
 		modules.add(new ComponentModule(configFiles, valueConverters, new AnnotationScanner()));
+//		modules.add(new ComponentMultibindings());
+//		Injector componentInjector = Guice.createInjector(modules);
+//		return componentInjector.createChildInjector(new ComponentListModule(componentInjector));
 		return Guice.createInjector(modules);
 	}
 

@@ -11,9 +11,13 @@ import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 import com.google.inject.AbstractModule;
+import com.google.inject.Key;
 import com.google.inject.PrivateModule;
 import com.google.inject.binder.LinkedBindingBuilder;
+import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigValue;
@@ -40,11 +44,31 @@ public final class ComponentModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		HashMultiset<Class<?>> bindingTypeCounter = HashMultiset.create();
 		for (Config componentConfig : loadComponentConfigs()) {
 			String type = getType(componentConfig);
-			String name = getName(componentConfig);
-			install(new ComponentConfigurationModule(type, name, componentConfig));
+			Class<?> componentClass = getComponentClass(type);
+			List<Class<?>> bindingTypes = getBindingTypesForClass(componentClass);
+			ComponentConfigurationModule configurationModule = new ComponentConfigurationModule(componentClass, bindingTypes, componentConfig,
+					bindingTypeCounter);
+			install(configurationModule);
+
 		}
+		bindMultibindings(bindingTypeCounter);
+
+	}
+
+	private void bindMultibindings(HashMultiset<Class<?>> bindingTypeCounter) {
+		for (Multiset.Entry<Class<?>> entry : bindingTypeCounter.entrySet()) {
+			Class<?> bindingType = entry.getElement();
+			@SuppressWarnings("unchecked")
+			Multibinder<Object> setBinder = (Multibinder<Object>) Multibinder.newSetBinder(binder(), bindingType);
+			logger.info("Multibinder for " + entry.getElement() + " , count: " + entry.getCount());
+			for (int i =0 ;i < entry.getCount(); i++) {
+				setBinder.addBinding().to(Key.get(bindingType, Names.named("__internal_list_" + i)));
+			}
+		}
+		
 	}
 
 	private List<Config> loadComponentConfigs() {
@@ -68,57 +92,103 @@ public final class ComponentModule extends AbstractModule {
 		return list;
 	}
 
+	private Class<?> getComponentClass(String componentType) {
+		List<Class<?>> list = new ArrayList<Class<?>>();
+		for (Class<?> componentClass : annotationScanner.getClassesAnnotatedWith(Component.class)) {
+			Component annotation = componentClass.getAnnotation(Component.class);
+			if (componentType.equals(annotation.value())) {
+				list.add(componentClass);
+			}
+		}
+		if (list.size() == 0) {
+			// TODO: Throw exception?
+			logger.warn("No @Component classes found for configured component type \"" + componentType + "\"");
+			return null;
+		} else if (list.size() > 1) {
+			// TODO: Throw exception?
+			logger.warn("Multiple @Component classes found for component type: \"" + componentType + "\".  classes=" + list + ".  Using the first one.");
+		}
+		return list.get(0);
+	}
+
+	private static String getType(Config componentConfig) {
+		if (!componentConfig.hasPath(COMPONENT_TYPE)) {
+			throw new IllegalStateException("Component does not have type:" + componentConfig);
+		}
+		return componentConfig.getString(COMPONENT_TYPE);
+	}
+
+	private static String getName(Config componentConfig) {
+		if (!componentConfig.hasPath(COMPONENT_NAME)) {
+			return null;
+		} else {
+			return componentConfig.getString(COMPONENT_NAME);
+		}
+	}
+
+	// Return a list containing all the types we should bind to. Include
+	// this class, all supertypes and implemented interfaces. If this class
+	// is null, then return an emptylist
+	private List<Class<?>> getBindingTypesForClass(Class<?> componentClass) {
+		List<Class<?>> list = new ArrayList<Class<?>>();
+		for (Class<?> clazz : getInclusiveSuperclasses(componentClass)) {
+			list.add(clazz);
+			list.addAll(Arrays.asList(clazz.getInterfaces()));
+		}
+		return list;
+	}
+
+	// Return a collection of this class (if not null, and all superclasses)
+	private Collection<Class<?>> getInclusiveSuperclasses(Class<?> clazz) {
+		List<Class<?>> list = new ArrayList<Class<?>>();
+		while (clazz != null) {
+			list.add(clazz);
+			clazz = clazz.getSuperclass();
+		}
+		return list;
+	}
+
 	private final class ComponentConfigurationModule extends PrivateModule {
 
 		private final Config config;
-		private final String type;
-		private final String name;
 
-		public ComponentConfigurationModule(String type, String name, Config config) {
-			this.type = type;
-			this.name = name;
+		private final Class<?> componentClass;
+
+		private final Collection<Class<?>> bindingTypes;
+
+		private final HashMultiset<Class<?>> bindingTypeCounter;
+
+		public ComponentConfigurationModule(Class<?> componentClass, Collection<Class<?>> bindingTypes, Config config, HashMultiset<Class<?>> bindingTypeCounter) {
+			this.componentClass = componentClass;
+			this.bindingTypes = bindingTypes;
 			this.config = config;
+			this.bindingTypeCounter = bindingTypeCounter;
 		}
 
 		@Override
 		protected void configure() {
 			bindConfiguration();
+			final String name = getName(config);
+			for (Class<?> bindingType : bindingTypes) {
 
-			Class<?> componentClass = getComponentClass(type);
-			for (Class<?> bindingType : getBindingTypesForClass(componentClass)) {
-				
+				if (name != null) {
+					@SuppressWarnings("unchecked")
+					LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) binder() //
+							.withSource(config) //
+							.bind(bindingType) //
+							.annotatedWith(Names.named(name));
+					bindingBuilder.to(componentClass).in(Singleton.class);
+					expose(bindingType).annotatedWith(Names.named(name));
+				}
+
+				int index = bindingTypeCounter.add(bindingType, 1);
 				@SuppressWarnings("unchecked")
-				LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) binder() //
-					.withSource(config) //
-					.bind(bindingType) //
-					.annotatedWith(Names.named(name));
+				LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) bind(Key.get(bindingType, Names.named("__internal_list_" + index)));
 				bindingBuilder.to(componentClass).in(Singleton.class);
-				
-				expose(bindingType).annotatedWith(Names.named(name));
+				expose(Key.get(bindingType, Names.named("__internal_list_" + index)));
+
 			}
 
-		}
-
-		// Return a list containing all the types we should bind to. Include
-		// this class, all supertypes and implemented interfaces. If this class
-		// is null, then return an emptylist
-		private List<Class<?>> getBindingTypesForClass(Class<?> componentClass) {
-			List<Class<?>> list = new ArrayList<Class<?>>();
-			for (Class<?> clazz : getInclusiveSuperclasses(componentClass)) {
-				list.add(clazz);
-				list.addAll(Arrays.asList(clazz.getInterfaces()));
-			}
-			return list;
-		}
-
-		// Return a collection of this class (if not null, and all superclasses)
-		private Collection<Class<?>> getInclusiveSuperclasses(Class<?> clazz) {
-			List<Class<?>> list = new ArrayList<Class<?>>();
-			while (clazz != null) {
-				list.add(clazz);
-				clazz = clazz.getSuperclass();
-			}
-			return list;
 		}
 
 		private void bindConfiguration() {
@@ -146,40 +216,5 @@ public final class ComponentModule extends AbstractModule {
 			}
 		}
 
-		private Class<?> getComponentClass(String componentType) {
-			List<Class<?>> list = new ArrayList<Class<?>>();
-			for (Class<?> componentClass : annotationScanner.getClassesAnnotatedWith(Component.class)) {
-				Component annotation = componentClass.getAnnotation(Component.class);
-				if (componentType.equals(annotation.value())) {
-					list.add(componentClass);
-				}
-			}
-			if (list.size() == 0) {
-				// TODO: Throw exception?
-				logger.warn("No @Component classes found for configured component type \"" + componentType + "\"");
-				return null;
-			} else if (list.size() > 1) {
-				// TODO: Throw exception?
-				logger.warn("Multiple @Component classes found for component type: \"" + componentType + "\".  classes=" + list + ".  Using the first one.");
-			}
-			return list.get(0);
-		}
-
 	}
-
-	private static String getType(Config componentConfig) {
-		if (!componentConfig.hasPath(COMPONENT_TYPE)) {
-			throw new IllegalStateException("Component does not have type:" + componentConfig);
-		}
-		return componentConfig.getString(COMPONENT_TYPE);
-	}
-
-	private static String getName(Config componentConfig) {
-		if (!componentConfig.hasPath(COMPONENT_NAME)) {
-			return null;
-		} else {
-			return componentConfig.getString(COMPONENT_NAME);
-		}
-	}
-
 }

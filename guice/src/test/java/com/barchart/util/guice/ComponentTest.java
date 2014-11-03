@@ -1,6 +1,10 @@
 package com.barchart.util.guice;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+
+import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 //import javax.inject.Named;
@@ -214,22 +218,22 @@ public class ComponentTest {
 		public void testName() {
 			assertEquals("configreader", testCase.reader.name);
 		}
-		
+
 		@Test
 		public void testCommonString() {
 			assertEquals("common", testCase.reader.commonString);
 		}
-		
+
 		@Test
 		public void testCommonObject() {
 			assertEquals("common_object", testCase.reader.commonConfigObject.getString("value"));
 		}
-		
+
 		@Test
 		public void testNumberFromOtherFile() {
 			assertEquals(42, testCase.reader.numberFromOtherFile);
 		}
-		
+
 		@Test
 		public void testComponentConfig() {
 			assertEquals("configreader", testCase.reader.componentConfig.getString("name"));
@@ -243,6 +247,76 @@ public class ComponentTest {
 
 		}
 
+	}
+	
+	
+	public static final class ObjectList extends InjectorTest {
+
+
+		@Before
+		public void init() {
+			setup("src/test/resources/componenttest");
+		}
+
+		@Test
+		public void testName() {
+			TestCase testCase = get(TestCase.class);
+			logger.info("Object List: " + testCase.set);
+			assertEquals(4, testCase.set.size());
+		}
+		
+		public static final class TestCase {
+			@Inject
+			public Set<Object> set;
+		}
+	}
+	
+
+	public static final class InjectComponentList extends InjectorTest {
+
+
+		@Before
+		public void init() {
+			setup("src/test/resources/componenttest");
+		}
+
+		@Test
+		public void testName() {
+			TestCase testCase = get(TestCase.class);
+			assertEquals(3, testCase.list.size());
+			assertSame(getFromList(testCase.list, "basic1"), testCase.comp1);
+			assertSame(getFromList(testCase.list, "basic2"), testCase.comp2);
+			assertSame(getFromList(testCase.list, "basic3"), testCase.comp3);
+		}
+
+		private BasicComponent getFromList(List<BasicComponent> list, String name) {
+			for (BasicComponent component : list) {
+				if (component.getName().equals(name)) {
+					return component;
+				}
+			}
+			Assert.fail("Could not find " + name);
+			return null;
+		}
+
+		public static final class TestCase {
+
+			@Inject
+			private List<BasicComponent> list;
+			
+			@Inject
+			@Named("basic1")
+			private BasicComponent comp1;
+
+			@Inject
+			@Named("basic2")
+			private BasicComponent comp2;
+			
+			@Inject
+			@Named("basic3")
+			private BasicComponent comp3;
+			
+		}
 	}
 }
 
@@ -300,7 +374,7 @@ final class CommonConfigReader {
 	@Inject
 	@Named("#")
 	public Config componentConfig;
-	
+
 	@Inject
 	@Named("common_config_string")
 	public String commonString;
