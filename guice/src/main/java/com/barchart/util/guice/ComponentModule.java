@@ -1,7 +1,6 @@
 package com.barchart.util.guice;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
@@ -49,9 +48,7 @@ final class ComponentModule extends AbstractModule {
 			String type = getType(componentConfig);
 			Class<?> componentClass = getComponentClass(type);
 			if (componentClass != null) {
-				List<Class<?>> bindingTypes = getBindingTypesForClass(componentClass);
-				ComponentConfigurationModule configurationModule = new ComponentConfigurationModule(componentClass, bindingTypes, componentConfig,
-						bindingTypeCounter);
+				ComponentConfigurationModule configurationModule = new ComponentConfigurationModule(componentClass, componentConfig, bindingTypeCounter);
 				install(configurationModule);
 			}
 		}
@@ -126,27 +123,8 @@ final class ComponentModule extends AbstractModule {
 		}
 	}
 
-	// Return a list containing all the types we should bind to. Include
-	// this class, all supertypes and implemented interfaces. If this class
-	// is null, then return an emptylist
-	private List<Class<?>> getBindingTypesForClass(Class<?> componentClass) {
-		List<Class<?>> list = new ArrayList<Class<?>>();
-		for (Class<?> clazz : getInclusiveSuperclasses(componentClass)) {
-			list.add(clazz);
-			list.addAll(Arrays.asList(clazz.getInterfaces()));
-		}
-		return list;
-	}
 
-	// Return a collection of this class (if not null, and all superclasses)
-	private Collection<Class<?>> getInclusiveSuperclasses(Class<?> clazz) {
-		List<Class<?>> list = new ArrayList<Class<?>>();
-		while (clazz != null) {
-			list.add(clazz);
-			clazz = clazz.getSuperclass();
-		}
-		return list;
-	}
+
 
 	private final class ComponentConfigurationModule extends PrivateModule {
 
@@ -154,23 +132,24 @@ final class ComponentModule extends AbstractModule {
 
 		private final Class<?> componentClass;
 
-		private final Collection<Class<?>> bindingTypes;
 
 		private final HashMultiset<Class<?>> bindingTypeCounter;
 
-		public ComponentConfigurationModule(Class<?> componentClass, Collection<Class<?>> bindingTypes, Config config, HashMultiset<Class<?>> bindingTypeCounter) {
+		private BindUtil bindUtil;
+
+		public ComponentConfigurationModule(Class<?> componentClass, Config config, HashMultiset<Class<?>> bindingTypeCounter) {
 			this.componentClass = componentClass;
-			this.bindingTypes = bindingTypes;
 			this.config = config;
 			this.bindingTypeCounter = bindingTypeCounter;
 		}
 
 		@Override
 		protected void configure() {
+			this.bindUtil = new BindUtil(binder());
 			bind(componentClass).in(Singleton.class);
 			bindConfiguration();
 			final String name = getName(config);
-			for (Class<?> bindingType : bindingTypes) {
+			for (Class<?> bindingType : CastableTypes.of(componentClass)) {
 				if (name != null) {
 					bindByName(name, bindingType);
 				}
@@ -208,7 +187,10 @@ final class ComponentModule extends AbstractModule {
 
 		private void bindConfigValue(String key, ConfigValue value) {
 			for (ValueConverter converter : valueConverters) {
-				converter.applyBindings(binder(), "#" + key, value);
+				Object result = converter.convert(value);
+				if (result != null) {
+					bindUtil.bindInstance(converter.getBindingType(), "#" + key, result);
+				}
 			}
 		}
 

@@ -1,10 +1,12 @@
 package com.barchart.util.guice;
 
-import com.google.inject.Binder;
+import com.google.inject.TypeLiteral;
 import com.typesafe.config.ConfigValue;
 
 public interface ValueConverter {
 
-	public void applyBindings(Binder binder, String key, ConfigValue value);
+	public Object convert(ConfigValue value);
 
+	public TypeLiteral<?> getBindingType();
+	
 }

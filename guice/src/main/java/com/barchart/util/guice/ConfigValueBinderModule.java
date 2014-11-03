@@ -20,6 +20,8 @@ final class ConfigValueBinderModule extends AbstractModule {
 
 	private final List<ValueConverter> valueConverters;
 
+	private BindUtil bindUtil;
+
 	public ConfigValueBinderModule(List<Config> configFiles, List<ValueConverter> valueConverters) {
 		this.configFiles = configFiles;
 		this.valueConverters = valueConverters;
@@ -27,6 +29,7 @@ final class ConfigValueBinderModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		this.bindUtil = new BindUtil(super.binder());
 		for (Config config : configFiles) {
 			if (Filetypes.isConfigFile(config)) {
 				ConfigFileBinder configFileBinder = new ConfigFileBinder(config);
@@ -68,9 +71,12 @@ final class ConfigValueBinderModule extends AbstractModule {
 
 		private void bindConfigValue(String key, ConfigValue value) {
 			for (ValueConverter converter : valueConverters) {
-				converter.applyBindings(binder(), getPath(key), value);
-				if (Filetypes.isDefaultConfigFile(config)) {
-					converter.applyBindings(binder(), key, value);
+				Object result = converter.convert(value);
+				if (result != null) {
+					bindUtil.bindInstance(converter.getBindingType(), getPath(key), result);
+					if (Filetypes.isDefaultConfigFile(config)) {
+						bindUtil.bindInstance(converter.getBindingType(), key, result);
+					}
 				}
 			}
 		}

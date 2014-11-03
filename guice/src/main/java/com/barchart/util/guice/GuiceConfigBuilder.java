@@ -4,31 +4,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.barchart.util.guice.converters.BooleanConverter;
-import com.barchart.util.guice.converters.BooleanListConverter;
-import com.barchart.util.guice.converters.ByteConverter;
-import com.barchart.util.guice.converters.ByteListConverter;
-import com.barchart.util.guice.converters.ConfigConverter;
-import com.barchart.util.guice.converters.ConfigListConverter;
-import com.barchart.util.guice.converters.DoubleConverter;
-import com.barchart.util.guice.converters.DoubleListConverter;
-import com.barchart.util.guice.converters.FloatConverter;
-import com.barchart.util.guice.converters.FloatListConverter;
-import com.barchart.util.guice.converters.IntegerConverter;
-import com.barchart.util.guice.converters.IntegerListConverter;
-import com.barchart.util.guice.converters.LongConverter;
-import com.barchart.util.guice.converters.LongListConverter;
-import com.barchart.util.guice.converters.ShortConverter;
-import com.barchart.util.guice.converters.ShortListConverter;
-import com.barchart.util.guice.converters.StringConverter;
-import com.barchart.util.guice.converters.StringListConverter;
-import com.google.common.base.Preconditions;
+import com.barchart.util.guice.converters.BasicValueConverters;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 
 public final class GuiceConfigBuilder {
 
@@ -79,24 +60,25 @@ public final class GuiceConfigBuilder {
 	}
 
 	private void addDefaultValueConverters() {
-		valueConverters.add(new StringConverter());
-		valueConverters.add(new BooleanConverter());
-		valueConverters.add(new LongConverter());
-		valueConverters.add(new IntegerConverter());
-		valueConverters.add(new ShortConverter());
-		valueConverters.add(new ByteConverter());
-		valueConverters.add(new DoubleConverter());
-		valueConverters.add(new FloatConverter());
-		valueConverters.add(new ConfigConverter());
-		valueConverters.add(new ConfigListConverter());
-		valueConverters.add(new StringListConverter());
-		valueConverters.add(new BooleanListConverter());
-		valueConverters.add(new LongListConverter());
-		valueConverters.add(new IntegerListConverter());
-		valueConverters.add(new ShortListConverter());
-		valueConverters.add(new ByteListConverter());
-		valueConverters.add(new DoubleListConverter());
-		valueConverters.add(new FloatListConverter());
+//		valueConverters.add(new StringConverter());
+//		valueConverters.add(new BooleanConverter());
+//		valueConverters.add(new LongConverter());
+//		valueConverters.add(new IntegerConverter());
+//		valueConverters.add(new ShortConverter());
+//		valueConverters.add(new ByteConverter());
+//		valueConverters.add(new DoubleConverter());
+//		valueConverters.add(new FloatConverter());
+//		valueConverters.add(new ConfigConverter());
+//		valueConverters.add(new ConfigListConverter());
+//		valueConverters.add(new StringListConverter());
+//		valueConverters.add(new BooleanListConverter());
+//		valueConverters.add(new LongListConverter());
+//		valueConverters.add(new IntegerListConverter());
+//		valueConverters.add(new ShortListConverter());
+//		valueConverters.add(new ByteListConverter());
+//		valueConverters.add(new DoubleListConverter());
+//		valueConverters.add(new FloatListConverter());
+		valueConverters.addAll(new BasicValueConverters().getList());
 	}
 
 	private List<Config> readConfigFiles() throws Exception {
