@@ -28,7 +28,7 @@ public final class GuiceMain {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		Injector injector = GuiceConfigBuilder.create() //
 				.build();
 		GuiceMain guiceMain = injector.getInstance(GuiceMain.class);

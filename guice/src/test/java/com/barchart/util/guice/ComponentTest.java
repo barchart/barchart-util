@@ -27,7 +27,7 @@ public class ComponentTest {
 	public static final class InjectComponent1 extends InjectorTest {
 
 		@Before
-		public void init() {
+		public void init() throws Exception {
 			setup("src/test/resources/componenttest");
 		}
 
@@ -47,7 +47,7 @@ public class ComponentTest {
 	public static final class InjectComponent1ByInterface extends InjectorTest {
 
 		@Before
-		public void init() {
+		public void init() throws Exception {
 			setup("src/test/resources/componenttest");
 		}
 
@@ -71,7 +71,7 @@ public class ComponentTest {
 	public static final class InjectComponent1BySuperclass extends InjectorTest {
 
 		@Before
-		public void init() {
+		public void init() throws Exception {
 			setup("src/test/resources/componenttest");
 		}
 
@@ -93,7 +93,7 @@ public class ComponentTest {
 	public static final class InjectComponent1BySuperclassesInterface extends InjectorTest {
 
 		@Before
-		public void init() {
+		public void init() throws Exception {
 			setup("src/test/resources/componenttest");
 		}
 
@@ -113,7 +113,7 @@ public class ComponentTest {
 	public static final class InjectComponent1BySuperSuperClass extends InjectorTest {
 
 		@Before
-		public void init() {
+		public void init() throws Exception {
 			setup("src/test/resources/componenttest");
 		}
 
@@ -136,7 +136,7 @@ public class ComponentTest {
 	public static final class DuplicateComponentInjections extends InjectorTest {
 
 		@Before
-		public void init() {
+		public void init() throws Exception {
 			setup("src/test/resources/componenttest");
 		}
 
@@ -161,7 +161,7 @@ public class ComponentTest {
 	public static final class Component2ReferencesComponent1 extends InjectorTest {
 
 		@Before
-		public void init() {
+		public void init() throws Exception {
 			setup("src/test/resources/componenttest");
 		}
 
@@ -184,7 +184,7 @@ public class ComponentTest {
 	public static final class ExternalComponentFile extends InjectorTest {
 
 		@Before
-		public void init() {
+		public void init() throws Exception {
 			setup("src/test/resources/componenttest");
 		}
 
@@ -208,7 +208,7 @@ public class ComponentTest {
 		private TestCase testCase;
 
 		@Before
-		public void init() {
+		public void init() throws Exception {
 			setup("src/test/resources/componenttest");
 			this.testCase = get(TestCase.class);
 		}
@@ -247,13 +247,11 @@ public class ComponentTest {
 		}
 
 	}
-	
-	
+
 	public static final class ObjectList extends InjectorTest {
 
-
 		@Before
-		public void init() {
+		public void init() throws Exception {
 			setup("src/test/resources/componenttest");
 		}
 
@@ -262,19 +260,17 @@ public class ComponentTest {
 			TestCase testCase = get(TestCase.class);
 			assertEquals(6, testCase.set.size());
 		}
-		
+
 		public static final class TestCase {
 			@Inject
 			public Set<Object> set;
 		}
 	}
-	
 
 	public static final class MultibindingContainsSameInstances extends InjectorTest {
 
-
 		@Before
-		public void init() {
+		public void init() throws Exception {
 			setup("src/test/resources/componenttest");
 		}
 
@@ -301,7 +297,7 @@ public class ComponentTest {
 
 			@Inject
 			private Set<BasicComponent> list;
-			
+
 			@Inject
 			@Named("basic1")
 			private BasicComponent comp1;
@@ -309,20 +305,18 @@ public class ComponentTest {
 			@Inject
 			@Named("basic2")
 			private BasicComponent comp2;
-			
+
 			@Inject
 			@Named("basic3")
 			private BasicComponent comp3;
-			
+
 		}
 	}
-	
-	
+
 	public static final class MultibindingsByInterface extends InjectorTest {
 
-
 		@Before
-		public void init() {
+		public void init() throws Exception {
 			setup("src/test/resources/componenttest");
 		}
 
@@ -350,7 +344,7 @@ public class ComponentTest {
 
 			@Inject
 			private Set<BasicComponenInterface> set;
-			
+
 			@Inject
 			@Named("basic1")
 			private BasicComponent comp1;
@@ -358,15 +352,14 @@ public class ComponentTest {
 			@Inject
 			@Named("basic2")
 			private BasicComponent comp2;
-			
+
 			@Inject
 			@Named("basic3")
 			private BasicComponent comp3;
-			
+
 		}
 	}
-	
-	
+
 }
 
 interface ComponentInterface {
@@ -437,10 +430,9 @@ final class CommonConfigReader {
 	public int numberFromOtherFile;
 }
 
-
 @Component("test.external_component")
 final class ExternalComponent {
-	
+
 	@Inject
 	@Named("#name")
 	public String name;

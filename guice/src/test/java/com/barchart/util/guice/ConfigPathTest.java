@@ -18,11 +18,11 @@ public class ConfigPathTest {
 	private static final class TestConfigDirectory extends TestCase {
 
 		@Inject
-		private ConfigDirectory configDirectory;
+		private ConfigResources configDirectory;
 
 		@Override
 		void test() {
-			assertEquals(CONFIGURATION_DIRECTORY, configDirectory.getFile());
+			assertEquals(CONFIGURATION_DIRECTORY, configDirectory.getPathDescription());
 		}
 
 	}
@@ -103,7 +103,7 @@ public class ConfigPathTest {
 	private Injector injector;
 
 	@Before
-	public void setup() {
+	public void setup() throws Exception {
 		this.injector = GuiceConfigBuilder.create() //
 				.setDirectory(CONFIGURATION_DIRECTORY) //
 				.build();

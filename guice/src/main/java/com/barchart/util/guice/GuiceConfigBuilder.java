@@ -22,6 +22,7 @@ import com.barchart.util.guice.converters.ShortConverter;
 import com.barchart.util.guice.converters.ShortListConverter;
 import com.barchart.util.guice.converters.StringConverter;
 import com.barchart.util.guice.converters.StringListConverter;
+import com.google.common.base.Preconditions;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -36,6 +37,8 @@ public final class GuiceConfigBuilder {
 	private final ArrayList<ValueConverter> valueConverters;
 
 	private File directory;
+
+	private ConfigResources configResources;
 
 	GuiceConfigBuilder() {
 		this.modules = new ArrayList<Module>();
@@ -57,11 +60,16 @@ public final class GuiceConfigBuilder {
 	}
 
 	public GuiceConfigBuilder setDirectory(String directoryName) {
-		this.directory = new File(directoryName);
+		this.configResources = new DirectoryResources(new File(directoryName));
 		return this;
 	}
 
-	public Injector build() {
+	public GuiceConfigBuilder setConfigResources(ConfigResources configResources) {
+		this.configResources = configResources;
+		return this;
+	}
+
+	public Injector build() throws Exception {
 		addDefaultValueConverters();
 		List<Config> configFiles = readConfigFiles();
 		modules.add(new BasicModule());
@@ -91,14 +99,15 @@ public final class GuiceConfigBuilder {
 		valueConverters.add(new FloatListConverter());
 	}
 
-	private List<Config> readConfigFiles() {
-		ConfigDirectory configDirectory = new ConfigDirectory(directory);
+	private List<Config> readConfigFiles() throws Exception {
 		List<Config> list = new ArrayList<Config>();
-		for (File file : configDirectory.listFiles(Filetypes.CONFIG_FILE_EXTENSION)) {
-			list.add(ConfigFactory.parseFile(file));
-		}
-		for (File file : configDirectory.listFiles(Filetypes.COMPONENT_FILE_EXTENSION)) {
-			list.add(ConfigFactory.parseFile(file));
+		for (String resourceName : configResources.listResources()) {
+			if (resourceName.endsWith(Filetypes.CONFIG_FILE_EXTENSION)) {
+				list.add(configResources.readConfig(resourceName));
+			}
+			if (resourceName.endsWith(Filetypes.COMPONENT_FILE_EXTENSION)) {
+				list.add(configResources.readConfig(resourceName));
+			}
 		}
 		return list;
 	}
@@ -107,7 +116,7 @@ public final class GuiceConfigBuilder {
 
 		@Override
 		protected void configure() {
-			bind(ConfigDirectory.class).toInstance(new ConfigDirectory(directory));
+			bind(ConfigResources.class).toInstance(configResources);
 		}
 
 	}

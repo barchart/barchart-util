@@ -48,10 +48,12 @@ final class ComponentModule extends AbstractModule {
 		for (Config componentConfig : loadComponentConfigs()) {
 			String type = getType(componentConfig);
 			Class<?> componentClass = getComponentClass(type);
-			List<Class<?>> bindingTypes = getBindingTypesForClass(componentClass);
-			ComponentConfigurationModule configurationModule = new ComponentConfigurationModule(componentClass, bindingTypes, componentConfig,
-					bindingTypeCounter);
-			install(configurationModule);
+			if (componentClass != null) {
+				List<Class<?>> bindingTypes = getBindingTypesForClass(componentClass);
+				ComponentConfigurationModule configurationModule = new ComponentConfigurationModule(componentClass, bindingTypes, componentConfig,
+						bindingTypeCounter);
+				install(configurationModule);
+			}
 		}
 		bindMultibindings(bindingTypeCounter);
 

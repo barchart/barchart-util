@@ -10,7 +10,7 @@ public class InjectorTest {
 
 	}
 
-	public void setup(String directory) {
+	public void setup(String directory) throws Exception {
 		this.injector = GuiceConfigBuilder.create() //
 				.setDirectory(directory) //
 				.build();

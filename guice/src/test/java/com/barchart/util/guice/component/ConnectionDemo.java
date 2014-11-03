@@ -115,7 +115,7 @@ public class ConnectionDemo {
 
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		Injector injector = GuiceConfigBuilder.create() //
 				.setDirectory("./src/test/resources/connectiondemo") //
 				.build();

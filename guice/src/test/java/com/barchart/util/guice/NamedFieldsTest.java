@@ -476,7 +476,7 @@ public class NamedFieldsTest {
 	private Injector injector;
 
 	@Before
-	public void setup() {
+	public void setup() throws Exception {
 		this.injector = GuiceConfigBuilder.create() //
 				.setDirectory("src/test/resources/namedfieldtest") //
 				.build();
