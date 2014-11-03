@@ -63,7 +63,7 @@ final class ComponentModule extends AbstractModule {
 			@SuppressWarnings("unchecked")
 			Multibinder<Object> setBinder = (Multibinder<Object>) Multibinder.newSetBinder(binder(), bindingType);
 			for (int i = 0; i < entry.getCount(); i++) {
-				setBinder.addBinding().to(Key.get(bindingType, Names.named("__internal_list_" + i)));
+				setBinder.addBinding().to(Key.get(bindingType, indexed(i)));
 			}
 		}
 
@@ -179,9 +179,9 @@ final class ComponentModule extends AbstractModule {
 		private void exposeToComponentList(Class<?> bindingType) {
 			int index = bindingTypeCounter.add(bindingType, 1);
 			@SuppressWarnings("unchecked")
-			LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) bind(Key.get(bindingType, Names.named("__internal_list_" + index)));
+			LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) bind(Key.get(bindingType, indexed(index)));
 			bindingBuilder.to(componentClass);
-			expose(Key.get(bindingType, Names.named("__internal_list_" + index)));
+			expose(Key.get(bindingType, indexed(index)));
 		}
 
 		private void bindByName(String name, Class<?> bindingType) {
@@ -219,5 +219,9 @@ final class ComponentModule extends AbstractModule {
 			}
 		}
 
+	}
+
+	private Indexed indexed(int index) {
+		return new IndexedImpl(index);
 	}
 }
