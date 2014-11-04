@@ -75,4 +75,15 @@ public final class ClassPathResources implements ConfigResources {
 		return pathDescription;
 	}
 
+	@Override
+	public List<Config> readAllConfigs(String fileExtension) throws Exception {
+		List<Config> list = new ArrayList<Config>();
+		for (String resource : listResources()) {
+			if (resource.endsWith(fileExtension)) {
+				list.add(readConfig(resource));
+			}
+		}
+		return list;
+	}
+
 }

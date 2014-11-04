@@ -1,45 +1,50 @@
-package com.barchart.util.guice.converters;
+package com.barchart.util.guice;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.barchart.util.guice.ValueConverter;
+import javax.inject.Inject;
+
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.common.collect.ImmutableList.Builder;
+import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
+import com.google.inject.multibindings.Multibinder;
 import com.google.inject.util.Types;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigValue;
 import com.typesafe.config.ConfigValueType;
 
-public final class BasicValueConverters {
+public final class ValueConverterModule extends AbstractModule {
 
-	private final List<ValueConverter> list;
+	@Inject
+	private ConfigResources resources;
+	
+	public ValueConverterModule() {
+	}
 
-	public BasicValueConverters() {
-		Builder<ValueConverter> builder = ImmutableList.builder();
-		builder.add(new StringConverter());
-		builder.add(new ConfigConverter());
-		builder.add(new BooleanConverter());
-		builder.add(new ByteConverter());
-		builder.add(new ShortConverter());
-		builder.add(new IntegerConverter());
-		builder.add(new LongConverter());
-		builder.add(new FloatConverter());
-		builder.add(new DoubleConverter());
-		builder.add(new StringListConverter());
-		builder.add(new BooleanListConverter());
-		builder.add(new ConfigListConverter());
-		builder.add(new ByteListConverter());
-		builder.add(new ShortListConverter());
-		builder.add(new IntegerListConverter());
-		builder.add(new LongListConverter());
-		builder.add(new FloatListConverter());
-		builder.add(new DoubleListConverter());
-		this.list = builder.build();
+	@Override
+	protected void configure() {
+		Multibinder<ValueConverter> setBinder = Multibinder.newSetBinder(binder(), ValueConverter.class);
+		setBinder.addBinding().to(StringConverter.class);
+		setBinder.addBinding().to(ConfigConverter.class);
+		setBinder.addBinding().to(BooleanConverter.class);
+		setBinder.addBinding().to(ByteConverter.class);
+		setBinder.addBinding().to(ShortConverter.class);
+		setBinder.addBinding().to(IntegerConverter.class);
+		setBinder.addBinding().to(LongConverter.class);
+		setBinder.addBinding().to(FloatConverter.class);
+		setBinder.addBinding().to(DoubleConverter.class);
+		setBinder.addBinding().to(StringListConverter.class);
+		setBinder.addBinding().to(ConfigListConverter.class);
+		setBinder.addBinding().to(BooleanListConverter.class);
+		setBinder.addBinding().to(ByteListConverter.class);
+		setBinder.addBinding().to(ShortListConverter.class);
+		setBinder.addBinding().to(IntegerListConverter.class);
+		setBinder.addBinding().to(LongListConverter.class);
+		setBinder.addBinding().to(FloatListConverter.class);
+		setBinder.addBinding().to(DoubleListConverter.class);
 	}
 
 	public static final class StringConverter implements ValueConverter {
@@ -345,10 +350,6 @@ public final class BasicValueConverters {
 			}
 		}
 		return result;
-	}
-
-	public List<ValueConverter> getList() {
-		return list;
 	}
 
 }

@@ -1,7 +1,9 @@
 package com.barchart.util.guice;
 
-import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,25 +18,27 @@ final class ConfigValueBinderModule extends AbstractModule {
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(ConfigValueBinderModule.class);
 
-	private final List<Config> configFiles;
+	@Inject
+	private ConfigResources resources;
 
-	private final List<ValueConverter> valueConverters;
+	@Inject
+	private Set<ValueConverter> valueConverters;
 
 	private BindUtil bindUtil;
 
-	public ConfigValueBinderModule(List<Config> configFiles, List<ValueConverter> valueConverters) {
-		this.configFiles = configFiles;
-		this.valueConverters = valueConverters;
+	ConfigValueBinderModule() {
 	}
 
 	@Override
 	protected void configure() {
-		this.bindUtil = new BindUtil(super.binder());
-		for (Config config : configFiles) {
-			if (Filetypes.isConfigFile(config)) {
+		try {
+			this.bindUtil = new BindUtil(super.binder());
+			for (Config config : resources.readAllConfigs(Filetypes.CONFIG_FILE_EXTENSION)) {
 				ConfigFileBinder configFileBinder = new ConfigFileBinder(config);
 				configFileBinder.applyBindings();
 			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 

@@ -44,12 +44,12 @@ class DirectoryResources implements ConfigResources {
 		return Lists.transform(list, new Function<File, String>() {
 
 			final URI directoryURI = directory.toURI();
-			
+
 			@Override
 			public String apply(File input) {
 				return directoryURI.relativize(input.toURI()).getPath();
 			}
-			
+
 		});
 	}
 
@@ -67,6 +67,17 @@ class DirectoryResources implements ConfigResources {
 	@Override
 	public String getPathDescription() {
 		return directory.getAbsolutePath();
+	}
+
+	@Override
+	public List<Config> readAllConfigs(String filenameExtension) throws Exception {
+		List<Config> list = new ArrayList<Config>();
+		for (String resource : listResources()) {
+			if (resource.endsWith(filenameExtension)) {
+				list.add(readConfig(resource));
+			}
+		}
+		return list;
 	}
 
 }

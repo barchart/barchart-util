@@ -1,5 +1,8 @@
 package com.barchart.util.guice;
 
+import java.io.File;
+import java.io.FilenameFilter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,9 +19,14 @@ final class Filetypes {
 
 	static final String CONFIG_LIST = "component";
 
-	static boolean isConfigFile(Config config) {
-		return getOriginName(config).endsWith(CONFIG_FILE_EXTENSION);
+	static boolean isConfig(Config config) {
+		return isConfig(getOriginName(config));
 	}
+	
+	static boolean isConfig(String name) {
+		return name.endsWith(CONFIG_FILE_EXTENSION);
+	}
+	
 
 	static boolean isDefaultConfigFile(Config config) {
 		return getOriginName(config).endsWith("/" + DEFAULT_CONFIG_FILE);
@@ -50,4 +58,6 @@ final class Filetypes {
 		String originName = stripLinenumbersFromOriginDescription(originDescription);
 		return originName.substring(originName.lastIndexOf("/") + 1, originName.lastIndexOf("."));
 	}
+
+
 }

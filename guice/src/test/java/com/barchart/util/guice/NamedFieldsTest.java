@@ -374,102 +374,102 @@ public class NamedFieldsTest {
 	}
 
 	@Test
-	public void testStringField() {
+	public void testStringField() throws Exception {
 		runTest(StringField.class);
 	}
 
 	@Test
-	public void testConfigField() {
+	public void testConfigField() throws Exception {
 		runTest(ConfigField.class);
 	}
 
 	@Test
-	public void testSmallIntegerNumberToLongField() {
+	public void testSmallIntegerNumberToLongField() throws Exception {
 		runTest(SmallIntegerNumberToLongField.class);
 	}
 
 	@Test
-	public void testSmallIntegerNumberToIntegerField() {
+	public void testSmallIntegerNumberToIntegerField() throws Exception {
 		runTest(SmallIntegerNumberToIntegerField.class);
 	}
 
 	@Test
-	public void testSmallIntegerNumberToShortField() {
+	public void testSmallIntegerNumberToShortField() throws Exception {
 		runTest(SmallIntegerNumberToShortField.class);
 	}
 
 	@Test
-	public void testSmallIntegerNumberToByteField() {
+	public void testSmallIntegerNumberToByteField() throws Exception {
 		runTest(SmallIntegerNumberToByteField.class);
 	}
 
 	@Test
-	public void testSmallIntegerNumberToDoubleField() {
+	public void testSmallIntegerNumberToDoubleField() throws Exception {
 		runTest(SmallIntegerNumberToDoubleField.class);
 	}
 
 	@Test
-	public void testSmallIntegerNumberToFloatField() {
+	public void testSmallIntegerNumberToFloatField() throws Exception {
 		runTest(SmallIntegerNumberToFloatField.class);
 	}
 
 	@Test
-	public void testBooleanField() {
+	public void testBooleanField() throws Exception {
 		runTest(BooleanField.class);
 	}
 
 	@Test
-	public void testStringListField() {
+	public void testStringListField() throws Exception {
 		runTest(StringListField.class);
 	}
 
 	@Test
-	public void testLongListField() {
+	public void testLongListField() throws Exception {
 		runTest(LongListField.class);
 	}
 
 	@Test
-	public void testIntListField() {
+	public void testIntListField() throws Exception {
 		runTest(IntListField.class);
 	}
 
 	@Test
-	public void testShortListField() {
+	public void testShortListField() throws Exception {
 		runTest(ShortListField.class);
 	}
 
 	@Test
-	public void testByteListField() {
+	public void testByteListField() throws Exception {
 		runTest(ByteListField.class);
 	}
 
 	@Test
-	public void testDoubleListField() {
+	public void testDoubleListField() throws Exception {
 		runTest(DoubleListField.class);
 	}
 
 	@Test
-	public void testFloatListField() {
+	public void testFloatListField() throws Exception {
 		runTest(FloatListField.class);
 	}
 
 	@Test
-	public void testBooleanListField() {
+	public void testBooleanListField() throws Exception {
 		runTest(BooleanListField.class);
 	}
 
 	@Test
-	public void testConfigListField() {
+	public void testConfigListField() throws Exception {
 		runTest(ConfigListField.class);
 	}
 
 	@Test
-	public void testEmptyLists() {
+	public void testEmptyLists() throws Exception {
 		runTest(EmptyLists.class);
 	}
 
 	@Test(expected = ConfigurationException.class)
-	public void testTypeMismatchList() {
+	public void testTypeMismatchList() throws Exception {
 		runTest(TypeMismatchList.class);
 	}
 
@@ -486,7 +486,7 @@ public class NamedFieldsTest {
 		return injector.getInstance(clazz);
 	}
 
-	private void runTest(Class<? extends TestCase> clazz) {
+	private void runTest(Class<? extends TestCase> clazz) throws Exception {
 		get(clazz).test();
 	}
 

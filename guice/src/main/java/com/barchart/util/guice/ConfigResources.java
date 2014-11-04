@@ -10,14 +10,17 @@ public interface ConfigResources {
 
 	public Config readConfig(String resourceName) throws Exception;
 	
-	public List<String> listResources();
+	public List<String> listResources() throws Exception;
 
 	/**
 	 * 
 	 * @return a string describing the path of these resources, such as a
 	 *         directory name or a classpath URL
 	 */
-	public String getPathDescription();
+	public String getPathDescription() throws Exception;
+
+	public List<Config> readAllConfigs(String fileExtension) throws Exception;
+
 
 	
 

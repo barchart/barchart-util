@@ -33,7 +33,7 @@ public class ConfigResourcesTest {
 		}
 
 		@Test
-		public void listResources() throws IOException {
+		public void listResources() throws Exception {
 			checkListResources(configResources);
 		}
 
@@ -61,6 +61,12 @@ public class ConfigResourcesTest {
 		public void testBadResource() throws Exception {
 			checkBadResource(configResources);
 		}
+
+		@Test
+		public void readAllConfigs() throws Exception {
+			checkReadAllConfigs(configResources);
+		}
+
 
 	}
 
@@ -74,7 +80,7 @@ public class ConfigResourcesTest {
 		}
 
 		@Test
-		public void listResources() throws IOException {
+		public void listResources() throws Exception {
 			checkListResources(configResources);
 		}
 
@@ -102,10 +108,15 @@ public class ConfigResourcesTest {
 		public void testBadResource() throws Exception {
 			checkBadResource(configResources);
 		}
+		
+		@Test
+		public void readAllConfigs() throws Exception {
+			checkReadAllConfigs(configResources);
+		}
 
 	}
 
-	private static void checkListResources(ConfigResources configResources) {
+	private static void checkListResources(ConfigResources configResources) throws Exception {
 		List<String> resources = configResources.listResources();
 		assertEquals(3, resources.size());
 		assertTrue(resources.contains("application.conf"));
@@ -135,5 +146,12 @@ public class ConfigResourcesTest {
 
 	private static void checkBadResource(ConfigResources configResources) throws Exception {
 		configResources.readResource("doesntexist");
+	}
+	
+	private static void checkReadAllConfigs(ConfigResources configResources) throws Exception {
+		List<Config> configs = configResources.readAllConfigs(Filetypes.CONFIG_FILE_EXTENSION);
+		assertEquals(1, configs.size());
+		assertEquals("application", Filetypes.getSimpleName(configs.get(0)));
+		
 	}
 }

@@ -5,6 +5,6 @@ import org.junit.Test;
 abstract class TestCase {
 
 	@Test
-	abstract void test();
+	abstract void test() throws Exception;
 
 }

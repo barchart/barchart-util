@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.slf4j.Logger;
@@ -29,30 +31,34 @@ final class ComponentModule extends AbstractModule {
 
 	private static final String COMPONENT_NAME = "name";
 
-	private final List<Config> configFiles;
+	@Inject
+	private ConfigResources resources;
 
-	private final ArrayList<ValueConverter> valueConverters;
+	@Inject
+	private Set<ValueConverter> valueConverters;
 
-	private final AnnotationScanner annotationScanner;
+	@Inject
+	private AnnotationScanner annotationScanner;
 
-	public ComponentModule(List<Config> configFiles, ArrayList<ValueConverter> valueConverters, AnnotationScanner annotationScanner) {
-		this.configFiles = configFiles;
-		this.valueConverters = valueConverters;
-		this.annotationScanner = annotationScanner;
+	public ComponentModule() {
 	}
 
 	@Override
 	protected void configure() {
-		HashMultiset<Class<?>> bindingTypeCounter = HashMultiset.create();
-		for (Config componentConfig : loadComponentConfigs()) {
-			String type = getType(componentConfig);
-			Class<?> componentClass = getComponentClass(type);
-			if (componentClass != null) {
-				ComponentConfigurationModule configurationModule = new ComponentConfigurationModule(componentClass, componentConfig, bindingTypeCounter);
-				install(configurationModule);
+		try {
+			HashMultiset<Class<?>> bindingTypeCounter = HashMultiset.create();
+			for (Config componentConfig : loadComponentConfigs()) {
+				String type = getType(componentConfig);
+				Class<?> componentClass = getComponentClass(type);
+				if (componentClass != null) {
+					ComponentConfigurationModule configurationModule = new ComponentConfigurationModule(componentClass, componentConfig, bindingTypeCounter);
+					install(configurationModule);
+				}
 			}
+			bindMultibindings(bindingTypeCounter);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
-		bindMultibindings(bindingTypeCounter);
 
 	}
 
@@ -67,15 +73,14 @@ final class ComponentModule extends AbstractModule {
 		}
 	}
 
-	private List<Config> loadComponentConfigs() {
+	private List<Config> loadComponentConfigs() throws Exception {
 		List<Config> list = new ArrayList<Config>();
-		for (Config configFile : configFiles) {
-			if (Filetypes.isConfigFile(configFile)) {
-				list.addAll(getComponentList(configFile));
-			}
-			if (Filetypes.isComponentFile(configFile)) {
-				list.add(configFile);
-			}
+		for (Config configFile : resources.readAllConfigs(Filetypes.CONFIG_FILE_EXTENSION)) {
+			list.addAll(getComponentList(configFile));
+		}
+
+		for (Config componentConfig : resources.readAllConfigs(Filetypes.COMPONENT_FILE_EXTENSION)) {
+			list.add(componentConfig);
 		}
 		return list;
 	}

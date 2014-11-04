@@ -21,7 +21,7 @@ public class ConfigPathTest {
 		private ConfigResources configDirectory;
 
 		@Override
-		void test() {
+		void test() throws Exception {
 			assertEquals(CONFIGURATION_DIRECTORY, configDirectory.getPathDescription());
 		}
 
