@@ -6,6 +6,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
@@ -18,15 +21,26 @@ import com.typesafe.config.ConfigValueType;
 
 public final class ValueConverterModule extends AbstractModule {
 
+	private static final Logger logger = LoggerFactory.getLogger(ValueConverterModule.class);
+
 	@Inject
 	private ConfigResources resources;
-	
+
 	public ValueConverterModule() {
 	}
 
 	@Override
 	protected void configure() {
-		Multibinder<ValueConverter> setBinder = Multibinder.newSetBinder(binder(), ValueConverter.class);
+		try {
+			Multibinder<ValueConverter> setBinder = Multibinder.newSetBinder(binder(), ValueConverter.class);
+			bindDefaultValueConverters(setBinder);
+			bindCustomValueConverters(setBinder);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void bindDefaultValueConverters(Multibinder<ValueConverter> setBinder) {
 		setBinder.addBinding().to(StringConverter.class);
 		setBinder.addBinding().to(ConfigConverter.class);
 		setBinder.addBinding().to(BooleanConverter.class);
@@ -45,6 +59,32 @@ public final class ValueConverterModule extends AbstractModule {
 		setBinder.addBinding().to(LongListConverter.class);
 		setBinder.addBinding().to(FloatListConverter.class);
 		setBinder.addBinding().to(DoubleListConverter.class);
+	}
+
+	private void bindCustomValueConverters(Multibinder<ValueConverter> setBinder) throws Exception {
+		for (Config c : resources.readAllConfigs(Filetypes.CONFIG_FILE_EXTENSION)) {
+			if (c.hasPath(Filetypes.VALUE_CONVERTERS)) {
+				for (String valueConverterClassname : c.getStringList(Filetypes.VALUE_CONVERTERS)) {
+					try {
+						Class<? extends ValueConverter> customConverter = loadClass(valueConverterClassname);
+						setBinder.addBinding().to(customConverter);
+					} catch (Exception e) {
+						logger.error("Could not add custom value converter: " + valueConverterClassname, e);
+					}
+				}
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private Class<? extends ValueConverter> loadClass(String valueConverterClassname) throws ClassNotFoundException {
+		// TODO: Thoughtful Classloading
+		Class<?> clazz = this.getClass().getClassLoader().loadClass(valueConverterClassname);
+		if (ValueConverter.class.isAssignableFrom(clazz)) {
+			return (Class<? extends ValueConverter>) clazz;
+		} else {
+			throw new IllegalStateException("Class " + clazz + " is not a ValueConverter.");
+		}
 	}
 
 	public static final class StringConverter implements ValueConverter {

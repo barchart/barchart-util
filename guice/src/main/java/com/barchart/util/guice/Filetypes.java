@@ -1,13 +1,13 @@
 package com.barchart.util.guice;
 
-import java.io.File;
-import java.io.FilenameFilter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.typesafe.config.Config;
 
+/*
+ * TODO: Refactor this to be more sensible
+ */
 final class Filetypes {
 	private static final Logger logger = LoggerFactory.getLogger(Filetypes.class);
 
@@ -18,6 +18,8 @@ final class Filetypes {
 	static final String DEFAULT_CONFIG_FILE = "application.conf";
 
 	static final String CONFIG_LIST = "component";
+
+	public static final String VALUE_CONVERTERS = "value_converters";
 
 	static boolean isConfig(Config config) {
 		return isConfig(getOriginName(config));
