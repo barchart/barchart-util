@@ -1,10 +1,13 @@
 package com.barchart.util.guice;
 
 import java.io.File;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -37,8 +40,28 @@ class DirectoryResources implements ConfigResources {
 
 	@Override
 	public List<String> listResources() {
-		// TODO: Not recursive
-		return Arrays.asList(directory.list());
+		List<File> list = addFilesInDirectory(directory, new ArrayList<File>());
+		return Lists.transform(list, new Function<File, String>() {
+
+			final URI directoryURI = directory.toURI();
+			
+			@Override
+			public String apply(File input) {
+				return directoryURI.relativize(input.toURI()).getPath();
+			}
+			
+		});
+	}
+
+	private List<File> addFilesInDirectory(File directory, List<File> files) {
+		for (File f : directory.listFiles()) {
+			if (f.isDirectory()) {
+				files.addAll(addFilesInDirectory(f, new ArrayList<File>()));
+			} else {
+				files.add(f);
+			}
+		}
+		return files;
 	}
 
 	@Override

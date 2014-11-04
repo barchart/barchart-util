@@ -16,7 +16,7 @@ import com.typesafe.config.ConfigFactory;
 
 public final class ClassPathResources implements ConfigResources {
 
-	private static final String CONFIG_RESOURCE_PATH = "META-INF/conf";
+	private static final String CONFIG_RESOURCE_PATH = "META-INF/conf/";
 
 	private final Map<String, URL> map;
 
@@ -32,10 +32,14 @@ public final class ClassPathResources implements ConfigResources {
 		ClassPath classPath = ClassPath.from(ClassPathResources.class.getClassLoader());
 		for (ResourceInfo info : classPath.getResources()) {
 			if (info.url().getFile().startsWith(pathDescription)) {
-				map.put(info.getResourceName(), info.url());
+				map.put(shorten(info.getResourceName()), info.url());
 			}
 		}
 		return map;
+	}
+
+	private String shorten(String resourceName) {
+		return resourceName.replace(CONFIG_RESOURCE_PATH, "");
 	}
 
 	@Override
