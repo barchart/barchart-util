@@ -46,11 +46,7 @@ final class ConfigValueBinderModule extends AbstractModule {
 
 		public ConfigFileBinder(Config config) {
 			this.config = config;
-			this.simpleFilename = getSimpleName(config.origin().filename());
-		}
-
-		private String getSimpleName(String filename) {
-			return filename.substring(filename.lastIndexOf("/") + 1, filename.lastIndexOf("."));
+			this.simpleFilename = Filetypes.getSimpleName(config);
 		}
 
 		public void applyBindings() {

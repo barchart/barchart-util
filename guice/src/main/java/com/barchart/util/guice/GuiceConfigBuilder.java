@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.barchart.util.guice.converters.BasicValueConverters;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -13,11 +16,11 @@ import com.typesafe.config.Config;
 
 public final class GuiceConfigBuilder {
 
+	private static final Logger logger = LoggerFactory.getLogger(GuiceConfigBuilder.class);
+	
 	private final ArrayList<Module> modules;
 
 	private final ArrayList<ValueConverter> valueConverters;
-
-	private File directory;
 
 	private ConfigResources configResources;
 
@@ -51,34 +54,16 @@ public final class GuiceConfigBuilder {
 	}
 
 	public Injector build() throws Exception {
-		addDefaultValueConverters();
+
+		if (configResources == null) {
+			configResources = new ClassPathResources();
+		}
 		List<Config> configFiles = readConfigFiles();
+		valueConverters.addAll(new BasicValueConverters().getList());
 		modules.add(new BasicModule());
 		modules.add(new ConfigValueBinderModule(configFiles, valueConverters));
 		modules.add(new ComponentModule(configFiles, valueConverters, new AnnotationScanner()));
 		return Guice.createInjector(modules);
-	}
-
-	private void addDefaultValueConverters() {
-//		valueConverters.add(new StringConverter());
-//		valueConverters.add(new BooleanConverter());
-//		valueConverters.add(new LongConverter());
-//		valueConverters.add(new IntegerConverter());
-//		valueConverters.add(new ShortConverter());
-//		valueConverters.add(new ByteConverter());
-//		valueConverters.add(new DoubleConverter());
-//		valueConverters.add(new FloatConverter());
-//		valueConverters.add(new ConfigConverter());
-//		valueConverters.add(new ConfigListConverter());
-//		valueConverters.add(new StringListConverter());
-//		valueConverters.add(new BooleanListConverter());
-//		valueConverters.add(new LongListConverter());
-//		valueConverters.add(new IntegerListConverter());
-//		valueConverters.add(new ShortListConverter());
-//		valueConverters.add(new ByteListConverter());
-//		valueConverters.add(new DoubleListConverter());
-//		valueConverters.add(new FloatListConverter());
-		valueConverters.addAll(new BasicValueConverters().getList());
 	}
 
 	private List<Config> readConfigFiles() throws Exception {

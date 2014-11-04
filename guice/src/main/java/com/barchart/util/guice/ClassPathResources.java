@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.io.Resources;
 import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.ClassPath.ResourceInfo;
@@ -16,6 +19,8 @@ import com.typesafe.config.ConfigFactory;
 
 public final class ClassPathResources implements ConfigResources {
 
+	private static final Logger logger = LoggerFactory.getLogger(ClassPathResources.class);
+	
 	private static final String CONFIG_RESOURCE_PATH = "META-INF/conf/";
 
 	private final Map<String, URL> map;

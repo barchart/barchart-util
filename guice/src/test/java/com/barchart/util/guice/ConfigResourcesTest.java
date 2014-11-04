@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 
 @RunWith(Enclosed.class)
 public class ConfigResourcesTest {
@@ -119,7 +120,7 @@ public class ConfigResourcesTest {
 
 	public static void checkReadConfigOrigin(ConfigResources configResources) throws Exception {
 		Config config = configResources.readConfig("application.conf");
-		assertTrue(config.origin().filename().endsWith((".conf")));
+		assertTrue(Filetypes.getOriginName(config).endsWith((".conf")));
 	}
 
 	private static void checkReadResource1(ConfigResources configResources) throws Exception {

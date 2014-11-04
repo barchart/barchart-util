@@ -65,7 +65,6 @@ final class ComponentModule extends AbstractModule {
 				setBinder.addBinding().to(Key.get(bindingType, indexed(i)));
 			}
 		}
-
 	}
 
 	private List<Config> loadComponentConfigs() {
@@ -123,15 +122,11 @@ final class ComponentModule extends AbstractModule {
 		}
 	}
 
-
-
-
 	private final class ComponentConfigurationModule extends PrivateModule {
 
 		private final Config config;
 
 		private final Class<?> componentClass;
-
 
 		private final HashMultiset<Class<?>> bindingTypeCounter;
 
