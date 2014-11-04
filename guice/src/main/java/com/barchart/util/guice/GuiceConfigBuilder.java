@@ -1,9 +1,7 @@
 package com.barchart.util.guice;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +10,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.typesafe.config.Config;
 
 public final class GuiceConfigBuilder {
 
@@ -56,31 +53,10 @@ public final class GuiceConfigBuilder {
 	public Injector build() throws Exception {
 		Injector injector = Guice.createInjector(new BasicModule());
 		injector = injector.createChildInjector(injector.getInstance(ValueConverterModule.class));
-		
 		injector = injector.createChildInjector(injector.getInstance(ConfigValueBinderModule.class));
 		injector = injector.createChildInjector(injector.getInstance(ModuleLoaderModule.class));
 		injector = injector.createChildInjector(injector.getInstance(ComponentModule.class));
 		return injector;
-		// valueConverters.addAll(new BasicValueConverters().getList());
-		// modules.add(new BasicModule());
-		// modules.add(new ConfigValueBinderModule(configFiles,
-		// valueConverters));
-		// modules.add(new ComponentModule(configFiles, valueConverters, new
-		// AnnotationScanner()));
-		// return Guice.createInjector(modules);
-	}
-
-	private List<Config> readConfigFiles() throws Exception {
-		List<Config> list = new ArrayList<Config>();
-		for (String resourceName : configResources.listResources()) {
-			if (resourceName.endsWith(Filetypes.CONFIG_FILE_EXTENSION)) {
-				list.add(configResources.readConfig(resourceName));
-			}
-			if (resourceName.endsWith(Filetypes.COMPONENT_FILE_EXTENSION)) {
-				list.add(configResources.readConfig(resourceName));
-			}
-		}
-		return list;
 	}
 
 	private class BasicModule extends AbstractModule {
