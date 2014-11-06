@@ -1,4 +1,0 @@
-type = "barchart.connection"
-name = "feed3"
-host = "feed3.barcdhart.com"
-port = 7500
