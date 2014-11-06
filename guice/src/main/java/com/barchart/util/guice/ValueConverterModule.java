@@ -32,48 +32,71 @@ public final class ValueConverterModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		try {
-			Multibinder<ValueConverter> setBinder = Multibinder.newSetBinder(binder(), ValueConverter.class);
-			bindDefaultValueConverters(setBinder);
-			bindCustomValueConverters(setBinder);
+			List<Class<? extends ValueConverter>> list = new ArrayList<Class<? extends ValueConverter>>();
+			list.addAll(getDefaultValueConverters());
+			list.addAll(getCustomValueConverters());
+			addMultibindings(list);
+			logValueConverters(list);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private void bindDefaultValueConverters(Multibinder<ValueConverter> setBinder) {
-		setBinder.addBinding().to(StringConverter.class);
-		setBinder.addBinding().to(ConfigConverter.class);
-		setBinder.addBinding().to(BooleanConverter.class);
-		setBinder.addBinding().to(ByteConverter.class);
-		setBinder.addBinding().to(ShortConverter.class);
-		setBinder.addBinding().to(IntegerConverter.class);
-		setBinder.addBinding().to(LongConverter.class);
-		setBinder.addBinding().to(FloatConverter.class);
-		setBinder.addBinding().to(DoubleConverter.class);
-		setBinder.addBinding().to(StringListConverter.class);
-		setBinder.addBinding().to(ConfigListConverter.class);
-		setBinder.addBinding().to(BooleanListConverter.class);
-		setBinder.addBinding().to(ByteListConverter.class);
-		setBinder.addBinding().to(ShortListConverter.class);
-		setBinder.addBinding().to(IntegerListConverter.class);
-		setBinder.addBinding().to(LongListConverter.class);
-		setBinder.addBinding().to(FloatListConverter.class);
-		setBinder.addBinding().to(DoubleListConverter.class);
+	private void logValueConverters(List<Class<? extends ValueConverter>> valueConverters) {
+		List<String> simpleNames = Lists.transform(valueConverters, new Function<Class<?>, String>() {
+			@Override
+			public String apply(Class<?> input) {
+				return input.getSimpleName();
+			}
+		});
+		logger.info("Using value converters: " + simpleNames);
 	}
 
-	private void bindCustomValueConverters(Multibinder<ValueConverter> setBinder) throws Exception {
+	private void addMultibindings(List<Class<? extends ValueConverter>> list) {
+		Multibinder<ValueConverter> setBinder = Multibinder.newSetBinder(binder(), ValueConverter.class);
+		for (Class<? extends ValueConverter> converter : list) {
+			setBinder.addBinding().to(converter);
+		}
+	}
+
+	private List<Class<? extends ValueConverter>> getDefaultValueConverters() {
+		List<Class<? extends ValueConverter>> list = Lists.newArrayList();
+		list.add(StringConverter.class);
+		list.add(ConfigConverter.class);
+		list.add(BooleanConverter.class);
+		list.add(ByteConverter.class);
+		list.add(ShortConverter.class);
+		list.add(IntegerConverter.class);
+		list.add(LongConverter.class);
+		list.add(FloatConverter.class);
+		list.add(DoubleConverter.class);
+		list.add(StringListConverter.class);
+		list.add(ConfigListConverter.class);
+		list.add(BooleanListConverter.class);
+		list.add(ByteListConverter.class);
+		list.add(ShortListConverter.class);
+		list.add(IntegerListConverter.class);
+		list.add(LongListConverter.class);
+		list.add(FloatListConverter.class);
+		list.add(DoubleListConverter.class);
+		return list;
+	}
+
+	private List<Class<? extends ValueConverter>> getCustomValueConverters() throws Exception {
+		List<Class<? extends ValueConverter>> list = Lists.newArrayList();
 		for (Config c : resources.readAllConfigs(Filetypes.CONFIG_FILE_EXTENSION)) {
 			if (c.hasPath(Filetypes.VALUE_CONVERTERS)) {
 				for (String valueConverterClassname : c.getStringList(Filetypes.VALUE_CONVERTERS)) {
 					try {
 						Class<? extends ValueConverter> customConverter = loadClass(valueConverterClassname);
-						setBinder.addBinding().to(customConverter);
+						list.add(customConverter);
 					} catch (Exception e) {
 						logger.error("Could not add custom value converter: " + valueConverterClassname, e);
 					}
 				}
 			}
 		}
+		return list;
 	}
 
 	@SuppressWarnings("unchecked")
