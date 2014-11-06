@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.common.collect.Iterables;
+
 /**
  * 
  * Iterable over all types a class can safely cast to, including itself. Include
@@ -24,6 +26,11 @@ final class CastableTypes implements Iterable<Class<?>> {
 	@Override
 	public Iterator<Class<?>> iterator() {
 		return iterable.iterator();
+	}
+
+	@Override
+	public String toString() {
+		return Iterables.toString(iterable);
 	}
 
 	public static CastableTypes of(Class<?> baseclass) {

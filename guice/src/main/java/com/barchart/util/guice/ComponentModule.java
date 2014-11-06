@@ -149,12 +149,19 @@ final class ComponentModule extends AbstractModule {
 			bind(componentClass).in(Singleton.class);
 			bindConfiguration();
 			final String name = getName(config);
+			logComponentInstallation();
+			
+			
 			for (Class<?> bindingType : CastableTypes.of(componentClass)) {
 				if (name != null) {
 					bindByName(name, bindingType);
 				}
 				exposeToComponentList(bindingType);
 			}
+		}
+
+		private void logComponentInstallation() {
+			logger.info("Binding component " + componentClass.getName() + " of type " + getType(config) + " to " + CastableTypes.of(componentClass) + " with name: " + getName(config));
 		}
 
 		private void exposeToComponentList(Class<?> bindingType) {

@@ -37,6 +37,7 @@ final class ConfigValueBinderModule extends AbstractModule {
 		try {
 			this.bindUtil = new BindUtil(super.binder());
 			for (Config config : resources.readAllConfigs(Filetypes.CONFIG_FILE_EXTENSION)) {
+				logger.info("Binding values from config file: " + config.origin().description());
 				ConfigFileBinder configFileBinder = new ConfigFileBinder(config);
 				configFileBinder.applyBindings();
 			}

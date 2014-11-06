@@ -56,6 +56,7 @@ public final class ModuleLoaderModule extends AbstractModule {
 			if (!Module.class.isAssignableFrom(moduleClass)) {
 				throw new IllegalStateException("Module class " + moduleClass + "  for module type " + type + " is not an instance of com.google.inject.Module");
 			}
+			logger.info("Installing module. Type=" + type + ", class=" + moduleClass);
 			Module configuredModule = configureModule(moduleConfig, (Class<? extends Module>) moduleClass);
 			install(configuredModule);
 		}
