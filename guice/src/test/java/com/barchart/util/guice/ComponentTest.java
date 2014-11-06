@@ -22,13 +22,15 @@ import com.typesafe.config.Config;
 @RunWith(Enclosed.class)
 public class ComponentTest {
 
+	public static final String CONFIG_DIRECTORY = "src/test/resources/ComponentTest";
+
 	private static final Logger logger = LoggerFactory.getLogger(ComponentTest.class);
 
 	public static final class InjectComponent1 extends InjectorTest {
 
 		@Before
 		public void init() throws Exception {
-			setup("src/test/resources/componenttest");
+			setup(CONFIG_DIRECTORY);
 		}
 
 		@Test
@@ -48,7 +50,7 @@ public class ComponentTest {
 
 		@Before
 		public void init() throws Exception {
-			setup("src/test/resources/componenttest");
+			setup(CONFIG_DIRECTORY);
 		}
 
 		@Test
@@ -72,7 +74,7 @@ public class ComponentTest {
 
 		@Before
 		public void init() throws Exception {
-			setup("src/test/resources/componenttest");
+			setup(CONFIG_DIRECTORY);
 		}
 
 		@Test
@@ -94,7 +96,7 @@ public class ComponentTest {
 
 		@Before
 		public void init() throws Exception {
-			setup("src/test/resources/componenttest");
+			setup(CONFIG_DIRECTORY);
 		}
 
 		@Test
@@ -114,7 +116,7 @@ public class ComponentTest {
 
 		@Before
 		public void init() throws Exception {
-			setup("src/test/resources/componenttest");
+			setup(CONFIG_DIRECTORY);
 		}
 
 		@Test
@@ -137,7 +139,7 @@ public class ComponentTest {
 
 		@Before
 		public void init() throws Exception {
-			setup("src/test/resources/componenttest");
+			setup(CONFIG_DIRECTORY);
 		}
 
 		@Test
@@ -162,7 +164,7 @@ public class ComponentTest {
 
 		@Before
 		public void init() throws Exception {
-			setup("src/test/resources/componenttest");
+			setup(CONFIG_DIRECTORY);
 		}
 
 		@Test
@@ -185,7 +187,7 @@ public class ComponentTest {
 
 		@Before
 		public void init() throws Exception {
-			setup("src/test/resources/componenttest");
+			setup(CONFIG_DIRECTORY);
 		}
 
 		@Test
@@ -209,7 +211,7 @@ public class ComponentTest {
 
 		@Before
 		public void init() throws Exception {
-			setup("src/test/resources/componenttest");
+			setup(CONFIG_DIRECTORY);
 			this.testCase = get(TestCase.class);
 		}
 
@@ -252,7 +254,7 @@ public class ComponentTest {
 
 		@Before
 		public void init() throws Exception {
-			setup("src/test/resources/componenttest");
+			setup(CONFIG_DIRECTORY);
 		}
 
 		@Test
@@ -271,7 +273,7 @@ public class ComponentTest {
 
 		@Before
 		public void init() throws Exception {
-			setup("src/test/resources/componenttest");
+			setup(CONFIG_DIRECTORY);
 		}
 
 		@Test
@@ -317,7 +319,7 @@ public class ComponentTest {
 
 		@Before
 		public void init() throws Exception {
-			setup("src/test/resources/componenttest");
+			setup(CONFIG_DIRECTORY);
 		}
 
 		@Test
