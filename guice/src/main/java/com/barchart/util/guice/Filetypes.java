@@ -21,6 +21,10 @@ final class Filetypes {
 
 	public static final String VALUE_CONVERTERS = "value_converters";
 
+	public static final String MODULES = "module";
+
+	public static final String MODULE_TYPE = "type";
+
 	static boolean isConfig(Config config) {
 		return isConfig(getOriginName(config));
 	}

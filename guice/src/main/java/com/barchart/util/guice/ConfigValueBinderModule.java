@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
 import com.google.inject.name.Names;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigValue;
@@ -31,6 +32,8 @@ final class ConfigValueBinderModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		// FIXME: ? hack to get correct injector in ModuleLoaderModule
+		bind(ModuleLoaderModule.class);
 		try {
 			this.bindUtil = new BindUtil(super.binder());
 			for (Config config : resources.readAllConfigs(Filetypes.CONFIG_FILE_EXTENSION)) {
