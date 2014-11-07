@@ -387,6 +387,20 @@ public class ComponentTest {
 			private NoNameComponent noNameComponent;
 		}
 	}
+	
+	public static final class GetConfiguredNoNameComponentFromInjector extends InjectorTest {
+		
+		@Before
+		public void init() throws Exception {
+			setup(CONFIG_DIRECTORY);
+		}
+		
+		@Test
+		public void test() {
+			NoNameComponent noNameComponent = get(NoNameComponent.class);
+			assertEquals(555, noNameComponent.someNumber);
+		}
+	}
 
 }
 
