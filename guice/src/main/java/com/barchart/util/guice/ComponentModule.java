@@ -58,7 +58,6 @@ final class ComponentModule extends AbstractModule {
 			ImmutableMultimap<Class<?>, Config> componentClassToConfigMap = loadComponentConfigs();
 			ImmutableMultimap<Class<?>, Class<?>> componentClassToBindingType = determineBindingTypes(componentClassToConfigMap.keySet());
 			ImmutableSet<Class<?>> noNameEligibleBindingTypes = determineNoNameEligibleBindingTypes(componentClassToConfigMap, componentClassToBindingType);
-			logger.info("NoNameEligible? :" + noNameEligibleBindingTypes);
 			HashMultiset<Class<?>> bindingTypeCounter = HashMultiset.create();
 			for (Class<?> componentClass : componentClassToConfigMap.keySet()) {
 				ImmutableCollection<Config> configs = componentClassToConfigMap.get(componentClass);
