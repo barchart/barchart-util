@@ -9,14 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Injector;
 import com.google.inject.name.Names;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigValue;
 
 final class ConfigValueBinderModule extends AbstractModule {
 
-	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(ConfigValueBinderModule.class);
 
 	@Inject

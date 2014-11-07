@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Function;
-import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.ImmutableCollection;
@@ -144,6 +143,7 @@ final class ComponentModule extends AbstractModule {
 			for (int i = 0; i < entry.getCount(); i++) {
 				setBinder.addBinding().to(Key.get(bindingType, indexed(i)));
 			}
+			logger.info("Created multibindings for \"" + bindingType.getName() + "\" with " + entry.getCount() + " component(s).");
 		}
 	}
 
@@ -267,10 +267,6 @@ final class ComponentModule extends AbstractModule {
 			expose(bindingType).annotatedWith(Names.named(name));
 		}
 
-		private void logComponentInstallationByName() {
-			logger.info("Binding component " + componentClass.getName() + " of type " + getType(config) + " to " + CastableTypes.of(componentClass)
-					+ " with name: " + getName(config));
-		}
 
 		private void bindWithNoName(Class<?> bindingType) {
 			if (bindingType != componentClass) {
@@ -281,11 +277,6 @@ final class ComponentModule extends AbstractModule {
 				bindingBuilder.to(componentClass);
 			} 
 			expose(bindingType);
-		}
-
-		private void logComponentInstalltionWithNoName(Class<?> bindingType) {
-			logger.info("Binding component " + componentClass.getName() + " of type " + getType(config) + " to " + bindingType.getName()
-					+ " as default binding.");
 		}
 
 		private void exposeToComponentList(Class<?> bindingType) {
@@ -317,7 +308,6 @@ final class ComponentModule extends AbstractModule {
 
 		private void bindConfigObjectPaths(UniqueObjectPathSet objectPaths) {
 			bindConfigValue("", config.root());
-
 			for (String objectPath : objectPaths) {
 				Config object = config.getConfig(objectPath);
 				bindConfigValue(objectPath, object.root());
