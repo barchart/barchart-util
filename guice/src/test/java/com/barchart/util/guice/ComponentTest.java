@@ -260,7 +260,7 @@ public class ComponentTest {
 		@Test
 		public void testName() {
 			TestCase testCase = get(TestCase.class);
-			assertEquals(6, testCase.set.size());
+			assertEquals(7, testCase.set.size());
 		}
 
 		public static final class TestCase {
@@ -361,6 +361,32 @@ public class ComponentTest {
 
 		}
 	}
+	
+	public static final class DefaultBindingForSingleNoNameComponentAndInterface extends InjectorTest {
+		
+		private TestCase testCase;
+
+		@Before
+		public void init() throws Exception {
+			setup(CONFIG_DIRECTORY);
+			this.testCase = get(TestCase.class);
+		}
+
+		@Test
+		public void test() {
+			assertEquals(555, testCase.noNameComponent.someNumber);
+			assertEquals(555, testCase.noNameInterface.getSomeNumber());
+		}
+		
+		public static final class TestCase {
+			
+			@Inject
+			public NoNameInterface noNameInterface;
+			
+			@Inject
+			private NoNameComponent noNameComponent;
+		}
+	}
 
 }
 
@@ -438,4 +464,21 @@ final class ExternalComponent {
 	@Inject
 	@Named("#name")
 	public String name;
+}
+
+interface NoNameInterface {
+	public int getSomeNumber();
+}
+
+@Component("test.no_name_component")
+final class NoNameComponent implements NoNameInterface{
+	
+	@Inject
+	@Named("#number")
+	public int someNumber;
+
+	@Override
+	public int getSomeNumber() {
+		return someNumber;
+	}
 }
