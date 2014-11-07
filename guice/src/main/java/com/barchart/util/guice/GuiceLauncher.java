@@ -33,13 +33,13 @@ public final class GuiceLauncher {
 		builder.append(getPaths("sun.boot.library.path"));
 		builder.append(getPaths("java.library.path"));
 		builder.append(getPaths("java.class.path"));
-		logger.info("Paths:\n" + builder.toString());
+		logger.info("Paths:" + builder.toString());
 	}
 
 	private static String getPaths(final String property) {
 		String paths = System.getProperty(property);
 		String[] pathArray = paths.split(File.pathSeparator);
-		return "\t" + property + "\n\t\t" + Joiner.on("\n\t\t").join(pathArray) + "\n";
+		return "\n\t" + property + "\n\t\t" + Joiner.on("\n\t\t").join(pathArray);
 	}
 
 	private static void logEnvironment() {

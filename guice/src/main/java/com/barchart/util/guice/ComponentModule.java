@@ -13,19 +13,17 @@ import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.HashMultimap;
+import com.google.common.base.Function;
+import com.google.common.base.MoreObjects.ToStringHelper;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.ImmutableMultimap.Builder;
-import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.PrivateModule;
-import com.google.inject.binder.AnnotatedBindingBuilder;
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
@@ -149,22 +147,6 @@ final class ComponentModule extends AbstractModule {
 		}
 	}
 
-	private Multimap<String, Config> loadComponentConfigsByType() throws Exception {
-		Multimap<String, Config> map = HashMultimap.create();
-		for (Config configFile : resources.readAllConfigs(Filetypes.CONFIG_FILE_EXTENSION)) {
-			for (Config componentConfig : getComponentList(configFile)) {
-				String type = getType(componentConfig);
-				map.put(type, componentConfig);
-			}
-		}
-
-		for (Config componentConfig : resources.readAllConfigs(Filetypes.COMPONENT_FILE_EXTENSION)) {
-			String type = getType(componentConfig);
-			map.put(type, componentConfig);
-		}
-		return map;
-	}
-
 	private Collection<Config> getComponentList(Config configFile) {
 		List<Config> list = new ArrayList<Config>();
 		if (configFile.hasPath(Filetypes.CONFIG_LIST)) {
@@ -235,26 +217,44 @@ final class ComponentModule extends AbstractModule {
 			this.bindUtil = new BindUtil(binder());
 			bind(componentClass).in(Singleton.class);
 			bindConfiguration();
+			final String type = getType(config);
 			final String name = getName(config);
-
-			logComponentInstallationByName();
+			
+			List<Class<?>> noNameBindings = new ArrayList<Class<?>>();
 			for (Class<?> bindingType : bindingTypes) {
 				if (name != null) {
 					bindByName(name, bindingType);
 				}
 
 				if (noNameEligibleBindingTypes.contains(bindingType)) {
+					noNameBindings.add(bindingType);
 					// If this component is the only binding for this type,
 					// bind it without a name.
 					// TODO: What happens if the type is bound by some other
 					// module? (Not a component)
 					// How can we skip this noname binding in that case?
-					logComponentInstalltionWithNoName(bindingType);
 					bindWithNoName(bindingType);
 				}
 
 				exposeToComponentList(bindingType);
 			}
+			
+			{
+				String message = "Found component configuration with type=\"" + type  + "\", name=\"" + name + "\", and class=\"" +componentClass.getName() + "\". Binding to: " + classNames(bindingTypes) + ".";
+				if (!noNameBindings.isEmpty()) {
+					message += "  No-name bindings: " + classNames(noNameBindings);
+				}
+				logger.info(message);
+			}
+		}
+
+		private Collection<String> classNames(Collection<Class<?>> classCollection) {
+			return Collections2.transform(classCollection, new Function<Class<?>, String>() {
+				@Override
+				public String apply(Class<?> input) {
+					return input.getName();
+				}
+			});
 		}
 
 		private void bindByName(String name, Class<?> bindingType) {
