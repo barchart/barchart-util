@@ -36,6 +36,9 @@ public final class GuiceConfigBuilder {
 	}
 
 	public GuiceConfigBuilder addValueConverter(ValueConverter valueConverter) {
+		// TODO: This doesn't do anything anymore. Either remove it, do the
+		// multibindings in the BasicModule, or somehow pass it into the
+		// ValueConverterModule
 		valueConverters.add(valueConverter);
 		return this;
 	}
