@@ -72,6 +72,7 @@ public final class GuiceConfigBuilder {
 				} else {
 					bind(ConfigResources.class).toInstance(configResources);
 				}
+				
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}

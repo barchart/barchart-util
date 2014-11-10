@@ -23,6 +23,7 @@ import com.google.common.collect.Multiset;
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.PrivateModule;
+import com.google.inject.Scopes;
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
@@ -46,12 +47,18 @@ final class ComponentModule extends AbstractModule {
 	@Inject
 	private AnnotationScanner annotationScanner;
 
+	@Inject
+	private GuiceComponentScope guiceComponentScope;
+	
 	public ComponentModule() {
 	}
 
 	@Override
 	protected void configure() {
 		try {
+			bindScope(ComponentScoped.class, guiceComponentScope);
+			bindScope(ActualComponent.class, new ActualComponentScope(guiceComponentScope));
+			
 			ImmutableMultimap<Class<?>, Config> componentClassToConfigMap = loadComponentConfigs();
 			ImmutableMultimap<Class<?>, Class<?>> componentClassToBindingType = determineBindingTypes(componentClassToConfigMap.keySet());
 			ImmutableSet<Class<?>> noNameEligibleBindingTypes = determineNoNameEligibleBindingTypes(componentClassToConfigMap, componentClassToBindingType);
@@ -101,6 +108,7 @@ final class ComponentModule extends AbstractModule {
 		for (Config config : configs) {
 			ComponentConfigurationModule configurationModule = new ComponentConfigurationModule(componentClass, config, bindingTypes, bindingTypeCounter,
 					noNameEligibleBindingTypes);
+			
 			install(configurationModule);
 		}
 	}
@@ -214,14 +222,17 @@ final class ComponentModule extends AbstractModule {
 
 		@Override
 		protected void configure() {
+			
 			this.bindUtil = new BindUtil(binder());
-			bind(componentClass).in(Singleton.class);
+
+			bind(componentClass).in(ActualComponent.class);
 			bindConfiguration();
 			final String type = getType(config);
 			final String name = getName(config);
 			
 			List<Class<?>> noNameBindings = new ArrayList<Class<?>>();
 			for (Class<?> bindingType : bindingTypes) {
+				
 				if (name != null) {
 					bindByName(name, bindingType);
 				}
@@ -235,6 +246,8 @@ final class ComponentModule extends AbstractModule {
 					// How can we skip this noname binding in that case?
 					bindWithNoName(bindingType);
 				}
+				
+				
 
 				exposeToComponentList(bindingType);
 			}
@@ -246,6 +259,8 @@ final class ComponentModule extends AbstractModule {
 				}
 				logger.info(message);
 			}
+			
+
 		}
 
 		private Collection<String> classNames(Collection<Class<?>> classCollection) {
@@ -263,7 +278,7 @@ final class ComponentModule extends AbstractModule {
 					.withSource(config) //
 					.bind(bindingType) //
 					.annotatedWith(Names.named(name));
-			bindingBuilder.to(componentClass);
+			bindingBuilder.to(componentClass).in(ActualComponent.class);
 			expose(bindingType).annotatedWith(Names.named(name));
 		}
 
@@ -275,7 +290,7 @@ final class ComponentModule extends AbstractModule {
 						.withSource(config) //
 						.bind(bindingType);
 				bindingBuilder.to(componentClass);
-			} 
+			}
 			expose(bindingType);
 		}
 
@@ -283,6 +298,7 @@ final class ComponentModule extends AbstractModule {
 			int index = bindingTypeCounter.add(bindingType, 1);
 			@SuppressWarnings("unchecked")
 			LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) bind(Key.get(bindingType, indexed(index)));
+			
 			bindingBuilder.to(componentClass);
 			expose(Key.get(bindingType, indexed(index)));
 		}
