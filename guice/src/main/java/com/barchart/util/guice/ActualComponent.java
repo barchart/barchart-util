@@ -11,7 +11,7 @@ import com.google.inject.ScopeAnnotation;
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RUNTIME)
 @ScopeAnnotation
-public @interface ActualComponent {
+@interface ActualComponent {
 
 }
 

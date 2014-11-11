@@ -416,7 +416,7 @@ abstract class AbstractComponent implements ComponentInterface {
 
 }
 
-@Component("test.basic_component")
+@Component(type = "test.basic_component")
 final class BasicComponent extends AbstractComponent implements BasicComponenInterface {
 
 	@Inject
@@ -430,7 +430,7 @@ final class BasicComponent extends AbstractComponent implements BasicComponenInt
 
 }
 
-@Component("test.compound_component")
+@Component(type = "test.compound_component")
 final class CompoundComponent extends AbstractComponent {
 
 	@Inject
@@ -448,7 +448,7 @@ final class CompoundComponent extends AbstractComponent {
 
 }
 
-@Component("test.common_config_reader")
+@Component(type = "test.common_config_reader")
 final class CommonConfigReader {
 
 	@Inject
@@ -472,7 +472,7 @@ final class CommonConfigReader {
 	public int numberFromOtherFile;
 }
 
-@Component("test.external_component")
+@Component(type = "test.external_component")
 final class ExternalComponent {
 
 	@Inject
@@ -484,7 +484,7 @@ interface NoNameInterface {
 	public int getSomeNumber();
 }
 
-@Component("test.no_name_component")
+@Component(type = "test.no_name_component")
 final class NoNameComponent implements NoNameInterface{
 	
 	@Inject

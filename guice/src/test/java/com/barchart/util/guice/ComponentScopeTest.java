@@ -164,7 +164,7 @@ public class ComponentScopeTest {
 
 		}
 
-		@Component(value = "ScopeTest.TestComponent")
+		@Component(type = "ScopeTest.TestComponent")
 		private static class TestComponent {
 
 			@Inject

@@ -15,7 +15,7 @@ import javax.inject.Qualifier;
 @Target(ElementType.TYPE)
 public @interface Component {
 
-	/** The name. */
-	String value() default "";
+	/** The type of this component. */
+	String type() default "";
 
 }

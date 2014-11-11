@@ -19,9 +19,7 @@ public class PrivateComponentScope implements Scope {
 
 	private final GuiceComponentScope guiceComponentScope;
 
-
 	PrivateComponentScope(GuiceComponentScope guiceComponentScope, String type, String name) {
-		logger.info("PrivateComponentScope(): " + type + ", " + name);
 		this.guiceComponentScope = guiceComponentScope;
 		this.componentType = type;
 		this.componentName = name;
@@ -33,13 +31,10 @@ public class PrivateComponentScope implements Scope {
 			@SuppressWarnings("unchecked")
 			@Override
 			public T get() {
-				logger.info("Get instance: " + key);
 				if (instance == null) {
-					logger.info("Create instance...");
-					guiceComponentScope.push();
+					guiceComponentScope.enter();
 					instance = unscoped.get();
-					guiceComponentScope.pop();
-					logger.info("Done creating instance...");
+					guiceComponentScope.leave();
 				}
 				return (T) instance;
 			}
