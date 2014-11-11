@@ -10,13 +10,13 @@ import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
 
-final class GuiceComponentScope implements Scope {
+final class ComponentScope implements Scope {
 
-	private static final Logger logger = LoggerFactory.getLogger(GuiceComponentScope.class);
+	private static final Logger logger = LoggerFactory.getLogger(ComponentScope.class);
 
 	private ObjectMap current;
 
-	GuiceComponentScope() {
+	ComponentScope() {
 
 	}
 

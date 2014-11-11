@@ -17,9 +17,9 @@ public class PrivateComponentScope implements Scope {
 
 	private Object instance;
 
-	private final GuiceComponentScope guiceComponentScope;
+	private final ComponentScope guiceComponentScope;
 
-	PrivateComponentScope(GuiceComponentScope guiceComponentScope, String type, String name) {
+	PrivateComponentScope(ComponentScope guiceComponentScope, String type, String name) {
 		this.guiceComponentScope = guiceComponentScope;
 		this.componentType = type;
 		this.componentName = name;

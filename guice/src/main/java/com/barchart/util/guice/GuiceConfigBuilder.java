@@ -10,6 +10,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.google.inject.Scope;
 
 public final class GuiceConfigBuilder {
 
@@ -72,6 +73,9 @@ public final class GuiceConfigBuilder {
 				} else {
 					bind(ConfigResources.class).toInstance(configResources);
 				}
+				ComponentScope componentScope = new ComponentScope();
+				bindScope(ComponentScoped.class, componentScope);
+				bind(ComponentScope.class).toInstance(componentScope);
 				
 			} catch (Exception e) {
 				throw new RuntimeException(e);

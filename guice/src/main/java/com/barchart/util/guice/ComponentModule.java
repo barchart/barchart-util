@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,6 @@ import com.google.common.collect.Multiset;
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.PrivateModule;
-import com.google.inject.Scopes;
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
@@ -48,7 +46,7 @@ final class ComponentModule extends AbstractModule {
 	private AnnotationScanner annotationScanner;
 
 	@Inject
-	private GuiceComponentScope guiceComponentScope;
+	private ComponentScope componentScope;
 	
 	public ComponentModule() {
 	}
@@ -56,9 +54,6 @@ final class ComponentModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		try {
-			bindScope(ComponentScoped.class, guiceComponentScope);
-			
-			
 			ImmutableMultimap<Class<?>, Config> componentClassToConfigMap = loadComponentConfigs();
 			ImmutableMultimap<Class<?>, Class<?>> componentClassToBindingType = determineBindingTypes(componentClassToConfigMap.keySet());
 			ImmutableSet<Class<?>> noNameEligibleBindingTypes = determineNoNameEligibleBindingTypes(componentClassToConfigMap, componentClassToBindingType);
@@ -73,7 +68,6 @@ final class ComponentModule extends AbstractModule {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-
 	}
 
 	private ImmutableSet<Class<?>> determineNoNameEligibleBindingTypes(ImmutableMultimap<Class<?>, Config> componentClassToConfigMap,
@@ -229,8 +223,8 @@ final class ComponentModule extends AbstractModule {
 		@Override
 		protected void configure() {
 			this.bindUtil = new BindUtil(binder());
-			bindScope(ActualComponent.class, new PrivateComponentScope(guiceComponentScope, type, name));
-			bind(componentClass).in(ActualComponent.class);
+			bindScope(PrivateComponentScoped.class, new PrivateComponentScope(componentScope, type, name));
+			bind(componentClass).in(PrivateComponentScoped.class);
 			bindConfiguration();
 			List<Class<?>> noNameBindings = new ArrayList<Class<?>>();
 			for (Class<?> bindingType : bindingTypes) {
