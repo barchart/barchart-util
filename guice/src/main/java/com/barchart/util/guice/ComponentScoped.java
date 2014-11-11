@@ -8,10 +8,13 @@ import java.lang.annotation.Target;
 
 import com.google.inject.ScopeAnnotation;
 
-
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RUNTIME)
 @ScopeAnnotation
 public @interface ComponentScoped {
+
+	String type() default "";
+
+	String name() default "";
 
 }

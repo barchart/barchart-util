@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.Multimap;
 import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.ClassPath.ClassInfo;
@@ -30,15 +31,7 @@ class AnnotationScanner {
 			for (ClassInfo info : classPath.getTopLevelClasses()) {
 				Class<?> clazz = loadClass(info);
 				if (clazz != null) {
-					for (Class<? extends Annotation> annotationType : getAnnotationTypes(clazz)) {
-						builder.put(annotationType, clazz);
-					}
-
-					for (Class<?> declaredClass : clazz.getDeclaredClasses()) {
-						for (Class<? extends Annotation> annotationType : getAnnotationTypes(declaredClass)) {
-							builder.put(annotationType, declaredClass);
-						}
-					}
+					addAllAnnotatedClasses(builder, clazz);
 				}
 			}
 			annotationToClassMap = builder.build();
@@ -48,6 +41,15 @@ class AnnotationScanner {
 	}
 
 	public AnnotationScanner() {
+	}
+
+	private static void addAllAnnotatedClasses(Builder<Class<? extends Annotation>, Class<?>> builder, Class<?> clazz) {
+		for (Class<? extends Annotation> annotationType : getAnnotationTypes(clazz)) {
+			builder.put(annotationType, clazz);
+		}
+		for (Class<?> declaredClass : clazz.getDeclaredClasses()) {
+			addAllAnnotatedClasses(builder, declaredClass);
+		}
 	}
 
 	private static List<Class<? extends Annotation>> getAnnotationTypes(Class<?> clazz) {

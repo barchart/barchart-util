@@ -57,7 +57,7 @@ final class ComponentModule extends AbstractModule {
 	protected void configure() {
 		try {
 			bindScope(ComponentScoped.class, guiceComponentScope);
-			bindScope(ActualComponent.class, new ActualComponentScope(guiceComponentScope));
+			
 			
 			ImmutableMultimap<Class<?>, Config> componentClassToConfigMap = loadComponentConfigs();
 			ImmutableMultimap<Class<?>, Class<?>> componentClassToBindingType = determineBindingTypes(componentClassToConfigMap.keySet());
@@ -211,8 +211,14 @@ final class ComponentModule extends AbstractModule {
 
 		private final Set<Class<?>> noNameEligibleBindingTypes;
 
+		private final String type;
+
+		private final String name;
+
 		public ComponentConfigurationModule(Class<?> componentClass, Config config, Collection<Class<?>> bindingTypes, Multiset<Class<?>> bindingTypeCounter,
 				Set<Class<?>> noNameElgibleBindingTypes) {
+			this.type = getType(config);
+			this.name = getName(config);
 			this.componentClass = componentClass;
 			this.bindingTypes = bindingTypes;
 			this.config = config;
@@ -222,14 +228,10 @@ final class ComponentModule extends AbstractModule {
 
 		@Override
 		protected void configure() {
-			
 			this.bindUtil = new BindUtil(binder());
-
+			bindScope(ActualComponent.class, new PrivateComponentScope(guiceComponentScope, type, name));
 			bind(componentClass).in(ActualComponent.class);
 			bindConfiguration();
-			final String type = getType(config);
-			final String name = getName(config);
-			
 			List<Class<?>> noNameBindings = new ArrayList<Class<?>>();
 			for (Class<?> bindingType : bindingTypes) {
 				
@@ -247,8 +249,6 @@ final class ComponentModule extends AbstractModule {
 					bindWithNoName(bindingType);
 				}
 				
-				
-
 				exposeToComponentList(bindingType);
 			}
 			
@@ -278,7 +278,7 @@ final class ComponentModule extends AbstractModule {
 					.withSource(config) //
 					.bind(bindingType) //
 					.annotatedWith(Names.named(name));
-			bindingBuilder.to(componentClass).in(ActualComponent.class);
+			bindingBuilder.to(componentClass);
 			expose(bindingType).annotatedWith(Names.named(name));
 		}
 
@@ -298,7 +298,6 @@ final class ComponentModule extends AbstractModule {
 			int index = bindingTypeCounter.add(bindingType, 1);
 			@SuppressWarnings("unchecked")
 			LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) bind(Key.get(bindingType, indexed(index)));
-			
 			bindingBuilder.to(componentClass);
 			expose(Key.get(bindingType, indexed(index)));
 		}
