@@ -29,6 +29,7 @@ class AnnotationScanner {
 
 			ClassPath classPath = ClassPath.from(AnnotationScanner.class.getClassLoader());
 			for (ClassInfo info : classPath.getTopLevelClasses()) {
+				
 				Class<?> clazz = loadClass(info);
 				if (clazz != null) {
 					addAllAnnotatedClasses(builder, clazz);
@@ -52,7 +53,7 @@ class AnnotationScanner {
 				addAllAnnotatedClasses(builder, declaredClass);
 			}
 		} catch (NoClassDefFoundError err) {
-			logger.info("Could not scan class: " + clazz + " because " + err.getMessage());
+			logger.debug("Could not scan class: " + clazz + " because " + err.getMessage());
 		}
 	}
 

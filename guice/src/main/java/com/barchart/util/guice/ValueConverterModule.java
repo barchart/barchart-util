@@ -49,7 +49,7 @@ public final class ValueConverterModule extends AbstractModule {
 				return input.getSimpleName();
 			}
 		});
-		logger.info("Using value converters: " + simpleNames);
+		logger.debug("Using value converters: " + simpleNames);
 	}
 
 	private void addMultibindings(List<Class<? extends ValueConverter>> list) {
