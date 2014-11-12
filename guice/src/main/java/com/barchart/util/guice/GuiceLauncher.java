@@ -12,12 +12,16 @@ public final class GuiceLauncher {
 
 	private static final Logger logger = LoggerFactory.getLogger(GuiceLauncher.class);
 
-	public static <T> T configure(Class<T> clazz) throws Exception {
+	public static <T extends Runnable> void run(final Class<T> clazz) throws Exception {
+		configure(clazz).run();
+	}
+
+	public static <T> T configure(final Class<T> clazz) throws Exception {
 		logger.info("Starting Guice Launcher.  Configuring: " + clazz);
 		logCurrentDirecotry();
 		logPaths();
 		logEnvironment();
-		Injector injector = GuiceConfigBuilder.create() //
+		final Injector injector = GuiceConfigBuilder.create() //
 				.build();
 		return injector.getInstance(clazz);
 	}
@@ -28,7 +32,7 @@ public final class GuiceLauncher {
 	}
 
 	private static void logPaths() {
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		builder.append(getPaths("sun.boot.class.path"));
 		builder.append(getPaths("sun.boot.library.path"));
 		builder.append(getPaths("java.library.path"));
@@ -37,8 +41,8 @@ public final class GuiceLauncher {
 	}
 
 	private static String getPaths(final String property) {
-		String paths = System.getProperty(property);
-		String[] pathArray = paths.split(File.pathSeparator);
+		final String paths = System.getProperty(property);
+		final String[] pathArray = paths.split(File.pathSeparator);
 		return "\n\t" + property + "\n\t\t" + Joiner.on("\n\t\t").join(pathArray);
 	}
 
