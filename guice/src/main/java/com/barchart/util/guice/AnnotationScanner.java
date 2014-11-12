@@ -44,11 +44,15 @@ class AnnotationScanner {
 	}
 
 	private static void addAllAnnotatedClasses(Builder<Class<? extends Annotation>, Class<?>> builder, Class<?> clazz) {
-		for (Class<? extends Annotation> annotationType : getAnnotationTypes(clazz)) {
-			builder.put(annotationType, clazz);
-		}
-		for (Class<?> declaredClass : clazz.getDeclaredClasses()) {
-			addAllAnnotatedClasses(builder, declaredClass);
+		try {
+			for (Class<? extends Annotation> annotationType : getAnnotationTypes(clazz)) {
+				builder.put(annotationType, clazz);
+			}
+			for (Class<?> declaredClass : clazz.getDeclaredClasses()) {
+				addAllAnnotatedClasses(builder, declaredClass);
+			}
+		} catch (NoClassDefFoundError err) {
+			logger.info("Could not scan class: " + clazz + " because " + err.getMessage());
 		}
 	}
 
