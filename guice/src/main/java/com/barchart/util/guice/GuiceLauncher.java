@@ -18,7 +18,7 @@ public final class GuiceLauncher {
 
 	public static <T> T configure(final Class<T> clazz) throws Exception {
 		logger.info("Starting Guice Launcher.  Configuring: " + clazz);
-		logCurrentDirecotry();
+		logCurrentDirectory();
 		logPaths();
 		logEnvironment();
 		final Injector injector = GuiceConfigBuilder.create() //
@@ -26,7 +26,7 @@ public final class GuiceLauncher {
 		return injector.getInstance(clazz);
 	}
 
-	private static void logCurrentDirecotry() {
+	private static void logCurrentDirectory() {
 		logger.info("user.dir = " + System.getProperty("user.dir"));
 
 	}
