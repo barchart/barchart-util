@@ -25,7 +25,7 @@ public class ActivatbleComponentTest extends InjectorTest {
 		assertSame(myComponent1, myComponent2);
 	}
 
-	@Component(type = "ActivatbleComponentTest.MyComponent")
+	@Component("ActivatbleComponentTest.MyComponent")
 	public static final class MyComponent implements Activatable {
 
 		private boolean activated;
