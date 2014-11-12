@@ -195,7 +195,7 @@ final class ComponentModule extends AbstractModule {
 		List<Class<?>> list = new ArrayList<Class<?>>();
 		for (Class<?> componentClass : annotationScanner.getClassesAnnotatedWith(Component.class)) {
 			Component annotation = componentClass.getAnnotation(Component.class);
-			if (componentType.equals(annotation.type())) {
+			if (componentType.equals(annotation.value())) {
 				list.add(componentClass);
 			}
 		}

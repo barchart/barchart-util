@@ -5,7 +5,7 @@ import javax.inject.Singleton;
 
 public class Common {
 
-	@Component(type = "ComponentScopeTest.component")
+	@Component("ComponentScopeTest.component")
 	public static class TestComponent implements IFace {
 
 		@Inject

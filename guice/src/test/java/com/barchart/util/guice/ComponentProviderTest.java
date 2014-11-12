@@ -40,7 +40,7 @@ public class ComponentProviderTest extends InjectorTest {
 
 	}
 
-	@Component(type = "ComponentProviderTest.ComplexComponent")
+	@Component("ComponentProviderTest.ComplexComponent")
 	private static final class ComplexComponentProvider implements Provider<ComplexComponent> {
 
 		@Inject
