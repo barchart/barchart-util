@@ -20,22 +20,27 @@ import com.typesafe.config.ConfigFactory;
 public final class ClassPathResources implements ConfigResources {
 
 	private static final Logger logger = LoggerFactory.getLogger(ClassPathResources.class);
-	
+
 	private static final String CONFIG_RESOURCE_PATH = "META-INF/conf/";
 
-	private final Map<String, URL> map;
+	private Map<String, URL> map;
 
-	private final String pathDescription;
+	private String pathDescription;
 
 	public ClassPathResources() throws IOException {
-		this.pathDescription = Resources.getResource(CONFIG_RESOURCE_PATH).getFile();
-		this.map = loadConfigResources();
+		try {
+			this.pathDescription = Resources.getResource(CONFIG_RESOURCE_PATH).getFile();
+			this.map = loadConfigResources();
+		} catch (final IllegalArgumentException iae) {
+			this.pathDescription = null;
+			this.map = new HashMap<String, URL>();
+		}
 	}
 
 	private Map<String, URL> loadConfigResources() throws IOException {
-		Map<String, URL> map = new HashMap<String, URL>();
-		ClassPath classPath = ClassPath.from(ClassPathResources.class.getClassLoader());
-		for (ResourceInfo info : classPath.getResources()) {
+		final Map<String, URL> map = new HashMap<String, URL>();
+		final ClassPath classPath = ClassPath.from(ClassPathResources.class.getClassLoader());
+		for (final ResourceInfo info : classPath.getResources()) {
 			if (info.url().getFile().startsWith(pathDescription)) {
 				map.put(shorten(info.getResourceName()), info.url());
 			}
@@ -43,22 +48,22 @@ public final class ClassPathResources implements ConfigResources {
 		return map;
 	}
 
-	private String shorten(String resourceName) {
+	private String shorten(final String resourceName) {
 		return resourceName.replace(CONFIG_RESOURCE_PATH, "");
 	}
 
 	@Override
-	public String readResource(String resourceName) throws Exception {
+	public String readResource(final String resourceName) throws Exception {
 		return Resources.toString(getURL(resourceName), StandardCharsets.UTF_8);
 	}
 
 	@Override
-	public Config readConfig(String resourceName) throws Exception {
+	public Config readConfig(final String resourceName) throws Exception {
 		return ConfigFactory.parseURL(getURL(resourceName));
 	}
 
-	private URL getURL(String resourceName) {
-		URL url = map.get(resourceName);
+	private URL getURL(final String resourceName) {
+		final URL url = map.get(resourceName);
 		if (url == null) {
 			throw new IllegalArgumentException("No resource with name:" + resourceName);
 		}
@@ -76,9 +81,9 @@ public final class ClassPathResources implements ConfigResources {
 	}
 
 	@Override
-	public List<Config> readAllConfigs(String fileExtension) throws Exception {
-		List<Config> list = new ArrayList<Config>();
-		for (String resource : listResources()) {
+	public List<Config> readAllConfigs(final String fileExtension) throws Exception {
+		final List<Config> list = new ArrayList<Config>();
+		for (final String resource : listResources()) {
 			if (resource.endsWith(fileExtension)) {
 				list.add(readConfig(resource));
 			}
