@@ -18,4 +18,6 @@ public @interface Component {
 	/** The type of this component. */
 	String value() default "";
 
+	Class<? extends CustomModule> customModule() default CustomModule.class;
+	
 }

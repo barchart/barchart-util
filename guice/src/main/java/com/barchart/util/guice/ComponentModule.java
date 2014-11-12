@@ -1,5 +1,6 @@
 package com.barchart.util.guice;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -260,6 +261,7 @@ final class ComponentModule extends AbstractModule {
 			bindScope(PrivateComponentScoped.class, new PrivateComponentScope(componentScope, type, name));
 			bind(componentClass).in(PrivateComponentScoped.class);
 			bindConfiguration();
+			installCustomModule();
 			List<Class<?>> noNameBindings = new ArrayList<Class<?>>();
 			for (Class<?> bindingType : bindingTypes) {
 
@@ -290,7 +292,19 @@ final class ComponentModule extends AbstractModule {
 			}
 
 		}
-		
+
+		private void installCustomModule() {
+			try {
+				Component annotation = componentClass.getAnnotation(Component.class);
+				Class<? extends CustomModule> customModuleClass = annotation.customModule();
+				Constructor<? extends CustomModule> constructor = customModuleClass.getConstructor(Config.class);
+				CustomModule customModule = constructor.newInstance(config);
+				install(customModule);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+
 		private boolean isProvider() {
 			return javax.inject.Provider.class.isAssignableFrom(componentClass);
 		}
@@ -342,7 +356,7 @@ final class ComponentModule extends AbstractModule {
 			} else {
 				bindingBuilder.to(componentClass);
 			}
-			
+
 			expose(Key.get(bindingType, indexed(index)));
 		}
 

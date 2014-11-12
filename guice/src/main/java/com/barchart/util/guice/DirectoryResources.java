@@ -17,6 +17,12 @@ class DirectoryResources implements ConfigResources {
 	private final File directory;
 
 	public DirectoryResources(File directory) {
+		if (!directory.exists()) {
+			throw new RuntimeException("Does not exist: " + directory);
+		}
+		if (!directory.isDirectory()) {
+			throw new RuntimeException("Not a directory: " + directory);
+		}
 		this.directory = directory;
 	}
 
