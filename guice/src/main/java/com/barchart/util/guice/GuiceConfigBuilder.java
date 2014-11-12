@@ -55,7 +55,7 @@ public final class GuiceConfigBuilder {
 	}
 
 	public Injector build() throws Exception {
-		Injector injector = Guice.createInjector(new BasicModule());
+		Injector injector = Guice.createInjector(new BasicModule(), new ComponentActivator());
 		injector = injector.createChildInjector(injector.getInstance(ValueConverterModule.class));
 		injector = injector.createChildInjector(injector.getInstance(ConfigValueBinderModule.class));
 		injector = injector.createChildInjector(injector.getInstance(ModuleLoaderModule.class));
