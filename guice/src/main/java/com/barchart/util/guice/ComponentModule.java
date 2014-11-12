@@ -1,5 +1,7 @@
 package com.barchart.util.guice;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 //import java.util.HashSet;
@@ -17,11 +19,14 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Multiset;
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.PrivateModule;
+import com.google.inject.TypeLiteral;
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
@@ -47,7 +52,7 @@ final class ComponentModule extends AbstractModule {
 
 	@Inject
 	private ComponentScope componentScope;
-	
+
 	public ComponentModule() {
 	}
 
@@ -95,14 +100,12 @@ final class ComponentModule extends AbstractModule {
 		return multiset;
 	}
 
-
-
-	private void configureComponent(Class<?> componentClass, Collection<Config> configs, Collection<Class<?>> bindingTypes,
-			ImmutableSet<Class<?>> noNameEligibleBindingTypes, HashMultiset<Class<?>> bindingTypeCounter) {
+	private void configureComponent(Class<?> componentClass, Collection<Config> configs, Collection<Class<?>> bindingTypes, ImmutableSet<Class<?>> noNameEligibleBindingTypes,
+			HashMultiset<Class<?>> bindingTypeCounter) {
 		for (Config config : configs) {
 			ComponentConfigurationModule configurationModule = new ComponentConfigurationModule(componentClass, config, bindingTypes, bindingTypeCounter,
 					noNameEligibleBindingTypes);
-			
+
 			install(configurationModule);
 		}
 	}
@@ -110,9 +113,40 @@ final class ComponentModule extends AbstractModule {
 	private ImmutableMultimap<Class<?>, Class<?>> determineBindingTypes(Set<Class<?>> componentClasses) {
 		ImmutableMultimap.Builder<Class<?>, Class<?>> builder = ImmutableMultimap.builder();
 		for (Class<?> componentClass : componentClasses) {
-			builder.putAll(componentClass, CastableTypes.of(componentClass));
+			List<Class<?>> providedTypes = getProvidedTypes(componentClass);
+			if (providedTypes.isEmpty()) {
+				// Not a provider
+				builder.putAll(componentClass, CastableTypes.of(componentClass));
+			} else {
+				// Is a provider
+				builder.putAll(componentClass, providedTypes);
+			}
+
 		}
 		return builder.build();
+	}
+
+	/*
+	 * 
+	 * If the copmonentClass is a provider, return a list of all types that can
+	 * be provided. Otherwise, return the empty list.
+	 */
+	private List<Class<?>> getProvidedTypes(Class<?> componentClass) {
+		List<Class<?>> list = new ArrayList<Class<?>>();
+		for (Type interfaceType : componentClass.getGenericInterfaces()) {
+			if (ParameterizedType.class.isAssignableFrom(interfaceType.getClass())) {
+				ParameterizedType parameterizedType = (ParameterizedType) interfaceType;
+				Type rawType = parameterizedType.getRawType();
+				if (rawType == javax.inject.Provider.class || rawType == com.google.inject.Provider.class) {
+					Type providedType = parameterizedType.getActualTypeArguments()[0];
+					logger.info("Found provider for " + providedType);
+					if (providedType instanceof Class) {
+						list.addAll(Lists.newArrayList(CastableTypes.of((Class<?>) providedType)));
+					}
+				}
+			}
+		}
+		return list;
 	}
 
 	private ImmutableMultimap<Class<?>, Config> loadComponentConfigs() throws Exception {
@@ -228,7 +262,7 @@ final class ComponentModule extends AbstractModule {
 			bindConfiguration();
 			List<Class<?>> noNameBindings = new ArrayList<Class<?>>();
 			for (Class<?> bindingType : bindingTypes) {
-				
+
 				if (name != null) {
 					bindByName(name, bindingType);
 				}
@@ -242,19 +276,23 @@ final class ComponentModule extends AbstractModule {
 					// How can we skip this noname binding in that case?
 					bindWithNoName(bindingType);
 				}
-				
+
 				exposeToComponentList(bindingType);
 			}
-			
+
 			{
-				String message = "Found component configuration with type=\"" + type  + "\", name=\"" + name + "\", and class=\"" +componentClass.getName() + "\". Binding to: " + classNames(bindingTypes) + ".";
+				String message = "Found component configuration with type=\"" + type + "\", name=\"" + name + "\", and class=\"" + componentClass.getName() + "\". Binding to: "
+						+ classNames(bindingTypes) + ".";
 				if (!noNameBindings.isEmpty()) {
 					message += "  No-name bindings: " + classNames(noNameBindings);
 				}
 				logger.info(message);
 			}
-			
 
+		}
+		
+		private boolean isProvider() {
+			return javax.inject.Provider.class.isAssignableFrom(componentClass);
 		}
 
 		private Collection<String> classNames(Collection<Class<?>> classCollection) {
@@ -266,33 +304,45 @@ final class ComponentModule extends AbstractModule {
 			});
 		}
 
+		@SuppressWarnings("unchecked")
 		private void bindByName(String name, Class<?> bindingType) {
-			@SuppressWarnings("unchecked")
 			LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) binder() //
 					.withSource(config) //
 					.bind(bindingType) //
 					.annotatedWith(Names.named(name));
-			bindingBuilder.to(componentClass);
+			if (isProvider()) {
+				bindingBuilder.toProvider((Class<? extends javax.inject.Provider<Object>>) componentClass);
+			} else {
+				bindingBuilder.to(componentClass);
+			}
 			expose(bindingType).annotatedWith(Names.named(name));
 		}
 
-
+		@SuppressWarnings("unchecked")
 		private void bindWithNoName(Class<?> bindingType) {
 			if (bindingType != componentClass) {
-				@SuppressWarnings("unchecked")
 				LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) binder() //
 						.withSource(config) //
 						.bind(bindingType);
-				bindingBuilder.to(componentClass);
+				if (isProvider()) {
+					bindingBuilder.toProvider((Class<? extends javax.inject.Provider<Object>>) componentClass);
+				} else {
+					bindingBuilder.to(componentClass);
+				}
 			}
 			expose(bindingType);
 		}
 
+		@SuppressWarnings("unchecked")
 		private void exposeToComponentList(Class<?> bindingType) {
 			int index = bindingTypeCounter.add(bindingType, 1);
-			@SuppressWarnings("unchecked")
 			LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) bind(Key.get(bindingType, indexed(index)));
-			bindingBuilder.to(componentClass);
+			if (isProvider()) {
+				bindingBuilder.toProvider((Class<? extends javax.inject.Provider<Object>>) componentClass);
+			} else {
+				bindingBuilder.to(componentClass);
+			}
+			
 			expose(Key.get(bindingType, indexed(index)));
 		}
 
