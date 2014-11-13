@@ -16,10 +16,8 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.typesafe.config.Config;
 
-@Component(HealthReportHandler.NAME)
+@Component("com.barchart.util.health.rest")
 public class HealthReportHandler extends AbstractHttpRequestHandler {
-
-	public static final String NAME = "com.barchart.util.health.http";
 
 	@Inject
 	@Named("#")
