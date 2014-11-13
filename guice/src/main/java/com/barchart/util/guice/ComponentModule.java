@@ -78,10 +78,13 @@ final class ComponentModule extends AbstractModule {
 			}
 
 			bindMultibindings(bindingTypeCounter);
+			bindEmptySets(bindingTypeCounter);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
+
+
 
 	private ImmutableSet<Class<?>> determineNoNameEligibleBindingTypes(ImmutableMultimap<Class<?>, Config> componentClassToConfigMap,
 			ImmutableMultimap<Class<?>, Class<?>> componentClassToBindingType) {
@@ -187,10 +190,24 @@ final class ComponentModule extends AbstractModule {
 			for (int i = 0; i < entry.getCount(); i++) {
 				setBinder.addBinding().to(Key.get(bindingType, indexed(i)));
 			}
-			logger.info("Created multibindings for \"" + bindingType.getName() + "\" with " + entry.getCount() + " component(s).");
+			logger.info("Created Set<" + bindingType.getName() + "> binding with " + entry.getCount() + " component" + (entry.getCount() > 1 ? "s" : ""));
 		}
 	}
 
+	private void bindEmptySets(HashMultiset<Class<?>> bindingTypeCounter) {
+		Collection<Class<?>> allComponentClasses = annotationScanner.getClassesAnnotatedWith(Component.class);
+		Collection<Class<?>> allPotentialBindingTypes = new ArrayList<Class<?>>(); 
+		for (Class<?> clazz : allComponentClasses) {
+			allPotentialBindingTypes.addAll(CastableTypes.of(clazz));
+		}
+		for (Class<?> bindingType : allPotentialBindingTypes) {
+			if (!bindingTypeCounter.contains(bindingType)) {
+				Multibinder.newSetBinder(binder(), bindingType);
+				logger.info("Created Set<" + bindingType + "> binding with 0 components");
+			}
+		}
+	}
+	
 	private Collection<Config> getComponentList(Config configFile) {
 		List<Config> list = new ArrayList<Config>();
 		if (configFile.hasPath(Filetypes.CONFIG_LIST)) {

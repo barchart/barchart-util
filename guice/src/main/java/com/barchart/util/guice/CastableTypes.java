@@ -1,5 +1,6 @@
 package com.barchart.util.guice;
 
+import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -15,22 +16,27 @@ import com.google.common.collect.Iterables;
  * null, then return an emptylist
  *
  */
-final class CastableTypes implements Iterable<Class<?>> {
+final class CastableTypes extends AbstractCollection<Class<?>> {
 
-	private final Iterable<Class<?>> iterable;
+	private final Collection<Class<?>> collection;
 
-	CastableTypes(Iterable<Class<?>> iterable) {
-		this.iterable = iterable;
+	CastableTypes(Collection<Class<?>> collection) {
+		this.collection = collection;
 	}
 
 	@Override
+	public int size() {
+		return collection.size();
+	}
+	
+	@Override
 	public Iterator<Class<?>> iterator() {
-		return iterable.iterator();
+		return collection.iterator();
 	}
 
 	@Override
 	public String toString() {
-		return Iterables.toString(iterable);
+		return Iterables.toString(collection);
 	}
 
 	public static CastableTypes of(Class<?> baseclass) {
@@ -51,5 +57,7 @@ final class CastableTypes implements Iterable<Class<?>> {
 		}
 		return list;
 	}
+
+
 
 }
