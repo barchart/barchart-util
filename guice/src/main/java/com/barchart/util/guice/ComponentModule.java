@@ -304,7 +304,6 @@ final class ComponentModule extends AbstractModule {
 			try {
 				Component annotation = componentClass.getAnnotation(Component.class);
 				Class<? extends Module> customModuleClass = annotation.customModule();
-				logger.info("Installing custom module. using injector: " + injector.hashCode());
 				Injector childInjector = injector.createChildInjector(new AbstractModule() {
 					@Override
 					protected void configure() {
