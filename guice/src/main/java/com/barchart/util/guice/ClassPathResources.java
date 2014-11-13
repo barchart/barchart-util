@@ -26,10 +26,16 @@ public final class ClassPathResources implements ConfigResources {
 	private Map<String, URL> map;
 
 	private String pathDescription;
+	private final String basePath;
 
 	public ClassPathResources() throws IOException {
+		this(CONFIG_RESOURCE_PATH);
+	}
+
+	public ClassPathResources(final String base) throws IOException {
+		this.basePath = base;
 		try {
-			this.pathDescription = Resources.getResource(CONFIG_RESOURCE_PATH).getFile();
+			this.pathDescription = Resources.getResource(basePath).getFile();
 			this.map = loadConfigResources();
 		} catch (final IllegalArgumentException iae) {
 			this.pathDescription = null;
@@ -49,7 +55,7 @@ public final class ClassPathResources implements ConfigResources {
 	}
 
 	private String shorten(final String resourceName) {
-		return resourceName.replace(CONFIG_RESOURCE_PATH, "");
+		return resourceName.replace(basePath, "");
 	}
 
 	@Override
