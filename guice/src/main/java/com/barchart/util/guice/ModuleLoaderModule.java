@@ -38,6 +38,8 @@ public final class ModuleLoaderModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		// FIXME: ? hack to get correct injector in ComponentModule
+		bind(ComponentModule.class);
 		try {
 			for (Config moduleConfig : loadModuleConfigs()) {
 				bindModule(moduleConfig);

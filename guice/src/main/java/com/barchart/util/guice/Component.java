@@ -9,6 +9,8 @@ import java.lang.annotation.Target;
 
 import javax.inject.Qualifier;
 
+import com.google.inject.Module;
+
 @Qualifier
 @Documented
 @Retention(RUNTIME)
@@ -18,6 +20,6 @@ public @interface Component {
 	/** The type of this component. */
 	String value() default "";
 
-	Class<? extends CustomModule> customModule() default CustomModule.class;
+	Class<? extends Module> customModule() default NullModule.class;
 	
 }

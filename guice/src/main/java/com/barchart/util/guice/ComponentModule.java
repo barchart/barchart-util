@@ -25,7 +25,11 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multiset;
 import com.google.inject.AbstractModule;
+import com.google.inject.Binder;
+import com.google.inject.Injector;
 import com.google.inject.Key;
+import com.google.inject.Module;
+import com.google.inject.PrivateBinder;
 import com.google.inject.PrivateModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.binder.LinkedBindingBuilder;
@@ -54,6 +58,9 @@ final class ComponentModule extends AbstractModule {
 	@Inject
 	private ComponentScope componentScope;
 
+	@Inject
+	private Injector injector;
+	
 	public ComponentModule() {
 	}
 
@@ -260,7 +267,7 @@ final class ComponentModule extends AbstractModule {
 			this.bindUtil = new BindUtil(binder());
 			bindScope(PrivateComponentScoped.class, new PrivateComponentScope(componentScope, type, name));
 			bind(componentClass).in(PrivateComponentScoped.class);
-			bindConfiguration();
+			bindConfiguration(binder());
 			installCustomModule();
 			List<Class<?>> noNameBindings = new ArrayList<Class<?>>();
 			for (Class<?> bindingType : bindingTypes) {
@@ -296,9 +303,15 @@ final class ComponentModule extends AbstractModule {
 		private void installCustomModule() {
 			try {
 				Component annotation = componentClass.getAnnotation(Component.class);
-				Class<? extends CustomModule> customModuleClass = annotation.customModule();
-				Constructor<? extends CustomModule> constructor = customModuleClass.getConstructor(Config.class);
-				CustomModule customModule = constructor.newInstance(config);
+				Class<? extends Module> customModuleClass = annotation.customModule();
+				logger.info("Installing custom module. using injector: " + injector.hashCode());
+				Injector childInjector = injector.createChildInjector(new AbstractModule() {
+					@Override
+					protected void configure() {
+						bindConfiguration(binder());
+					}
+				});
+				Module customModule = childInjector.getInstance(customModuleClass);
 				install(customModule);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
@@ -360,17 +373,18 @@ final class ComponentModule extends AbstractModule {
 			expose(Key.get(bindingType, indexed(index)));
 		}
 
-		private void bindConfiguration() {
+		private void bindConfiguration(Binder binder) {
 			UniqueObjectPathSet objectPaths = new UniqueObjectPathSet();
 			for (Entry<String, ConfigValue> entry : config.entrySet()) {
 				String configValuePath = entry.getKey();
 				objectPaths.add(configValuePath);
-				bindConfigValue(configValuePath, entry.getValue());
+				bindConfigValue(binder, configValuePath, entry.getValue());
 			}
-			bindConfigObjectPaths(objectPaths);
+			bindConfigObjectPaths(binder, objectPaths);
 		}
 
-		private void bindConfigValue(String key, ConfigValue value) {
+		private void bindConfigValue(Binder binder, String key, ConfigValue value) {
+			BindUtil bindUtil = new BindUtil(binder);
 			for (ValueConverter converter : valueConverters) {
 				Object result = converter.convert(value);
 				if (result != null) {
@@ -379,11 +393,11 @@ final class ComponentModule extends AbstractModule {
 			}
 		}
 
-		private void bindConfigObjectPaths(UniqueObjectPathSet objectPaths) {
-			bindConfigValue("", config.root());
+		private void bindConfigObjectPaths(Binder binder, UniqueObjectPathSet objectPaths) {
+			bindConfigValue(binder, "", config.root());
 			for (String objectPath : objectPaths) {
 				Config object = config.getConfig(objectPath);
-				bindConfigValue(objectPath, object.root());
+				bindConfigValue(binder, objectPath, object.root());
 			}
 		}
 

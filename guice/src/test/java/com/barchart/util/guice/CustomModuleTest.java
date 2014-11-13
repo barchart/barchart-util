@@ -52,42 +52,42 @@ public class CustomModuleTest extends InjectorTest {
 			return "MyComponent [name=" + name + ", customObjects=" + customObjects + "]";
 		}
 
-		
-
 	}
 
 	public static final class CustomId {
-
 
 	}
 
 	public static final class CustomObject {
 
-
-		 @Inject
-		 public CustomId customId;
+		@Inject
+		public CustomId customId;
 
 		@Override
 		public String toString() {
 			return "CustomObject [customId=" + customId + "]";
 		}
 
-
-		 
-		 
 	}
 
-	public static final class MyCustomModule extends CustomModule {
+	public static final class MyCustomModule extends AbstractModule {
 
-		public MyCustomModule(Config config) {
-			super(config);
+		@Inject
+		@Named("#name")
+		private String name;
+		
+		@Inject
+		@Named("#custom_value_list")
+		private List<Integer> customValueList;
+		
+		MyCustomModule() {
 		}
 
 		@Override
 		protected void configure() {
-			logger.info("Custom module!: " + config.getString("name"));
+			logger.info("Custom module!: " + name);
 			Multibinder<CustomObject> setBinder = Multibinder.newSetBinder(binder(), CustomObject.class);
-			for (int value : config.getIntList("custom_value_list")) {
+			for (int value : customValueList) {
 				CustomObject customObject = new CustomObject();
 				customObject.customId = new CustomId();
 				setBinder.addBinding().toInstance(customObject);
