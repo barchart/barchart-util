@@ -46,6 +46,7 @@ Layout Project.
 		<module>value</module>
 		<module>rx</module>
 		<module>guice</module>
+		<module>health</module>
 		<module>test</module>
 
 	</modules>
