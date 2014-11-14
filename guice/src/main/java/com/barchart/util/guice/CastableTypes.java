@@ -55,7 +55,7 @@ final class CastableTypes extends AbstractCollection<TypeLiteral<?>> {
 		final Class<?> rawType = type.getRawType();
 		for (final Class<?> iface : rawType.getInterfaces()) {
 			final TypeLiteral<?> itype = type.getSupertype(iface);
-			list.add(type.getSupertype(iface));
+			list.add(itype);
 			list.addAll(getInterfaces(itype));
 		}
 		return list;
