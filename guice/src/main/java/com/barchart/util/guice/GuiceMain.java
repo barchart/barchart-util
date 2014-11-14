@@ -21,14 +21,14 @@ public class GuiceMain {
 
 	private static final long WIRING_TEST_TIMEOUT = 5000;
 
-	public static void main(String[] args) throws Exception {
+	public static void main(final String[] args) throws Exception {
 		logger.info("Inspecting manifest for GuiceApp class");
-		URL resource = Resources.getResource("META-INF/MANIFEST.MF");
-		Manifest manifest = new Manifest(resource.openStream());
-		Attributes mainAttributes = manifest.getMainAttributes();
-		String guiceAppMainClass = mainAttributes.getValue(GUICE_APP_MAIN_CLASS);
+		final URL resource = Resources.getResource("META-INF/MANIFEST.MF");
+		final Manifest manifest = new Manifest(resource.openStream());
+		final Attributes mainAttributes = manifest.getMainAttributes();
+		final String guiceAppMainClass = mainAttributes.getValue(GUICE_APP_MAIN_CLASS);
 		logger.info(GUICE_APP_MAIN_CLASS + ": " + guiceAppMainClass);
-		Class<?> mainClass = GuiceMain.class.getClassLoader().loadClass(guiceAppMainClass);
+		final Class<?> mainClass = GuiceMain.class.getClassLoader().loadClass(guiceAppMainClass);
 
 		if (args.length > 0 && args[0].equals(TESTING_OPTION)) {
 			logger.info("Starting wiring test.");
@@ -37,20 +37,18 @@ public class GuiceMain {
 			logger.info("Starting application.");
 			runMain(mainClass, args);
 		}
-		logger.info("GuiceApp completed normally.");
-		System.exit(0);
 	}
 
-	private static void runMain(Class<?> mainClass, String[] args) throws Exception {
-		Method m = mainClass.getMethod("main", String[].class);
+	private static void runMain(final Class<?> mainClass, final String[] args) throws Exception {
+		final Method m = mainClass.getMethod("main", String[].class);
 		m.invoke(null, (Object) args);
 	}
 
 	private static void runTest(final Class<?> mainClass, final String[] args) throws Exception {
-		WiringTestRunner thread = new WiringTestRunner(mainClass, args);
+		final WiringTestRunner thread = new WiringTestRunner(mainClass, args);
 		thread.start();
 		thread.join(WIRING_TEST_TIMEOUT);
-		Exception exception = thread.exception;
+		final Exception exception = thread.exception;
 		if (exception != null) {
 			throw new RuntimeException("Wiring test failed", exception);
 		}
@@ -69,7 +67,7 @@ public class GuiceMain {
 
 		private volatile Exception exception;
 
-		public WiringTestRunner(Class<?> mainClass, String[] args) {
+		public WiringTestRunner(final Class<?> mainClass, final String[] args) {
 			super("WiringTest");
 			this.mainClass = mainClass;
 			this.args = args;
@@ -78,9 +76,9 @@ public class GuiceMain {
 		@Override
 		public void run() {
 			try {
-				Method m = mainClass.getMethod("test", String[].class);
+				final Method m = mainClass.getMethod("test", String[].class);
 				m.invoke(null, (Object) args);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				this.exception = e;
 			}
 		}
