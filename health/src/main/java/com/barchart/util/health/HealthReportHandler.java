@@ -14,26 +14,20 @@ import com.barchart.util.common.status.MemberStatus;
 import com.barchart.util.guice.Component;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.typesafe.config.Config;
 
 @Component("com.barchart.util.health.rest")
 public class HealthReportHandler extends AbstractHttpRequestHandler {
 
-	@Inject
-	@Named("#")
-	private Config config;
+	@Inject(optional = true)
+	@Named("#path")
+	private String path = "/health";
 
 	@Inject(optional = true)
 	private Set<GroupStatus> clusters;
 
 	@Override
 	public String path() {
-
-		if (config.hasPath("path"))
-			return config.getString("path");
-
-		return "/health";
-
+		return path;
 	}
 
 	@Override
