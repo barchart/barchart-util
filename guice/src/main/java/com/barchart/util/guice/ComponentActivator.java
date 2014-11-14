@@ -59,8 +59,9 @@ public class ComponentActivator implements Module {
 
 			final Activate anno = m.getAnnotation(Activate.class);
 
-			if (anno != null)
+			if (anno != null) {
 				return m;
+			}
 
 		}
 
