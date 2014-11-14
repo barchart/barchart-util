@@ -190,7 +190,7 @@ final class ComponentModule extends AbstractModule {
 			for (int i = 0; i < entry.getCount(); i++) {
 				setBinder.addBinding().to(Key.get(bindingType, indexed(i)));
 			}
-			logger.info("Created Set<" + bindingType.getRawType().getName() + "> binding with " + entry.getCount() + " component" + (entry.getCount() > 1 ? "s" : ""));
+			logger.info("Created Set<" + bindingType + "> binding with " + entry.getCount() + " component" + (entry.getCount() > 1 ? "s" : ""));
 		}
 	}
 
@@ -340,7 +340,7 @@ final class ComponentModule extends AbstractModule {
 			return Collections2.transform(classCollection, new Function<TypeLiteral<?>, String>() {
 				@Override
 				public String apply(TypeLiteral<?> input) {
-					return input.getRawType().getName();
+					return input.toString();
 				}
 			});
 		}
