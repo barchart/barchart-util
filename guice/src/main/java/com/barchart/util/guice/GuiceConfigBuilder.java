@@ -10,7 +10,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.Scope;
 
 public final class GuiceConfigBuilder {
 
@@ -23,20 +22,25 @@ public final class GuiceConfigBuilder {
 	private ConfigResources configResources;
 
 	GuiceConfigBuilder() {
+
 		this.modules = new ArrayList<Module>();
 		this.valueConverters = new ArrayList<ValueConverter>();
+
+		addModule(new BasicModule());
+		addModule(new ComponentActivator());
+
 	}
 
 	public static GuiceConfigBuilder create() {
 		return new GuiceConfigBuilder();
 	}
 
-	public GuiceConfigBuilder addModule(Module module) {
+	public GuiceConfigBuilder addModule(final Module module) {
 		modules.add(module);
 		return this;
 	}
 
-	public GuiceConfigBuilder addValueConverter(ValueConverter valueConverter) {
+	public GuiceConfigBuilder addValueConverter(final ValueConverter valueConverter) {
 		// TODO: This doesn't do anything anymore. Either remove it, do the
 		// multibindings in the BasicModule, or somehow pass it into the
 		// ValueConverterModule
@@ -44,18 +48,18 @@ public final class GuiceConfigBuilder {
 		return this;
 	}
 
-	public GuiceConfigBuilder setDirectory(String directoryName) {
+	public GuiceConfigBuilder setDirectory(final String directoryName) {
 		this.configResources = new DirectoryResources(new File(directoryName));
 		return this;
 	}
 
-	public GuiceConfigBuilder setConfigResources(ConfigResources configResources) {
+	public GuiceConfigBuilder setConfigResources(final ConfigResources configResources) {
 		this.configResources = configResources;
 		return this;
 	}
 
 	public Injector build() throws Exception {
-		Injector injector = Guice.createInjector(new BasicModule(), new ComponentActivator());
+		Injector injector = Guice.createInjector(modules);
 		injector = injector.createChildInjector(injector.getInstance(ValueConverterModule.class));
 		injector = injector.createChildInjector(injector.getInstance(ConfigValueBinderModule.class));
 		injector = injector.createChildInjector(injector.getInstance(ModuleLoaderModule.class));
@@ -73,11 +77,11 @@ public final class GuiceConfigBuilder {
 				} else {
 					bind(ConfigResources.class).toInstance(configResources);
 				}
-				ComponentScope componentScope = new ComponentScope();
+				final ComponentScope componentScope = new ComponentScope();
 				bindScope(ComponentScoped.class, componentScope);
 				bind(ComponentScope.class).toInstance(componentScope);
-				
-			} catch (Exception e) {
+
+			} catch (final Exception e) {
 				throw new RuntimeException(e);
 			}
 
