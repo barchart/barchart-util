@@ -1,0 +1,2 @@
+type = ActivatableComponentTest.MyAnnoComponent
+name = "annocomponent"

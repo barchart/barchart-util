@@ -1,0 +1,2 @@
+type = ActivatableComponentTest.MyComponent
+name = "testcomponent"
