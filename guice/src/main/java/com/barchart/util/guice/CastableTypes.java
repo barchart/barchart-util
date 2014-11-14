@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.collect.Iterables;
+import com.google.inject.TypeLiteral;
 
 /**
  * 
@@ -16,11 +17,11 @@ import com.google.common.collect.Iterables;
  * null, then return an emptylist
  *
  */
-final class CastableTypes extends AbstractCollection<Class<?>> {
+final class CastableTypes extends AbstractCollection<TypeLiteral<?>> {
 
-	private final Collection<Class<?>> collection;
+	private final Collection<TypeLiteral<?>> collection;
 
-	CastableTypes(Collection<Class<?>> collection) {
+	CastableTypes(Collection<TypeLiteral<?>> collection) {
 		this.collection = collection;
 	}
 
@@ -28,9 +29,9 @@ final class CastableTypes extends AbstractCollection<Class<?>> {
 	public int size() {
 		return collection.size();
 	}
-	
+
 	@Override
-	public Iterator<Class<?>> iterator() {
+	public Iterator<TypeLiteral<?>> iterator() {
 		return collection.iterator();
 	}
 
@@ -40,24 +41,35 @@ final class CastableTypes extends AbstractCollection<Class<?>> {
 	}
 
 	public static CastableTypes of(Class<?> baseclass) {
-		List<Class<?>> list = new ArrayList<Class<?>>();
-		for (Class<?> clazz : getInclusiveSuperclasses(baseclass)) {
-			list.add(clazz);
-			list.addAll(Arrays.asList(clazz.getInterfaces()));
+		List<TypeLiteral<?>> list = new ArrayList<TypeLiteral<?>>();
+		if (baseclass != null) {
+			for (TypeLiteral<?> type : getInclusiveSuperclasses(TypeLiteral.get(baseclass))) {
+				list.add(type);
+				list.addAll(getInterfaces(type));
+			}
 		}
 		return new CastableTypes(list);
 	}
 
-	// Return a collection of this class (if not null), and all superclasses
-	private static Collection<Class<?>> getInclusiveSuperclasses(Class<?> clazz) {
-		List<Class<?>> list = new ArrayList<Class<?>>();
-		while (clazz != null) {
-			list.add(clazz);
-			clazz = clazz.getSuperclass();
+	private static Collection<TypeLiteral<?>> getInterfaces(TypeLiteral<?> type) {
+		List<TypeLiteral<?>> list = new ArrayList<TypeLiteral<?>>();
+		Class<?> rawType = type.getRawType();
+		for (Class<?> iface : rawType.getInterfaces()) {
+			list.add(type.getSupertype(iface));
 		}
 		return list;
 	}
 
-
+	// Return a collection of this class (if not null), and all superclasses
+	private static Collection<TypeLiteral<?>> getInclusiveSuperclasses(TypeLiteral<?> type) {
+		List<TypeLiteral<?>> list = new ArrayList<TypeLiteral<?>>();
+		while (type != null) {
+			list.add(type);
+			Class<?> rawType = type.getRawType();
+			Class<?> rawSuperclass = rawType.getSuperclass();
+			type = rawSuperclass == null ? null : type.getSupertype(rawType.getSuperclass());
+		}
+		return list;
+	}
 
 }
