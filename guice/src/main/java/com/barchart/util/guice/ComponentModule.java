@@ -1,12 +1,12 @@
 package com.barchart.util.guice;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 //import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -20,7 +20,6 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multiset;
@@ -29,7 +28,6 @@ import com.google.inject.Binder;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
-import com.google.inject.PrivateBinder;
 import com.google.inject.PrivateModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.binder.LinkedBindingBuilder;
@@ -50,7 +48,7 @@ final class ComponentModule extends AbstractModule {
 	private ConfigResources resources;
 
 	@Inject
-	private Set<ValueConverter> valueConverters;
+	private ValueConverterTool valueConverterTool;
 
 	@Inject
 	private AnnotationScanner annotationScanner;
@@ -60,7 +58,7 @@ final class ComponentModule extends AbstractModule {
 
 	@Inject
 	private Injector injector;
-	
+
 	public ComponentModule() {
 	}
 
@@ -69,7 +67,8 @@ final class ComponentModule extends AbstractModule {
 		try {
 			ImmutableMultimap<Class<?>, Config> componentClassToConfigMap = loadComponentConfigs();
 			ImmutableMultimap<Class<?>, TypeLiteral<?>> componentClassToBindingType = determineBindingTypes(componentClassToConfigMap.keySet());
-			ImmutableSet<TypeLiteral<?>> noNameEligibleBindingTypes = determineNoNameEligibleBindingTypes(componentClassToConfigMap, componentClassToBindingType);
+			ImmutableSet<TypeLiteral<?>> noNameEligibleBindingTypes = determineNoNameEligibleBindingTypes(componentClassToConfigMap,
+					componentClassToBindingType);
 			HashMultiset<TypeLiteral<?>> bindingTypeCounter = HashMultiset.create();
 			for (Class<?> componentClass : componentClassToConfigMap.keySet()) {
 				ImmutableCollection<Config> configs = componentClassToConfigMap.get(componentClass);
@@ -83,8 +82,6 @@ final class ComponentModule extends AbstractModule {
 			throw new RuntimeException(e);
 		}
 	}
-
-
 
 	private ImmutableSet<TypeLiteral<?>> determineNoNameEligibleBindingTypes(ImmutableMultimap<Class<?>, Config> componentClassToConfigMap,
 			ImmutableMultimap<Class<?>, TypeLiteral<?>> componentClassToBindingType) {
@@ -111,8 +108,8 @@ final class ComponentModule extends AbstractModule {
 		return multiset;
 	}
 
-	private void configureComponent(Class<?> componentClass, Collection<Config> configs, Collection<TypeLiteral<?>> bindingTypes, ImmutableSet<TypeLiteral<?>> noNameEligibleBindingTypes,
-			HashMultiset<TypeLiteral<?>> bindingTypeCounter) {
+	private void configureComponent(Class<?> componentClass, Collection<Config> configs, Collection<TypeLiteral<?>> bindingTypes,
+			ImmutableSet<TypeLiteral<?>> noNameEligibleBindingTypes, HashMultiset<TypeLiteral<?>> bindingTypeCounter) {
 		for (Config config : configs) {
 			ComponentConfigurationModule configurationModule = new ComponentConfigurationModule(componentClass, config, bindingTypes, bindingTypeCounter,
 					noNameEligibleBindingTypes);
@@ -196,7 +193,7 @@ final class ComponentModule extends AbstractModule {
 
 	private void bindEmptySets(HashMultiset<TypeLiteral<?>> bindingTypeCounter) {
 		Collection<Class<?>> allComponentClasses = annotationScanner.getClassesAnnotatedWith(Component.class);
-		Collection<TypeLiteral<?>> allPotentialBindingTypes = new ArrayList<TypeLiteral<?>>(); 
+		Collection<TypeLiteral<?>> allPotentialBindingTypes = new ArrayList<TypeLiteral<?>>();
 		for (Class<?> clazz : allComponentClasses) {
 			allPotentialBindingTypes.addAll(CastableTypes.of(clazz));
 		}
@@ -207,7 +204,7 @@ final class ComponentModule extends AbstractModule {
 			}
 		}
 	}
-	
+
 	private Collection<Config> getComponentList(Config configFile) {
 		List<Config> list = new ArrayList<Config>();
 		if (configFile.hasPath(Filetypes.CONFIG_LIST)) {
@@ -260,15 +257,14 @@ final class ComponentModule extends AbstractModule {
 
 		private final Collection<TypeLiteral<?>> bindingTypes;
 
-
 		private final Set<TypeLiteral<?>> noNameEligibleBindingTypes;
 
 		private final String type;
 
 		private final String name;
 
-		public ComponentConfigurationModule(Class<?> componentClass, Config config, Collection<TypeLiteral<?>> bindingTypes, Multiset<TypeLiteral<?>> bindingTypeCounter,
-				Set<TypeLiteral<?>> noNameElgibleBindingTypes) {
+		public ComponentConfigurationModule(Class<?> componentClass, Config config, Collection<TypeLiteral<?>> bindingTypes,
+				Multiset<TypeLiteral<?>> bindingTypeCounter, Set<TypeLiteral<?>> noNameElgibleBindingTypes) {
 			this.type = getType(config);
 			this.name = getName(config);
 			this.componentClass = componentClass;
@@ -305,8 +301,8 @@ final class ComponentModule extends AbstractModule {
 			}
 
 			{
-				String message = "Found component configuration with type=\"" + type + "\", name=\"" + name + "\", and class=\"" + componentClass.getName() + "\". Binding to: "
-						+ classNames(bindingTypes) + ".";
+				String message = "Found component configuration with type=\"" + type + "\", name=\"" + name + "\", and class=\"" + componentClass.getName()
+						+ "\". Binding to: " + classNames(bindingTypes) + ".";
 				if (!noNameBindings.isEmpty()) {
 					message += "  No-name bindings: " + classNames(noNameBindings);
 				}
@@ -345,9 +341,6 @@ final class ComponentModule extends AbstractModule {
 			});
 		}
 
-		
-		
-		
 		@SuppressWarnings("unchecked")
 		private void bindByName(String name, TypeLiteral<?> bindingType) {
 			LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) binder() //
@@ -402,11 +395,10 @@ final class ComponentModule extends AbstractModule {
 
 		private void bindConfigValue(Binder binder, String key, ConfigValue value) {
 			BindUtil bindUtil = new BindUtil(binder);
-			for (ValueConverter converter : valueConverters) {
-				Object result = converter.convert(value);
-				if (result != null) {
-					bindUtil.bindInstance(converter.getBindingType(), "#" + key, result);
-				}
+			for (Map.Entry<TypeLiteral<?>, Object> entry : valueConverterTool.getConversions(value).entrySet()) {
+				TypeLiteral<?> bindingType = entry.getKey();
+				Object result = entry.getValue();
+				bindUtil.bindInstance(bindingType, "#" + key, result);
 			}
 		}
 

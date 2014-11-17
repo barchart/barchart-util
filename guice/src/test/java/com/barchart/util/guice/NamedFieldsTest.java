@@ -468,7 +468,7 @@ public class NamedFieldsTest {
 		runTest(EmptyLists.class);
 	}
 
-	@Test(expected = ConfigurationException.class)
+	@Test(expected = RuntimeException.class)
 	public void testTypeMismatchList() throws Exception {
 		runTest(TypeMismatchList.class);
 	}

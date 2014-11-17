@@ -1,6 +1,7 @@
 package com.barchart.util.guice;
 
 import java.util.Map.Entry;
+import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -9,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigValue;
@@ -21,7 +23,7 @@ final class ConfigValueBinderModule extends AbstractModule {
 	private ConfigResources resources;
 
 	@Inject
-	private Set<ValueConverter> valueConverters;
+	private ValueConverterTool valueConverterTool;
 
 	private BindUtil bindUtil;
 
@@ -72,13 +74,12 @@ final class ConfigValueBinderModule extends AbstractModule {
 		}
 
 		private void bindConfigValue(String key, ConfigValue value) {
-			for (ValueConverter converter : valueConverters) {
-				Object result = converter.convert(value);
-				if (result != null) {
-					bindUtil.bindInstance(converter.getBindingType(), getPath(key), result);
-					if (Filetypes.isDefaultConfigFile(config)) {
-						bindUtil.bindInstance(converter.getBindingType(), key, result);
-					}
+			for (Map.Entry<TypeLiteral<?>, Object> entry : valueConverterTool.getConversions(value).entrySet()) {
+				TypeLiteral<?> bindingType = entry.getKey();
+				Object result = entry.getValue();
+				bindUtil.bindInstance(bindingType, getPath(key), result);
+				if (Filetypes.isDefaultConfigFile(config)) {
+					bindUtil.bindInstance(bindingType, key, result);
 				}
 			}
 		}

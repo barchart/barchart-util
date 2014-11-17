@@ -2,6 +2,7 @@ package com.barchart.util.guice;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.google.inject.TypeLiteral;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigValue;
 
@@ -30,7 +32,7 @@ public final class ModuleLoaderModule extends AbstractModule {
 	private Injector injector;
 
 	@Inject
-	private Set<ValueConverter> valueConverters;
+	private ValueConverterTool valueConverterTool;
 
 	ModuleLoaderModule() {
 
@@ -129,11 +131,10 @@ public final class ModuleLoaderModule extends AbstractModule {
 		}
 
 		private void bindConfigValue(String key, ConfigValue value) {
-			for (ValueConverter converter : valueConverters) {
-				Object result = converter.convert(value);
-				if (result != null) {
-					bindUtil.bindInstance(converter.getBindingType(), "#" + key, result);
-				}
+			for (Map.Entry<TypeLiteral<?>, Object> entry : valueConverterTool.getConversions(value).entrySet()) {
+				TypeLiteral<?> bindingType = entry.getKey();
+				Object result = entry.getValue();
+				bindUtil.bindInstance(bindingType, "#" + key, result);
 			}
 		}
 
