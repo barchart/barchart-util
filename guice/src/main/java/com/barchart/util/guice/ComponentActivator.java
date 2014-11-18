@@ -16,13 +16,7 @@ public class ComponentActivator implements Module {
 
 		@Override
 		public boolean matches(final TypeLiteral<?> t) {
-
-			if (Activatable.class.isAssignableFrom(t.getRawType())) {
-				return true;
-			}
-
 			return activator(Activate.class, t.getRawType()) != null;
-
 		}
 
 	};
@@ -36,13 +30,8 @@ public class ComponentActivator implements Module {
 					@Override
 					public void afterInjection(final I injectee) {
 						try {
-							if (injectee instanceof Activatable) {
-								final Activatable activatable = (Activatable) injectee;
-								activatable.activate();
-							} else {
-								final Method activator = activator(Activate.class, injectee.getClass());
-								activator.invoke(injectee);
-							}
+							final Method activator = activator(Activate.class, injectee.getClass());
+							activator.invoke(injectee);
 						} catch (final Exception e) {
 							throw new RuntimeException(e);
 						}
