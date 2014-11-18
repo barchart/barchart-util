@@ -1,11 +1,14 @@
 package com.barchart.util.guice;
 
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Joiner;
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
@@ -14,10 +17,10 @@ final class ComponentScope implements Scope {
 
 	private static final Logger logger = LoggerFactory.getLogger(ComponentScope.class);
 
-	private ObjectMap current;
-
+	private Deque<ObjectMap> currentDeque;
+	
 	ComponentScope() {
-
+		this.currentDeque = new LinkedList<ObjectMap>();
 	}
 
 	@Override
@@ -28,6 +31,8 @@ final class ComponentScope implements Scope {
 		return new Provider<T>() {
 			@Override
 			public T get() {
+				ObjectMap current = currentDeque.peek();
+				
 				if (current == null) {
 					throw new RuntimeException("Could not return instance for " + key + ".  Not in a component scope.");
 				}
@@ -54,11 +59,11 @@ final class ComponentScope implements Scope {
 	}
 
 	public void enter() {
-		this.current = new ObjectMap();
+		currentDeque.push(new ObjectMap());
 	}
 
 	public void leave() {
-		this.current = null;
+		currentDeque.pop();
 	}
 
 	private static final class ObjectMap {
