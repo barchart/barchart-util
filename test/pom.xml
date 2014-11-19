@@ -30,6 +30,12 @@
 		</dependency>
 		
 		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-guice</artifactId>
+			<version>[1-SNAPSHOT,2-SNAPSHOT)</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.barchart.osgi</groupId>
 			<artifactId>barchart-osgi-component</artifactId>
 		</dependency>
