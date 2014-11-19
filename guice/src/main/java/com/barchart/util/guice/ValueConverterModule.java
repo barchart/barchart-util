@@ -59,7 +59,7 @@ public final class ValueConverterModule extends AbstractModule {
 		}
 	}
 
-	private List<Class<? extends ValueConverter>> getDefaultValueConverters() {
+	public static final List<Class<? extends ValueConverter>> getDefaultValueConverters() {
 		List<Class<? extends ValueConverter>> list = Lists.newArrayList();
 		list.add(StringConverter.class);
 		list.add(ConfigConverter.class);

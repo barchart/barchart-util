@@ -1,7 +1,7 @@
 package com.barchart.util.guice;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.TypeLiteral;
 import com.google.inject.util.Types;
 import com.typesafe.config.ConfigFactory;
@@ -29,6 +30,10 @@ public class ValueConverterTool {
 	ValueConverterTool() {
 	}
 
+	public ValueConverterTool(Collection<ValueConverter> valueConverters) {
+		this.valueConverters = ImmutableSet.copyOf(valueConverters);
+	}
+	
 	public Map<TypeLiteral<?>, Object> getConversions(ConfigValue value) {
 		Map<TypeLiteral<?>, Object> map = new HashMap<TypeLiteral<?>, Object>();
 		if (value.valueType() == ConfigValueType.LIST) {
@@ -92,4 +97,17 @@ public class ValueConverterTool {
 		}
 	}
 
+	
+	public static ValueConverterTool defaultValueConverterTool() {
+		List<ValueConverter> converters = new ArrayList<ValueConverter>();
+		for (Class<? extends ValueConverter> clazz : ValueConverterModule.getDefaultValueConverters()) {
+				try {
+					ValueConverter converter = clazz.newInstance();
+					converters.add(converter);
+				} catch (Exception e) {
+					logger.warn("Could not instantiate " + clazz);
+				}
+		}
+		return new ValueConverterTool(converters);
+	}
 }
