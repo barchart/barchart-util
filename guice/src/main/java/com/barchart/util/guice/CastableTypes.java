@@ -16,7 +16,7 @@ import com.google.inject.TypeLiteral;
  * null, then return an emptylist
  *
  */
-final class CastableTypes extends AbstractCollection<TypeLiteral<?>> {
+public final class CastableTypes extends AbstractCollection<TypeLiteral<?>> {
 
 	private final Collection<TypeLiteral<?>> collection;
 
