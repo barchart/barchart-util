@@ -56,13 +56,22 @@ final class Filetypes {
 
 	// no path, no extension
 	static String getSimpleName(Config config) {
-		return getSimpleName(config.origin().description());
+		logger.info("GetSimpleName: " +config + ", origin: " + config.origin() + ", description: " + config.origin().description());
+		if (config.origin() == null) {
+			return "";
+		} else {
+			return getSimpleName(config.origin().description());
+		}
 
 	}
 
 	static String getSimpleName(String originDescription) {
 		String originName = stripLinenumbersFromOriginDescription(originDescription);
-		return originName.substring(originName.lastIndexOf("/") + 1, originName.lastIndexOf("."));
+		int lastIndexOf = originName.lastIndexOf("/");
+		if (lastIndexOf == -1) {
+			return "";
+		}
+		return originName.substring(lastIndexOf + 1, originName.lastIndexOf("."));
 	}
 
 

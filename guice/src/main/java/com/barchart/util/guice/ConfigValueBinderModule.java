@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.name.Names;
 import com.typesafe.config.Config;
 
 final class ConfigValueBinderModule extends AbstractModule {
@@ -26,11 +27,17 @@ final class ConfigValueBinderModule extends AbstractModule {
 	protected void configure() {
 		// FIXME: ? hack to get correct injector in ModuleLoaderModule
 		bind(ModuleLoaderModule.class);
+		ConfigBinder configBinder = new ConfigBinder(binder(), valueConverterTool);
 		try {
 			for (Config config : resources.readAllConfigs(Filetypes.CONFIG_FILE_EXTENSION)) {
 				logger.info("Binding values from config file: " + config.origin().description());
-				ConfigBinder configFileBinder = new ConfigBinder(config, valueConverterTool);
-				configFileBinder.applyBindings(binder());
+				String fileName = Filetypes.getSimpleName(config);
+				if (Filetypes.isDefaultConfigFile(config)) {
+					configBinder.applyBindings(config, "");
+					bind(Config.class).toInstance(config);
+					bind(Config.class).annotatedWith(Names.named("/")).toInstance(config);
+				}
+				configBinder.applyBindings(config, fileName + "/");
 				
 			}
 		} catch (Exception e) {
