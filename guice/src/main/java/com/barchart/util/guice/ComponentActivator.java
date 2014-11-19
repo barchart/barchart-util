@@ -31,6 +31,7 @@ public class ComponentActivator implements Module {
 					public void afterInjection(final I injectee) {
 						try {
 							final Method activator = activator(Activate.class, injectee.getClass());
+							activator.setAccessible(true);
 							activator.invoke(injectee);
 						} catch (final Exception e) {
 							throw new RuntimeException(e);

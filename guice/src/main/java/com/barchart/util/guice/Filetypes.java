@@ -8,16 +8,17 @@ import com.typesafe.config.Config;
 /*
  * TODO: Refactor this to be more sensible
  */
-final class Filetypes {
+public final class Filetypes {
+
 	private static final Logger logger = LoggerFactory.getLogger(Filetypes.class);
 
 	static final String CONFIG_FILE_EXTENSION = ".conf";
 
 	static final String COMPONENT_FILE_EXTENSION = ".component";
 
-	static final String DEFAULT_CONFIG_FILE = "application.conf";
-
 	static final String CONFIG_LIST = "component";
+
+	public static final String DEFAULT_CONFIG_FILE = "application.conf";
 
 	public static final String VALUE_CONVERTERS = "value_converters";
 
@@ -25,37 +26,37 @@ final class Filetypes {
 
 	public static final String MODULE_TYPE = "type";
 
-	static boolean isConfig(Config config) {
+	public static boolean isConfig(final Config config) {
 		return isConfig(getOriginName(config));
 	}
-	
-	static boolean isConfig(String name) {
+
+	public static boolean isConfig(final String name) {
 		return name.endsWith(CONFIG_FILE_EXTENSION);
 	}
-	
 
-	static boolean isDefaultConfigFile(Config config) {
+
+	public static boolean isDefaultConfigFile(final Config config) {
 		return getOriginName(config).endsWith("/" + DEFAULT_CONFIG_FILE);
 	}
 
-	static boolean isComponentFile(Config config) {
+	public static boolean isComponentFile(final Config config) {
 		return getOriginName(config).endsWith(COMPONENT_FILE_EXTENSION);
 	}
 
-	static String getOriginName(Config config) {
-		String description = config.origin().description();
+	static String getOriginName(final Config config) {
+		final String description = config.origin().description();
 		return stripLinenumbersFromOriginDescription(description);
 	}
 
 	/*
 	 * origin description sometimes has line numbers at the end
 	 */
-	static String stripLinenumbersFromOriginDescription(String originDescription) {
+	static String stripLinenumbersFromOriginDescription(final String originDescription) {
 		return originDescription.replaceAll(": \\d+-?\\d*$", "");
 	}
 
 	// no path, no extension
-	static String getSimpleName(Config config) {
+	public static String getSimpleName(final Config config) {
 		logger.info("GetSimpleName: " +config + ", origin: " + config.origin() + ", description: " + config.origin().description());
 		if (config.origin() == null) {
 			return "";
@@ -65,9 +66,9 @@ final class Filetypes {
 
 	}
 
-	static String getSimpleName(String originDescription) {
-		String originName = stripLinenumbersFromOriginDescription(originDescription);
-		int lastIndexOf = originName.lastIndexOf("/");
+	public static String getSimpleName(final String originDescription) {
+		final String originName = stripLinenumbersFromOriginDescription(originDescription);
+		final int lastIndexOf = originName.lastIndexOf("/");
 		if (lastIndexOf == -1) {
 			return "";
 		}
