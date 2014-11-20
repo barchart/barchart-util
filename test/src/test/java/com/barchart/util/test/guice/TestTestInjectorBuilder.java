@@ -15,8 +15,9 @@ public class TestTestInjectorBuilder {
 	@Test
 	public void testGlobalConfig() throws Exception {
 
-		final SimpleComponent sm = TestInjectorBuilder.createDefault()
-				.config("{ root = value, component = [{type = simple.component}]}")
+		final SimpleComponent sm = TestInjectorBuilder.createBasic()
+				.config("{ root = value }")
+				.module(TestComponentModule.forType(SimpleComponent.class).config("{ name = simple }"))
 				.build()
 				.getInstance(SimpleComponent.class);
 
@@ -54,7 +55,7 @@ public class TestTestInjectorBuilder {
 	public void testAutoComponentConfig() throws Exception {
 
 		final SimpleComponent sm = TestInjectorBuilder.createDefault()
-				.config("root = value") 
+				.config("root = value")
 				.component("{ type = \"simple.component\", name = \"simple\"}")
 				.build()
 				.getInstance(SimpleComponent.class);
