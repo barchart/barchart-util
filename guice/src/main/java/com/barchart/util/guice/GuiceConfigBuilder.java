@@ -30,8 +30,6 @@ public final class GuiceConfigBuilder {
 		this.modules = new ArrayList<Module>();
 		this.valueConverters = new ArrayList<ValueConverter>();
 
-		addModule(new BasicModule());
-		addModule(new ComponentActivator());
 
 	}
 
@@ -75,19 +73,19 @@ public final class GuiceConfigBuilder {
 	}
 
 	public Injector build() throws Exception {
-
-		Injector injector = Guice.createInjector(modules);
-
+		return build(Guice.createInjector());
+	}
+	
+	public Injector build(Injector parentInjector) {
+		Injector injector = parentInjector.createChildInjector(new BasicModule(), new ComponentActivator());
 		injector = injector.createChildInjector(injector.getInstance(ValueConverterModule.class));
 		injector = injector.createChildInjector(injector.getInstance(ConfigValueBinderModule.class));
-
+		injector = injector.createChildInjector(modules);
 		if (componentSupport) {
 			injector = injector.createChildInjector(injector.getInstance(ModuleLoaderModule.class));
 			injector = injector.createChildInjector(injector.getInstance(ComponentModule.class));
 		}
-
 		return injector;
-
 	}
 
 	private class BasicModule extends AbstractModule {
