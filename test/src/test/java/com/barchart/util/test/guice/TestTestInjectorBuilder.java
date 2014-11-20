@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import com.barchart.util.guice.Activate;
 import com.barchart.util.guice.Component;
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.typesafe.config.Config;
@@ -16,10 +15,10 @@ public class TestTestInjectorBuilder {
 	@Test
 	public void testGlobalConfig() throws Exception {
 
-		final SimpleModule sm = TestInjectorBuilder.create()
-			.config("{ root = value }")
-			.build()
-			.getInstance(SimpleModule.class);
+		final SimpleComponent sm = TestInjectorBuilder.createBasic()
+				.config("{ root = value }")
+				.build()
+				.getInstance(SimpleComponent.class);
 
 		assertEquals("value", sm.rootValue);
 		assertEquals("value", sm.rootConfig.getString("root"));
@@ -27,12 +26,12 @@ public class TestTestInjectorBuilder {
 	}
 
 	@Test
-	public void testComponentConfig() throws Exception {
+	public void testManualComponentConfig() throws Exception {
 
-		final SimpleModule sm = TestInjectorBuilder.create()
-				.component(SimpleModule.class, "{ name = simple }")
+		final SimpleComponent sm = TestInjectorBuilder.createBasic()
+				.module(TestComponentModule.forType(SimpleComponent.class).config("{ name = simple }"))
 				.build()
-				.getInstance(SimpleModule.class);
+				.getInstance(SimpleComponent.class);
 
 		assertEquals("simple", sm.componentName);
 		assertEquals("simple", sm.componentConfig.getString("name"));
@@ -40,48 +39,61 @@ public class TestTestInjectorBuilder {
 	}
 
 	@Test
-	public void testComponentActivation() throws Exception {
+	public void testManualComponentActivation() throws Exception {
 
-		final SimpleModule sm = TestInjectorBuilder.create()
-				.component(SimpleModule.class, "{ name = simple }")
+		final SimpleComponent sm = TestInjectorBuilder.createBasic()
+				.module(TestComponentModule.forType(SimpleComponent.class).config("{ name = simple }"))
 				.build()
-				.getInstance(SimpleModule.class);
+				.getInstance(SimpleComponent.class);
 
 		assertTrue(sm.activated);
 
 	}
 
-	@Component("simple.module")
-	public static class SimpleModule extends AbstractModule {
+	@Test
+	public void testAutoComponentConfig() throws Exception {
 
-		@Inject(optional = true)
-		@Named("/")
-		private Config rootConfig;
+		final SimpleComponent sm = TestInjectorBuilder.createDefault()
+				.component("{ type = \"simple.component\", name = \"simple\" }")
+				.build()
+				.getInstance(SimpleComponent.class);
 
-		@Inject(optional = true)
-		@Named("root")
-		private String rootValue;
+		assertEquals("value", sm.rootValue);
+		assertEquals("value", sm.rootConfig.getString("root"));
 
-		@Inject(optional = true)
-		@Named("#")
-		private Config componentConfig;
+		assertEquals("simple", sm.componentName);
+		assertEquals("simple", sm.componentConfig.getString("name"));
 
-		@Inject(optional = true)
-		@Named("#name")
-		private String componentName;
+		assertTrue(sm.activated);
 
-		private boolean activated = false;
+	}
 
-		@Override
-		protected void configure() {
+}
 
-		}
+@Component("simple.component")
+class SimpleComponent {
 
-		@Activate
-		private void activate() {
-			activated = true;
-		}
+	@Inject(optional = true)
+	@Named("/")
+	Config rootConfig;
 
+	@Inject(optional = true)
+	@Named("root")
+	String rootValue;
+
+	@Inject(optional = true)
+	@Named("#")
+	Config componentConfig;
+
+	@Inject(optional = true)
+	@Named("#name")
+	String componentName;
+
+	boolean activated = false;
+
+	@Activate
+	private void activate() {
+		activated = true;
 	}
 
 }

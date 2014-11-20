@@ -6,15 +6,15 @@ import java.net.ServerSocket;
 
 /**
  * Helper with some common http related issues
- * 
+ *
  * @author Maurycy
- * 
+ *
  */
 public class SocketHelper {
 
 	/**
 	 * Checks to see if a specific local port is available.
-	 * 
+	 *
 	 * @param port
 	 *            the port to check for availability
 	 */
@@ -45,6 +45,17 @@ public class SocketHelper {
 		}
 
 		return false;
+	}
+
+	public static int randomPort() throws Exception {
+
+		final ServerSocket s = new ServerSocket(0);
+		final int port = s.getLocalPort();
+		s.close();
+		Thread.sleep(100);
+
+		return port;
+
 	}
 
 }

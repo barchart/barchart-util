@@ -1,49 +1,60 @@
 package com.barchart.util.test.guice;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.barchart.util.guice.ComponentActivator;
-import com.google.inject.Guice;
+import com.barchart.util.guice.Filetypes;
+import com.barchart.util.guice.GuiceConfigBuilder;
+import com.barchart.util.guice.StringResources;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.typesafe.config.Config;
 
 public class TestInjectorBuilder {
 
-	private final Set<Module> modules;
+	private GuiceConfigBuilder gcb;
+	private Map<String, String> resources;
 
-	private TestInjectorBuilder() {
-		modules = new HashSet<Module>();
-		modules.add(new ComponentActivator());
+	private int configs = 1;
+	private int components = 1;
+
+	private TestInjectorBuilder(final boolean components) {
+		gcb = components ? GuiceConfigBuilder.create() : GuiceConfigBuilder.createBasic();
+		resources = new HashMap<String, String>();
 	}
 
-	public static TestInjectorBuilder create() {
-		return new TestInjectorBuilder();
+	public static TestInjectorBuilder createDefault() {
+		return new TestInjectorBuilder(true);
 	}
 
-	public TestInjectorBuilder config(final Config config) {
-		modules.add(new TestConfigModule(config));
-		return this;
+	public static TestInjectorBuilder createBasic() {
+		return new TestInjectorBuilder(false);
 	}
 
 	public TestInjectorBuilder config(final String config) {
-		modules.add(new TestConfigModule(config));
+		if (resources.containsKey(Filetypes.DEFAULT_CONFIG_FILE))
+			resources.put("/config" + (configs++) + ".conf", config);
+		else
+			resources.put("/" + Filetypes.DEFAULT_CONFIG_FILE, config);
+		return this;
+	}
+
+	public TestInjectorBuilder config(final String file, final String config) {
+		resources.put(file, config);
+		return this;
+	}
+
+	public TestInjectorBuilder component(final String config) {
+		config("/component" + (components++) + ".component", config);
 		return this;
 	}
 
 	public TestInjectorBuilder module(final Module module) {
-		modules.add(module);
+		gcb.addModule(module);
 		return this;
 	}
 
-	public TestInjectorBuilder component(final Class<?> type, final String config) {
-		modules.add(new TestComponentModule(type, config));
-		return this;
-	}
-
-	public Injector build() {
-		return Guice.createInjector(modules);
+	public Injector build() throws Exception {
+		return gcb.setConfigResources(new StringResources(resources)).build();
 	}
 
 }
