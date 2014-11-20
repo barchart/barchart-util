@@ -21,7 +21,11 @@ public final class GuiceConfigBuilder {
 
 	private ConfigResources configResources;
 
-	GuiceConfigBuilder() {
+	private final boolean componentSupport;
+
+	GuiceConfigBuilder(final boolean component) {
+
+		this.componentSupport = component;
 
 		this.modules = new ArrayList<Module>();
 		this.valueConverters = new ArrayList<ValueConverter>();
@@ -31,8 +35,20 @@ public final class GuiceConfigBuilder {
 
 	}
 
+	/**
+	 * Create a new injector supporting automatic configuration injection, dynamic module configuration and component
+	 * discovery.
+	 */
 	public static GuiceConfigBuilder create() {
-		return new GuiceConfigBuilder();
+		return new GuiceConfigBuilder(true);
+	}
+
+	/**
+	 * Create a new injector without dynamic module configuration or component discovery. This avoids classpath scanning
+	 * overhead on build.
+	 */
+	public static GuiceConfigBuilder createBasic() {
+		return new GuiceConfigBuilder(false);
 	}
 
 	public GuiceConfigBuilder addModule(final Module module) {
@@ -59,12 +75,19 @@ public final class GuiceConfigBuilder {
 	}
 
 	public Injector build() throws Exception {
+
 		Injector injector = Guice.createInjector(modules);
+
 		injector = injector.createChildInjector(injector.getInstance(ValueConverterModule.class));
 		injector = injector.createChildInjector(injector.getInstance(ConfigValueBinderModule.class));
-		injector = injector.createChildInjector(injector.getInstance(ModuleLoaderModule.class));
-		injector = injector.createChildInjector(injector.getInstance(ComponentModule.class));
+
+		if (componentSupport) {
+			injector = injector.createChildInjector(injector.getInstance(ModuleLoaderModule.class));
+			injector = injector.createChildInjector(injector.getInstance(ComponentModule.class));
+		}
+
 		return injector;
+
 	}
 
 	private class BasicModule extends AbstractModule {
