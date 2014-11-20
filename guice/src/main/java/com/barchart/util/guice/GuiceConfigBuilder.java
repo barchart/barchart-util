@@ -80,9 +80,9 @@ public final class GuiceConfigBuilder {
 
 		injector = injector.createChildInjector(injector.getInstance(ValueConverterModule.class));
 		injector = injector.createChildInjector(injector.getInstance(ConfigValueBinderModule.class));
-
+		injector = injector.createChildInjector(injector.getInstance(ModuleLoaderModule.class));
+		
 		if (componentSupport) {
-			injector = injector.createChildInjector(injector.getInstance(ModuleLoaderModule.class));
 			injector = injector.createChildInjector(injector.getInstance(ComponentModule.class));
 		}
 

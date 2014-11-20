@@ -6,17 +6,31 @@ import org.junit.Test;
 
 import com.barchart.util.guice.Activate;
 import com.barchart.util.guice.Component;
+import com.barchart.util.guice.ConfiguredModule;
+import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.typesafe.config.Config;
 
 public class TestTestInjectorBuilder {
 
+	
+	@ConfiguredModule("SetupModule")
+	private static final class SetupModule extends AbstractModule {
+
+		@Override
+		protected void configure() {
+			bind(SimpleComponent.class);
+		}
+		
+	}
+	
+	
 	@Test
 	public void testGlobalConfig() throws Exception {
 
 		final SimpleComponent sm = TestInjectorBuilder.createBasic()
-				.config("{ root = value }")
+				.config("{ root = value, module = [{type = SetupModule}] }")
 				.build()
 				.getInstance(SimpleComponent.class);
 
@@ -54,7 +68,7 @@ public class TestTestInjectorBuilder {
 	public void testAutoComponentConfig() throws Exception {
 
 		final SimpleComponent sm = TestInjectorBuilder.createDefault()
-				.component("{ type = \"simple.component\", name = \"simple\" }")
+				.component("{ type = \"simple.component\", name = \"simple\", module = [{type = SetupModule}] }")
 				.build()
 				.getInstance(SimpleComponent.class);
 
