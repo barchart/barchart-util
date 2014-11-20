@@ -54,7 +54,8 @@ public class TestTestInjectorBuilder {
 	public void testAutoComponentConfig() throws Exception {
 
 		final SimpleComponent sm = TestInjectorBuilder.createDefault()
-				.component("{ type = \"simple.component\", name = \"simple\" }")
+				.config("root = value") 
+				.component("{ type = \"simple.component\", name = \"simple\"}")
 				.build()
 				.getInstance(SimpleComponent.class);
 
