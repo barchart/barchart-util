@@ -15,8 +15,8 @@ public class TestTestInjectorBuilder {
 	@Test
 	public void testGlobalConfig() throws Exception {
 
-		final SimpleComponent sm = TestInjectorBuilder.createBasic()
-				.config("{ root = value }")
+		final SimpleComponent sm = TestInjectorBuilder.createDefault()
+				.config("{ root = value, component = [{type = simple.component}]}")
 				.build()
 				.getInstance(SimpleComponent.class);
 
