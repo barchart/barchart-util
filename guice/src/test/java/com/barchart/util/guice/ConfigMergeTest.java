@@ -6,14 +6,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class ConfigMergeTest extends InjectorTest {
 
 	private static final String CONFIGURATION_DIRECTORY = "src/test/resources/ConfigMergeTest";
 
-	@Ignore
 	@Test
 	public void testMergeConf() {
 		get(MergeConf.class).test();
