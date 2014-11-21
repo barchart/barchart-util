@@ -24,7 +24,13 @@ public class StringResources implements ConfigResources {
 
 	@Override
 	public String readResource(final String resourceName) throws Exception {
+
+		if (!resources.containsKey(resourceName)) {
+			throw new IllegalArgumentException("Invalid resource");
+		}
+
 		return resources.get(resourceName);
+
 	}
 
 	@Override
@@ -33,7 +39,8 @@ public class StringResources implements ConfigResources {
 		final String content = readResource(resourceName);
 
 		if (content != null) {
-			return ConfigFactory.parseString(content, ConfigParseOptions.defaults().setOriginDescription(resourceName));
+			return ConfigFactory.parseString(content,
+					ConfigParseOptions.defaults().setOriginDescription("/" + resourceName));
 		}
 
 		return ConfigFactory.empty();

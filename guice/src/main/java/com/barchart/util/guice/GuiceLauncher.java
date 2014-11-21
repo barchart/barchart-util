@@ -6,24 +6,38 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Joiner;
-import com.google.inject.Injector;
 
 public final class GuiceLauncher {
 
 	private static final Logger logger = LoggerFactory.getLogger(GuiceLauncher.class);
 
 	public static <T extends Runnable> void run(final Class<T> clazz) throws Exception {
-		configure(clazz).run();
+		configure(clazz, null).run();
+	}
+
+	public static <T extends Runnable> void run(final Class<T> clazz, final String directory) throws Exception {
+		configure(clazz, directory).run();
 	}
 
 	public static <T> T configure(final Class<T> clazz) throws Exception {
+		return configure(clazz, null);
+	}
+
+	public static <T> T configure(final Class<T> clazz, final String directory) throws Exception {
+
 		logger.info("Starting Guice Launcher.  Configuring: " + clazz);
+
 		logCurrentDirectory();
 		logPaths();
 		logEnvironment();
-		final Injector injector = GuiceConfigBuilder.create() //
-				.build();
-		return injector.getInstance(clazz);
+
+		final GuiceConfigBuilder builder = GuiceConfigBuilder.create();
+
+		if (directory != null)
+			builder.setDirectory(directory, true);
+
+		return builder.build().getInstance(clazz);
+
 	}
 
 	private static void logCurrentDirectory() {

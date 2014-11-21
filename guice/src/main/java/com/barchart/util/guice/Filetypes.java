@@ -68,11 +68,7 @@ public final class Filetypes {
 
 	public static String getSimpleName(final String originDescription) {
 		final String originName = stripLinenumbersFromOriginDescription(originDescription);
-		final int lastIndexOf = originName.lastIndexOf("/");
-		if (lastIndexOf == -1) {
-			return "";
-		}
-		return originName.substring(lastIndexOf + 1, originName.lastIndexOf("."));
+		return originName.substring(originName.lastIndexOf("/") + 1, originName.lastIndexOf("."));
 	}
 
 

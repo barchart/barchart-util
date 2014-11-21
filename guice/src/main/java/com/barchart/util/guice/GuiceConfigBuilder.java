@@ -1,6 +1,7 @@
 package com.barchart.util.guice;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -29,7 +30,6 @@ public final class GuiceConfigBuilder {
 
 		this.modules = new ArrayList<Module>();
 		this.valueConverters = new ArrayList<ValueConverter>();
-
 
 	}
 
@@ -63,8 +63,27 @@ public final class GuiceConfigBuilder {
 	}
 
 	public GuiceConfigBuilder setDirectory(final String directoryName) {
-		this.configResources = new DirectoryResources(new File(directoryName));
-		return this;
+		return setDirectory(directoryName, false);
+	}
+
+	public GuiceConfigBuilder setDirectory(final String directoryName, final boolean classpathFallback) {
+
+		try {
+
+			if (classpathFallback) {
+				this.configResources = new MergedResources(
+						new DirectoryResources(new File(directoryName)),
+						new ClassPathResources());
+			} else {
+				this.configResources = new DirectoryResources(new File(directoryName));
+			}
+
+			return this;
+
+		} catch (final IOException e) {
+			throw new RuntimeException(e);
+		}
+
 	}
 
 	public GuiceConfigBuilder setConfigResources(final ConfigResources configResources) {
@@ -75,8 +94,8 @@ public final class GuiceConfigBuilder {
 	public Injector build() throws Exception {
 		return build(Guice.createInjector());
 	}
-	
-	public Injector build(Injector parentInjector) {
+
+	public Injector build(final Injector parentInjector) {
 		Injector injector = parentInjector.createChildInjector(new BasicModule(), new ComponentActivator());
 		injector = injector.createChildInjector(injector.getInstance(ValueConverterModule.class));
 		injector = injector.createChildInjector(injector.getInstance(ConfigValueBinderModule.class));
