@@ -26,7 +26,7 @@ class AnnotationScanner {
 		final Collection<URL> urls = ClasspathHelper.forPackage("META-INF/reflections/");
 
 		// Load from cache if available (requires dom4j dependency in including project to avoid NoClassDefFound)
-		final Reflections reflections = urls.size() > 0 ? Reflections.collect() : new Reflections("");
+		final Reflections reflections = urls.size() > 0 ? Reflections.collect() : new Reflections(ClasspathHelper.forJavaClassPath());
 
 		this.componentClasses = ImmutableSet.copyOf(reflections.getTypesAnnotatedWith(Component.class));
 		this.configuredModuleClasses = ImmutableSet.copyOf(reflections.getTypesAnnotatedWith(ConfiguredModule.class));
