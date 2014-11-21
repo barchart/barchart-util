@@ -1,8 +1,9 @@
-package com.barchart.util.guice;
+package com.barchart.util.guice.valueconverters;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.barchart.util.guice.ValueConverter;
 import com.google.inject.TypeLiteral;
 import com.typesafe.config.ConfigValue;
 import com.typesafe.config.ConfigValueType;
