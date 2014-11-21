@@ -81,7 +81,7 @@ public final class ModuleLoaderModule extends AbstractModule {
 
 	private Class<?> getModuleClass(String moduleType) {
 		List<Class<?>> list = new ArrayList<Class<?>>();
-		for (Class<?> moduleClass : annotationScanner.getClassesAnnotatedWith(ConfiguredModule.class)) {
+		for (Class<?> moduleClass : annotationScanner.getConfiguredModuleClasses()) {
 			ConfiguredModule annotation = moduleClass.getAnnotation(ConfiguredModule.class);
 			if (moduleType.equals(annotation.value())) {
 				list.add(moduleClass);

@@ -192,7 +192,7 @@ final class ComponentModule extends AbstractModule {
 	}
 
 	private void bindEmptySets(HashMultiset<TypeLiteral<?>> bindingTypeCounter) {
-		Collection<Class<?>> allComponentClasses = annotationScanner.getClassesAnnotatedWith(Component.class);
+		Collection<Class<?>> allComponentClasses = annotationScanner.getComponentClasses();
 		Collection<TypeLiteral<?>> allPotentialBindingTypes = new ArrayList<TypeLiteral<?>>();
 		for (Class<?> clazz : allComponentClasses) {
 			allPotentialBindingTypes.addAll(CastableTypes.of(clazz));
@@ -215,7 +215,7 @@ final class ComponentModule extends AbstractModule {
 
 	private Class<?> getComponentClass(String componentType) {
 		List<Class<?>> list = new ArrayList<Class<?>>();
-		for (Class<?> componentClass : annotationScanner.getClassesAnnotatedWith(Component.class)) {
+		for (Class<?> componentClass : annotationScanner.getComponentClasses()) {
 			Component annotation = componentClass.getAnnotation(Component.class);
 			if (componentType.equals(annotation.value())) {
 				list.add(componentClass);
