@@ -15,14 +15,9 @@ class AnnotationScanner {
 
 	private static final Logger logger = LoggerFactory.getLogger(AnnotationScanner.class);
 
-	// private final Multimap<Class<? extends Annotation>, Class<?>>
-	// annotationToClassMap;
-
 	private final Set<Class<?>> componentClasses;
 
 	private final Set<Class<?>> configuredModuleClasses;
-
-	// private final Set<Class<?>> s;
 
 	public AnnotationScanner() {
 		Reflections reflections = new Reflections("");
