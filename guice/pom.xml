@@ -48,19 +48,13 @@
 			<groupId>com.typesafe</groupId>
 			<artifactId>config</artifactId>
 		</dependency>
-
-		<!-- Logging framework. -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<scope>test</scope>
-		</dependency>
+		
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>[1.6.1,1.7-SNAPSHOT)</version>
+            <optional>true</optional>
+        </dependency>
 
 	</dependencies>
 
