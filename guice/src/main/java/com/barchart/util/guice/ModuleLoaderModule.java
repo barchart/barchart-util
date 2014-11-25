@@ -2,9 +2,6 @@ package com.barchart.util.guice;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -14,9 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.TypeLiteral;
 import com.typesafe.config.Config;
-import com.typesafe.config.ConfigValue;
 
 public final class ModuleLoaderModule extends AbstractModule {
 
@@ -43,46 +38,46 @@ public final class ModuleLoaderModule extends AbstractModule {
 		// FIXME: ? hack to get correct injector in ComponentModule
 		bind(ComponentModule.class);
 		try {
-			for (Config moduleConfig : loadModuleConfigs()) {
+			for (final Config moduleConfig : loadModuleConfigs()) {
 				bindModule(moduleConfig);
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}
 
 	}
 
 	@SuppressWarnings("unchecked")
-	private void bindModule(Config moduleConfig) {
-		String type = getType(moduleConfig);
-		Class<?> moduleClass = getModuleClass(type);
+	private void bindModule(final Config moduleConfig) {
+		final String type = getType(moduleConfig);
+		final Class<?> moduleClass = getModuleClass(type);
 		if (moduleClass != null) {
 			if (!Module.class.isAssignableFrom(moduleClass)) {
 				throw new IllegalStateException("Module class " + moduleClass + "  for module type " + type + " is not an instance of com.google.inject.Module");
 			}
 			logger.info("Installing module. Type=" + type + ", class=" + moduleClass);
-			Module configuredModule = configureModule(moduleConfig, (Class<? extends Module>) moduleClass);
+			final Module configuredModule = configureModule(moduleConfig, (Class<? extends Module>) moduleClass);
 			install(configuredModule);
 		}
 	}
 
-	private Module configureModule(final Config moduleConfig, Class<? extends Module> moduleClass) {
-		Injector moduleInjector = injector.createChildInjector(new ModuleForConfiguringModules(moduleConfig));
-		Module instance = moduleInjector.getInstance(moduleClass);
+	private Module configureModule(final Config moduleConfig, final Class<? extends Module> moduleClass) {
+		final Injector moduleInjector = injector.createChildInjector(new ModuleForConfiguringModules(moduleConfig));
+		final Module instance = moduleInjector.getInstance(moduleClass);
 		return instance;
 	}
 
-	private String getType(Config moduleConfig) {
+	private String getType(final Config moduleConfig) {
 		if (!moduleConfig.hasPath(Filetypes.MODULE_TYPE)) {
 			throw new IllegalStateException("Module does not have type:" + moduleConfig);
 		}
 		return moduleConfig.getString(Filetypes.MODULE_TYPE);
 	}
 
-	private Class<?> getModuleClass(String moduleType) {
-		List<Class<?>> list = new ArrayList<Class<?>>();
-		for (Class<?> moduleClass : annotationScanner.getConfiguredModuleClasses()) {
-			ConfiguredModule annotation = moduleClass.getAnnotation(ConfiguredModule.class);
+	private Class<?> getModuleClass(final String moduleType) {
+		final List<Class<?>> list = new ArrayList<Class<?>>();
+		for (final Class<?> moduleClass : annotationScanner.getConfiguredModuleClasses()) {
+			final ConfiguredModule annotation = moduleClass.getAnnotation(ConfiguredModule.class);
 			if (moduleType.equals(annotation.value())) {
 				list.add(moduleClass);
 			}
@@ -99,8 +94,8 @@ public final class ModuleLoaderModule extends AbstractModule {
 	}
 
 	private List<Config> loadModuleConfigs() throws Exception {
-		List<Config> list = new ArrayList<Config>();
-		for (Config c : resources.readAllConfigs(Filetypes.CONFIG_FILE_EXTENSION)) {
+		final List<Config> list = new ArrayList<Config>();
+		for (final Config c : resources.readAllConfigs(Filetypes.CONFIG_FILE_EXTENSION)) {
 			if (c.hasPath(Filetypes.MODULES)) {
 				list.addAll(c.getConfigList(Filetypes.MODULES));
 			}
@@ -112,38 +107,13 @@ public final class ModuleLoaderModule extends AbstractModule {
 
 		private final Config config;
 
-		private BindUtil bindUtil;
-
-		public ModuleForConfiguringModules(Config config) {
+		public ModuleForConfiguringModules(final Config config) {
 			this.config = config;
 		}
 
 		@Override
 		protected void configure() {
-			this.bindUtil = new BindUtil(binder());
-			UniqueObjectPathSet objectPaths = new UniqueObjectPathSet();
-			for (Entry<String, ConfigValue> entry : config.entrySet()) {
-				String configValuePath = entry.getKey();
-				objectPaths.add(configValuePath);
-				bindConfigValue(configValuePath, entry.getValue());
-			}
-			bindConfigObjectPaths(objectPaths);
-		}
-
-		private void bindConfigValue(String key, ConfigValue value) {
-			for (Map.Entry<TypeLiteral<?>, Object> entry : valueConverterTool.getConversions(value).entrySet()) {
-				TypeLiteral<?> bindingType = entry.getKey();
-				Object result = entry.getValue();
-				bindUtil.bindInstance(bindingType, "#" + key, result);
-			}
-		}
-
-		private void bindConfigObjectPaths(UniqueObjectPathSet objectPaths) {
-			bindConfigValue("", config.root());
-			for (String objectPath : objectPaths) {
-				Config object = config.getConfig(objectPath);
-				bindConfigValue(objectPath, object.root());
-			}
+			new ConfigBinder(binder(), valueConverterTool).applyBindings(config, "#");
 		}
 
 	}
