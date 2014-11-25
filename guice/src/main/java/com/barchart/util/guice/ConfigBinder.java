@@ -5,6 +5,9 @@ import java.util.Map.Entry;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.barchart.util.guice.encryption.Decrypter;
 import com.barchart.util.guice.encryption.EchoDecrypter;
 import com.google.inject.Binder;
@@ -14,14 +17,15 @@ import com.typesafe.config.ConfigValue;
 
 public class ConfigBinder {
 
+	private static final Logger logger = LoggerFactory.getLogger(ConfigBinder.class);
+
 	@Inject
 	private ValueConverterTool valueConverterTool;
 
 	@Inject
 	private Decrypter decrypter;
 
-	ConfigBinder() {
-	}
+	ConfigBinder() {}
 
 	public ConfigBinder(final ValueConverterTool vct) {
 		valueConverterTool = vct;
@@ -69,11 +73,13 @@ public class ConfigBinder {
 			}
 
 			if (value.unwrapped() instanceof String) {
-				if (decrypter != null) {
-					bindUtil.bindInstance(String.class, "decrypted/" + prefix + key,
-							new String(decrypter.decrypt(value.unwrapped().toString().getBytes())));
-				} else {
-					bindUtil.bindInstance(String.class, "decrypted/" + prefix + key, value.unwrapped());
+				try {
+					final byte[] decrypted = decrypter.decrypt(value.unwrapped().toString().getBytes());
+					if (decrypted != null) {
+						bindUtil.bindEncrypted(String.class, prefix + key, new String(decrypted));
+					}
+				} catch (final Throwable t) {
+					logger.warn("Error decrypting configuration: ", t);
 				}
 			}
 

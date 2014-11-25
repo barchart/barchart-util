@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.util.guice.encryption.Decrypter;
-import com.barchart.util.guice.encryption.EchoDecrypter;
+import com.barchart.util.guice.encryption.NullDecrypter;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -135,7 +135,7 @@ public final class GuiceConfigBuilder {
 				bind(ComponentScope.class).toInstance(componentScope);
 
 				if (decrypter == null) {
-					bind(Decrypter.class).to(EchoDecrypter.class).in(Singleton.class);
+					bind(Decrypter.class).to(NullDecrypter.class).in(Singleton.class);
 				} else {
 					bind(Decrypter.class).toInstance(decrypter);
 				}

@@ -2,13 +2,14 @@ package com.barchart.util.guice;
 
 import static org.junit.Assert.assertEquals;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.junit.Test;
 
 import com.barchart.util.guice.encryption.Decrypter;
+import com.barchart.util.guice.encryption.Encrypted;
 import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
 
 public class ConfigDecryptionTest {
 
@@ -50,8 +51,8 @@ public class ConfigDecryptionTest {
 	@Component("decrypted.component")
 	private static final class DecryptedConf extends TestCase {
 
-		@Inject
-		@Named("decrypted/#encrypted")
+		@Inject(optional = true)
+		@Encrypted("#encrypted")
 		private String value;
 
 		@Override
