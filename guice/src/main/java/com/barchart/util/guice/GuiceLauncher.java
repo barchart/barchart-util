@@ -33,8 +33,14 @@ public final class GuiceLauncher {
 
 		final GuiceConfigBuilder builder = GuiceConfigBuilder.create();
 
-		if (directory != null)
-			builder.setDirectory(directory, true);
+		if (directory != null) {
+			if (!new File(directory).exists()) {
+				logger.warn("Specified configuration directory does not exist: {}", directory);
+			} else {
+				logger.info("Using configuration directory: {}", directory);
+				builder.setDirectory(directory, true);
+			}
+		}
 
 		return builder.build().getInstance(clazz);
 
