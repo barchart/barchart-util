@@ -17,8 +17,7 @@ final class ConfigValueBinderModule extends AbstractModule {
 	private ConfigResources resources;
 
 	@Inject
-	private ValueConverterTool valueConverterTool;
-
+	private ConfigBinder configBinder;
 
 	ConfigValueBinderModule() {
 	}
@@ -27,20 +26,19 @@ final class ConfigValueBinderModule extends AbstractModule {
 	protected void configure() {
 		// FIXME: ? hack to get correct injector in ModuleLoaderModule
 		bind(ModuleLoaderModule.class);
-		ConfigBinder configBinder = new ConfigBinder(binder(), valueConverterTool);
 		try {
-			for (Config config : resources.readAllConfigs(Filetypes.CONFIG_FILE_EXTENSION)) {
+			for (final Config config : resources.readAllConfigs(Filetypes.CONFIG_FILE_EXTENSION)) {
 				logger.info("Binding values from config file: " + config.origin().description());
-				String fileName = Filetypes.getSimpleName(config);
+				final String fileName = Filetypes.getSimpleName(config);
 				if (Filetypes.isDefaultConfigFile(config)) {
-					configBinder.applyBindings(config, "");
+					configBinder.applyBindings(binder(), config, "");
 					bind(Config.class).toInstance(config);
 					bind(Config.class).annotatedWith(Names.named("/")).toInstance(config);
 				}
-				configBinder.applyBindings(config, fileName + "/");
-				
+				configBinder.applyBindings(binder(), config, fileName + "/");
+
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}
 	}

@@ -1,5 +1,6 @@
 package com.barchart.util.guice;
 
+import com.barchart.util.guice.encryption.EncryptedAnno;
 import com.google.inject.Binder;
 import com.google.inject.TypeLiteral;
 import com.google.inject.binder.AnnotatedBindingBuilder;
@@ -12,20 +13,36 @@ final class BindUtil {
 
 	private final Binder binder;
 
-	public BindUtil(Binder binder) {
+	public BindUtil(final Binder binder) {
 		this.binder = binder;
 	}
 
-	public void bindInstance(Class<?> bindingType, String name, Object instance) {
+	public void bindInstance(final Class<?> bindingType, final String name, final Object instance) {
 		@SuppressWarnings("unchecked")
+		final
 		AnnotatedBindingBuilder<Object> bindingBuilder = (AnnotatedBindingBuilder<Object>) binder.bind(bindingType);
 		bindingBuilder.annotatedWith(Names.named(name)).toInstance(instance);
 	}
 
-	public void bindInstance(TypeLiteral<?> bindingType, String name, Object instance) {
+	public void bindInstance(final TypeLiteral<?> bindingType, final String name, final Object instance) {
 		@SuppressWarnings("unchecked")
+		final
 		AnnotatedBindingBuilder<Object> bindingBuilder = (AnnotatedBindingBuilder<Object>) binder.bind(bindingType);
 		bindingBuilder.annotatedWith(Names.named(name)).toInstance(instance);
+	}
+
+	public void bindEncrypted(final Class<?> bindingType, final String name, final Object instance) {
+		@SuppressWarnings("unchecked")
+		final AnnotatedBindingBuilder<Object> bindingBuilder =
+				(AnnotatedBindingBuilder<Object>) binder.bind(bindingType);
+		bindingBuilder.annotatedWith(EncryptedAnno.named(name)).toInstance(instance);
+	}
+
+	public void bindEncrypted(final TypeLiteral<?> bindingType, final String name, final Object instance) {
+		@SuppressWarnings("unchecked")
+		final AnnotatedBindingBuilder<Object> bindingBuilder =
+				(AnnotatedBindingBuilder<Object>) binder.bind(bindingType);
+		bindingBuilder.annotatedWith(EncryptedAnno.named(name)).toInstance(instance);
 	}
 
 }

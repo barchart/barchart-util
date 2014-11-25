@@ -27,7 +27,7 @@ public final class ModuleLoaderModule extends AbstractModule {
 	private Injector injector;
 
 	@Inject
-	private ValueConverterTool valueConverterTool;
+	private ConfigBinder configBinder;
 
 	ModuleLoaderModule() {
 
@@ -113,7 +113,7 @@ public final class ModuleLoaderModule extends AbstractModule {
 
 		@Override
 		protected void configure() {
-			new ConfigBinder(binder(), valueConverterTool).applyBindings(config, "#");
+			configBinder.applyBindings(binder(), config, "#");
 		}
 
 	}
