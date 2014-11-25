@@ -8,7 +8,6 @@ import java.util.HashMap;
 //import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -25,7 +24,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multiset;
 import com.google.inject.AbstractModule;
-import com.google.inject.Binder;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
@@ -35,7 +33,6 @@ import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
 import com.typesafe.config.Config;
-import com.typesafe.config.ConfigValue;
 
 final class ComponentModule extends AbstractModule {
 
@@ -347,7 +344,7 @@ final class ComponentModule extends AbstractModule {
 		protected void configure() {
 			bindScope(PrivateComponentScoped.class, new PrivateComponentScope(componentScope, type, name));
 			bind(componentClass).in(PrivateComponentScoped.class);
-			bindConfiguration(binder());
+			new ConfigBinder(binder(), valueConverterTool).applyBindings(config, "#");
 			installCustomModule();
 			final List<TypeLiteral<?>> noNameBindings = new ArrayList<TypeLiteral<?>>();
 			for (final TypeLiteral<?> bindingType : bindingTypes) {
@@ -387,7 +384,7 @@ final class ComponentModule extends AbstractModule {
 				final Injector childInjector = injector.createChildInjector(new AbstractModule() {
 					@Override
 					protected void configure() {
-						bindConfiguration(binder());
+						new ConfigBinder(binder(), valueConverterTool).applyBindings(config, "#");
 					}
 				});
 				final Module customModule = childInjector.getInstance(customModuleClass);
@@ -450,33 +447,6 @@ final class ComponentModule extends AbstractModule {
 			}
 
 			expose(Key.get(bindingType, indexed(index)));
-		}
-
-		private void bindConfiguration(final Binder binder) {
-			final UniqueObjectPathSet objectPaths = new UniqueObjectPathSet();
-			for (final Entry<String, ConfigValue> entry : config.entrySet()) {
-				final String configValuePath = entry.getKey();
-				objectPaths.add(configValuePath);
-				bindConfigValue(binder, configValuePath, entry.getValue());
-			}
-			bindConfigObjectPaths(binder, objectPaths);
-		}
-
-		private void bindConfigValue(final Binder binder, final String key, final ConfigValue value) {
-			final BindUtil bindUtil = new BindUtil(binder);
-			for (final Map.Entry<TypeLiteral<?>, Object> entry : valueConverterTool.getConversions(value).entrySet()) {
-				final TypeLiteral<?> bindingType = entry.getKey();
-				final Object result = entry.getValue();
-				bindUtil.bindInstance(bindingType, "#" + key, result);
-			}
-		}
-
-		private void bindConfigObjectPaths(final Binder binder, final UniqueObjectPathSet objectPaths) {
-			bindConfigValue(binder, "", config.root());
-			for (final String objectPath : objectPaths) {
-				final Config object = config.getConfig(objectPath);
-				bindConfigValue(binder, objectPath, object.root());
-			}
 		}
 
 	}
