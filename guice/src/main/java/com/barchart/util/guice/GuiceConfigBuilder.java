@@ -4,9 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.inject.Singleton;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.util.guice.encryption.Decrypter;
+import com.barchart.util.guice.encryption.EchoDecrypter;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -21,6 +25,8 @@ public final class GuiceConfigBuilder {
 	private final ArrayList<ValueConverter> valueConverters;
 
 	private ConfigResources configResources;
+
+	private Decrypter decrypter;
 
 	private final boolean componentSupport;
 
@@ -91,6 +97,11 @@ public final class GuiceConfigBuilder {
 		return this;
 	}
 
+	public GuiceConfigBuilder setDecrypter(final Decrypter decrypter) {
+		this.decrypter = decrypter;
+		return this;
+	}
+
 	public Injector build() throws Exception {
 		return build(Guice.createInjector());
 	}
@@ -112,14 +123,22 @@ public final class GuiceConfigBuilder {
 		@Override
 		protected void configure() {
 			try {
+
 				if (configResources == null) {
 					bind(ConfigResources.class).toInstance(new ClassPathResources());
 				} else {
 					bind(ConfigResources.class).toInstance(configResources);
 				}
+
 				final ComponentScope componentScope = new ComponentScope();
 				bindScope(ComponentScoped.class, componentScope);
 				bind(ComponentScope.class).toInstance(componentScope);
+
+				if (decrypter == null) {
+					bind(Decrypter.class).to(EchoDecrypter.class).in(Singleton.class);
+				} else {
+					bind(Decrypter.class).toInstance(decrypter);
+				}
 
 			} catch (final Exception e) {
 				throw new RuntimeException(e);
@@ -128,4 +147,5 @@ public final class GuiceConfigBuilder {
 		}
 
 	}
+
 }

@@ -66,9 +66,6 @@ final class ComponentModule extends AbstractModule {
 	private ConfigResources resources;
 
 	@Inject
-	private ValueConverterTool valueConverterTool;
-
-	@Inject
 	private AnnotationScanner annotationScanner;
 
 	@Inject
@@ -76,6 +73,9 @@ final class ComponentModule extends AbstractModule {
 
 	@Inject
 	private Injector injector;
+
+	@Inject
+	private ConfigBinder configBinder;
 
 	public ComponentModule() {
 	}
@@ -344,7 +344,7 @@ final class ComponentModule extends AbstractModule {
 		protected void configure() {
 			bindScope(PrivateComponentScoped.class, new PrivateComponentScope(componentScope, type, name));
 			bind(componentClass).in(PrivateComponentScoped.class);
-			new ConfigBinder(binder(), valueConverterTool).applyBindings(config, "#");
+			configBinder.applyBindings(binder(), config, "#");
 			installCustomModule();
 			final List<TypeLiteral<?>> noNameBindings = new ArrayList<TypeLiteral<?>>();
 			for (final TypeLiteral<?> bindingType : bindingTypes) {
@@ -384,7 +384,7 @@ final class ComponentModule extends AbstractModule {
 				final Injector childInjector = injector.createChildInjector(new AbstractModule() {
 					@Override
 					protected void configure() {
-						new ConfigBinder(binder(), valueConverterTool).applyBindings(config, "#");
+						configBinder.applyBindings(binder(), config, "#");
 					}
 				});
 				final Module customModule = childInjector.getInstance(customModuleClass);

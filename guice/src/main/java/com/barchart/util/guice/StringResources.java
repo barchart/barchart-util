@@ -13,6 +13,10 @@ public class StringResources implements ConfigResources {
 
 	private final Map<String, String> resources;
 
+	public StringResources() {
+		resources = new HashMap<String, String>();
+	}
+
 	public StringResources(final String source) {
 		resources = new HashMap<String, String>();
 		resources.put("application.conf", source);
