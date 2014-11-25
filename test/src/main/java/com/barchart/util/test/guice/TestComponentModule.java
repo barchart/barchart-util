@@ -83,9 +83,9 @@ public class TestComponentModule<T> extends AbstractModule {
 		@Override
 		protected void configure() {
 
-			final ConfigBinder binder = new ConfigBinder(binder(), ValueConverterTool.defaultValueConverterTool());
+			final ConfigBinder binder = new ConfigBinder(ValueConverterTool.defaultValueConverterTool());
 
-			binder.applyBindings(cfg, "#");
+			binder.applyBindings(binder(), cfg, "#");
 
 			bind(type);
 			expose(type);
