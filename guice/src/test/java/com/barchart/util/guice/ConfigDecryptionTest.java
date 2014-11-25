@@ -1,6 +1,6 @@
 package com.barchart.util.guice;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import javax.inject.Named;
 
@@ -55,9 +55,14 @@ public class ConfigDecryptionTest {
 		@Encrypted("#encrypted")
 		private String value;
 
+		@Inject(optional = true)
+		@Encrypted("#encrypted")
+		private byte[] raw;
+
 		@Override
 		void test() {
 			assertEquals("decrypted", value);
+			assertArrayEquals("decrypted".getBytes(), raw);
 		}
 
 	}
