@@ -22,7 +22,7 @@ public class ConfigBinderTest {
 		final Config config = ConfigFactory.parseString("{key1 = hello, key2 = world, key3 = 42 }");
 		System.out.println("config: " + config);
 
-		final ConfigBinder configBinder = injector().getInstance(ConfigBinder.class);
+		final ConfigBinder configBinder = new ConfigBinder(ValueConverterTool.defaultValueConverterTool());
 
 		final Injector injector = injector().createChildInjector(new AbstractModule() {
 
@@ -45,7 +45,7 @@ public class ConfigBinderTest {
 		final Config config = ConfigFactory.parseString("{key1 = hello, key2 = world, key3 = 42 }");
 		System.out.println("config: " + config);
 
-		final ConfigBinder configBinder = injector().getInstance(ConfigBinder.class);
+		final ConfigBinder configBinder = new ConfigBinder(ValueConverterTool.defaultValueConverterTool());
 
 		final Injector injector = injector().createChildInjector(new AbstractModule() {
 
