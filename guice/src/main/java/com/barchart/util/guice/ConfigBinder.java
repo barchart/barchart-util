@@ -1,5 +1,6 @@
 package com.barchart.util.guice;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -76,8 +77,12 @@ public class ConfigBinder {
 				try {
 					final byte[] decrypted = decrypter.decrypt(value.unwrapped().toString().getBytes());
 					if (decrypted != null) {
-						bindUtil.bindEncrypted(String.class, prefix + key, new String(decrypted));
 						bindUtil.bindEncrypted(byte[].class, prefix + key, decrypted);
+						try {
+							bindUtil.bindEncrypted(String.class, prefix + key, new String(decrypted, "UTF-8"));
+						} catch (final UnsupportedEncodingException uee) {
+							// Binary value, string decode failed (not necessarily a problem)
+						}
 					}
 				} catch (final Throwable t) {
 					logger.warn("Error decrypting configuration: ", t);
