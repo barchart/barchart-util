@@ -25,7 +25,6 @@
 		<dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-guice</artifactId>
-			<version>[1.0.0-SNAPSHOT,2-SNAPSHOT)</version>
 		</dependency>
   	
 		<dependency>
