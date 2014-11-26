@@ -19,8 +19,6 @@ public final class GuiceConfigBuilder {
 
 	private final ArrayList<Module> modules;
 
-	private final ArrayList<ValueConverter> valueConverters;
-
 	private ConfigResources configResources;
 
 	private Decrypter decrypter;
@@ -32,7 +30,6 @@ public final class GuiceConfigBuilder {
 		this.componentSupport = component;
 
 		this.modules = new ArrayList<Module>();
-		this.valueConverters = new ArrayList<ValueConverter>();
 
 	}
 
@@ -54,14 +51,6 @@ public final class GuiceConfigBuilder {
 
 	public GuiceConfigBuilder addModule(final Module module) {
 		modules.add(module);
-		return this;
-	}
-
-	public GuiceConfigBuilder addValueConverter(final ValueConverter valueConverter) {
-		// TODO: This doesn't do anything anymore. Either remove it, do the
-		// multibindings in the BasicModule, or somehow pass it into the
-		// ValueConverterModule
-		valueConverters.add(valueConverter);
 		return this;
 	}
 
