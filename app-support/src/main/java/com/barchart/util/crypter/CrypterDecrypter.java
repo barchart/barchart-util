@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +21,11 @@ public class CrypterDecrypter implements Decrypter {
 	private static final String PREFIX = "-----BEGIN PKCS7-----";
 	private static final String SUFFIX = "-----END PKCS7-----";
 
-	private final String script;
+	@Inject
+	@Named("#script")
+	private String script = "/usr/local/bin/crypter-client";
+
+	protected CrypterDecrypter() {}
 
 	public CrypterDecrypter(final String script_) {
 
