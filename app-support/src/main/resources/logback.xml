@@ -8,7 +8,10 @@
 		</encoder>
 	</appender>
 
-	<appender name="LOG" class="ch.qos.logback.core.RollingFileAppender">
+	<!-- File appenders throw errors in dev. Figure out a better way to set these defaults in production -->
+
+	<!--
+	<appender name="LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>/var/log/barchart/app.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>/var/log/barchart/app.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
@@ -16,12 +19,15 @@
 				<maxFileSize>20MB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
 		</rollingPolicy>
+	-->
+	<appender name="LOG" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
-	<appender name="ACCESS" class="ch.qos.logback.core.RollingFileAppender">
+	<!--
+	<appender name="ACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>/var/log/barchart/access.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>/var/log/barchart/access.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
@@ -29,6 +35,8 @@
 				<maxFileSize>20MB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
 		</rollingPolicy>
+	-->
+	<appender name="ACCESS" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<pattern>%msg%n</pattern>
 		</encoder>
@@ -44,5 +52,7 @@
 	</logger>
 
 	<logger name="com.barchart" level="INFO"/>
+
+	<logger name="ch.qos.logback" level="WARN"/>
 
 </configuration>
