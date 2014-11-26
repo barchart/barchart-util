@@ -57,7 +57,8 @@ public final class Filetypes {
 
 	// no path, no extension
 	public static String getSimpleName(final Config config) {
-		logger.info("GetSimpleName: " +config + ", origin: " + config.origin() + ", description: " + config.origin().description());
+		logger.debug("GetSimpleName: " + config + ", origin: " + config.origin() + ", description: "
+				+ config.origin().description());
 		if (config.origin() == null) {
 			return "";
 		} else {

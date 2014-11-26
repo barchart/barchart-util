@@ -253,7 +253,8 @@ final class ComponentModule extends AbstractModule {
 			for (int i = 0; i < entry.getCount(); i++) {
 				setBinder.addBinding().to(Key.get(bindingType, indexed(i)));
 			}
-			logger.info("Created Set<" + bindingType + "> binding with " + entry.getCount() + " component" + (entry.getCount() > 1 ? "s" : ""));
+			logger.debug("Created Set<" + bindingType + "> binding with " + entry.getCount() + " component"
+					+ (entry.getCount() > 1 ? "s" : ""));
 		}
 	}
 
@@ -266,7 +267,7 @@ final class ComponentModule extends AbstractModule {
 		for (final TypeLiteral<?> bindingType : allPotentialBindingTypes) {
 			if (!bindingTypeCounter.contains(bindingType)) {
 				Multibinder.newSetBinder(binder(), bindingType);
-				logger.info("Created Set<" + bindingType + "> binding with 0 components");
+				logger.debug("Created Set<" + bindingType + "> binding with 0 components");
 			}
 		}
 	}
