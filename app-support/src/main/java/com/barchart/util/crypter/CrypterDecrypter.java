@@ -23,7 +23,7 @@ public class CrypterDecrypter implements Decrypter {
 
 	@Inject
 	@Named("#script")
-	private String script = "/usr/local/bin/crypter-client";
+	String script = "/usr/local/bin/crypter-client";
 
 	protected CrypterDecrypter() {}
 

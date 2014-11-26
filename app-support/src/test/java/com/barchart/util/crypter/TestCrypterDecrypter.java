@@ -1,9 +1,12 @@
 package com.barchart.util.crypter;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+
+import javax.inject.Inject;
 
 import org.junit.Test;
 
+import com.barchart.util.guice.GuiceConfigBuilder;
 import com.barchart.util.guice.encryption.Decrypter;
 
 public class TestCrypterDecrypter {
@@ -34,6 +37,30 @@ public class TestCrypterDecrypter {
 	@Test(expected = IllegalArgumentException.class)
 	public void testInvalid() throws Exception {
 		new CrypterDecrypter("/invalid/path");
+	}
+
+	@Test
+	public void testInjected() throws Exception {
+
+		final TestApp app = GuiceConfigBuilder.create()
+				.setDirectory("src/test/resources/crypter")
+				.build()
+				.getInstance(TestApp.class);
+
+		app.test();
+
+	}
+
+	public static class TestApp {
+
+		@Inject
+		private Decrypter decrypter;
+
+		public void test() throws Exception {
+			assertTrue(decrypter instanceof CrypterDecrypter);
+			assertEquals("/test/path", ((CrypterDecrypter) decrypter).script);
+		}
+
 	}
 
 }
