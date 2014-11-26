@@ -13,29 +13,39 @@ import com.google.inject.Inject;
 
 public class ConfigDecryptionTest {
 
-	private static final String CONFIGURATION_DIRECTORY = "src/test/resources/ConfigDecryptTest";
+	private static final String STATIC_CONFIG = "src/test/resources/StaticDecryptTest";
+	private static final String CONFIG_CONFIG = "src/test/resources/ConfigDecryptTest";
 
 	@Test
-	public void testDefault() throws Exception {
+	public void testNoDecrypter() throws Exception {
 		GuiceConfigBuilder.create()
-				.setDirectory(CONFIGURATION_DIRECTORY)
+				.setDirectory(STATIC_CONFIG)
 				.build()
-				.getInstance(EncryptedConf.class)
+				.getInstance(NoDecrypter.class)
 				.test();
 	}
 
 	@Test
-	public void testDecrypt() throws Exception {
+	public void testStaticDecrypter() throws Exception {
 		GuiceConfigBuilder.create()
-				.setDirectory(CONFIGURATION_DIRECTORY)
+				.setDirectory(STATIC_CONFIG)
 				.setDecrypter(new TestDecrypter())
 				.build()
-				.getInstance(DecryptedConf.class)
+				.getInstance(StaticDecrypter.class)
 				.test();
 	}
 
-	@Component("encrypted.component")
-	private static final class EncryptedConf extends TestCase {
+	@Test
+	public void testConfigDecrypter() throws Exception {
+		GuiceConfigBuilder.create()
+				.setDirectory(CONFIG_CONFIG)
+				.build()
+				.getInstance(ConfigDecrypter.class)
+				.test();
+	}
+
+	@Component("nodecrypter")
+	private static final class NoDecrypter extends TestCase {
 
 		@Inject
 		@Named("#encrypted")
@@ -48,8 +58,8 @@ public class ConfigDecryptionTest {
 
 	}
 
-	@Component("decrypted.component")
-	private static final class DecryptedConf extends TestCase {
+	@Component("staticdecrypter")
+	private static final class StaticDecrypter extends TestCase {
 
 		@Inject(optional = true)
 		@Encrypted("#encrypted")
@@ -67,11 +77,43 @@ public class ConfigDecryptionTest {
 
 	}
 
+	@Component("configdecrypter")
+	private static final class ConfigDecrypter extends TestCase {
+
+		@Inject(optional = true)
+		@Encrypted("#encrypted")
+		private String value;
+
+		@Inject(optional = true)
+		@Encrypted("#encrypted")
+		private byte[] raw;
+
+		@Override
+		void test() {
+			assertEquals("config", value);
+			assertArrayEquals("config".getBytes(), raw);
+		}
+
+	}
+
 	public static final class TestDecrypter implements Decrypter {
 
 		@Override
 		public byte[] decrypt(final byte[] input) {
 			return "decrypted".getBytes();
+		}
+
+	}
+
+	public static final class TestConfigDecrypter implements Decrypter {
+
+		@Inject
+		@Named("#output")
+		private String output = "decrypted";
+
+		@Override
+		public byte[] decrypt(final byte[] input) {
+			return output.getBytes();
 		}
 
 	}

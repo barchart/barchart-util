@@ -73,7 +73,7 @@ public class ConfigBinder {
 				bindUtil.bindInstance(bindingType, prefix + key, result);
 			}
 
-			if (value.unwrapped() instanceof String) {
+			if (value.unwrapped() instanceof String && decrypter != null) {
 				try {
 					final byte[] decrypted = decrypter.decrypt(value.unwrapped().toString().getBytes());
 					if (decrypted != null) {

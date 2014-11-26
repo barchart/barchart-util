@@ -4,13 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.inject.Singleton;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.util.guice.encryption.Decrypter;
-import com.barchart.util.guice.encryption.NullDecrypter;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -107,15 +104,26 @@ public final class GuiceConfigBuilder {
 	}
 
 	public Injector build(final Injector parentInjector) {
+
 		Injector injector = parentInjector.createChildInjector(new BasicModule(), new ComponentActivator());
+
+		if (decrypter == null) {
+			injector = injector.createChildInjector(injector.getInstance(DecrypterConfigModule.class));
+		} else {
+			injector = injector.createChildInjector(new DecrypterStaticModule(decrypter));
+		}
+
 		injector = injector.createChildInjector(injector.getInstance(ValueConverterModule.class));
 		injector = injector.createChildInjector(injector.getInstance(ConfigValueBinderModule.class));
 		injector = injector.createChildInjector(modules);
+
 		if (componentSupport) {
 			injector = injector.createChildInjector(injector.getInstance(ModuleLoaderModule.class));
 			injector = injector.createChildInjector(injector.getInstance(ComponentModule.class));
 		}
+
 		return injector;
+
 	}
 
 	private class BasicModule extends AbstractModule {
@@ -133,12 +141,6 @@ public final class GuiceConfigBuilder {
 				final ComponentScope componentScope = new ComponentScope();
 				bindScope(ComponentScoped.class, componentScope);
 				bind(ComponentScope.class).toInstance(componentScope);
-
-				if (decrypter == null) {
-					bind(Decrypter.class).to(NullDecrypter.class).in(Singleton.class);
-				} else {
-					bind(Decrypter.class).toInstance(decrypter);
-				}
 
 			} catch (final Exception e) {
 				throw new RuntimeException(e);
