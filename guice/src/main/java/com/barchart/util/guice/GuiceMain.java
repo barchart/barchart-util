@@ -19,7 +19,7 @@ public class GuiceMain {
 
 	private static final String GUICE_APP_MAIN_CLASS = "Guice-App-Main-Class";
 
-	private static final long WIRING_TEST_TIMEOUT = 5000;
+	private static final long WIRING_TEST_TIMEOUT = 10000;
 
 	public static void main(final String[] args) throws Exception {
 		logger.info("Inspecting manifest for GuiceApp class");
