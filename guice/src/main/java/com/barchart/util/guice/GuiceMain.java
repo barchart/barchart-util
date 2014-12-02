@@ -28,7 +28,7 @@ public class GuiceMain {
 		final Attributes mainAttributes = manifest.getMainAttributes();
 		final String guiceAppMainClass = mainAttributes.getValue(GUICE_APP_MAIN_CLASS);
 		logger.info(GUICE_APP_MAIN_CLASS + ": " + guiceAppMainClass);
-		final Class<?> mainClass = GuiceMain.class.getClassLoader().loadClass(guiceAppMainClass);
+		final Class<?> mainClass = loadMainClass(guiceAppMainClass);
 
 		if (args.length > 0 && args[0].equals(TESTING_OPTION)) {
 			logger.info("Starting wiring test.");
@@ -36,6 +36,15 @@ public class GuiceMain {
 		} else {
 			logger.info("Starting application.");
 			runMain(mainClass, args);
+		}
+	}
+
+	private static Class<?> loadMainClass(String guiceAppMainClass) throws Exception {
+		try {
+			return GuiceMain.class.getClassLoader().loadClass(guiceAppMainClass);
+		} catch (Exception e) {
+			logger.error("Could not load main class: " + guiceAppMainClass + ". Make sure " + GUICE_APP_MAIN_CLASS + "   attribute is set correctly in the manifest.");
+			throw e;
 		}
 	}
 
