@@ -33,7 +33,7 @@ public class ValueConverterTool {
 	public ValueConverterTool(Collection<ValueConverter> valueConverters) {
 		this.valueConverters = ImmutableSet.copyOf(valueConverters);
 	}
-	
+
 	public Map<TypeLiteral<?>, Object> getConversions(ConfigValue value) {
 		Map<TypeLiteral<?>, Object> map = new HashMap<TypeLiteral<?>, Object>();
 		if (value.valueType() == ConfigValueType.LIST) {
@@ -60,9 +60,10 @@ public class ValueConverterTool {
 	}
 
 	private void populateMap(Map<TypeLiteral<?>, Object> map, TypeLiteral<?> bindingType, ConfigValue value, Object result) {
-		if (!map.containsKey(bindingType)) {
+		Object existingResult = map.get(bindingType);
+		if (existingResult == null) {
 			map.put(bindingType, result);
-		} else {
+		} else if (!existingResult.equals(result)) {
 			logger.warn("Value  " + value + " has multiple conversions for type " + bindingType);
 		}
 	}
@@ -97,16 +98,15 @@ public class ValueConverterTool {
 		}
 	}
 
-	
 	public static ValueConverterTool defaultValueConverterTool() {
 		List<ValueConverter> converters = new ArrayList<ValueConverter>();
 		for (Class<? extends ValueConverter> clazz : ValueConverterModule.getDefaultValueConverters()) {
-				try {
-					ValueConverter converter = clazz.newInstance();
-					converters.add(converter);
-				} catch (Exception e) {
-					logger.warn("Could not instantiate " + clazz);
-				}
+			try {
+				ValueConverter converter = clazz.newInstance();
+				converters.add(converter);
+			} catch (Exception e) {
+				logger.warn("Could not instantiate " + clazz);
+			}
 		}
 		return new ValueConverterTool(converters);
 	}
