@@ -10,8 +10,6 @@
 		</encoder>
 	</appender>
 
-	<!-- File appenders throw errors in dev. Figure out a better way to set these defaults in production -->
-
 	<if condition="${PRODUCTION}">
 		<then>
 			<include resource="logback-production.xml"/>
