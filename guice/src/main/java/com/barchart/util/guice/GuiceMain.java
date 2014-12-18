@@ -2,6 +2,7 @@ package com.barchart.util.guice;
 
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.concurrent.TimeoutException;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -22,28 +23,36 @@ public class GuiceMain {
 	private static final long WIRING_TEST_TIMEOUT = 10000;
 
 	public static void main(final String[] args) throws Exception {
+
 		logger.info("Inspecting manifest for GuiceApp class");
+
 		final URL resource = Resources.getResource("META-INF/MANIFEST.MF");
 		final Manifest manifest = new Manifest(resource.openStream());
 		final Attributes mainAttributes = manifest.getMainAttributes();
 		final String guiceAppMainClass = mainAttributes.getValue(GUICE_APP_MAIN_CLASS);
+
 		logger.info(GUICE_APP_MAIN_CLASS + ": " + guiceAppMainClass);
+
 		final Class<?> mainClass = loadMainClass(guiceAppMainClass);
 
-		if (args.length > 0 && args[0].equals(TESTING_OPTION)) {
+		final ArgParser parser = new ArgParser().parse(args);
+
+		if (parser.has("test")) {
 			logger.info("Starting wiring test.");
-			runTest(mainClass, args);
+			runTest(mainClass, Arrays.copyOfRange(args, 1, args.length));
 		} else {
 			logger.info("Starting application.");
 			runMain(mainClass, args);
 		}
+
 	}
 
-	private static Class<?> loadMainClass(String guiceAppMainClass) throws Exception {
+	private static Class<?> loadMainClass(final String guiceAppMainClass) throws Exception {
 		try {
 			return GuiceMain.class.getClassLoader().loadClass(guiceAppMainClass);
-		} catch (Exception e) {
-			logger.error("Could not load main class: " + guiceAppMainClass + ". Make sure " + GUICE_APP_MAIN_CLASS + "   attribute is set correctly in the manifest.");
+		} catch (final Exception e) {
+			logger.error("Could not load main class: " + guiceAppMainClass + ". Make sure " + GUICE_APP_MAIN_CLASS
+					+ "   attribute is set correctly in the manifest.");
 			throw e;
 		}
 	}

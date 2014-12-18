@@ -11,19 +11,11 @@ public final class GuiceLauncher {
 
 	private static final Logger logger = LoggerFactory.getLogger(GuiceLauncher.class);
 
-	public static <T extends Runnable> void run(final Class<T> clazz) throws Exception {
-		configure(clazz, null).run();
+	public static <T extends Runnable> void run(final Class<T> clazz, final String... args) throws Exception {
+		configure(clazz, args).run();
 	}
 
-	public static <T extends Runnable> void run(final Class<T> clazz, final String directory) throws Exception {
-		configure(clazz, directory).run();
-	}
-
-	public static <T> T configure(final Class<T> clazz) throws Exception {
-		return configure(clazz, null);
-	}
-
-	public static <T> T configure(final Class<T> clazz, final String directory) throws Exception {
+	public static <T> T configure(final Class<T> clazz, final String... args) throws Exception {
 
 		logger.info("Starting Guice Launcher.  Configuring: " + clazz);
 
@@ -33,13 +25,21 @@ public final class GuiceLauncher {
 
 		final GuiceConfigBuilder builder = GuiceConfigBuilder.create();
 
-		if (directory != null) {
-			if (!new File(directory).exists()) {
-				logger.warn("Specified configuration directory does not exist: {}", directory);
-			} else {
-				logger.info("Using configuration directory: {}", directory);
-				builder.setDirectory(directory, true);
+		final ArgParser parser = new ArgParser().parse(args);
+
+		if (parser.has("conf")) {
+
+			final String directory = parser.option("conf");
+
+			if (directory != null) {
+				if (!new File(directory).exists()) {
+					logger.warn("Specified configuration directory does not exist: {}", directory);
+				} else {
+					logger.info("Using configuration directory: {}", directory);
+					builder.setDirectory(directory, true);
+				}
 			}
+
 		}
 
 		return builder.build().getInstance(clazz);
