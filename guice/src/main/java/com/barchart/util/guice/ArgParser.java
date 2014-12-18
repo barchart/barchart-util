@@ -18,7 +18,6 @@ public final class ArgParser {
 
 	public ArgParser parse(final String[] args) {
 		new Parser().parse(args);
-		System.out.println(parsed);
 		return this;
 	}
 

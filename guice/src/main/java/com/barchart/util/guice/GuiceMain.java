@@ -2,7 +2,6 @@ package com.barchart.util.guice;
 
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.concurrent.TimeoutException;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -39,7 +38,7 @@ public class GuiceMain {
 
 		if (parser.has("test")) {
 			logger.info("Starting wiring test.");
-			runTest(mainClass, Arrays.copyOfRange(args, 1, args.length));
+			runTest(mainClass, args);
 		} else {
 			logger.info("Starting application.");
 			runMain(mainClass, args);
