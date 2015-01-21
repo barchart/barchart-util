@@ -33,7 +33,7 @@ class DirectoryResources implements ConfigResources {
 
 	@Override
 	public Config readConfig(String resourceName) throws Exception {
-		return ConfigFactory.parseFile(getFile(resourceName));
+		return ConfigFactory.parseFile(getFile(resourceName)).resolve();
 	}
 
 	private File getFile(String resourceName) {

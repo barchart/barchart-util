@@ -27,7 +27,7 @@ public class MergedResources implements ConfigResources {
 
 	@Override
 	public Config readConfig(final String resourceName) throws Exception {
-		return merged().readConfig(resourceName);
+		return merged().readConfig(resourceName).resolve();
 	}
 
 	@Override

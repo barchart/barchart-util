@@ -65,7 +65,7 @@ public final class ClassPathResources implements ConfigResources {
 
 	@Override
 	public Config readConfig(final String resourceName) throws Exception {
-		return ConfigFactory.parseURL(getURL(resourceName));
+		return ConfigFactory.parseURL(getURL(resourceName)).resolve();
 	}
 
 	private URL getURL(final String resourceName) {

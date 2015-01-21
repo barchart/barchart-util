@@ -44,7 +44,7 @@ public class StringResources implements ConfigResources {
 
 		if (content != null) {
 			return ConfigFactory.parseString(content,
-					ConfigParseOptions.defaults().setOriginDescription("/" + resourceName));
+					ConfigParseOptions.defaults().setOriginDescription("/" + resourceName)).resolve();
 		}
 
 		return ConfigFactory.empty();
