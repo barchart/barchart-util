@@ -6,15 +6,17 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ConfigurationPolicy;
-import org.osgi.service.component.annotations.Reference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.barchart.util.common.aws.EC2Util;
+import com.barchart.util.guice.Activate;
+import com.barchart.util.guice.Component;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.hazelcast.client.ClientConfig;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.config.AwsConfig;
-import com.hazelcast.config.Config;
 import com.hazelcast.config.Join;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.MapStoreConfig;
@@ -22,44 +24,27 @@ import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.MapLoader;
+import com.typesafe.config.Config;
 
-@Component(name = HazelcastClusterProvider.NAME, immediate = true, configurationPolicy = ConfigurationPolicy.REQUIRE)
-public class HazelcastClusterProvider extends DefaultComponent implements
-		HazelcastCluster {
+@Component(HazelcastClusterProvider.TYPE)
+public class HazelcastClusterProvider implements HazelcastCluster {
 
-	public static final String NAME = "barchart.util.cluster.hazelcast";
+	public static final String TYPE = "barchart.util.cluster.hazelcast";
+
+	private static final Logger log = LoggerFactory.getLogger(HazelcastClusterProvider.class);
 
 	private HazelcastInstance hazelcast;
 
 	private volatile CountDownLatch updateLatch;
 
-	@Override
-	protected void activate() throws Exception {
-		super.activate();
-		configure();
-	}
+	@Inject
+	HazelcastStoreRegistry storeRegistry;
 
-	@Override
-	protected void modified() throws Exception {
-		super.modified();
-		configure();
-	}
+	@Inject
+	@Named("#")
+	Config config;
 
-	@Override
-	protected void deactivate() throws Exception {
-
-		super.deactivate();
-
-		// Use getter to block and avoid shutdown during initialization
-		final HazelcastInstance active = getInstance();
-
-		if (active != null) {
-			active.getLifecycleService().shutdown();
-			hazelcast = null;
-		}
-
-	}
-
+	@Activate
 	protected void configure() {
 
 		// Block on existing initialization to avoid conflicts
@@ -74,8 +59,8 @@ public class HazelcastClusterProvider extends DefaultComponent implements
 
 		updateLatch = new CountDownLatch(1);
 
-		if (configCurrent().hasPath("client")
-				&& configCurrent().getBoolean("client")) {
+		if (config.hasPath("client")
+				&& config.getBoolean("client")) {
 			configureClient();
 		} else {
 			configureNode();
@@ -88,14 +73,13 @@ public class HazelcastClusterProvider extends DefaultComponent implements
 		final ClientConfig cfg = new ClientConfig();
 
 		// Group config
-		if (configCurrent().hasPath("cluster-name")) {
-			cfg.getGroupConfig().setName(
-					configCurrent().getString("cluster-name"));
+		if (config.hasPath("cluster-name")) {
+			cfg.getGroupConfig().setName(config.getString("cluster-name"));
 		}
 
 		// Network config
-		if (configCurrent().hasPath("members")) {
-			for (final String member : configCurrent().getStringList("members")) {
+		if (config.hasPath("members")) {
+			for (final String member : config.getStringList("members")) {
 				cfg.addAddress(member);
 			}
 		}
@@ -113,12 +97,12 @@ public class HazelcastClusterProvider extends DefaultComponent implements
 
 	private void configureNode() {
 
-		final Config cfg = new Config();
+		final com.hazelcast.config.Config cfg = new com.hazelcast.config.Config();
 
 		// Group config
-		if (configCurrent().hasPath("cluster-name")) {
+		if (config.hasPath("cluster-name")) {
 			cfg.getGroupConfig().setName(
-					configCurrent().getString("cluster-name"));
+					config.getString("cluster-name"));
 		}
 
 		// Map config
@@ -175,13 +159,13 @@ public class HazelcastClusterProvider extends DefaultComponent implements
 
 		final NetworkConfig network = new NetworkConfig();
 
-		if (configCurrent().hasPath("port")) {
-			network.setPort(configCurrent().getInt("port"));
+		if (config.hasPath("port")) {
+			network.setPort(config.getInt("port"));
 		}
 
 		final Join join = network.getJoin();
 
-		if (configCurrent().hasPath("aws-access-key")) {
+		if (config.hasPath("aws-access-key")) {
 
 			join.getMulticastConfig().setEnabled(false);
 
@@ -189,15 +173,15 @@ public class HazelcastClusterProvider extends DefaultComponent implements
 
 			aws.setEnabled(true);
 
-			aws.setAccessKey(configCurrent().getString("aws-access-key"));
-			aws.setSecretKey(configCurrent().getString("aws-secret-key"));
+			aws.setAccessKey(config.getString("aws-access-key"));
+			aws.setSecretKey(config.getString("aws-secret-key"));
 
-			if (configCurrent().hasPath("aws-region")) {
-				aws.setRegion(configCurrent().getString("aws-region"));
+			if (config.hasPath("aws-region")) {
+				aws.setRegion(config.getString("aws-region"));
 			}
 
-			if (configCurrent().hasPath("aws-security-group")) {
-				aws.setSecurityGroupName(configCurrent().getString(
+			if (config.hasPath("aws-security-group")) {
+				aws.setSecurityGroupName(config.getString(
 						"aws-security-group"));
 			} else {
 
@@ -217,47 +201,47 @@ public class HazelcastClusterProvider extends DefaultComponent implements
 
 			}
 
-			if (configCurrent().hasPath("aws-tag-key")) {
-				aws.setTagKey(configCurrent().getString("aws-tag-key"));
-				aws.setTagValue(configCurrent().getString("aws-tag-value"));
+			if (config.hasPath("aws-tag-key")) {
+				aws.setTagKey(config.getString("aws-tag-key"));
+				aws.setTagValue(config.getString("aws-tag-value"));
 			}
 
 		} else {
 			join.getAwsConfig().setEnabled(false);
 		}
 
-		if (configCurrent().hasPath("multicast")) {
+		if (config.hasPath("multicast")) {
 
 			join.getMulticastConfig().setEnabled(
-					configCurrent().getBoolean("multicast"));
+					config.getBoolean("multicast"));
 
-			if (configCurrent().hasPath("multicast-group")) {
+			if (config.hasPath("multicast-group")) {
 
 				join.getMulticastConfig().setMulticastGroup(
-						configCurrent().getString("multicast-group"));
+						config.getString("multicast-group"));
 
-				if (configCurrent().hasPath("multicast-port")) {
+				if (config.hasPath("multicast-port")) {
 					join.getMulticastConfig().setMulticastPort(
-							configCurrent().getInt("multicast-port"));
+							config.getInt("multicast-port"));
 				}
 
 			}
 
 		}
 
-		if (configCurrent().hasPath("members")) {
+		if (config.hasPath("members")) {
 
 			join.getTcpIpConfig().setEnabled(true);
 
-			for (final String member : configCurrent().getStringList("members")) {
+			for (final String member : config.getStringList("members")) {
 				join.getTcpIpConfig().addMember(member);
 			}
 
 		}
 
-		if (configCurrent().hasPath("interface")) {
+		if (config.hasPath("interface")) {
 			network.getInterfaces().setEnabled(true)
-					.addInterface(configCurrent().getString("interface"));
+					.addInterface(config.getString("interface"));
 		}
 
 		return network;
@@ -268,15 +252,20 @@ public class HazelcastClusterProvider extends DefaultComponent implements
 
 		final Map<String, MapConfig> configs = new HashMap<String, MapConfig>();
 
-		if (configCurrent().hasPath("maps")) {
+		if (config.hasPath("maps")) {
 
-			for (final com.typesafe.config.Config map : configCurrent()
+			for (final com.typesafe.config.Config map : config
 					.getConfigList("maps")) {
 
 				final MapConfig mapConfig = new MapConfig();
 
 				mapConfig.setName(map.getString("name"));
-				mapConfig.setBackupCount(getConfigInt("backup-count", 2));
+				if (map.hasPath("backup-count")) {
+					mapConfig.setBackupCount(map.getInt("backup-count"));
+				} else {
+					mapConfig.setBackupCount(2);
+				}
+
 				if (map.hasPath("size")) {
 					mapConfig.getMaxSizeConfig().setSize(map.getInt("size"));
 				}
@@ -323,17 +312,6 @@ public class HazelcastClusterProvider extends DefaultComponent implements
 
 		return configs;
 
-	}
-
-	HazelcastStoreRegistry storeRegistry;
-
-	@Reference
-	protected void bind(final HazelcastStoreRegistry sr_) {
-		storeRegistry = sr_;
-	}
-
-	protected void unbind(final HazelcastStoreRegistry sr_) {
-		storeRegistry = null;
 	}
 
 	@Override
