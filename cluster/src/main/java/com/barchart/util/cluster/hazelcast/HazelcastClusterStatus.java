@@ -4,21 +4,19 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-
 import com.barchart.util.common.status.GroupStatus;
 import com.barchart.util.common.status.MemberStatus;
 import com.barchart.util.common.status.ServiceState;
+import com.barchart.util.guice.Component;
+import com.google.inject.Inject;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.Member;
 import com.hazelcast.partition.MigrationEvent;
 import com.hazelcast.partition.MigrationListener;
 
-@Component(immediate = true)
-public class HazelcastClusterStatus extends DefaultComponent implements
-		GroupStatus {
+@Component
+public class HazelcastClusterStatus implements GroupStatus {
 
 	/*
 	 * Cluster health reporting for admin interface
@@ -143,7 +141,7 @@ public class HazelcastClusterStatus extends DefaultComponent implements
 
 		@Override
 		public String serviceName() {
-			return id();
+			return "";
 		}
 
 		@Override
@@ -165,14 +163,10 @@ public class HazelcastClusterStatus extends DefaultComponent implements
 
 	HazelcastCluster cluster;
 
-	@Reference
+	@Inject
 	protected void bind(final HazelcastCluster cluster_) {
 		cluster = cluster_;
 		addListeners(cluster.getInstance());
-	}
-
-	protected void unbind(final HazelcastCluster cluster_) {
-		cluster = null;
 	}
 
 }

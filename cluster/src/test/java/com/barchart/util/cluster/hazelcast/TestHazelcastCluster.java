@@ -1,4 +1,4 @@
-package com.barchart.news.modules.hazelcast.cluster.impl;
+package com.barchart.util.cluster.hazelcast;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -19,13 +19,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.util.cluster.hazelcast.HazelcastClusterProvider;
-import com.barchart.util.cluster.hazelcast.HazelcastStoreRegistry;
 import com.barchart.util.test.concurrent.CallableTest;
-import com.barchart.util.test.osgi.ComponentUtil;
 import com.hazelcast.core.IMap;
 import com.hazelcast.core.MapLoader;
 import com.hazelcast.core.MapStore;
+import com.typesafe.config.ConfigFactory;
 
 public class TestHazelcastCluster {
 
@@ -107,7 +105,7 @@ public class TestHazelcastCluster {
 		assertEquals(0, store.data.size());
 
 		// testMapInvalid
-		ComponentUtil.deactivate(cl3);
+		cl3.getInstance().getLifecycleService().shutdown();
 		map.get("1");
 
 	}
@@ -115,7 +113,8 @@ public class TestHazelcastCluster {
 	// @Test
 	public void testAdapterFailure() throws Exception {
 		final HazelcastClusterProvider cp = new HazelcastClusterProvider();
-		ComponentUtil.activate(cp, getConfig("cp"));
+		cp.config = ConfigFactory.parseString(getConfig("cp"));
+		cp.configure();
 		assertNotNull(cp.getInstance());
 	}
 
@@ -144,20 +143,23 @@ public class TestHazelcastCluster {
 		// Balls this is slow
 
 		cl1 = new HazelcastClusterProvider();
-		ComponentUtil.bind(cl1, registry, HazelcastStoreRegistry.class);
-		ComponentUtil.activate(cl1, getConfig("c1"));
+		cl1.storeRegistry = registry;
+		cl1.config = ConfigFactory.parseString(getConfig("c1"));
+		cl1.configure();
 
 		Thread.sleep(100);
 
 		cl2 = new HazelcastClusterProvider();
-		ComponentUtil.bind(cl2, registry, HazelcastStoreRegistry.class);
-		ComponentUtil.activate(cl2, getConfig("c2"));
+		cl2.storeRegistry = registry;
+		cl2.config = ConfigFactory.parseString(getConfig("c2"));
+		cl2.configure();
 
 		Thread.sleep(100);
 
 		cl3 = new HazelcastClusterProvider();
-		ComponentUtil.bind(cl3, registry, HazelcastStoreRegistry.class);
-		ComponentUtil.activate(cl3, getConfig("c3"));
+		cl3.storeRegistry = registry;
+		cl3.config = ConfigFactory.parseString(getConfig("c3"));
+		cl3.configure();
 
 	}
 
@@ -193,9 +195,9 @@ public class TestHazelcastCluster {
 
 	@After
 	public void tearDown() throws Exception {
-		ComponentUtil.deactivate(cl1);
-		ComponentUtil.deactivate(cl2);
-		ComponentUtil.deactivate(cl3);
+		cl1.getInstance().getLifecycleService().shutdown();
+		cl2.getInstance().getLifecycleService().shutdown();
+		cl3.getInstance().getLifecycleService().shutdown();
 	}
 
 	private static class TestStoreRegistry extends
