@@ -1,4 +1,4 @@
-<configuration>
+<configuration scan="true">
 
 	<define name="PRODUCTION" class="ch.qos.logback.core.property.FileExistsPropertyDefiner">
 		<path>/var/log/ext</path>
