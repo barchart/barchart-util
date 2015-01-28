@@ -24,5 +24,6 @@
 	</logger>
 
 	<include optional="true" resource="logback-app.xml"/>
+	<include optional="true" file="logback-debug.xml"/>
 
 </configuration>
