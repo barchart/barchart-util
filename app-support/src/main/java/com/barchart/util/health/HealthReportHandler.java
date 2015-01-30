@@ -4,6 +4,7 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -20,10 +21,9 @@ public class HealthReportHandler extends AbstractHttpRequestHandler {
 
 	@Inject(optional = true)
 	@Named("#path")
-	private String path = "/health";
+	private final String path = "/health";
 
-	@Inject(optional = true)
-	private Set<GroupStatus> clusters;
+	private final Set<GroupStatus> clusters = new HashSet<GroupStatus>();
 
 	@Override
 	public String path() {
@@ -160,4 +160,8 @@ public class HealthReportHandler extends AbstractHttpRequestHandler {
 
 	}
 
+	@Inject
+	public void bind(final GroupStatus sg_) {
+		clusters.add(sg_);
+	}
 }
