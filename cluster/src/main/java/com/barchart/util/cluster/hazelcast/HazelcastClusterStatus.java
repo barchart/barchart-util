@@ -15,8 +15,10 @@ import com.hazelcast.core.Member;
 import com.hazelcast.partition.MigrationEvent;
 import com.hazelcast.partition.MigrationListener;
 
-@Component
+@Component(HazelcastClusterStatus.TYPE)
 public class HazelcastClusterStatus implements GroupStatus {
+
+	public static final String TYPE = "com.barchart.util.cluster.hazelcaststatus";
 
 	/*
 	 * Cluster health reporting for admin interface
