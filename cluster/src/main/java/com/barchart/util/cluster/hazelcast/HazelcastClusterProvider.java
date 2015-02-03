@@ -199,7 +199,7 @@ public class HazelcastClusterProvider implements HazelcastCluster {
 			if (secGroup != null) {
 
 				if (secGroup.contains("*")) {
-					final Pattern p = Pattern.compile(secGroup.replace("*", ".*"));
+					final Pattern p = Pattern.compile("^" + secGroup.replace("*", ".*") + "$");
 					for (final String sg : EC2Util.getSecurityGroups()) {
 						if (p.matcher(sg).matches()) {
 							secGroup = sg;
