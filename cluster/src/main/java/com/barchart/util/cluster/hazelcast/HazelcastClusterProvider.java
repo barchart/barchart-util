@@ -100,6 +100,8 @@ public class HazelcastClusterProvider implements HazelcastCluster {
 
 		final com.hazelcast.config.Config cfg = new com.hazelcast.config.Config();
 
+		cfg.setProperty("hazelcast.logging.type", "slf4j");
+
 		// Group config
 		if (config.hasPath("cluster-name")) {
 			cfg.getGroupConfig().setName(
