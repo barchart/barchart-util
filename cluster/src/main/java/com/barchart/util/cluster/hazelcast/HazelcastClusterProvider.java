@@ -198,15 +198,23 @@ public class HazelcastClusterProvider implements HazelcastCluster {
 
 			if (secGroup != null) {
 
+				log.debug("Using provided security group '" + secGroup + "'");
+
 				if (secGroup.contains("*")) {
-					final Pattern p = Pattern.compile("^" + secGroup.replace("*", ".*") + "$");
+					final String pattern = "^" + secGroup.replace("*", ".*") + "$";
+					log.trace("Match pattern: " + pattern);
+					final Pattern p = Pattern.compile(pattern);
 					for (final String sg : EC2Util.getSecurityGroups()) {
+						log.trace("Checking instance security group '" + sg + "'");
 						if (p.matcher(sg).matches()) {
+							log.trace("Matched security group '" + sg + "'");
 							secGroup = sg;
 							break;
 						}
 					}
 				}
+
+				log.debug("Attempting node discovery with security group '" + secGroup + "'");
 
 				aws.setSecurityGroupName(secGroup);
 
