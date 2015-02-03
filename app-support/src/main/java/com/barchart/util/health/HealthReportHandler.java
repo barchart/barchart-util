@@ -89,17 +89,24 @@ public class HealthReportHandler extends AbstractHttpRequestHandler {
 	private String getNodes(final Set<MemberStatus> mss) {
 
 		final StringBuilder ret = new StringBuilder();
+		boolean first = true;
 		ret.append(",\n\t\t\t\"nodes\":\n" //
 				+ "\t\t\t[\n");
 		for (final MemberStatus ms : mss) {
+			if (first == true) {
+				first = false;
+			} else {
+				ret.append(",\n");
+			}
+
 			ret.append("\t\t\t\t{\n" //
 					+ "\t\t\t\t\t\"id\": \"" + ms.serviceId() + "\",\n" //
 					+ "\t\t\t\t\t\"address\": \"" + ms.serviceAddress() + "\",\n" //
 					+ "\t\t\t\t\t\"state\": \"" + ms.serviceState() + "\",\n" //
 					+ "\t\t\t\t\t\"status\": \"" + ms.serviceStatus() + "\"\n" //
-					+ "\t\t\t\t}\n");
+					+ "\t\t\t\t}");
 		}
-		ret.append("\t\t\t]");
+		ret.append("\n\t\t\t]");
 		return ret.toString();
 	}
 
