@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -180,24 +181,34 @@ public class HazelcastClusterProvider implements HazelcastCluster {
 				aws.setRegion(config.getString("aws-region"));
 			}
 
+			String secGroup = null;
 			if (config.hasPath("aws-security-group")) {
-				aws.setSecurityGroupName(config.getString(
-						"aws-security-group"));
+				secGroup = config.getString("aws-security-group");
 			} else {
 
 				// Try EC2 userdata lookup
-				final com.typesafe.config.Config userData = EC2Util
-						.getUserData();
+				final com.typesafe.config.Config userData = EC2Util.getUserData();
 
-				if (userData != null
-						&& userData.root().containsKey(
-								"barchart.config.hazelcast.group")) {
-					final String secGroup = (String) userData.root()
-							.get("barchart.config.hazelcast.group").unwrapped();
-					log.debug("Using user-data provided security group "
-							+ secGroup);
-					aws.setSecurityGroupName(secGroup);
+				if (userData != null && userData.root().containsKey("barchart.config.hazelcast.group")) {
+					secGroup = (String) userData.root().get("barchart.config.hazelcast.group").unwrapped();
+					log.debug("Using user-data provided security group " + secGroup);
 				}
+
+			}
+
+			if (secGroup != null) {
+
+				if (secGroup.contains("*")) {
+					final Pattern p = Pattern.compile(secGroup.replace("*", ".*"));
+					for (final String sg : EC2Util.getSecurityGroups()) {
+						if (p.matcher(sg).matches()) {
+							secGroup = sg;
+							break;
+						}
+					}
+				}
+
+				aws.setSecurityGroupName(secGroup);
 
 			}
 
