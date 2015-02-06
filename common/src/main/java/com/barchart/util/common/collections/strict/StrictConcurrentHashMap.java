@@ -25,13 +25,13 @@ public class StrictConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V>
 	
 	@Override
 	public V replace(final K key, final V value) {
-		
-		if(!super.containsKey(key)) {
+		V previousValue = super.put(key, value);
+		if (previousValue != null) {
+			super.put(key, previousValue);
 			throw new IllegalStateException("Unknown Key " + key.toString());
 		} else {
-			return super.put(key, value);
+			return previousValue;
 		}
-		
 	}
 
 	@Override
@@ -41,11 +41,12 @@ public class StrictConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V>
 			throw new IllegalStateException("Invalid key class - " + key.getClass().getCanonicalName());
 		}
 		
-		if(!super.containsKey(key)) {
+		V value = super.get(key);
+		if (value == null) {
 			throw new IllegalStateException("Unknown Key " + key.toString());
 		}
 		
-		return super.get(key);
+		return value;
 	}
 	
 	@Override
@@ -55,11 +56,12 @@ public class StrictConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V>
 			throw new IllegalStateException("Invalid key class - " + key.getClass().getCanonicalName());
 		}
 		
-		if(!super.containsKey(key)) {
+		V value = super.remove(key);
+		if (value == null) {
 			throw new IllegalStateException("Unknown Key " + key.toString());
 		}
 		
-		return super.remove(key);
+		return value;
 	}
 	
 	@Override
@@ -69,11 +71,12 @@ public class StrictConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V>
 			throw new IllegalStateException("Value cannot be null");
 		}
 		
-		if(super.containsKey(key)) {
+		V previousValue = super.putIfAbsent(key, value);
+		if (previousValue != null) {
 			throw new IllegalStateException("Key " + key.toString() + " already in map");
+		} else {
+			return null;
 		}
-		
-		return super.put(key, value);
 	}
 	
 }
