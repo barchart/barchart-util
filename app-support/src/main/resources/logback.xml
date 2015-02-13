@@ -23,6 +23,10 @@
 		<appender-ref ref="ACCESS" />
 	</logger>
 
+	<logger name="com.barchart.logger.error" level="INFO" additivity="false">
+		<appender-ref ref="ERROR" />
+	</logger>
+
 	<include optional="true" resource="logback-app.xml"/>
 	<include optional="true" file="logback-debug.xml"/>
 
