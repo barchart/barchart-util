@@ -167,7 +167,7 @@ public class HealthReportHandler extends AbstractHttpRequestHandler {
 
 	}
 
-	@Inject
+	@Inject(optional = true)
 	public void bind(final GroupStatus sg_) {
 		clusters.add(sg_);
 	}
