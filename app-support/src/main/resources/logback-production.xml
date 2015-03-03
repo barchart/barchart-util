@@ -9,7 +9,7 @@
 			</timeBasedFileNamingAndTriggeringPolicy>
 		</rollingPolicy>
 		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+			<pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
@@ -40,7 +40,6 @@
 	</appender>
 
 	<root level="INFO">
-		<appender-ref ref="STDOUT" />
 		<appender-ref ref="LOG" />
 	</root>
 
