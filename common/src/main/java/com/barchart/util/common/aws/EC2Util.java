@@ -13,12 +13,27 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
 public class EC2Util {
+
+	public enum METADATA {
+		SECURITY_GROUPS,
+		AVAILABILITY_ZONE
+	}
+
+	private static String metadataUrl = "http://169.254.169.254/latest/meta-data/";
+
+	private static EnumMap<METADATA, String> metadataMap = new EnumMap<METADATA, String>(METADATA.class);
+
+	static {
+		metadataMap.put(METADATA.SECURITY_GROUPS, "security_groups");
+		metadataMap.put(METADATA.AVAILABILITY_ZONE, "placement/availability-zone");
+	}
 
 	public static Config getUserData() {
 
@@ -51,6 +66,11 @@ public class EC2Util {
 
 	}
 
+	/**
+	 * @return
+	 * @deprecated This method can be replaced with @code getMetadata()
+	 */
+	@Deprecated
 	public static List<String> getSecurityGroups() {
 
 		final List<String> groups = new ArrayList<String>();
@@ -83,6 +103,50 @@ public class EC2Util {
 		}
 
 		return groups;
+
+	}
+
+	/**
+	 * get metadata based on the category
+	 *
+	 * @param metadata category
+	 * @return
+	 */
+	public static List<String> getMetadata(METADATA value) {
+
+		final List<String> ret = new ArrayList<String>();
+
+		String category = metadataMap.get(value);
+
+		if (category != null && !category.isEmpty()) {
+			try {
+
+				final URL url = new URL(metadataUrl + category);
+
+				final HttpURLConnection connection = (HttpURLConnection) url
+						.openConnection();
+
+				connection.setConnectTimeout(2 * 1000);
+				connection.setRequestMethod("GET");
+				connection.setRequestProperty("User-Agent", "config-reader");
+				connection.connect();
+
+				final InputStream input = connection.getInputStream();
+				final InputStreamReader reader = new InputStreamReader(input);
+				final BufferedReader buffered = new BufferedReader(reader);
+
+				String s;
+				while ((s = buffered.readLine()) != null) {
+					ret.add(s);
+				}
+
+				buffered.close();
+
+			} catch (final Exception e) {
+			}
+		}
+
+		return ret;
 
 	}
 
