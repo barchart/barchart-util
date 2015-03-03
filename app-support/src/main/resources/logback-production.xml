@@ -1,9 +1,9 @@
 <included>
 
 	<appender name="LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>/var/log/ext/app.log</file>
+		<file>/var/log/ext/java/app.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>/var/log/ext/app.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+			<fileNamePattern>/var/log/ext/java/app.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<maxFileSize>20MB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
@@ -14,9 +14,9 @@
 	</appender>
 
 	<appender name="ACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>/var/log/ext/access.log</file>
+		<file>/var/log/ext/http/access.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>/var/log/ext/access.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+			<fileNamePattern>/var/log/ext/http/access.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<maxFileSize>20MB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
@@ -27,9 +27,9 @@
 	</appender>
 
 	<appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>/var/log/ext/error.log</file>
+		<file>/var/log/ext/http/error.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>/var/log/ext/access.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+			<fileNamePattern>/var/log/ext/http/error.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<maxFileSize>20MB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
