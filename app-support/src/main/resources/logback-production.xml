@@ -24,7 +24,7 @@
 		<encoder class="net.logstash.logback.encoder.LogstashEncoder">
 			<fieldNames class="net.logstash.logback.fieldnames.ShortenedFieldNames"/>
 			<timeZone>UTC</timeZone>
-			<customFields>{"type":"java"}</customFields>
+			<customFields>{"type":"java","app":"${DOCKER_IMAGE}"}</customFields>
 		</encoder>
 	</appender>
 
@@ -39,7 +39,7 @@
 		<encoder class="net.logstash.logback.encoder.LogstashEncoder">
 			<fieldNames class="net.logstash.logback.fieldnames.ShortenedFieldNames"/>
 			<timeZone>UTC</timeZone>
-			<customFields>{"type":"http"}</customFields>
+			<customFields>{"type":"http","app":"${DOCKER_IMAGE}"}</customFields>
 		</encoder>
 	</appender>
 
