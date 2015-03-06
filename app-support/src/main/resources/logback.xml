@@ -4,12 +4,6 @@
 		<path>/var/log/ext</path>
 	</define>
 
-	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-		<encoder>
-			<pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-		</encoder>
-	</appender>
-
 	<if condition="${PRODUCTION}">
 		<then>
 			<include resource="logback-production.xml"/>
@@ -21,10 +15,6 @@
 
 	<logger name="com.barchart.logger.access" level="INFO" additivity="false">
 		<appender-ref ref="ACCESS" />
-	</logger>
-
-	<logger name="com.barchart.logger.error" level="INFO" additivity="false">
-		<appender-ref ref="ERROR" />
 	</logger>
 
 	<include optional="true" resource="logback-app.xml"/>

@@ -6,14 +6,14 @@
 		</encoder>
 	</appender>
 
-	<appender name="ERROR" class="ch.qos.logback.core.ConsoleAppender">
+	<appender name="DEFAULT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>%msg%n</pattern>
+			<pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
-	<root level="INFO">
-		<appender-ref ref="STDOUT" />
+	<root level="DEBUG">
+		<appender-ref ref="DEFAULT" />
 	</root>
 
 </included>

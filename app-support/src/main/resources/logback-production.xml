@@ -1,5 +1,6 @@
 <included>
 
+	<!--  Standard file log (deprecated, use JSON) -->
 	<appender name="LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>/var/log/ext/java/app.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -12,35 +13,38 @@
 			<pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
-
-	<appender name="ACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>/var/log/ext/http/access.log</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>/var/log/ext/http/access.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+	
+	<!-- JSON event format -->
+	<appender name="JSON" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/var/log/ext/app.log.json</file> <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> <fileNamePattern>/var/log/ext/app.log.json.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<maxFileSize>20MB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
 		</rollingPolicy>
-		<encoder>
-			<pattern>%msg%n</pattern>
+		<encoder class="net.logstash.logback.encoder.LogstashEncoder">
+			<fieldNames class="net.logstash.logback.fieldnames.ShortenedFieldNames"/>
+			<timeZone>UTC</timeZone>
+			<customFields>{"type":"java"}</customFields>
 		</encoder>
 	</appender>
 
-	<appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>/var/log/ext/http/error.log</file>
+	<appender name="ACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/var/log/ext/access.log.json</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>/var/log/ext/http/error.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+			<fileNamePattern>/var/log/ext/access.log.json.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<maxFileSize>20MB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
 		</rollingPolicy>
-		<encoder>
-			<pattern>%msg%n</pattern>
+		<encoder class="net.logstash.logback.encoder.LogstashEncoder">
+			<fieldNames class="net.logstash.logback.fieldnames.ShortenedFieldNames"/>
+			<timeZone>UTC</timeZone>
+			<customFields>{"type":"http"}</customFields>
 		</encoder>
 	</appender>
 
 	<root level="INFO">
-		<appender-ref ref="LOG" />
+		<appender-ref ref="JSON" />
 	</root>
 
 </included>
