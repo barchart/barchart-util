@@ -19,9 +19,9 @@ import org.slf4j.MDC;
 import com.barchart.netty.server.http.request.HttpServerRequest;
 import com.barchart.netty.server.http.request.RequestHandlerBase;
 import com.barchart.util.common.status.ComponentStatus;
-import com.barchart.util.common.status.ComponentStatus.Status;
 import com.barchart.util.common.status.ScalingMonitor;
 import com.barchart.util.common.status.ScalingMonitor.Usage;
+import com.barchart.util.common.status.StatusType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 
@@ -49,13 +49,13 @@ public class BasicStatusReportHandler extends RequestHandlerBase {
 
 		final ScalingMonitor.Usage usage = scaling != null ? scaling.usage() : Usage.NORMAL;
 
-		ComponentStatus.Status status = Status.OK;
+		StatusType status = StatusType.OK;
 		String message = "";
 
 		// Calculate based on ComponentStatus rules
 		if (componentStatus != null) {
 			for (final ComponentStatus cs : componentStatus) {
-				if (cs.status() != Status.OK) {
+				if (cs.status() != StatusType.OK) {
 					switch (cs.optionality()) {
 						case IGNORED:
 							continue;
@@ -67,8 +67,8 @@ public class BasicStatusReportHandler extends RequestHandlerBase {
 						case OPTIONAL:
 						default:
 							// Optional stuff gets dropped back a level
-							if (cs.status() == Status.ERROR && Status.WARNING.ordinal() > status.ordinal()) {
-								status = Status.WARNING;
+							if (cs.status() == StatusType.ERROR && StatusType.WARNING.ordinal() > status.ordinal()) {
+								status = StatusType.WARNING;
 							}
 					}
 

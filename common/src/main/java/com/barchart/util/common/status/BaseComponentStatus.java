@@ -1,55 +1,21 @@
 package com.barchart.util.common.status;
 
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.Collections;
+import java.util.Set;
 
-public abstract class BaseComponentStatus implements ComponentStatus {
+public abstract class BaseComponentStatus extends BaseStatus implements ComponentStatus {
 
-	private Status status = Status.OK;
 	private Optionality optionality = Optionality.OPTIONAL;
 	private Locality locality = Locality.LOCAL;
-	private String name;
-	private String message;
-	private long timestamp;
-	private int errorCount;
-	private Deque<Long> flaps = new LinkedList<Long>();
 
 	public BaseComponentStatus(final String name_) {
-		name = name_;
+		super(name_);
 	}
 
 	public BaseComponentStatus(final String name_, final Optionality optionality_, final Locality locality_) {
-		name = name_;
+		super(name_);
 		optionality = optionality_;
 		locality = locality_;
-	}
-
-	@Override
-	public Status status() {
-		return status;
-	}
-
-	protected void status(final Status status_) {
-		if (status_ != status) {
-			timestamp = System.currentTimeMillis();
-			flaps.add(timestamp);
-			final int remove = flaps.size() - 101;
-			for (int i = 0; i < remove; i++) {
-				flaps.pollFirst();
-			}
-			if (status == Status.OK) {
-				errorCount = 0;
-			}
-		}
-		if (status_ != Status.OK) {
-			errorCount++;
-		}
-		status = status_;
-	}
-
-	protected void status(final Status status_, final String message_) {
-		status(status_);
-		message = message_;
 	}
 
 	@Override
@@ -71,40 +37,8 @@ public abstract class BaseComponentStatus implements ComponentStatus {
 	}
 
 	@Override
-	public String name() {
-		return name;
-	}
-
-	@Override
-	public String message() {
-		return message;
-	}
-
-	@Override
-	public long timestamp() {
-		return timestamp;
-	}
-
-	@Override
-	public int errorCount() {
-		return errorCount;
-	}
-
-	@Override
-	public int flaps(final int minutes) {
-
-		final long from = System.currentTimeMillis() - (60 * minutes * 1000);
-
-		int count = 0;
-
-		for (final Long ts : flaps) {
-			if (ts >= from) {
-				count++;
-			}
-		}
-
-		return count;
-
+	public Set<NodeStatus> nodes() {
+		return Collections.emptySet();
 	}
 
 }

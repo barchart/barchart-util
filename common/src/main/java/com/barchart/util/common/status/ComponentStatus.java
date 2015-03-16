@@ -1,16 +1,11 @@
 package com.barchart.util.common.status;
 
+import java.util.Set;
+
 /**
  * An interface describing the functional status of a specific application component.
  */
 public interface ComponentStatus {
-
-	/**
-	 * The functional status of the component.
-	 */
-	enum Status {
-		OK, WARNING, ERROR
-	};
 
 	/**
 	 * The optionality of the component (i.e., how vital is it to correct application function.)
@@ -29,7 +24,7 @@ public interface ComponentStatus {
 	/**
 	 * The current functional status of the component.
 	 */
-	Status status();
+	StatusType status();
 
 	/**
 	 * The optionality of the component. This can be overridden per-application in the status handler.
@@ -63,9 +58,14 @@ public interface ComponentStatus {
 
 	/**
 	 * The number of times the component has changed status in the last <i>minutes</i> minutes.
-	 * 
+	 *
 	 * @return
 	 */
 	int flaps(int minutes);
+
+	/**
+	 * If this is a clustered service, return individual cluster node status.
+	 */
+	Set<NodeStatus> nodes();
 
 }
