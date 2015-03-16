@@ -29,6 +29,12 @@
   	
 		<dependency>
 			<groupId>com.barchart.netty</groupId>
+			<artifactId>barchart-netty-rest-server</artifactId>
+			<version>[1-SNAPSHOT,2-SNAPSHOT)</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.barchart.netty</groupId>
 			<artifactId>barchart-netty-http-guice</artifactId>
 		</dependency>
 		
