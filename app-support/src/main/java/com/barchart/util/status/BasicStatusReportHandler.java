@@ -21,7 +21,6 @@ import com.barchart.netty.server.http.request.RequestHandlerBase;
 import com.barchart.util.common.status.ComponentStatus;
 import com.barchart.util.common.status.ScalingMonitor;
 import com.barchart.util.common.status.ScalingMonitor.Usage;
-import com.barchart.util.common.status.StatusType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 
@@ -29,11 +28,14 @@ public class BasicStatusReportHandler extends RequestHandlerBase {
 
 	private static Logger log = LoggerFactory.getLogger(BasicStatusReportHandler.class);
 
+	private final ApplicationStatus appStatus;
 	private final ScalingMonitor scaling;
 	private final Set<ComponentStatus> componentStatus;
 	private final ObjectMapper mapper;
 
-	public BasicStatusReportHandler(final ScalingMonitor scaling_, final Set<ComponentStatus> status_) {
+	public BasicStatusReportHandler(final ApplicationStatus appStatus_, final ScalingMonitor scaling_,
+			final Set<ComponentStatus> status_) {
+		appStatus = appStatus_;
 		scaling = scaling_;
 		componentStatus = status_;
 		mapper = new ObjectMapper();
@@ -49,44 +51,12 @@ public class BasicStatusReportHandler extends RequestHandlerBase {
 
 		final ScalingMonitor.Usage usage = scaling != null ? scaling.usage() : Usage.NORMAL;
 
-		StatusType status = StatusType.OK;
-		String message = "";
-
-		// Calculate based on ComponentStatus rules
-		if (componentStatus != null) {
-			for (final ComponentStatus cs : componentStatus) {
-				if (cs.status() != StatusType.OK) {
-					switch (cs.optionality()) {
-						case IGNORED:
-							continue;
-						case REQUIRED:
-							if (cs.status().ordinal() > status.ordinal()) {
-								status = cs.status();
-							}
-							break;
-						case OPTIONAL:
-						default:
-							// Optional stuff gets dropped back a level
-							if (cs.status() == StatusType.ERROR && StatusType.WARNING.ordinal() > status.ordinal()) {
-								status = StatusType.WARNING;
-							}
-					}
-
-					if (!message.isEmpty()) {
-						message += "; ";
-					}
-					message += cs.message();
-
-				}
-
-			}
-
-		}
+		appStatus.update();
 
 		final ImmutableMap.Builder<String, Object> builder = new ImmutableMap.Builder<String, Object>()
 				.put("resources", usage)
-				.put("status", status)
-				.put("message", message)
+				.put("status", appStatus.status())
+				.put("message", appStatus.message())
 				.put("uptime_ms", uptime)
 				.put("load", new ImmutableMap.Builder<String, Object>()
 						.put("total", load)

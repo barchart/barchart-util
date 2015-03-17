@@ -10,6 +10,7 @@ import com.barchart.util.guice.Activate;
 import com.barchart.util.guice.Component;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.typesafe.config.Config;
 
 /**
  * Root module for REST services. Uses a Router internally for request processing. Subclass to create independent
@@ -19,6 +20,10 @@ import com.google.inject.name.Named;
 public class StatusRestService extends RestServiceBase implements HttpRequestHandler {
 
 	public static final String TYPE = "com.barchart.util.status.rest";
+
+	@Inject(optional = true)
+	@Named("#")
+	private Config config;
 
 	@Inject(optional = true)
 	@Named("#path")
@@ -32,10 +37,21 @@ public class StatusRestService extends RestServiceBase implements HttpRequestHan
 
 	@Activate
 	public void activate() {
-		final BasicStatusReportHandler basic = new BasicStatusReportHandler(scaling, status);
+
+		Config overrides = null;
+
+		if (config.hasPath("optionality")) {
+			overrides = config.getConfig("optionality");
+		}
+
+		final ApplicationStatus appStatus = new ApplicationStatus(status, overrides);
+
+		final BasicStatusReportHandler basic = new BasicStatusReportHandler(appStatus, scaling, status);
+
 		add("/", basic);
 		add("/basic", basic);
-		add("/full", new FullStatusReportHandler(scaling, status));
+		add("/full", new FullStatusReportHandler(appStatus, scaling, status));
+
 	}
 
 	@Override
