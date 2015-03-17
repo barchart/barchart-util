@@ -1,5 +1,7 @@
 package com.barchart.util.status;
 
+import io.netty.handler.codec.http.HttpResponseStatus;
+
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.nio.file.FileStore;
@@ -21,6 +23,7 @@ import com.barchart.netty.server.http.request.RequestHandlerBase;
 import com.barchart.util.common.status.ComponentStatus;
 import com.barchart.util.common.status.ScalingMonitor;
 import com.barchart.util.common.status.ScalingMonitor.Usage;
+import com.barchart.util.common.status.StatusType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 
@@ -85,6 +88,12 @@ public class BasicStatusReportHandler extends RequestHandlerBase {
 
 		final Map<String, Object> health = builder.build();
 
+		if (appStatus.status() == StatusType.ERROR) {
+			request.response().setStatus(HttpResponseStatus.INTERNAL_SERVER_ERROR);
+		} else {
+			request.response().setStatus(HttpResponseStatus.OK);
+		}
+		request.response().setContentType("application/json");
 		mapper.writeValue(request.response().getOutputStream(), health);
 
 		// setMDC(health, "");
