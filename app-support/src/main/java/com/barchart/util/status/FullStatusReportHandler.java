@@ -10,33 +10,31 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import com.barchart.netty.server.http.request.HttpServerRequest;
 import com.barchart.netty.server.http.request.RequestHandlerBase;
 import com.barchart.util.common.status.ComponentStatus;
-import com.barchart.util.common.status.GroupStatus;
-import com.barchart.util.common.status.MemberStatus;
+import com.barchart.util.common.status.NodeStatus;
 import com.barchart.util.common.status.ScalingMonitor;
 import com.barchart.util.common.status.ScalingMonitor.Usage;
 import com.barchart.util.common.status.StatusType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.reflect.ClassPath;
 
 public class FullStatusReportHandler extends RequestHandlerBase {
 
 	private final ScalingMonitor scaling;
 	private final Set<ComponentStatus> componentStatus;
-	private final Set<GroupStatus> clusters;
 	private final ObjectMapper mapper;
 
-	public FullStatusReportHandler(final ScalingMonitor scaling_,
-			final Set<ComponentStatus> status_, final Set<GroupStatus> clusters_) {
+	public FullStatusReportHandler(final ScalingMonitor scaling_, final Set<ComponentStatus> status_) {
 		scaling = scaling_;
 		componentStatus = status_;
-		clusters = clusters_;
 		mapper = new ObjectMapper();
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
 	}
@@ -127,7 +125,8 @@ public class FullStatusReportHandler extends RequestHandlerBase {
 
 			for (final ComponentStatus cs : componentStatus) {
 
-				componentList.add(new ImmutableMap.Builder<String, Object>()
+				final ImmutableMap.Builder<String, Object> componentBuilder =
+						new ImmutableMap.Builder<String, Object>()
 						.put("name", cs.name())
 						.put("status", cs.status())
 						.put("locality", cs.locality())
@@ -137,45 +136,60 @@ public class FullStatusReportHandler extends RequestHandlerBase {
 						.put("errorCount", cs.errorCount())
 						.put("flaps_5min", cs.flaps(5))
 						.put("flaps_15min", cs.flaps(15))
-						.put("flaps_60min", cs.flaps(60))
-						.build());
+								.put("flaps_60min", cs.flaps(60));
+
+				if (cs.nodes() != null && cs.nodes().size() > 0) {
+
+					final List<Map<String, Object>> nodeList = new ArrayList<Map<String, Object>>();
+
+					for (final NodeStatus ns : cs.nodes()) {
+						nodeList.add(new ImmutableMap.Builder<String, Object>()
+								.put("id", ns.id())
+								.put("name", ns.name())
+								.put("status", ns.status())
+								.put("address", ns.address())
+								.put("message", ns.message())
+								.put("timestamp", ns.timestamp())
+								.put("errorCount", ns.errorCount())
+								.build());
+					}
+
+					componentBuilder.put("nodes", nodeList);
+
+				}
+
+				componentList.add(componentBuilder.build());
+
 			}
 
 			builder.put("components", componentList);
 
 		}
 
-		if (clusters != null) {
+		// Show installed module version
+		final List<Map<String, Object>> artifactList = new ArrayList<Map<String, Object>>();
 
-			final List<Map<String, Object>> clusterList = new ArrayList<Map<String, Object>>();
+		for (final ClassPath.ResourceInfo r : ClassPath.from(this.getClass().getClassLoader()).getResources()) {
 
-			for (final GroupStatus gs : clusters) {
-
-				final List<Map<String, Object>> nodeList = new ArrayList<Map<String, Object>>();
-				for (final MemberStatus ms : gs.groupMembers()) {
-					nodeList.add(new ImmutableMap.Builder<String,Object>()
-							.put("id", ms.serviceId())
-							.put("address", ms.serviceAddress())
-							.put("status", ms.serviceState())
-							.put("message", ms.serviceStatus())
-							.build());
-				}
-
-				clusterList.add(new ImmutableMap.Builder<String, Object>()
-						.put("name", gs.groupName())
-						.put("type", gs.groupType())
-						.put("status", gs.groupState())
-						.put("message", gs.groupStatus())
-						.put("nodes", nodeList)
-						.build());
-
+			final String rn = r.getResourceName();
+			if (rn.startsWith("META-INF/maven")) {
+				System.out.println(rn);
 			}
-
-			builder.put("clusters", clusterList);
+			if (rn.startsWith("META-INF/maven") && rn.endsWith("pom.properties")) {
+				final Properties p = new Properties();
+				p.load(getClass().getClassLoader().getResourceAsStream(rn));
+				artifactList.add(new ImmutableMap.Builder<String, Object>()
+						.put("group", p.getProperty("groupId"))
+						.put("artifact", p.getProperty("artifactId"))
+						.put("version", p.getProperty("version"))
+						.build());
+			}
 
 		}
 
-		// TODO show installed packages by scanning META-INF/maven/*
+		if (artifactList.size() > 0) {
+			builder.put("artifacts", artifactList);
+		}
 
 		final Map<String, Object> health = builder.build();
 
@@ -237,58 +251,6 @@ public class FullStatusReportHandler extends RequestHandlerBase {
 
 		return nf.format(d) + " TB";
 
-	}
-
-	private String getServiceGroups() {
-
-		if (clusters != null) {
-
-			final StringBuffer ret = new StringBuffer();
-
-			ret.append(",\n\t\t\"clusters\": \n" //
-					+ "\t\t[\n");
-
-			for (final GroupStatus gs : clusters) {
-				ret.append("\t\t{\n" //
-						+ "\t\t\t\"state\": \"" + gs.groupStatus() + "\",\n" //
-						+ "\t\t\t\"size\": " + gs.groupMembers().size() //
-						+ getNodes(gs.groupMembers()) //
-						+ "\n\t\t}\n");
-
-			}
-
-			ret.append("\t\t]");
-
-			return ret.toString();
-
-		}
-
-		return "";
-
-	}
-
-	private String getNodes(final Set<MemberStatus> mss) {
-
-		final StringBuilder ret = new StringBuilder();
-		boolean first = true;
-		ret.append(",\n\t\t\t\"nodes\":\n" //
-				+ "\t\t\t[\n");
-		for (final MemberStatus ms : mss) {
-			if (first == true) {
-				first = false;
-			} else {
-				ret.append(",\n");
-			}
-
-			ret.append("\t\t\t\t{\n" //
-					+ "\t\t\t\t\t\"id\": \"" + ms.serviceId() + "\",\n" //
-					+ "\t\t\t\t\t\"address\": \"" + ms.serviceAddress() + "\",\n" //
-					+ "\t\t\t\t\t\"state\": \"" + ms.serviceState() + "\",\n" //
-					+ "\t\t\t\t\t\"status\": \"" + ms.serviceStatus() + "\"\n" //
-					+ "\t\t\t\t}");
-		}
-		ret.append("\n\t\t\t]");
-		return ret.toString();
 	}
 
 }

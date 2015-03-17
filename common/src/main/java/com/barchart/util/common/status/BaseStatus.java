@@ -8,7 +8,7 @@ public abstract class BaseStatus {
 	private StatusType status = StatusType.OK;
 	private String name;
 	private String message;
-	private long timestamp;
+	private long timestamp = System.currentTimeMillis();
 	private int errorCount;
 	private Deque<Long> flaps = new LinkedList<Long>();
 

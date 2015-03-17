@@ -4,9 +4,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.barchart.util.common.status.GroupStatus;
-import com.barchart.util.common.status.MemberStatus;
-import com.barchart.util.common.status.ServiceState;
+import com.barchart.util.common.status.BaseComponentStatus;
+import com.barchart.util.common.status.BaseNodeStatus;
+import com.barchart.util.common.status.NodeStatus;
+import com.barchart.util.common.status.StatusType;
 import com.barchart.util.guice.Component;
 import com.google.inject.Inject;
 import com.hazelcast.client.HazelcastClient;
@@ -16,7 +17,7 @@ import com.hazelcast.partition.MigrationEvent;
 import com.hazelcast.partition.MigrationListener;
 
 @Component(HazelcastClusterStatus.TYPE)
-public class HazelcastClusterStatus implements GroupStatus {
+public class HazelcastClusterStatus extends BaseComponentStatus {
 
 	public static final String TYPE = "com.barchart.util.cluster.hazelcaststatus";
 
@@ -25,7 +26,11 @@ public class HazelcastClusterStatus implements GroupStatus {
 	 */
 
 	private final Collection<MigrationEvent> migrations = new HashSet<MigrationEvent>();
-	private int failures = 0;
+	private Set<Member> failures = new HashSet<Member>();
+
+	public HazelcastClusterStatus() {
+		super("hazelcast", Optionality.REQUIRED, Locality.LOCAL);
+	}
 
 	protected void addListeners(final HazelcastInstance instance) {
 
@@ -34,131 +39,83 @@ public class HazelcastClusterStatus implements GroupStatus {
 					new MigrationListener() {
 
 						@Override
-						public void migrationStarted(
-								final MigrationEvent migrationEvent) {
+						public void migrationStarted(final MigrationEvent migrationEvent) {
 							migrations.add(migrationEvent);
 						}
 
 						@Override
-						public void migrationCompleted(
-								final MigrationEvent migrationEvent) {
+						public void migrationCompleted(final MigrationEvent migrationEvent) {
 							migrations.remove(migrationEvent);
+							failures.remove(migrationEvent.getNewOwner());
+							status(StatusType.OK);
 						}
 
 						@Override
-						public void migrationFailed(
-								final MigrationEvent migrationEvent) {
+						public void migrationFailed(final MigrationEvent migrationEvent) {
 							migrations.remove(migrationEvent);
-							failures++;
+							failures.add(migrationEvent.getNewOwner());
+							status(StatusType.WARNING);
 						}
+
 					});
 		}
 
 	}
 
 	@Override
-	public String groupId() {
+	public String name() {
 		if (cluster.getInstance() != null) {
-			return cluster.getInstance().getName();
+			return "hazelcast/" + cluster.getInstance().getConfig().getGroupConfig().getName();
 		}
-		return null;
-	}
-
-	@Override
-	public String groupType() {
 		return "hazelcast";
 	}
 
 	@Override
-	public String groupName() {
+	public String message() {
 		if (cluster.getInstance() != null) {
-			if (cluster.getInstance() instanceof HazelcastClient) {
-				return "client only";
-			} else {
-				return cluster.getInstance().getConfig().getGroupConfig()
-						.getName();
+			if (migrations.size() > 0) {
+				return "Migrating " + migrations.size() + " partitions, " + failures.size() + " migration errors";
 			}
+			return failures.size() + " migration errors";
 		}
-		return null;
+		return "";
 	}
 
 	@Override
-	public ServiceState groupState() {
-		// Don't have a lot of tools from Hazelcast to determine overall cluster
-		// health, so we'll just check active partition migrations
-		if (migrations.size() > 0) {
-			return ServiceState.WORKING;
-		}
-		return ServiceState.OK;
-	}
-
-	@Override
-	public String groupStatus() {
+	public Set<NodeStatus> nodes() {
+		final Set<NodeStatus> ms = new HashSet<NodeStatus>();
 		if (cluster.getInstance() != null) {
-			int data = 0;
-			int clients = 0;
-			for (final Member m : cluster.getInstance().getCluster()
-					.getMembers()) {
-				if (m.isLiteMember()) {
-					clients++;
-				} else {
-					data++;
-				}
-			}
-			final StringBuilder status = new StringBuilder();
-			status.append(data + " data nodes, " + clients + " clients, "
-					+ failures + " partition migration errors");
-			return status.toString();
-		}
-		return null;
-	}
-
-	@Override
-	public Set<MemberStatus> groupMembers() {
-		final Set<MemberStatus> ms = new HashSet<MemberStatus>();
-		if (cluster.getInstance() != null) {
-			for (final Member m : cluster.getInstance().getCluster()
-					.getMembers()) {
-				ms.add(new HazelcastMemberStatus(m));
+			for (final Member m : cluster.getInstance().getCluster().getMembers()) {
+				ms.add(new HazelcastNodeStatus(m));
 			}
 		}
 		return ms;
 	}
 
-	private class HazelcastMemberStatus implements MemberStatus {
+	private class HazelcastNodeStatus extends BaseNodeStatus {
 
 		private final Member member;
 
-		HazelcastMemberStatus(final Member member_) {
+		HazelcastNodeStatus(final Member member_) {
+			super(member_.getUuid(), member_.isLiteMember() ? "client" : "node",
+					member_.getInetSocketAddress().toString());
 			member = member_;
 		}
 
 		@Override
-		public String serviceId() {
-			if (member.localMember()) {
-				return member.getUuid() + " (local node)";
+		public StatusType status() {
+			if (failures.contains(member)) {
+				return StatusType.WARNING;
 			}
-			return member.getUuid();
+			return StatusType.OK;
 		}
 
 		@Override
-		public String serviceName() {
+		public String message() {
+			if (failures.contains(member)) {
+				return "Last migration failed";
+			}
 			return "";
-		}
-
-		@Override
-		public String serviceAddress() {
-			return member.getInetSocketAddress().toString();
-		}
-
-		@Override
-		public ServiceState serviceState() {
-			return ServiceState.OK;
-		}
-
-		@Override
-		public String serviceStatus() {
-			return member.isLiteMember() ? "Client only" : "Data node";
 		}
 
 	}
