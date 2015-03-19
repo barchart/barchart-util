@@ -140,7 +140,7 @@ public class FullStatusReportHandler extends RequestHandlerBase {
 		}
 
 		// Show installed module version
-		final List<Map<String, Object>> artifactList = new ArrayList<Map<String, Object>>();
+		final List<Map<String, Object>> moduleList = new ArrayList<Map<String, Object>>();
 
 		for (final ClassPath.ResourceInfo r : ClassPath.from(this.getClass().getClassLoader()).getResources()) {
 
@@ -151,17 +151,16 @@ public class FullStatusReportHandler extends RequestHandlerBase {
 			if (rn.startsWith("META-INF/maven") && rn.endsWith("pom.properties")) {
 				final Properties p = new Properties();
 				p.load(getClass().getClassLoader().getResourceAsStream(rn));
-				artifactList.add(new ImmutableMap.Builder<String, Object>()
-						.put("group", p.getProperty("groupId"))
-						.put("artifact", p.getProperty("artifactId"))
+				moduleList.add(new ImmutableMap.Builder<String, Object>()
+						.put("module", p.getProperty("groupId") + "/" + p.getProperty("artifactId"))
 						.put("version", p.getProperty("version"))
 						.build());
 			}
 
 		}
 
-		if (artifactList.size() > 0) {
-			builder.put("artifacts", artifactList);
+		if (moduleList.size() > 0) {
+			builder.put("modules", moduleList);
 		}
 
 		final Map<String, Object> health = builder.build();
