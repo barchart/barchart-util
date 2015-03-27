@@ -21,27 +21,32 @@ public class GuiceMain {
 
 	private static final long WIRING_TEST_TIMEOUT = 60000;
 
-	public static void main(final String[] args) throws Exception {
+	public static void main(final String[] args) {
+		try {
+			logger.info("Inspecting manifest for GuiceApp class");
 
-		logger.info("Inspecting manifest for GuiceApp class");
+			final URL resource = Resources.getResource("META-INF/MANIFEST.MF");
+			final Manifest manifest = new Manifest(resource.openStream());
+			final Attributes mainAttributes = manifest.getMainAttributes();
+			final String guiceAppMainClass = mainAttributes.getValue(GUICE_APP_MAIN_CLASS);
 
-		final URL resource = Resources.getResource("META-INF/MANIFEST.MF");
-		final Manifest manifest = new Manifest(resource.openStream());
-		final Attributes mainAttributes = manifest.getMainAttributes();
-		final String guiceAppMainClass = mainAttributes.getValue(GUICE_APP_MAIN_CLASS);
+			logger.info(GUICE_APP_MAIN_CLASS + ": " + guiceAppMainClass);
 
-		logger.info(GUICE_APP_MAIN_CLASS + ": " + guiceAppMainClass);
+			final Class<?> mainClass = loadMainClass(guiceAppMainClass);
 
-		final Class<?> mainClass = loadMainClass(guiceAppMainClass);
+			final ArgParser parser = new ArgParser().parse(args);
 
-		final ArgParser parser = new ArgParser().parse(args);
-
-		if (parser.has("test")) {
-			logger.info("Starting wiring test.");
-			runTest(mainClass, args);
-		} else {
-			logger.info("Starting application.");
-			runMain(mainClass, args);
+			if (parser.has("test")) {
+				logger.info("Starting wiring test.");
+				runTest(mainClass, args);
+			} else {
+				logger.info("Starting application.");
+				runMain(mainClass, args);
+			}
+		} catch (Exception e) {
+			logger.error("Uncaught exception from GuiceApp", e);
+		} finally {
+			logger.info("GuiceApp terminated.");
 		}
 
 	}
@@ -50,8 +55,7 @@ public class GuiceMain {
 		try {
 			return GuiceMain.class.getClassLoader().loadClass(guiceAppMainClass);
 		} catch (final Exception e) {
-			logger.error("Could not load main class: " + guiceAppMainClass + ". Make sure " + GUICE_APP_MAIN_CLASS
-					+ "   attribute is set correctly in the manifest.");
+			logger.error("Could not load main class: " + guiceAppMainClass + ". Make sure " + GUICE_APP_MAIN_CLASS + "   attribute is set correctly in the manifest.");
 			throw e;
 		}
 	}
