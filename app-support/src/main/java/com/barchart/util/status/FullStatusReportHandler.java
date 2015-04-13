@@ -139,7 +139,10 @@ public class FullStatusReportHandler extends RequestHandlerBase {
 					for (final Statistics st : cs.stats()) {
 						statList.add(new ImmutableMap.Builder<String, Object>()
 								.put("name", st.name())
-								.put("value", st.value())
+								.put("count", st.count())
+								.put("min", st.min())
+								.put("max", st.max())
+								.put("mean", st.mean())
 								.build());
 					}
 

@@ -11,8 +11,23 @@ public interface Statistics {
 	String name();
 
 	/**
-	 * Stats value.
+	 * Stats count
 	 */
-	String value();
+	String count();
+
+	/**
+	 * Stats min
+	 */
+	String min();
+
+	/**
+	 * Stats max
+	 */
+	String max();
+
+	/**
+	 * Stats mean
+	 */
+	String mean();
 
 }
