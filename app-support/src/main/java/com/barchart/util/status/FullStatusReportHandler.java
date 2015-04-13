@@ -22,6 +22,7 @@ import com.barchart.util.common.status.ComponentStatus;
 import com.barchart.util.common.status.NodeStatus;
 import com.barchart.util.common.status.ScalingMonitor;
 import com.barchart.util.common.status.ScalingMonitor.Usage;
+import com.barchart.util.common.status.Statistics;
 import com.barchart.util.common.status.StatusType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -128,6 +129,21 @@ public class FullStatusReportHandler extends RequestHandlerBase {
 					}
 
 					componentBuilder.put("nodes", nodeList);
+
+				}
+
+				if (cs.stats() != null && cs.stats().size() > 0) {
+
+					final List<Map<String, Object>> statList = new ArrayList<Map<String, Object>>();
+
+					for (final Statistics st : cs.stats()) {
+						statList.add(new ImmutableMap.Builder<String, Object>()
+								.put("name", st.name())
+								.put("value", st.value())
+								.build());
+					}
+
+					componentBuilder.put("statistics", statList);
 
 				}
 

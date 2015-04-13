@@ -41,4 +41,9 @@ public abstract class BaseComponentStatus extends BaseStatus implements Componen
 		return Collections.emptySet();
 	}
 
+	@Override
+	public Set<Statistics> stats() {
+		return Collections.emptySet();
+	}
+
 }
