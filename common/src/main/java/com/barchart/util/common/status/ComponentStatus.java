@@ -68,4 +68,8 @@ public interface ComponentStatus {
 	 */
 	Set<NodeStatus> nodes();
 
+	/**
+	 * statistics of the compoenent
+	 */
+	Set<Statistics> stats();
 }
