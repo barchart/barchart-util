@@ -30,4 +30,8 @@ public interface Statistics {
 	 */
 	String mean();
 
+	/**
+	 * lite version only contains count and name
+	 */
+	boolean lite();
 }

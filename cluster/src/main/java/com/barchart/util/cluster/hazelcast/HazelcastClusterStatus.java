@@ -26,7 +26,7 @@ public class HazelcastClusterStatus extends BaseComponentStatus {
 	 */
 
 	private final Collection<MigrationEvent> migrations = new HashSet<MigrationEvent>();
-	private Set<Member> failures = new HashSet<Member>();
+	private final Set<Member> failures = new HashSet<Member>();
 
 	public HazelcastClusterStatus() {
 		super("hazelcast", Optionality.REQUIRED, Locality.LOCAL);

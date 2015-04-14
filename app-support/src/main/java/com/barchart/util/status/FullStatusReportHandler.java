@@ -134,19 +134,32 @@ public class FullStatusReportHandler extends RequestHandlerBase {
 
 				if (cs.stats() != null && cs.stats().size() > 0) {
 
-					final List<Map<String, Object>> statList = new ArrayList<Map<String, Object>>();
+					final List<Map<String, Object>> groupList = new ArrayList<Map<String, Object>>();
 
-					for (final Statistics st : cs.stats()) {
-						statList.add(new ImmutableMap.Builder<String, Object>()
-								.put("name", st.name())
-								.put("count", st.count())
-								.put("min", st.min())
-								.put("max", st.max())
-								.put("mean", st.mean())
-								.build());
+					for (String group : cs.stats().keySet()) {
+
+						ImmutableMap.Builder<String, Object> grpbld = new ImmutableMap.Builder<String, Object>();
+
+						final List<Map<String, Object>> statList = new ArrayList<Map<String, Object>>();
+
+						for (final Statistics st : cs.stats().get(group)) {
+							ImmutableMap.Builder<String, Object> bld = new ImmutableMap.Builder<String, Object>()
+									.put("name", st.name())
+									.put("count", st.count());
+							if (st.lite() == false) {
+								bld.put("min", st.min())
+										.put("max", st.max())
+										.put("mean", st.mean());
+							}
+							statList.add(bld.build());
+						}
+
+						grpbld.put(group, statList);
+
+						groupList.add(grpbld.build());
 					}
 
-					componentBuilder.put("statistics", statList);
+					componentBuilder.put("statistics", groupList);
 
 				}
 
