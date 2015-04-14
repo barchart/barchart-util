@@ -1,6 +1,7 @@
 package com.barchart.util.common.status;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 
 public abstract class BaseComponentStatus extends BaseStatus implements ComponentStatus {
@@ -42,8 +43,8 @@ public abstract class BaseComponentStatus extends BaseStatus implements Componen
 	}
 
 	@Override
-	public Set<Statistics> stats() {
-		return Collections.emptySet();
+	public Map<String, Set<Statistics>> stats() {
+		return Collections.emptyMap();
 	}
 
 }

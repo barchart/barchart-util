@@ -1,5 +1,6 @@
 package com.barchart.util.common.status;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -71,5 +72,5 @@ public interface ComponentStatus {
 	/**
 	 * statistics of the compoenent
 	 */
-	Set<Statistics> stats();
+	Map<String, Set<Statistics>> stats();
 }
