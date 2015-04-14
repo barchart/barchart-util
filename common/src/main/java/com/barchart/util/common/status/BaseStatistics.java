@@ -7,6 +7,7 @@ public class BaseStatistics implements Statistics {
 	private final String min;
 	private final String max;
 	private final String mean;
+	private boolean lite = true;
 
 	public BaseStatistics(String name_, String count_, String min_, String max_, String mean_) {
 		name = name_;
@@ -19,6 +20,7 @@ public class BaseStatistics implements Statistics {
 	public BaseStatistics(String name_, String count_) {
 		name = name_;
 		count = count_;
+		lite = false;
 		min = "0.0";
 		max = "0.0";
 		mean = "0.0";
@@ -47,6 +49,11 @@ public class BaseStatistics implements Statistics {
 	@Override
 	public String mean() {
 		return mean;
+	}
+
+	@Override
+	public boolean lite() {
+		return lite;
 	}
 
 }

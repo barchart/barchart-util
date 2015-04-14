@@ -137,13 +137,15 @@ public class FullStatusReportHandler extends RequestHandlerBase {
 					final List<Map<String, Object>> statList = new ArrayList<Map<String, Object>>();
 
 					for (final Statistics st : cs.stats()) {
-						statList.add(new ImmutableMap.Builder<String, Object>()
+						ImmutableMap.Builder<String, Object> bld = new ImmutableMap.Builder<String, Object>()
 								.put("name", st.name())
-								.put("count", st.count())
-								.put("min", st.min())
-								.put("max", st.max())
-								.put("mean", st.mean())
-								.build());
+								.put("count", st.count());
+						if (st.lite() == false) {
+							bld.put("min", st.min())
+							.put("max", st.max())
+									.put("mean", st.mean());
+						}
+						statList.add(bld.build());
 					}
 
 					componentBuilder.put("statistics", statList);
