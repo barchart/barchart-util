@@ -527,8 +527,12 @@ interface InheritancePath1 extends MultipleInheritanceInterface {}
 
 interface InheritancePath2 extends MultipleInheritanceInterface {}
 
+interface InheritancePath3 extends MultipleInheritanceInterface {}
+
+abstract class InheritancePathParent implements InheritancePath3 {}
+
 @Component("test.multiple_inheritance_component")
-final class MultipleInheritanceComponent implements InheritancePath1, InheritancePath2 {
+final class MultipleInheritanceComponent extends InheritancePathParent implements InheritancePath1, InheritancePath2 {
 
 	@Inject
 	@Named("#number")

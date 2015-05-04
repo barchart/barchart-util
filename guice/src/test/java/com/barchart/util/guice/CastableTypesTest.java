@@ -3,8 +3,7 @@ package com.barchart.util.guice;
 import static org.junit.Assert.assertTrue;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
 
 import org.junit.After;
 import org.junit.Test;
@@ -14,7 +13,7 @@ import com.google.inject.util.Types;
 
 public class CastableTypesTest {
 
-	private Set<TypeLiteral<?>> set;
+	private Collection<TypeLiteral<?>> set;
 
 	@Test
 	public void testNull() {
@@ -56,8 +55,19 @@ public class CastableTypesTest {
 		check(Object.class);
 	}
 
+	@Test
+	public void testMultipleAncestryPaths() {
+		init(TestMultiplePaths.class);
+		check(TestMultiplePaths.class);
+		check(TestParent.class);
+		check(ChildInterface.class);
+		check(ParentInterface.class);
+		check(Object.class);
+		System.out.println(set);
+	}
+
 	private void init(final Class<?> clazz) {
-		set = new HashSet<TypeLiteral<?>>(CastableTypes.of(clazz));
+		set = CastableTypes.of(clazz);
 	}
 
 	@After
@@ -80,5 +90,7 @@ public class CastableTypesTest {
 	public static interface ChildInterface extends ParentInterface {}
 
 	public static class TestChild implements ChildInterface {}
+
+	public static class TestMultiplePaths extends TestParent implements ChildInterface {}
 
 }

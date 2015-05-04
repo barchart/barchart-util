@@ -1,11 +1,9 @@
 package com.barchart.util.guice;
 
 import java.util.AbstractCollection;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Iterables;
@@ -42,14 +40,14 @@ public final class CastableTypes extends AbstractCollection<TypeLiteral<?>> {
 	}
 
 	public static CastableTypes of(final Class<?> baseclass) {
-		final List<TypeLiteral<?>> list = new ArrayList<TypeLiteral<?>>();
+		final Set<TypeLiteral<?>> set = new HashSet<TypeLiteral<?>>();
 		if (baseclass != null) {
 			for (final TypeLiteral<?> type : getInclusiveSuperclasses(TypeLiteral.get(baseclass))) {
-				list.add(type);
-				list.addAll(getInterfaces(type));
+				set.add(type);
+				set.addAll(getInterfaces(type));
 			}
 		}
-		return new CastableTypes(list);
+		return new CastableTypes(set);
 	}
 
 	private static Collection<TypeLiteral<?>> getInterfaces(final TypeLiteral<?> type) {
@@ -65,14 +63,14 @@ public final class CastableTypes extends AbstractCollection<TypeLiteral<?>> {
 
 	// Return a collection of this class (if not null), and all superclasses
 	private static Collection<TypeLiteral<?>> getInclusiveSuperclasses(TypeLiteral<?> type) {
-		final List<TypeLiteral<?>> list = new ArrayList<TypeLiteral<?>>();
+		final Set<TypeLiteral<?>> set = new HashSet<TypeLiteral<?>>();
 		while (type != null) {
-			list.add(type);
+			set.add(type);
 			final Class<?> rawType = type.getRawType();
 			final Class<?> rawSuperclass = rawType.getSuperclass();
 			type = rawSuperclass == null ? null : type.getSupertype(rawType.getSuperclass());
 		}
-		return list;
+		return set;
 	}
 
 }
