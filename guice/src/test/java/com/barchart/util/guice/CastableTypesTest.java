@@ -63,7 +63,6 @@ public class CastableTypesTest {
 		check(ChildInterface.class);
 		check(ParentInterface.class);
 		check(Object.class);
-		System.out.println(set);
 	}
 
 	private void init(final Class<?> clazz) {
