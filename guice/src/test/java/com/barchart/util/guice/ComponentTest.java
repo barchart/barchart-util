@@ -1,7 +1,6 @@
 package com.barchart.util.guice;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
 import java.util.Set;
 
@@ -144,7 +143,7 @@ public class ComponentTest {
 
 		@Test
 		public void test() {
-			TestCase testCase = get(TestCase.class);
+			final TestCase testCase = get(TestCase.class);
 			Assert.assertSame(testCase.basicComponentField1, testCase.basicComponentField2);
 		}
 
@@ -169,7 +168,7 @@ public class ComponentTest {
 
 		@Test
 		public void test() {
-			TestCase testCase = get(TestCase.class);
+			final TestCase testCase = get(TestCase.class);
 			assertEquals("compound1", testCase.compoundComponent.getName());
 			assertEquals("basic1", testCase.compoundComponent.basicComponent.getName());
 		}
@@ -192,7 +191,7 @@ public class ComponentTest {
 
 		@Test
 		public void test() {
-			TestCase testCase = get(TestCase.class);
+			final TestCase testCase = get(TestCase.class);
 			assertEquals("external", testCase.external.name);
 		}
 
@@ -259,7 +258,7 @@ public class ComponentTest {
 
 		@Test
 		public void testName() {
-			TestCase testCase = get(TestCase.class);
+			final TestCase testCase = get(TestCase.class);
 			assertEquals(7, testCase.set.size());
 		}
 
@@ -278,15 +277,15 @@ public class ComponentTest {
 
 		@Test
 		public void test() {
-			TestCase testCase = get(TestCase.class);
+			final TestCase testCase = get(TestCase.class);
 			assertEquals(3, testCase.list.size());
 			assertSame(getFromSet(testCase.list, "basic1"), testCase.comp1);
 			assertSame(getFromSet(testCase.list, "basic2"), testCase.comp2);
 			assertSame(getFromSet(testCase.list, "basic3"), testCase.comp3);
 		}
 
-		private BasicComponent getFromSet(Set<BasicComponent> list, String name) {
-			for (BasicComponent component : list) {
+		private BasicComponent getFromSet(final Set<BasicComponent> list, final String name) {
+			for (final BasicComponent component : list) {
 				if (component.getName().equals(name)) {
 					return component;
 				}
@@ -324,16 +323,16 @@ public class ComponentTest {
 
 		@Test
 		public void test() {
-			TestCase testCase = get(TestCase.class);
+			final TestCase testCase = get(TestCase.class);
 			assertEquals(3, testCase.set.size());
 			assertSame(getFromSet(testCase.set, "basic1"), testCase.comp1);
 			assertSame(getFromSet(testCase.set, "basic2"), testCase.comp2);
 			assertSame(getFromSet(testCase.set, "basic3"), testCase.comp3);
 		}
 
-		private BasicComponent getFromSet(Set<BasicComponenInterface> list, String name) {
-			for (BasicComponenInterface component : list) {
-				BasicComponent basicComponent = (BasicComponent) component;
+		private BasicComponent getFromSet(final Set<BasicComponenInterface> list, final String name) {
+			for (final BasicComponenInterface component : list) {
+				final BasicComponent basicComponent = (BasicComponent) component;
 				if (basicComponent.getName().equals(name)) {
 					return basicComponent;
 				}
@@ -361,9 +360,9 @@ public class ComponentTest {
 
 		}
 	}
-	
+
 	public static final class DefaultBindingForSingleNoNameComponentAndInterface extends InjectorTest {
-		
+
 		private TestCase testCase;
 
 		@Before
@@ -377,27 +376,50 @@ public class ComponentTest {
 			assertEquals(555, testCase.noNameComponent.someNumber);
 			assertEquals(555, testCase.noNameInterface.getSomeNumber());
 		}
-		
+
 		public static final class TestCase {
-			
+
 			@Inject
 			public NoNameInterface noNameInterface;
-			
+
 			@Inject
 			private NoNameComponent noNameComponent;
 		}
 	}
-	
+
+	public static final class NoNameComponentWithMultipleInheritancePaths extends InjectorTest {
+
+		private TestCase testCase;
+
+		@Before
+		public void init() throws Exception {
+			setup(CONFIG_DIRECTORY);
+			this.testCase = get(TestCase.class);
+		}
+
+		@Test
+		public void test() {
+			assertEquals(555, testCase.byInterface.getSomeNumber());
+		}
+
+		public static final class TestCase {
+
+			@Inject
+			public MultipleInheritanceInterface byInterface;
+
+		}
+	}
+
 	public static final class GetConfiguredNoNameComponentFromInjector extends InjectorTest {
-		
+
 		@Before
 		public void init() throws Exception {
 			setup(CONFIG_DIRECTORY);
 		}
-		
+
 		@Test
 		public void test() {
-			NoNameComponent noNameComponent = get(NoNameComponent.class);
+			final NoNameComponent noNameComponent = get(NoNameComponent.class);
 			assertEquals(555, noNameComponent.someNumber);
 		}
 	}
@@ -486,7 +508,7 @@ interface NoNameInterface {
 
 @Component("test.no_name_component")
 final class NoNameComponent implements NoNameInterface{
-	
+
 	@Inject
 	@Named("#number")
 	public int someNumber;
@@ -495,4 +517,26 @@ final class NoNameComponent implements NoNameInterface{
 	public int getSomeNumber() {
 		return someNumber;
 	}
+}
+
+interface MultipleInheritanceInterface {
+	public int getSomeNumber();
+}
+
+interface InheritancePath1 extends MultipleInheritanceInterface {}
+
+interface InheritancePath2 extends MultipleInheritanceInterface {}
+
+@Component("test.multiple_inheritance_component")
+final class MultipleInheritanceComponent implements InheritancePath1, InheritancePath2 {
+
+	@Inject
+	@Named("#number")
+	public int someNumber;
+
+	@Override
+	public int getSomeNumber() {
+		return someNumber;
+	}
+
 }
