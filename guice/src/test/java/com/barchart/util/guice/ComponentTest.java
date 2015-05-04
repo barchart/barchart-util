@@ -259,7 +259,7 @@ public class ComponentTest {
 		@Test
 		public void testName() {
 			final TestCase testCase = get(TestCase.class);
-			assertEquals(7, testCase.set.size());
+			assertEquals(8, testCase.set.size());
 		}
 
 		public static final class TestCase {

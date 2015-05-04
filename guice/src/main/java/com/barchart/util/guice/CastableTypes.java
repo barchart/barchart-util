@@ -3,8 +3,10 @@ package com.barchart.util.guice;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.collect.Iterables;
 import com.google.inject.TypeLiteral;
@@ -51,14 +53,15 @@ public final class CastableTypes extends AbstractCollection<TypeLiteral<?>> {
 	}
 
 	private static Collection<TypeLiteral<?>> getInterfaces(final TypeLiteral<?> type) {
-		final List<TypeLiteral<?>> list = new ArrayList<TypeLiteral<?>>();
+		final Set<TypeLiteral<?>> set = new HashSet<TypeLiteral<?>>();
 		final Class<?> rawType = type.getRawType();
 		for (final Class<?> iface : rawType.getInterfaces()) {
 			final TypeLiteral<?> itype = type.getSupertype(iface);
-			list.add(itype);
-			list.addAll(getInterfaces(itype));
+			set.add(itype);
+			set.addAll(getInterfaces(itype));
 		}
-		return list;
+		// return new ArrayList<TypeLiteral<?>>(new LinkedHashSet<TypeLiteral<?>>(set));
+		return set;
 	}
 
 	// Return a collection of this class (if not null), and all superclasses
