@@ -60,7 +60,6 @@ public final class CastableTypes extends AbstractCollection<TypeLiteral<?>> {
 			set.add(itype);
 			set.addAll(getInterfaces(itype));
 		}
-		// return new ArrayList<TypeLiteral<?>>(new LinkedHashSet<TypeLiteral<?>>(set));
 		return set;
 	}
 
