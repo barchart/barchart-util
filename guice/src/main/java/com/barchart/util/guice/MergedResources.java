@@ -13,8 +13,9 @@ public class MergedResources implements ConfigResources {
 	private StringResources merged = null;
 
 	/**
-	 * Create a new merged config provider that returns all resources for the provided set. Earlier resources take
-	 * precedence over later ones in the argument list.
+	 * Create a new merged config provider that returns all resources for the
+	 * provided set. Earlier resources take precedence over later ones in the
+	 * argument list.
 	 */
 	public MergedResources(final ConfigResources... resources_) {
 		resources = resources_;
@@ -50,17 +51,23 @@ public class MergedResources implements ConfigResources {
 
 	@Override
 	public List<Config> readAllConfigs(final String fileExtension) throws Exception {
-		return merged().readAllConfigs(fileExtension);
+		StringResources stringResources = merged();
+		return stringResources.readAllConfigs(fileExtension);
 	}
 
 	// Lazy load resources in order to throw exceptions at the correct place
-	private StringResources merged() throws Exception {
+	StringResources merged() throws Exception {
 
 		if (merged == null) {
 
 			final Map<String, String> map = new HashMap<String, String>();
 
-			// Reverse order so higher priority resources overwrite values
+			/*
+			 * Reverse order so higher priority resources overwrite values.
+			 * 
+			 * The overriding is based on the filename, so substitution of
+			 * content is at the file level.
+			 */
 			for (int i = resources.length - 1; i >= 0; i--) {
 				for (final String r : resources[i].listResources()) {
 					map.put(r, resources[i].readResource(r));

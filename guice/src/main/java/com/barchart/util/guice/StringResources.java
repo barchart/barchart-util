@@ -9,6 +9,11 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigParseOptions;
 
+/**
+ * Holds key(filename) to file contents (as a String). Creates HOCON objects
+ * from the content.
+ *
+ */
 public class StringResources implements ConfigResources {
 
 	private final Map<String, String> resources;
@@ -19,7 +24,7 @@ public class StringResources implements ConfigResources {
 
 	public StringResources(final String source) {
 		resources = new HashMap<String, String>();
-		resources.put("application.conf", source);
+		resources.put(Filetypes.DEFAULT_CONFIG_FILE, source);
 	}
 
 	public StringResources(final Map<String, String> source) {
@@ -65,15 +70,37 @@ public class StringResources implements ConfigResources {
 	public List<Config> readAllConfigs(final String fileExtension) throws Exception {
 
 		final List<Config> list = new ArrayList<Config>();
+		Config appDefaultConfig = null;
 
-		for (final String resource : listResources()) {
+		List<String> resources = listResources();
+		for (final String resource : resources) {
 			if (resource.endsWith(fileExtension)) {
-				list.add(readConfig(resource));
+				Config c = readConfig(resource);
+				if (resource.equals(Filetypes.DEFAULT_APPLICATION_CONFIG_FILE)) {
+					/*
+					 * This is the reference/default application configuration
+					 * which is normally in the jar. We save here to allow
+					 * overriding on the main configuration file
+					 * (application.conf)
+					 */
+					appDefaultConfig = c;
+				} else if (resource.equals(Filetypes.DEFAULT_CONFIG_FILE) && appDefaultConfig != null) {
+					/*
+					 * The HOCON library uses immutable objects so, must use the
+					 * returned object.
+					 * 
+					 * NOTE: The origin name is now changed to include the
+					 * merged file name.
+					 */
+					Config configWithFallBack = c.withFallback(appDefaultConfig);
+					list.add(configWithFallBack);
+				} else {
+					list.add(c);
+				}
 			}
 		}
 
 		return list;
 
 	}
-
 }
