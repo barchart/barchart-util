@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
+import javax.management.remote.JMXConnector;
+import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXConnectorServer;
 import javax.management.remote.JMXConnectorServerFactory;
 import javax.management.remote.JMXServiceURL;
@@ -306,5 +308,20 @@ public class HelpJMX {
 		}
 		logger.info("Started JMX client server at: " + url);
 		return cs;
+	}
+
+	/*
+	 * Get a client JMX connector using the "jmxmp" protocol.
+	 */
+	public static JMXConnector getJmxConnection(String host, int port) {
+		JMXConnector jmxc = null;
+		JMXServiceURL url = null;
+		try {
+			url = new JMXServiceURL(null, host, port);
+			jmxc = JMXConnectorFactory.connect(url, null);
+		} catch (IOException e) {
+			logger.error("Could not connect to JMX at: " + url + " : " + e.getMessage());
+		}
+		return jmxc;
 	}
 }
