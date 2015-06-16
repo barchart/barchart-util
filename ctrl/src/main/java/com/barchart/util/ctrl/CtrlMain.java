@@ -29,6 +29,9 @@ public final class CtrlMain {
 
 	private static final Logger logger = LoggerFactory.getLogger(CtrlMain.class);
 
+	@Option(name = "-host", usage = "Server host, default to localhost", required = false)
+	private String host = "localhost";
+
 	@Option(name = "-port", usage = "Server's JMX port, defaults to " + HelpJMX.JMX_PORT_DEFAULT, required = false)
 	private int port = HelpJMX.JMX_PORT_DEFAULT;
 
@@ -41,11 +44,11 @@ public final class CtrlMain {
 	@Option(name = "-d2", usage = "Debug Level 2", required = false)
 	private boolean debug2;
 
+	// Server's MBean server
+	private MBeanServerConnection mbsc;
+
 	// Client connection
 	private JMXConnector jmxc;
-
-	// Remote MBean server
-	private MBeanServerConnection mbsc;
 
 	public static void main(String[] args) throws Exception {
 
@@ -63,7 +66,7 @@ public final class CtrlMain {
 	private void start() throws IOException {
 		logger.info("Ctrl Starting: ");
 
-		jmxc = HelpJMX.getJmxConnection("dave-desktop", port);
+		jmxc = HelpJMX.getJmxConnection(host, port);
 		if (jmxc == null) {
 			return;
 		}
@@ -85,24 +88,6 @@ public final class CtrlMain {
 
 	}
 
-	private void dumpServerJmxConfig() throws IOException {
-
-		String domains[] = mbsc.getDomains();
-		Arrays.sort(domains);
-		for (String domain : domains) {
-			logger.debug("\tDomain = " + domain);
-		}
-
-		logger.debug("\tMBeanServer default domain = " + mbsc.getDefaultDomain());
-
-		logger.debug("\nQuery MBeanServer MBeans:");
-		Set<ObjectName> names = new TreeSet<ObjectName>(mbsc.queryNames(null, null));
-		for (ObjectName name : names) {
-			logger.debug("\tObjectName = " + name);
-		}
-
-	}
-
 	private void processCommand() {
 
 		try {
@@ -110,7 +95,8 @@ public final class CtrlMain {
 			JMXConfiguratorMBean mbeanProxy = JMX.newMBeanProxy(mbsc, mbeanName,
 					ch.qos.logback.classic.jmx.JMXConfiguratorMBean.class, true);
 
-			// String loggerLevel = mbeanProxy.getLoggerLevel("ROOT");
+			String rootLevel = mbeanProxy.getLoggerLevel("ROOT");
+			logger.info("Current root log level: " + rootLevel);
 
 			if (debug0) {
 				// Turn off
@@ -128,5 +114,23 @@ public final class CtrlMain {
 		} catch (Exception e) {
 			logger.error("Could not process command: " + e.getMessage());
 		}
+	}
+
+	private void dumpServerJmxConfig() throws IOException {
+
+		String domains[] = mbsc.getDomains();
+		Arrays.sort(domains);
+		for (String domain : domains) {
+			logger.debug("\tDomain = " + domain);
+		}
+
+		logger.debug("\tMBeanServer default domain = " + mbsc.getDefaultDomain());
+
+		logger.debug("\nQuery MBeanServer MBeans:");
+		Set<ObjectName> names = new TreeSet<ObjectName>(mbsc.queryNames(null, null));
+		for (ObjectName name : names) {
+			logger.debug("\tObjectName = " + name);
+		}
+
 	}
 }
