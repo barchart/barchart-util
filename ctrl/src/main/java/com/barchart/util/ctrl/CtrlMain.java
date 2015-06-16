@@ -64,7 +64,6 @@ public final class CtrlMain {
 	}
 
 	private void start() throws IOException {
-		logger.info("Ctrl Starting: ");
 
 		jmxc = HelpJMX.getJmxConnection(host, port);
 		if (jmxc == null) {
@@ -100,14 +99,17 @@ public final class CtrlMain {
 
 			if (debug0) {
 				// Turn off
+				logger.info("Activating info level for ROOT");
 				mbeanProxy.setLoggerLevel("ROOT", "info");
 				mbeanProxy.setLoggerLevel("log.message", "info");
 			} else if (debug1) {
 				// Root logger to debug
+				logger.info("Activating debug level for ROOT");
 				mbeanProxy.setLoggerLevel("ROOT", "debug");
 				mbeanProxy.setLoggerLevel("log.message", "info");
 			} else if (debug2) {
 				// Activate message logger
+				logger.info("Activating debug level for ROOT and message logging.");
 				mbeanProxy.setLoggerLevel("ROOT", "debug");
 				mbeanProxy.setLoggerLevel("log.message", "debug");
 			}
