@@ -4,11 +4,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.typesafe.config.Config;
+import com.typesafe.config.ConfigOrigin;
 
 /*
  * TODO: Refactor this to be more sensible
  */
 public final class Filetypes {
+
+	private static final String ORIGIN_NAME_MERGE_SUBSET = "merge of";
+
+	public static final String DEFAULT_CONFIG_FILE = "application.conf";
+
+	/*
+	 * Default file to be built into the jar.
+	 */
+	public static final String DEFAULT_APPLICATION_CONFIG_FILE = "application-defaults.conf";
+
+	public static final String VALUE_CONVERTERS = "value_converters";
+
+	public static final String MODULES = "module";
+
+	public static final String MODULE_TYPE = "type";
 
 	private static final Logger logger = LoggerFactory.getLogger(Filetypes.class);
 
@@ -18,14 +34,6 @@ public final class Filetypes {
 
 	static final String CONFIG_LIST = "component";
 
-	public static final String DEFAULT_CONFIG_FILE = "application.conf";
-
-	public static final String VALUE_CONVERTERS = "value_converters";
-
-	public static final String MODULES = "module";
-
-	public static final String MODULE_TYPE = "type";
-
 	public static boolean isConfig(final Config config) {
 		return isConfig(getOriginName(config));
 	}
@@ -34,9 +42,9 @@ public final class Filetypes {
 		return name.endsWith(CONFIG_FILE_EXTENSION);
 	}
 
-
 	public static boolean isDefaultConfigFile(final Config config) {
-		return getOriginName(config).endsWith("/" + DEFAULT_CONFIG_FILE);
+		String originName = getOriginName(config);
+		return originName.contains("/" + DEFAULT_CONFIG_FILE);
 	}
 
 	public static boolean isComponentFile(final Config config) {
@@ -59,18 +67,26 @@ public final class Filetypes {
 	public static String getSimpleName(final Config config) {
 		logger.debug("GetSimpleName: " + config + ", origin: " + config.origin() + ", description: "
 				+ config.origin().description());
-		if (config.origin() == null) {
+		ConfigOrigin origin = config.origin();
+		if (origin == null) {
 			return "";
 		} else {
-			return getSimpleName(config.origin().description());
+			return getSimpleName(origin.description());
 		}
 
 	}
 
 	public static String getSimpleName(final String originDescription) {
 		final String originName = stripLinenumbersFromOriginDescription(originDescription);
-		return originName.substring(originName.lastIndexOf("/") + 1, originName.lastIndexOf("."));
+		if (originName.contains(ORIGIN_NAME_MERGE_SUBSET)) {
+			/*
+			 * HOCON objects what are merged (withFallback(..)) have a different
+			 * origin name. Account for that here.
+			 */
+			return originName.substring(originName.indexOf("/") + 1, originName.indexOf("."));
+		} else {
+			return originName.substring(originName.lastIndexOf("/") + 1, originName.lastIndexOf("."));
+		}
 	}
-
 
 }

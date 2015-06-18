@@ -179,13 +179,18 @@ final class ComponentModule extends AbstractModule {
 
 		// Temporary hash map for merging duplicate type/name combos
 		final Map<Key<?>, Config> merged = new HashMap<Key<?>, Config>();
-
 		for (final Config configFile : resources.readAllConfigs(Filetypes.CONFIG_FILE_EXTENSION)) {
-			for (final Config componentConfig : getComponentList(configFile)) {
-				final Key<?> key = getMergeKey(componentConfig);
-				if (key != null) {
-					merged.put(key, getMergedConfig(merged.get(key), componentConfig));
+			if (!configFile.origin().description().contains("/common/")) {
+				// Exclude resources under /common/ from being loaded as components automatically.  This will
+				// allow custom typesafe including
+				for (final Config componentConfig : getComponentList(configFile)) {
+					final Key<?> key = getMergeKey(componentConfig);
+					if (key != null) {
+						merged.put(key, getMergedConfig(merged.get(key), componentConfig));
+					}
 				}
+			} else {
+				logger.info("Excluding common resource from automatic component loading: " + configFile.origin().description());
 			}
 		}
 
