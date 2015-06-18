@@ -79,4 +79,19 @@ public class StrictConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V>
 		}
 	}
 	
+	/**
+	 * Added because ConcurrentHashMap in Java 8 now calls the get method of the underlying map,
+	 * which throws an exception if the key is not in the map.
+	 */
+	@Override
+	public boolean containsKey(final Object key) {
+		
+		try {
+			return super.containsKey(key);
+		} catch (final IllegalStateException e) {
+			return false;
+		}
+		
+	}
+	
 }
