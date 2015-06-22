@@ -47,8 +47,14 @@ public final class ClassPathResources implements ConfigResources {
 		final Map<String, URL> map = new HashMap<String, URL>();
 		final ClassPath classPath = ClassPath.from(ClassPathResources.class.getClassLoader());
 		for (final ResourceInfo info : classPath.getResources()) {
-			if (info.url().getFile().startsWith(pathDescription)) {
-				map.put(shorten(info.getResourceName()), info.url());
+			try {
+				if (info.url().getFile().startsWith(pathDescription)) {
+					map.put(shorten(info.getResourceName()), info.url());
+				}
+			} catch (NullPointerException e) {
+				// These NPEs started showing up when using Java 8 for "source_tips" and "version.rc"
+				// Should be safe to ignore
+				logger.debug(e.getMessage());
 			}
 		}
 		return map;
