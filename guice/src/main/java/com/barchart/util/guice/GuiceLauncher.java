@@ -40,12 +40,15 @@ public final class GuiceLauncher {
 		return builder.build();
 	}
 
-	public static <T extends Runnable> void run(final Class<T> clazz, final String... args) throws Exception {
-		configure(clazz, args).run();
-	}
-
-	public static <T extends RunnableArgs> void runWithArgs(final Class<T> clazz, final String... args) throws Exception {
-		configure(clazz, args).run(args);
+	public static <T> void run(final Class<T> clazz, final String... args) throws Exception {
+		T instance = configure(clazz, args);
+		if (instance instanceof RunnableArgs) {
+			((RunnableArgs) instance).run(args);
+		} else if (instance instanceof Runnable) {
+			((Runnable) instance).run();
+		} else {
+			throw new IllegalStateException("Could not run type " + clazz);
+		}
 	}
 
 	public static <T> T configure(final Class<T> clazz, final String... args) throws Exception {
