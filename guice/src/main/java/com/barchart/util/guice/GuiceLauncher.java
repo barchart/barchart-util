@@ -40,7 +40,11 @@ public final class GuiceLauncher {
 		return builder.build();
 	}
 
-	public static <T extends RunnableArgs> void run(final Class<T> clazz, final String... args) throws Exception {
+	public static <T extends Runnable> void run(final Class<T> clazz, final String... args) throws Exception {
+		configure(clazz, args).run();
+	}
+
+	public static <T extends RunnableArgs> void runWithArgs(final Class<T> clazz, final String... args) throws Exception {
 		configure(clazz, args).run(args);
 	}
 
