@@ -41,9 +41,6 @@ public final class CtrlMain {
 	@Option(name = "-d1", usage = "Debug Level 1", required = false)
 	private boolean debug1;
 
-	@Option(name = "-d2", usage = "Debug Level 2", required = false)
-	private boolean debug2;
-
 	// Server's MBean server
 	private MBeanServerConnection mbsc;
 
@@ -101,17 +98,10 @@ public final class CtrlMain {
 				// Turn off
 				logger.info("Activating info level for ROOT");
 				mbeanProxy.setLoggerLevel("ROOT", "info");
-				mbeanProxy.setLoggerLevel("log.message", "info");
 			} else if (debug1) {
 				// Root logger to debug
 				logger.info("Activating debug level for ROOT");
 				mbeanProxy.setLoggerLevel("ROOT", "debug");
-				mbeanProxy.setLoggerLevel("log.message", "info");
-			} else if (debug2) {
-				// Activate message logger
-				logger.info("Activating debug level for ROOT and message logging.");
-				mbeanProxy.setLoggerLevel("ROOT", "debug");
-				mbeanProxy.setLoggerLevel("log.message", "debug");
 			}
 		} catch (Exception e) {
 			logger.error("Could not process command: " + e.getMessage());
