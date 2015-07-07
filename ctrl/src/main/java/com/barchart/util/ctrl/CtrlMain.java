@@ -104,7 +104,7 @@ public final class CtrlMain {
 				mbeanProxy.setLoggerLevel("ROOT", "debug");
 			}
 		} catch (Exception e) {
-			logger.error("Could not process command: " + e.getMessage());
+			logger.error("Could not process command: ", e);
 		}
 	}
 
