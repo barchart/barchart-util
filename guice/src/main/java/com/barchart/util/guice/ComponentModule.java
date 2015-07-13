@@ -44,9 +44,7 @@ final class ComponentModule extends AbstractModule {
 
 	private enum MergePrecedence {
 
-		COMPONENT,
-		CONF,
-		APPLICATION;
+		COMPONENT, CONF, APPLICATION;
 
 		public static MergePrecedence of(final Config config) {
 
@@ -84,9 +82,10 @@ final class ComponentModule extends AbstractModule {
 	protected void configure() {
 		try {
 			final ImmutableMultimap<Class<?>, Config> componentClassToConfigMap = loadComponentConfigs();
-			final ImmutableMultimap<Class<?>, TypeLiteral<?>> componentClassToBindingType = determineBindingTypes(componentClassToConfigMap.keySet());
-			final ImmutableSet<TypeLiteral<?>> noNameEligibleBindingTypes = determineNoNameEligibleBindingTypes(componentClassToConfigMap,
-					componentClassToBindingType);
+			final ImmutableMultimap<Class<?>, TypeLiteral<?>> componentClassToBindingType = determineBindingTypes(componentClassToConfigMap
+					.keySet());
+			final ImmutableSet<TypeLiteral<?>> noNameEligibleBindingTypes = determineNoNameEligibleBindingTypes(
+					componentClassToConfigMap, componentClassToBindingType);
 			final HashMultiset<TypeLiteral<?>> bindingTypeCounter = HashMultiset.create();
 			for (final Class<?> componentClass : componentClassToConfigMap.keySet()) {
 				final ImmutableCollection<Config> configs = componentClassToConfigMap.get(componentClass);
@@ -101,9 +100,11 @@ final class ComponentModule extends AbstractModule {
 		}
 	}
 
-	private ImmutableSet<TypeLiteral<?>> determineNoNameEligibleBindingTypes(final ImmutableMultimap<Class<?>, Config> componentClassToConfigMap,
+	private ImmutableSet<TypeLiteral<?>> determineNoNameEligibleBindingTypes(
+			final ImmutableMultimap<Class<?>, Config> componentClassToConfigMap,
 			final ImmutableMultimap<Class<?>, TypeLiteral<?>> componentClassToBindingType) {
-		final HashMultiset<TypeLiteral<?>> bindingOccurences = countBindingOccurences(componentClassToConfigMap, componentClassToBindingType);
+		final HashMultiset<TypeLiteral<?>> bindingOccurences = countBindingOccurences(componentClassToConfigMap,
+				componentClassToBindingType);
 		final ImmutableSet.Builder<TypeLiteral<?>> builder = ImmutableSet.builder();
 		for (final TypeLiteral<?> bindingType : bindingOccurences) {
 			if (bindingOccurences.count(bindingType) == 1) {
@@ -113,7 +114,8 @@ final class ComponentModule extends AbstractModule {
 		return builder.build();
 	}
 
-	private HashMultiset<TypeLiteral<?>> countBindingOccurences(final ImmutableMultimap<Class<?>, Config> componentClassToConfigMap,
+	private HashMultiset<TypeLiteral<?>> countBindingOccurences(
+			final ImmutableMultimap<Class<?>, Config> componentClassToConfigMap,
 			final ImmutableMultimap<Class<?>, TypeLiteral<?>> componentClassToBindingType) {
 
 		final HashMultiset<TypeLiteral<?>> multiset = HashMultiset.create();
@@ -126,11 +128,13 @@ final class ComponentModule extends AbstractModule {
 		return multiset;
 	}
 
-	private void configureComponent(final Class<?> componentClass, final Collection<Config> configs, final Collection<TypeLiteral<?>> bindingTypes,
-			final ImmutableSet<TypeLiteral<?>> noNameEligibleBindingTypes, final HashMultiset<TypeLiteral<?>> bindingTypeCounter) {
+	private void configureComponent(final Class<?> componentClass, final Collection<Config> configs,
+			final Collection<TypeLiteral<?>> bindingTypes,
+			final ImmutableSet<TypeLiteral<?>> noNameEligibleBindingTypes,
+			final HashMultiset<TypeLiteral<?>> bindingTypeCounter) {
 		for (final Config config : configs) {
-			final ComponentConfigurationModule configurationModule = new ComponentConfigurationModule(componentClass, config, bindingTypes, bindingTypeCounter,
-					noNameEligibleBindingTypes);
+			final ComponentConfigurationModule configurationModule = new ComponentConfigurationModule(componentClass,
+					config, bindingTypes, bindingTypeCounter, noNameEligibleBindingTypes);
 
 			install(configurationModule);
 		}
@@ -153,7 +157,7 @@ final class ComponentModule extends AbstractModule {
 	}
 
 	/*
-	 *
+	 * 
 	 * If the copmonentClass is a provider, return a list of all types that can
 	 * be provided. Otherwise, return the empty list.
 	 */
@@ -181,7 +185,8 @@ final class ComponentModule extends AbstractModule {
 		final Map<Key<?>, Config> merged = new HashMap<Key<?>, Config>();
 		for (final Config configFile : resources.readAllConfigs(Filetypes.CONFIG_FILE_EXTENSION)) {
 			if (!configFile.origin().description().contains("/common/")) {
-				// Exclude resources under /common/ from being loaded as components automatically.  This will
+				// Exclude resources under /common/ from being loaded as
+				// components automatically. This will
 				// allow custom typesafe including
 				for (final Config componentConfig : getComponentList(configFile)) {
 					final Key<?> key = getMergeKey(componentConfig);
@@ -190,11 +195,13 @@ final class ComponentModule extends AbstractModule {
 					}
 				}
 			} else {
-				logger.info("Excluding common resource from automatic component loading: " + configFile.origin().description());
+				logger.info("Excluding common resource from automatic component loading: "
+						+ configFile.origin().description());
 			}
 		}
 
-		for (final Config componentConfig : resources.readAllConfigs(Filetypes.COMPONENT_FILE_EXTENSION)) {
+		List<Config> componentConfigs = resources.readAllConfigs(Filetypes.COMPONENT_FILE_EXTENSION);
+		for (final Config componentConfig : componentConfigs) {
 			final Key<?> key = getMergeKey(componentConfig);
 			if (key != null) {
 				merged.put(key, getMergedConfig(merged.get(key), componentConfig));
@@ -253,8 +260,7 @@ final class ComponentModule extends AbstractModule {
 		for (final Multiset.Entry<TypeLiteral<?>> entry : bindingTypeCounter.entrySet()) {
 			final TypeLiteral<?> bindingType = entry.getElement();
 			@SuppressWarnings("unchecked")
-			final
-			Multibinder<Object> setBinder = (Multibinder<Object>) Multibinder.newSetBinder(binder(), bindingType);
+			final Multibinder<Object> setBinder = (Multibinder<Object>) Multibinder.newSetBinder(binder(), bindingType);
 			for (int i = 0; i < entry.getCount(); i++) {
 				setBinder.addBinding().to(Key.get(bindingType, indexed(i)));
 			}
@@ -299,7 +305,8 @@ final class ComponentModule extends AbstractModule {
 			return null;
 		} else if (list.size() > 1) {
 			// TODO: Throw exception?
-			logger.warn("Multiple @Component classes found for component type: \"" + componentType + "\".  classes=" + list + ".  Using the first one.");
+			logger.warn("Multiple @Component classes found for component type: \"" + componentType + "\".  classes="
+					+ list + ".  Using the first one.");
 		}
 		return list.get(0);
 	}
@@ -335,8 +342,9 @@ final class ComponentModule extends AbstractModule {
 
 		private final String name;
 
-		public ComponentConfigurationModule(final Class<?> componentClass, final Config config, final Collection<TypeLiteral<?>> bindingTypes,
-				final Multiset<TypeLiteral<?>> bindingTypeCounter, final Set<TypeLiteral<?>> noNameElgibleBindingTypes) {
+		public ComponentConfigurationModule(final Class<?> componentClass, final Config config,
+				final Collection<TypeLiteral<?>> bindingTypes, final Multiset<TypeLiteral<?>> bindingTypeCounter,
+				final Set<TypeLiteral<?>> noNameElgibleBindingTypes) {
 			this.type = getType(config);
 			this.name = getName(config);
 			this.componentClass = componentClass;
@@ -373,8 +381,9 @@ final class ComponentModule extends AbstractModule {
 			}
 
 			{
-				String message = "Found component configuration with type=\"" + type + "\", name=\"" + name + "\", and class=\"" + componentClass.getName()
-						+ "\". Binding to: " + classNames(bindingTypes) + ".";
+				String message = "Found component configuration with type=\"" + type + "\", name=\"" + name
+						+ "\", and class=\"" + componentClass.getName() + "\". Binding to: " + classNames(bindingTypes)
+						+ ".";
 				if (!noNameBindings.isEmpty()) {
 					message += "  No-name bindings: " + classNames(noNameBindings);
 				}
@@ -445,7 +454,8 @@ final class ComponentModule extends AbstractModule {
 		@SuppressWarnings("unchecked")
 		private void exposeToComponentList(final TypeLiteral<?> bindingType) {
 			final int index = bindingTypeCounter.add(bindingType, 1);
-			final LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) bind(Key.get(bindingType, indexed(index)));
+			final LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) bind(Key.get(
+					bindingType, indexed(index)));
 			if (isProvider()) {
 				bindingBuilder.toProvider((Class<? extends javax.inject.Provider<Object>>) componentClass);
 			} else {

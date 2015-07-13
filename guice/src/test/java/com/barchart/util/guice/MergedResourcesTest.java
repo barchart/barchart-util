@@ -1,14 +1,17 @@
 package com.barchart.util.guice;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class MergedResourcesTest {
 
@@ -38,8 +41,10 @@ public class MergedResourcesTest {
 		assertNotNull(finalMergedResources);
 		List<String> l = finalMergedResources.listResources();
 		assertEquals("otherFile.conf", l.get(0));
-		assertEquals(Filetypes.DEFAULT_APPLICATION_CONFIG_FILE, l.get(1));
-		assertEquals(Filetypes.DEFAULT_CONFIG_FILE, l.get(2));
+		Set<String> s = new HashSet<String>();
+		s.addAll(l);
+		assertTrue(s.contains(Filetypes.DEFAULT_APPLICATION_CONFIG_FILE));
+		assertTrue(s.contains(Filetypes.DEFAULT_CONFIG_FILE));
 	}
 
 	private String getApplicationConfString() {
