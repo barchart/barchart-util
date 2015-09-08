@@ -39,8 +39,8 @@ public class ComponentActivator implements Module {
 							activator.setAccessible(true);
 							activator.invoke(injectee);
 						} catch (final Exception e) {
-							logger.error("Could not activate " + injectee.getClass(), e);
-							throw new RuntimeException(e);
+							logger.error("Could not activate " + injectee.getClass());
+							binder.addError(e);
 						}
 					}
 				});
