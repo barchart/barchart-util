@@ -81,7 +81,11 @@ public class TextGridLayout {
 		}
 
 		public Builder addColumn(String header, int width) {
-			columns.add(new ColumnDefinition(header, width));
+			return addColumn(header, width, "");
+		}
+		
+		public Builder addColumn(String header, int width, String formatString) {
+			columns.add(new ColumnDefinition(header, width, formatString));
 			return this;
 		}
 
@@ -94,11 +98,15 @@ public class TextGridLayout {
 	private static final class ColumnDefinition {
 
 		private final String header;
+		
 		private final int width;
+		
+		private final String formatString;
 
-		public ColumnDefinition(String header, int width) {
+		public ColumnDefinition(String header, int width, String formatString) {
 			this.header = header;
 			this.width = width;
+			this.formatString = formatString;
 		}
 
 		public String getHeader() {
@@ -107,6 +115,10 @@ public class TextGridLayout {
 
 		public int getWidth() {
 			return width;
+		}
+
+		public String getFormatString() {
+			return formatString;
 		}
 
 	}
@@ -123,17 +135,19 @@ public class TextGridLayout {
 		}
 
 		@Override
-		public void addRowData(Object... values) {
+		public TextGrid addRowData(Object... values) {
 			rows.add(values);
+			return this;
 		}
 
 		@Override
-		public void addRowData(Iterable<Object> values) {
+		public TextGrid addRowData(Iterable<Object> values) {
 			ArrayList<Object> list = new ArrayList<Object>();
 			for (Object o : values) {
 				list.add(o);
 			}
 			addRowData(list.toArray());
+			return this;
 		}
 
 		@Override
@@ -160,14 +174,27 @@ public class TextGridLayout {
 			String[] values = new String[textGridLayout.columns.size()];
 			for (int i = 0; i < row.length; i++) {
 				ColumnDefinition column = textGridLayout.getColumn(i);
-				String str = truncate(row[i].toString(), column.getWidth());
+				
+				String stringValue = valueToString(row[i], column.getFormatString());
+				
+				String str = truncate(stringValue, column.getWidth());
 				values[i] = str;
+				
+
 			}
 			for (int i = row.length; i < textGridLayout.getColumnCount(); i++) {
 				values[i] = "";
 			}
 
 			return values;
+		}
+
+		private String valueToString(Object object, String formatString) {
+			if (formatString.isEmpty()) {
+				return object.toString();				
+			} else {
+				return String.format(formatString, object);
+			}
 		}
 
 		private String truncate(String string, int width) {
