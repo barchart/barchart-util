@@ -9,6 +9,8 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.util.guice.valueconverters.HostAndPortValueConverter;
+import com.barchart.util.guice.valueconverters.NetworkInterfaceValueConverter;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
@@ -79,6 +81,8 @@ public final class ValueConverterModule extends AbstractModule {
 		list.add(LongListConverter.class);
 		list.add(FloatListConverter.class);
 		list.add(DoubleListConverter.class);
+		list.add(HostAndPortValueConverter.class);
+		list.add(NetworkInterfaceValueConverter.class);
 		return list;
 	}
 
