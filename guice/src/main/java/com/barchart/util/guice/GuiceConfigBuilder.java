@@ -9,9 +9,11 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.util.guice.encryption.Decrypter;
 import com.google.inject.AbstractModule;
+import com.google.inject.CreationException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.google.inject.spi.Message;
 
 public final class GuiceConfigBuilder {
 
@@ -34,16 +36,16 @@ public final class GuiceConfigBuilder {
 	}
 
 	/**
-	 * Create a new injector supporting automatic configuration injection, dynamic module configuration and component
-	 * discovery.
+	 * Create a new injector supporting automatic configuration injection,
+	 * dynamic module configuration and component discovery.
 	 */
 	public static GuiceConfigBuilder create() {
 		return new GuiceConfigBuilder(true);
 	}
 
 	/**
-	 * Create a new injector without dynamic module configuration or component discovery. This avoids classpath scanning
-	 * overhead on build.
+	 * Create a new injector without dynamic module configuration or component
+	 * discovery. This avoids classpath scanning overhead on build.
 	 */
 	public static GuiceConfigBuilder createBasic() {
 		return new GuiceConfigBuilder(false);
@@ -63,9 +65,7 @@ public final class GuiceConfigBuilder {
 		try {
 
 			if (classpathFallback) {
-				this.configResources = new MergedResources(
-						new DirectoryResources(new File(directoryName)),
-						new ClassPathResources());
+				this.configResources = new MergedResources(new DirectoryResources(new File(directoryName)), new ClassPathResources());
 			} else {
 				this.configResources = new DirectoryResources(new File(directoryName));
 			}
@@ -93,26 +93,34 @@ public final class GuiceConfigBuilder {
 	}
 
 	public Injector build(final Injector parentInjector) {
+		try {
+			Injector injector = parentInjector.createChildInjector(new BasicModule(), new ComponentActivator());
 
-		Injector injector = parentInjector.createChildInjector(new BasicModule(), new ComponentActivator());
+			if (decrypter == null) {
+				injector = injector.createChildInjector(injector.getInstance(DecrypterConfigModule.class));
+			} else {
+				injector = injector.createChildInjector(new DecrypterStaticModule(decrypter));
+			}
 
-		if (decrypter == null) {
-			injector = injector.createChildInjector(injector.getInstance(DecrypterConfigModule.class));
-		} else {
-			injector = injector.createChildInjector(new DecrypterStaticModule(decrypter));
+			injector = injector.createChildInjector(injector.getInstance(ValueConverterModule.class));
+			injector = injector.createChildInjector(injector.getInstance(ConfigValueBinderModule.class));
+			injector = injector.createChildInjector(modules);
+
+			if (componentSupport) {
+				injector = injector.createChildInjector(injector.getInstance(ModuleLoaderModule.class));
+				injector = injector.createChildInjector(injector.getInstance(ComponentModule.class));
+			}
+
+			return injector;
+		} catch (CreationException e) {
+			// There seems to be a bug in the formatting of the creation exception which caused some very hard
+			// to track down problems.  So catch this exception, and simply log the individual error
+			// messages before rethrowing
+			for (Message message: e.getErrorMessages()) {
+				logger.error("Creation error: " + message);
+			}
+			throw e;
 		}
-
-		injector = injector.createChildInjector(injector.getInstance(ValueConverterModule.class));
-		injector = injector.createChildInjector(injector.getInstance(ConfigValueBinderModule.class));
-		injector = injector.createChildInjector(modules);
-
-		if (componentSupport) {
-			injector = injector.createChildInjector(injector.getInstance(ModuleLoaderModule.class));
-			injector = injector.createChildInjector(injector.getInstance(ComponentModule.class));
-		}
-
-		return injector;
-
 	}
 
 	private class BasicModule extends AbstractModule {
