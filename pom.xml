@@ -42,6 +42,7 @@ Layout Project.
 
 		<module>common</module>
 		<module>cluster</module>
+		<module>s3</module>
 		<module>flow</module>
 		<module>value</module>
 		<module>rx</module>

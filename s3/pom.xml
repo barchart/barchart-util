@@ -1,0 +1,63 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.barchart.base</groupId>
+		<artifactId>barchart-archon</artifactId>
+		<version>3.0.4</version>
+	</parent>
+
+	<groupId>com.barchart.util</groupId>
+	<artifactId>barchart-util-s3</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>bundle</packaging>
+
+	<properties>
+		<projectJavaVersion>1.7</projectJavaVersion>
+	</properties>
+
+	<scm>
+		<url>https://github.com/barchart/barchart-util</url>
+		<connection>scm:git:git://github.com/barchart/barchart-util.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-util.git</developerConnection>
+	  <tag>master</tag>
+  </scm>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-common</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+
+        <dependency>
+          <groupId>com.typesafe</groupId>
+          <artifactId>config</artifactId>
+        </dependency>
+
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-rx</artifactId>
+			<version>[1.0-SNAPSHOT,2.0-SNAPSHOT)</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.barchart.wrap</groupId>
+			<artifactId>barchart-wrap-aws-java-sdk</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+	</dependencies>
+
+</project>
