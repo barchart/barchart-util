@@ -122,8 +122,13 @@ public class S3Store {
 			for (final S3ObjectSummary objSummary : objects.getObjectSummaries()) {
 				files.add(objSummary.getKey());
 			}
-			objects = s3.listNextBatchOfObjects(objects);
-		} while (objects.isTruncated());
+
+			if (objects.isTruncated()) {
+				objects = s3.listNextBatchOfObjects(objects);
+			} else {
+				break;
+			}
+		} while (true);
 
 		return files;
 
