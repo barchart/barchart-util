@@ -3,6 +3,7 @@ package com.barchart.util.s3;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.commons.io.FileUtils;
@@ -107,6 +108,24 @@ public class S3Store {
 		} else {
 			log.error("invalid s3 config. failed to create s3 client");
 		}
+
+	}
+
+	public Set<String> lsFiles() {
+
+		final TreeSet<String> files = new TreeSet<String>();
+		ObjectListing objects =
+				s3.listObjects(new ListObjectsRequest().withBucketName(config.bucket).withPrefix(config.remoteDir));
+
+		// get the file list from S3 Bucket
+		do {
+			for (final S3ObjectSummary objSummary : objects.getObjectSummaries()) {
+				files.add(objSummary.getKey());
+			}
+			objects = s3.listNextBatchOfObjects(objects);
+		} while (objects.isTruncated());
+
+		return files;
 
 	}
 
