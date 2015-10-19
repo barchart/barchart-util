@@ -102,6 +102,13 @@ public class S3Store {
 				if (!s3.doesBucketExist(config.bucket())) {
 					log.error("S3 bucket " + config.bucket() + " does not exist.");
 				}
+
+				final File file = new File(config.localDir());
+				if (!file.exists()) {
+					if (!file.mkdir()) {
+						log.error("failed to create local cache dirctory.");
+					}
+				}
 			} catch (final Exception e) {
 				log.error("S3 bucket " + config.bucket() + " does not exist.");
 			}
