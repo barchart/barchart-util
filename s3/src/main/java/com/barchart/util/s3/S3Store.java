@@ -76,6 +76,10 @@ public class S3Store {
 		public String localDir() {
 			return localDir;
 		}
+
+		public String remoteDir() {
+			return remoteDir;
+		}
 	}
 
 	public static S3Store INSTANCE(S3Config config_) {
