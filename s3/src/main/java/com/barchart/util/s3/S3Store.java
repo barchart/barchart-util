@@ -183,6 +183,9 @@ public class S3Store {
 
 	}
 
+	/**
+	 * @param filenames: file name without s3 prefix
+	 */
 	public void downloadFile(String... filenames) {
 
 		try {
@@ -221,8 +224,9 @@ public class S3Store {
 			}
 
 			for (final String f : filesToRetrieve) {
-				if (files.contains(f)) {
-					s3.getObject(new GetObjectRequest(config.bucket, f), new File(config.localDir() + "/" + f));
+				if (files.contains(config.remoteDir() + f)) {
+					s3.getObject(new GetObjectRequest(config.bucket, config.remoteDir() + f),
+							new File(config.localDir() + "/" + f));
 					log.info("Downloaded " + f + " from " + config.bucket);
 				}
 			}
