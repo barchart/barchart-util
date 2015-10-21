@@ -259,4 +259,28 @@ public class S3Store {
 		});
 
 	}
+
+	public boolean needToDownload(File file) {
+		ObjectListing objects =
+				s3.listObjects(new ListObjectsRequest().withBucketName(config.bucket).withPrefix(config.remoteDir));
+
+		// get the file list from S3 Bucket
+		do {
+			for (final S3ObjectSummary objSummary : objects.getObjectSummaries()) {
+				if (objSummary.getKey().equals(config.remoteDir() + file.getName())) {
+					if (file.lastModified() > objSummary.getLastModified().getTime()) {
+						return false;
+					}
+				}
+			}
+
+			if (objects.isTruncated()) {
+				objects = s3.listNextBatchOfObjects(objects);
+			} else {
+				break;
+			}
+		} while (true);
+
+		return true;
+	}
 }
