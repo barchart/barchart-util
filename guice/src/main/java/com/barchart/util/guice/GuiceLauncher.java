@@ -11,7 +11,9 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Joiner;
 import com.google.common.io.Resources;
+import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
+import com.google.inject.spi.Message;
 
 public final class GuiceLauncher {
 
@@ -19,7 +21,6 @@ public final class GuiceLauncher {
 	private static final String GUICE_APP_MAIN_CLASS = "Guice-App-Main-Class";
 
 	public static <T> Injector buildInjector(final String... args) throws Exception {
-
 		logBuildInfo();
 		logCurrentDirectory();
 		logPaths();
@@ -83,8 +84,15 @@ public final class GuiceLauncher {
 	}
 
 	public static <T> T configure(final Class<T> clazz, final String... args) throws Exception {
-		logger.info("Starting Guice Launcher.  Configuring: " + clazz);
-		return buildInjector(args).getInstance(clazz);
+		try {
+			logger.info("Starting Guice Launcher.  Configuring: " + clazz);
+			return buildInjector(args).getInstance(clazz);
+		} catch (ConfigurationException e) {
+			for (Message message : e.getErrorMessages()) {
+				logger.error("Configuration error: " + message);
+			}
+			throw e;
+		}
 	}
 
 	private static void logCurrentDirectory() {

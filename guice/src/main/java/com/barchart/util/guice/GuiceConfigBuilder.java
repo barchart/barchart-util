@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.util.guice.encryption.Decrypter;
 import com.google.inject.AbstractModule;
+import com.google.inject.ConfigurationException;
 import com.google.inject.CreationException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -89,38 +90,41 @@ public final class GuiceConfigBuilder {
 	}
 
 	public Injector build() throws Exception {
-		return build(Guice.createInjector());
-	}
-
-	public Injector build(final Injector parentInjector) {
 		try {
-			Injector injector = parentInjector.createChildInjector(new BasicModule(), new ComponentActivator());
-
-			if (decrypter == null) {
-				injector = injector.createChildInjector(injector.getInstance(DecrypterConfigModule.class));
-			} else {
-				injector = injector.createChildInjector(new DecrypterStaticModule(decrypter));
-			}
-
-			injector = injector.createChildInjector(injector.getInstance(ValueConverterModule.class));
-			injector = injector.createChildInjector(injector.getInstance(ConfigValueBinderModule.class));
-			injector = injector.createChildInjector(modules);
-
-			if (componentSupport) {
-				injector = injector.createChildInjector(injector.getInstance(ModuleLoaderModule.class));
-				injector = injector.createChildInjector(injector.getInstance(ComponentModule.class));
-			}
-
-			return injector;
+			return build(Guice.createInjector());
 		} catch (CreationException e) {
-			// There seems to be a bug in the formatting of the creation exception which caused some very hard
-			// to track down problems.  So catch this exception, and simply log the individual error
+			// There seems to be a bug in the formatting of the creation
+			// exception which caused some very hard
+			// to track down problems. So catch this exception, and simply log
+			// the individual error
 			// messages before rethrowing
-			for (Message message: e.getErrorMessages()) {
+			for (Message message : e.getErrorMessages()) {
 				logger.error("Creation error: " + message);
 			}
 			throw e;
 		}
+	}
+
+	public Injector build(final Injector parentInjector) {
+		Injector injector = parentInjector.createChildInjector(new BasicModule(), new ComponentActivator());
+
+		if (decrypter == null) {
+			injector = injector.createChildInjector(injector.getInstance(DecrypterConfigModule.class));
+		} else {
+			injector = injector.createChildInjector(new DecrypterStaticModule(decrypter));
+		}
+
+		injector = injector.createChildInjector(injector.getInstance(ValueConverterModule.class));
+		injector = injector.createChildInjector(injector.getInstance(ConfigValueBinderModule.class));
+		injector = injector.createChildInjector(modules);
+
+		if (componentSupport) {
+			injector = injector.createChildInjector(injector.getInstance(ModuleLoaderModule.class));
+			injector = injector.createChildInjector(injector.getInstance(ComponentModule.class));
+		}
+
+		return injector;
+
 	}
 
 	private class BasicModule extends AbstractModule {
