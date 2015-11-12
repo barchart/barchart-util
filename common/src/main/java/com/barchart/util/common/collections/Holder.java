@@ -95,26 +95,15 @@ public final class Holder<T> {
 		return instance;
 	}
 
-	/**
-	 * Sets the contents of this holder to the given non-null reference.
-	 */
 	public void set(T instance) {
-		setNullable(checkNotNull(instance));
+		this.instance = instance;
 	}
 
 	/**
 	 * Removes the reference from the holder if one exists.
 	 */
 	public void clear() {
-		setNullable(null);
-	}
-
-	/**
-	 * Sets the contents of this holder to the given instance if it is non-null;
-	 * clears it otherwise.
-	 */
-	public void setNullable(T instance) {
-		this.instance = instance;
+		this.instance = null;
 	}
 
 	@Override
