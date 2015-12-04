@@ -40,7 +40,8 @@ public class ComponentActivator implements Module {
 							activator.invoke(injectee);
 						} catch (final Exception e) {
 							logger.error("Could not activate " + injectee.getClass());
-							binder.addError(e);
+							// binder.addError(e);  // This line is causing strange errors possibly related to upgrade to Java 8
+							binder.addError(e.getMessage());
 						}
 					}
 				});
