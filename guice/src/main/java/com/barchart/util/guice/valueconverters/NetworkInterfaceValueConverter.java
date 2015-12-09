@@ -21,8 +21,16 @@ public class NetworkInterfaceValueConverter extends ParameterizedValueConverter 
 	protected Object convertParameter(String parameter) throws Exception {
 		try {
 			InetAddress inetAddress = InetAddress.getByName(parameter);
-			return NetworkInterface.getByInetAddress(inetAddress);
-		} catch (UnknownHostException e) {
+			 NetworkInterface intf = NetworkInterface.getByInetAddress(inetAddress);
+			 if(intf == null) {
+				 // Java 8 returns a null instead of throwing an exception
+				 NetworkInterface loopback = NetworkInterface.getByInetAddress(InetAddress.getLoopbackAddress());
+				 logger.error("Could not resolve network interface: "+ parameter + " Using loopback instead: " + loopback);
+				 intf = loopback;
+			 }
+			 return intf;
+			
+		} catch (Exception e) {
 			// Not ideal, but if we throw an exception here, than we can't do a verifying build
 			// on machines without the interfaces configured
 			NetworkInterface loopback = NetworkInterface.getByInetAddress(InetAddress.getLoopbackAddress());
