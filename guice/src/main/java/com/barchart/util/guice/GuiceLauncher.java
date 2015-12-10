@@ -3,6 +3,9 @@ package com.barchart.util.guice;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
@@ -116,7 +119,34 @@ public final class GuiceLauncher {
 	}
 
 	private static void logEnvironment() {
+		Properties properties = System.getProperties();
+		Set<Entry<Object, Object>> entrySet = properties.entrySet();
+		if (logger.isDebugEnabled()) {
+			for (Entry<Object, Object> prop : entrySet) {
+				logger.debug(prop.getKey() + "=" + prop.getValue());
+			}
+		}
+		StringBuilder sb = new StringBuilder("Environment: \n");
+		sb.append("\tOS:\n");
+		sb.append("\t\t" + properties.getProperty("os.name") + "\n");
+		sb.append("\t\t" + properties.getProperty("os.version") + "\n");
+		sb.append("\t\t" + properties.getProperty("os.arch") + "\n");
 
+		sb.append("\tJVM:\n");
+		sb.append("\t\t" + properties.getProperty("java.vm.name") + "\n");
+		sb.append("\t\t" + properties.getProperty("java.runtime.version") + "\n");
+		sb.append("\t\t" + properties.getProperty("java.vm.vendor") + "\n");
+		sb.append("\t\tjavaHome: " + properties.getProperty("java.home") + "\n");
+		sb.append("\t\ttmpdir: " + properties.getProperty("java.io.tmpdir") + "\n");
+		sb.append("\t\tmode: " + properties.getProperty("java.vm.info") + "\n");
+
+		sb.append("\tUser:\n");
+		sb.append("\t\t" + properties.getProperty("user.name") + "\n");
+		sb.append("\t\tdir: " + properties.getProperty("user.dir") + "\n");
+		sb.append("\t\thome: " + properties.getProperty("user.home") + "\n");
+		sb.append("\t\ttz: " + properties.getProperty("user.timezone") + "\n");
+
+		logger.info(sb.toString());
 	}
 
 }
