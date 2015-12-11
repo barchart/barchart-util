@@ -43,8 +43,8 @@
 		</encoder>
 	</appender>
 
-	<root level="DEBUG">
-		<appender-ref ref="LOG" />
+	<root level="INFO">
+		<appender-ref ref="JSON" />
 	</root>
 
 </included>
