@@ -6,6 +6,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
@@ -13,6 +16,8 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
 class DirectoryResources implements ConfigResources {
+
+	private static final Logger logger = LoggerFactory.getLogger(DirectoryResources.class);
 
 	private final File directory;
 
@@ -28,6 +33,7 @@ class DirectoryResources implements ConfigResources {
 
 	@Override
 	public String readResource(String resourceName) throws Exception {
+		logger.info("Reading file resource: " + resourceName);
 		return Files.toString(getFile(resourceName), StandardCharsets.UTF_8);
 	}
 
@@ -86,4 +92,8 @@ class DirectoryResources implements ConfigResources {
 		return list;
 	}
 
+	@Override
+	public String toString() {
+		return "DirectoryResources: path: " + getPathDescription();
+	}
 }

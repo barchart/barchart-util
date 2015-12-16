@@ -4,10 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Joiner;
 import com.typesafe.config.Config;
 
 public class MergedResources implements ConfigResources {
+
+	private static final Logger logger = LoggerFactory.getLogger(MergedResources.class);
 
 	private final ConfigResources[] resources;
 	private StringResources merged = null;
@@ -23,11 +28,13 @@ public class MergedResources implements ConfigResources {
 
 	@Override
 	public String readResource(final String resourceName) throws Exception {
+		logger.info("Reading merged resource: " + resourceName);
 		return merged().readResource(resourceName);
 	}
 
 	@Override
 	public Config readConfig(final String resourceName) throws Exception {
+
 		return merged().readConfig(resourceName).resolve();
 	}
 
@@ -62,6 +69,10 @@ public class MergedResources implements ConfigResources {
 
 			final Map<String, String> map = new HashMap<String, String>();
 
+			logger.info("Loading Configuration Resources: ");
+			for (ConfigResources r : resources) {
+				logger.info("\t" + r.toString());
+			}
 			/*
 			 * Reverse order so higher priority resources overwrite values.
 			 * 

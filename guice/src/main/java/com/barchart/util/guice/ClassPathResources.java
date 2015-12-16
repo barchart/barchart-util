@@ -52,7 +52,8 @@ public final class ClassPathResources implements ConfigResources {
 					map.put(shorten(info.getResourceName()), info.url());
 				}
 			} catch (NullPointerException e) {
-				// These NPEs started showing up when using Java 8 for "source_tips" and "version.rc"
+				// These NPEs started showing up when using Java 8 for
+				// "source_tips" and "version.rc"
 				// Should be safe to ignore
 				logger.debug(e.getMessage());
 			}
@@ -66,6 +67,7 @@ public final class ClassPathResources implements ConfigResources {
 
 	@Override
 	public String readResource(final String resourceName) throws Exception {
+		logger.info("Reading classpath resource: " + resourceName);
 		return Resources.toString(getURL(resourceName), StandardCharsets.UTF_8);
 	}
 
@@ -103,4 +105,8 @@ public final class ClassPathResources implements ConfigResources {
 		return list;
 	}
 
+	@Override
+	public String toString() {
+		return "ClassPathResources: path: " + getPathDescription();
+	}
 }
