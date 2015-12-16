@@ -28,7 +28,6 @@ public class MergedResources implements ConfigResources {
 
 	@Override
 	public String readResource(final String resourceName) throws Exception {
-		logger.info("Reading merged resource: " + resourceName);
 		return merged().readResource(resourceName);
 	}
 
