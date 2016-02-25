@@ -1,5 +1,6 @@
 package com.barchart.util.guice;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.slf4j.Logger;
@@ -16,7 +17,7 @@ import com.google.inject.spi.TypeListener;
 public class ComponentActivator implements Module {
 
 	private static final Logger logger = LoggerFactory.getLogger(ComponentActivator.class);
-	
+
 	private static final AbstractMatcher<TypeLiteral<?>> MATCHER = new AbstractMatcher<TypeLiteral<?>>() {
 
 		@Override
@@ -39,9 +40,18 @@ public class ComponentActivator implements Module {
 							activator.setAccessible(true);
 							activator.invoke(injectee);
 						} catch (final Exception e) {
-							logger.error("Could not activate " + injectee.getClass());
-							// binder.addError(e);  // This line is causing strange errors possibly related to upgrade to Java 8
-							binder.addError(e.getMessage());
+							String causeMessage = null;
+							if (e instanceof InvocationTargetException) {
+								InvocationTargetException ite = (InvocationTargetException) e;
+								causeMessage = ite.getTargetException().getMessage();
+							}
+							logger.error("Could not activate " + injectee.getClass() + " error: " + causeMessage);
+							/*
+							 * binder.addError(e); // This line is causing
+							 * strange errors possibly related to upgrade to
+							 * Java 8
+							 */
+							binder.addError(causeMessage + " " + e.getMessage());
 						}
 					}
 				});
