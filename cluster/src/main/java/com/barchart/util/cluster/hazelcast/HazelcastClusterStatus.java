@@ -11,6 +11,7 @@ import com.barchart.util.common.status.StatusType;
 import com.barchart.util.guice.Component;
 import com.google.inject.Inject;
 import com.hazelcast.client.HazelcastClient;
+import com.hazelcast.config.Config;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.Member;
 import com.hazelcast.partition.MigrationEvent;
@@ -35,37 +36,45 @@ public class HazelcastClusterStatus extends BaseComponentStatus {
 	protected void addListeners(final HazelcastInstance instance) {
 
 		if (!(instance instanceof HazelcastClient)) {
-			instance.getPartitionService().addMigrationListener(
-					new MigrationListener() {
+			instance.getPartitionService().addMigrationListener(new MigrationListener() {
 
-						@Override
-						public void migrationStarted(final MigrationEvent migrationEvent) {
-							migrations.add(migrationEvent);
-						}
+				@Override
+				public void migrationStarted(final MigrationEvent migrationEvent) {
+					migrations.add(migrationEvent);
+				}
 
-						@Override
-						public void migrationCompleted(final MigrationEvent migrationEvent) {
-							migrations.remove(migrationEvent);
-							failures.remove(migrationEvent.getNewOwner());
-							status(StatusType.OK);
-						}
+				@Override
+				public void migrationCompleted(final MigrationEvent migrationEvent) {
+					migrations.remove(migrationEvent);
+					failures.remove(migrationEvent.getNewOwner());
+					status(StatusType.OK);
+				}
 
-						@Override
-						public void migrationFailed(final MigrationEvent migrationEvent) {
-							migrations.remove(migrationEvent);
-							failures.add(migrationEvent.getNewOwner());
-							status(StatusType.WARNING);
-						}
+				@Override
+				public void migrationFailed(final MigrationEvent migrationEvent) {
+					migrations.remove(migrationEvent);
+					failures.add(migrationEvent.getNewOwner());
+					status(StatusType.WARNING);
+				}
 
-					});
+			});
 		}
 
 	}
 
 	@Override
 	public String name() {
-		if (cluster.getInstance() != null) {
-			return "hazelcast/" + cluster.getInstance().getConfig().getGroupConfig().getName();
+		try {
+			if (cluster.getInstance() != null) {
+				HazelcastInstance instance = cluster.getInstance();
+				if (instance.getConfig() != null) {
+					Config config = instance.getConfig();
+					if (config.getGroupConfig() != null) {
+						return "hazelcast/" + config.getGroupConfig().getName();
+					}
+				}
+			}
+		} catch (Exception ignore) {
 		}
 		return "hazelcast";
 	}
