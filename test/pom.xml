@@ -12,14 +12,14 @@
 
 	<groupId>com.barchart.util</groupId>
 	<artifactId>barchart-util-test</artifactId>
-	<version>4.0.5-SNAPSHOT</version>
+	<version>4.0.5</version>
 	<packaging>bundle</packaging>
 
 	<scm>
 		<url>https://github.com/barchart/barchart-util</url>
 		<connection>scm:git:git://github.com/barchart/barchart-util.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-util.git</developerConnection>
-		<tag>master</tag>
+		<tag>barchart-util-test-4.0.5</tag>
 	</scm>
 
 	<dependencies>
