@@ -78,7 +78,7 @@ public final class Filetypes {
 
 	public static String getSimpleName(final String originDescription) {
 		final String originName = stripLinenumbersFromOriginDescription(originDescription);
-		if (originName.contains(ORIGIN_NAME_MERGE_SUBSET)) {
+		if (originName.contains(ORIGIN_NAME_MERGE_SUBSET) && !originName.contains("merge of system properties")) {
 			/*
 			 * HOCON objects what are merged (withFallback(..)) have a different
 			 * origin name. Account for that here.
