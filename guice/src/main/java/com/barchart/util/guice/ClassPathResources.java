@@ -15,6 +15,7 @@ import com.google.common.io.Resources;
 import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.ClassPath.ResourceInfo;
 import com.typesafe.config.Config;
+import com.typesafe.config.ConfigException;
 import com.typesafe.config.ConfigFactory;
 
 public final class ClassPathResources implements ConfigResources {
@@ -73,7 +74,13 @@ public final class ClassPathResources implements ConfigResources {
 
 	@Override
 	public Config readConfig(final String resourceName) throws Exception {
-		return ConfigFactory.parseURL(getURL(resourceName)).resolve();
+		try {
+			Config rawConfig = ConfigFactory.parseURL(getURL(resourceName));
+			Config withSystemProperties = ConfigFactory.systemProperties().withFallback(rawConfig);
+			return withSystemProperties.resolve();
+		} catch (ConfigException e) {
+			throw new RuntimeException(e.getMessage());
+		}
 	}
 
 	private URL getURL(final String resourceName) {
