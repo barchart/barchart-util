@@ -16,6 +16,7 @@ import com.google.common.base.Joiner;
 import com.google.common.io.Resources;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.google.inject.spi.Message;
 
 public final class GuiceLauncher {
@@ -24,12 +25,19 @@ public final class GuiceLauncher {
 	private static final String GUICE_APP_MAIN_CLASS = "Guice-App-Main-Class";
 
 	public static <T> Injector buildInjector(final String... args) throws Exception {
+		return buildInjector(null, args);
+	}
+
+	public static <T> Injector buildInjector(Module customModule, final String... args) throws Exception {
 		logBuildInfo();
 		logCurrentDirectory();
 		logPaths();
 		logEnvironment();
 
 		final GuiceConfigBuilder builder = GuiceConfigBuilder.create();
+		if (customModule != null) {
+			builder.addModule(customModule);
+		}
 
 		final ArgParser parser = new ArgParser().parse(args);
 
