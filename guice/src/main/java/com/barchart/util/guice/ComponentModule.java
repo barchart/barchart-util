@@ -82,8 +82,8 @@ final class ComponentModule extends AbstractModule {
 	protected void configure() {
 		try {
 			final ImmutableMultimap<Class<?>, Config> componentClassToConfigMap = loadComponentConfigs();
-			final ImmutableMultimap<Class<?>, TypeLiteral<?>> componentClassToBindingType = determineBindingTypes(componentClassToConfigMap
-					.keySet());
+			final ImmutableMultimap<Class<?>, TypeLiteral<?>> componentClassToBindingType = determineBindingTypes(
+					componentClassToConfigMap.keySet());
 			final ImmutableSet<TypeLiteral<?>> noNameEligibleBindingTypes = determineNoNameEligibleBindingTypes(
 					componentClassToConfigMap, componentClassToBindingType);
 			final HashMultiset<TypeLiteral<?>> bindingTypeCounter = HashMultiset.create();
@@ -195,7 +195,7 @@ final class ComponentModule extends AbstractModule {
 					}
 				}
 			} else {
-				logger.info("Excluding common resource from automatic component loading: "
+				logger.debug("Excluding common resource from automatic component loading: "
 						+ configFile.origin().description());
 			}
 		}
@@ -387,7 +387,7 @@ final class ComponentModule extends AbstractModule {
 				if (!noNameBindings.isEmpty()) {
 					message += "  No-name bindings: " + classNames(noNameBindings);
 				}
-				logger.info(message);
+				logger.debug(message);
 			}
 
 		}
@@ -454,8 +454,8 @@ final class ComponentModule extends AbstractModule {
 		@SuppressWarnings("unchecked")
 		private void exposeToComponentList(final TypeLiteral<?> bindingType) {
 			final int index = bindingTypeCounter.add(bindingType, 1);
-			final LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) bind(Key.get(
-					bindingType, indexed(index)));
+			final LinkedBindingBuilder<Object> bindingBuilder = (LinkedBindingBuilder<Object>) bind(
+					Key.get(bindingType, indexed(index)));
 			if (isProvider()) {
 				bindingBuilder.toProvider((Class<? extends javax.inject.Provider<Object>>) componentClass);
 			} else {

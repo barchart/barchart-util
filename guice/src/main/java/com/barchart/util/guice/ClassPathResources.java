@@ -68,7 +68,7 @@ public final class ClassPathResources implements ConfigResources {
 
 	@Override
 	public String readResource(final String resourceName) throws Exception {
-		logger.info("Reading classpath resource: " + resourceName);
+		logger.debug("Reading classpath resource: " + resourceName);
 		return Resources.toString(getURL(resourceName), StandardCharsets.UTF_8);
 	}
 

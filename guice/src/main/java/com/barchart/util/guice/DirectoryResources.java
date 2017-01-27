@@ -33,7 +33,7 @@ class DirectoryResources implements ConfigResources {
 
 	@Override
 	public String readResource(String resourceName) throws Exception {
-		logger.info("Reading file resource: " + resourceName);
+		logger.debug("Reading file resource: " + resourceName);
 		return Files.toString(getFile(resourceName), StandardCharsets.UTF_8);
 	}
 

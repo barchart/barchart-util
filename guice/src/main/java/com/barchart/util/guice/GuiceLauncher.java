@@ -117,7 +117,7 @@ public final class GuiceLauncher {
 		builder.append(getPaths("sun.boot.library.path"));
 		builder.append(getPaths("java.library.path"));
 		builder.append(getPaths("java.class.path"));
-		logger.info("Paths:" + builder.toString());
+		logger.debug("Paths:" + builder.toString());
 	}
 
 	private static String getPaths(final String property) {

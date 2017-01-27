@@ -3,9 +3,9 @@ package com.barchart.util.guice.simple;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
-import java.util.Map.Entry;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
@@ -21,10 +21,10 @@ import com.google.inject.Module;
 public class Launcher {
 
 	private static final String GUICE_APP_MAIN_CLASS = "Guice-App-Main-Class";
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(Launcher.class);
 
-	public static <T extends Runnable> void launch(Class<T> clazz, String[] args, Module...modules) {
+	public static <T extends Runnable> void launch(Class<T> clazz, String[] args, Module... modules) {
 		logger.info("Starting Simple Launcher.  Configuring: " + clazz);
 		logBuildInfo();
 		logCurrentDirectory();
@@ -68,7 +68,7 @@ public class Launcher {
 		builder.append(getPaths("sun.boot.library.path"));
 		builder.append(getPaths("java.library.path"));
 		builder.append(getPaths("java.class.path"));
-		logger.info("Paths:" + builder.toString());
+		logger.debug("Paths:" + builder.toString());
 	}
 
 	private static String getPaths(final String property) {
@@ -108,4 +108,3 @@ public class Launcher {
 		logger.info(sb.toString());
 	}
 }
-
