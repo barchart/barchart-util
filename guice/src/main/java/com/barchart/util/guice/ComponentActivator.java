@@ -22,7 +22,9 @@ public class ComponentActivator implements Module {
 
 		@Override
 		public boolean matches(final TypeLiteral<?> t) {
-			return activator(Activate.class, t.getRawType()) != null;
+			boolean b = activator(Activate.class, t.getRawType()) != null;
+			logger.error("***** Matches " + t + " = " + b);
+			return b;
 		}
 
 	};

@@ -91,7 +91,7 @@ public final class GuiceConfigBuilder {
 
 	public Injector build() throws Exception {
 		try {
-			return build(Guice.createInjector());
+			return build(Guice.createInjector(new BasicModule(), new ComponentActivator()));
 		} catch (CreationException e) {
 			// There seems to be a bug in the formatting of the creation
 			// exception which caused some very hard
@@ -105,8 +105,7 @@ public final class GuiceConfigBuilder {
 		}
 	}
 
-	public Injector build(final Injector parentInjector) {
-		Injector injector = parentInjector.createChildInjector(new BasicModule(), new ComponentActivator());
+	public Injector build(Injector injector) {
 
 		if (decrypter == null) {
 			injector = injector.createChildInjector(injector.getInstance(DecrypterConfigModule.class));
