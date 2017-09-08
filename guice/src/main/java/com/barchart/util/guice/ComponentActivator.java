@@ -20,12 +20,10 @@ public class ComponentActivator implements Module {
 
 	private static final AbstractMatcher<TypeLiteral<?>> MATCHER = new AbstractMatcher<TypeLiteral<?>>() {
 
-		@Override
-		public boolean matches(final TypeLiteral<?> t) {
-			boolean b = activator(Activate.class, t.getRawType()) != null;
-			logger.error("***** Matches " + t + " = " + b);
-			return b;
-		}
+    @Override
+    public boolean matches(final TypeLiteral<?> t) {
+      return activator(Activate.class, t.getRawType()) != null;
+    }
 
 	};
 
